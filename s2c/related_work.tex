@@ -1,0 +1,33 @@
+\section{Related Work}
+The open intent detection methods can be categorized into three types: statistical methods, deep-learning methods and LLM-embedding methods.
+
+\subsection{Statistical Methods for Intent Detection}
+Statistical methods frame intent detection as closed-set classification, using hand-crafted features and classical decision rules.
+\citet{wang2002combination} proposes a hybrid method that combines rule-based grammars with statistical classifiers, but the grammar must be hand-crafted for each domain.
+To eliminate this dependence, \citet{haffner2003scaling} proposes a large-margin method using support vector machine (SVM) with discriminative training, showing that purely statistical classifiers can match hybrid systems.
+However, this method still relies on manually designed features.
+To automate feature extraction, \citet{tur2010what} proposes an n-gram method based on word co-occurrence statistics, though sparsity limits its effectiveness in open vocabularies.
+To mitigate sparsity, \citet{schuurmans2020intent} compares Naive Bayes, SVM, and long short-term memory (LSTM) classifiers with sparse and dense features, finding that dense word embeddings replace discrete counts with continuous representations.
+Despite these efforts, all statistical methods operate on surface-level features and cannot capture compositional semantics or long-range dependencies.
+
+\subsection{Deep-Learning Methods for Intent Detection}
+Deep-learning methods replace hand-crafted features with learned semantic representations, and introduce explicit mechanisms for rejecting unknown intents.
+\citet{kim2014convolutional} proposes a convolutional neural network (CNN) method that extracts local semantic patterns from word embeddings; \citet{liu2016attention} proposes an attention-based recurrent method that captures sequential dependencies.
+However, these closed-set classifiers produce overconfident predictions for OOS queries because softmax normalization forces all inputs into the known label space~\citep{hendrycks2017baseline}.
+To address this, \citet{hendrycks2017baseline} proposes using maximum softmax probability (MSP) as a rejection score, but MSP does not reliably reflect epistemic uncertainty.
+\citet{lee2018simple} proposes a distance-based method using Mahalanobis distance between test embeddings and class centroids under a per-class Gaussian assumption.
+However, such parametric assumptions are often violated, and scoring-based methods do not explicitly model the decision boundary.
+To construct the boundary directly, \citet{shu2017doc} proposes deep open classification (DOC), which replaces softmax with one-vs-rest sigmoid classifiers and uses Gaussian-fitted per-class thresholds.
+However, DOC boundaries are coupled with the classification objective.
+To decouple boundary learning, \citet{zhang2021adaptive} proposes adaptive decision boundary (ADB), learning spherical boundaries that balance empirical risk and open-space risk in a post-processing step.
+However, ADB assumes one centroid per class and fails when intent semantics span multiple clusters.
+\citet{li2025multi} proposes multi-granularity boundaries via granular-ball computing, partitioning each class into sub-regions with distinct centroids and radii.
+
+\subsection{LLM-Embedding Methods for Intent Detection}
+LLM-embedding methods leverage the world knowledge and reasoning abilities encoded in large pretrained models, enabling generalization to intents unseen during training.
+\citet{arora2024intent} proposes a hybrid method that routes uncertain predictions from a fine-tuned sentence transformer to an LLM via in-context learning and chain-of-thought prompting.
+However, this requires LLM inference for every uncertain query.
+To reduce invocations, \citet{zaera2025efficient} proposes UDRIL (uncertainty-driven large language models triggering), which uses reconstruction-error scoring to selectively invoke a LoRA (low-rank adaptation) fine-tuned LLM only for ambiguous queries.
+However, routing decisions can become unstable under distribution drift.
+To address few-shot settings where labeled data is scarce, \citet{chen2025collaborating} proposes FCSLM, which uses the LLM for data augmentation during pretraining of a lightweight model, then employs multi-round inference with LLM refinement.
+All LLM-embedding methods face a trade-off between reasoning quality and deployment cost.

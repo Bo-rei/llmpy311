@@ -1,0 +1,9 @@
+logging:
+  use_swanlab: true
+  swanlab:
+    project: hilsa-llm-v4
+    workspace: null  # set if needed
+    mode: local  # cloud|local|disabled
+    description: HiLSA-LLM v4.0 with SmolLM on CLINC150
+    log_interval: 50
+    save_code: true

@@ -1,0 +1,5 @@
+paths:
+  project_root: /home/bo/bo01/llmpy311/s2c
+  model_dir: /home/bo/bo01/llmpy311/assets/models/smollm135m
+  artifacts_dir: ${paths.project_root}/outputs
+  cache_dir: ${paths.project_root}/cache

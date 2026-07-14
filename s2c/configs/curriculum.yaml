@@ -1,0 +1,24 @@
+curriculum:
+  phases:
+    - name: warmup
+      epoch_start: 0
+      epoch_end: 2
+      freeze_lora: true
+      lambda_scl: 0.0
+      lambda_oe: 0.0
+      checkpoint_tag: phase1-end
+    - name: shaping
+      epoch_start: 3
+      epoch_end: 12
+      freeze_lora: false
+      lambda_scl: 1.0
+      lambda_oe: 0.0
+      recluster_on_end: true
+      checkpoint_tag: phase2-end
+    - name: tuning
+      epoch_start: 13
+      epoch_end: 20
+      freeze_lora: false
+      lambda_scl: 0.0
+      lambda_oe: 1.0
+      checkpoint_tag: phase3-end

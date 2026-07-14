@@ -1,0 +1,18 @@
+profiles:
+  clinc150:
+    dataset: CLINC150
+    slug: clinc150
+    policy: {num_intents: 150, num_domains: 15, multi_domain: true, single_domain: false}
+  banking77_oos:
+    dataset: BANKING77-OOS
+    slug: banking77_oos
+    policy: {num_intents: 50, num_domains: 1, multi_domain: false, single_domain: true, oos_strategy: native_id_and_ood}
+  snips:
+    dataset: SNIPS
+    slug: snips
+    policy: {num_intents: 7, num_domains: 1, multi_domain: false, single_domain: true, oos_strategy: held_out_intents_plus_clinc_oos}
+  stackoverflow:
+    dataset: STACKOVERFLOW
+    slug: stackoverflow
+    policy: {num_intents: 20, num_domains: 1, multi_domain: false, single_domain: true, oos_strategy: held_out_intents_only}
+    stackoverflow_known_selection_strategy: seeded_random

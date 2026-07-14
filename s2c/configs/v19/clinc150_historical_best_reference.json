@@ -1,0 +1,61 @@
+{
+  "name": "clinc150_kir50_historical_best_reference",
+  "dataset": {
+    "name": "CLINC150",
+    "slug": "clinc150",
+    "kir": 0.5,
+    "seed": 42,
+    "data_root": "data/multidataset/v19/clinc150/kir50_seed42",
+    "gate_root": "data/multidataset/v19/clinc150/kir50_seed42/gate",
+    "router_root": "data/multidataset/v19/clinc150/kir50_seed42/router",
+    "experts_root": "data/multidataset/v19/clinc150/kir50_seed42/experts"
+  },
+  "profile": {
+    "name": "historical_best",
+    "gate_profile": "historical_best",
+    "gate_mode": "multisphere",
+    "gate_center_mode": "class_centroid_mixture",
+    "gate_distance_metric": "mahalanobis_diag",
+    "gate_l2_normalize": true,
+    "gate_subcenters_per_intent": 2,
+    "gate_min_id_recall": 0.8,
+    "semantic_gate_mode": "prototype",
+    "semantic_prompt_version": "ranking_v1",
+    "semantic_gate_threshold": 0.85,
+    "semantic_uncertain_low": 0.98,
+    "semantic_uncertain_high": 1.05,
+    "semantic_top_k": 3,
+    "prototype_centers_default": 1,
+    "multi_proto_id_threshold": 0.5904965996742249,
+    "multi_proto_threshold_mode": "fixed",
+    "router_lora_r": 32,
+    "router_lora_alpha": 64,
+    "expert_lora_r": 16,
+    "expert_lora_alpha": 32,
+    "eval_batch_size": 64,
+    "eval_seed": 20260317
+  },
+  "artifacts": {
+    "reference_eval_results": "outputs/experiments/archive/sweeps/2026-03-23/pipeline_phase3_proto_eval/pipeline_v19_phase3_proto_d_narrow_t085_eval/eval_results.json",
+    "reference_predictions": "outputs/experiments/archive/sweeps/2026-03-23/pipeline_phase3_proto_eval/pipeline_v19_phase3_proto_d_narrow_t085_eval/predictions.json",
+    "frozen_output_dir": "outputs/experiments/pipeline/frozen_prototype_gate/prototype_gate_frozen_2026-04-09/prototype_gate_pipeline_frozen",
+    "frozen_identity_manifest": "outputs/experiments/pipeline/frozen_prototype_gate/prototype_gate_frozen_2026-04-09/prototype_gate_pipeline_frozen/prototype_baseline_identity.json",
+    "frozen_run_manifest": "outputs/experiments/pipeline/frozen_prototype_gate/prototype_gate_frozen_2026-04-09/prototype_gate_pipeline_frozen/run_manifest.json",
+    "frozen_eval_results": "outputs/experiments/pipeline/frozen_prototype_gate/prototype_gate_frozen_2026-04-09/prototype_gate_pipeline_frozen/eval_results.json",
+    "frozen_predictions": "outputs/experiments/pipeline/frozen_prototype_gate/prototype_gate_frozen_2026-04-09/prototype_gate_pipeline_frozen/predictions.json",
+    "gate_detector_path": "outputs/experiments/archive/sweeps/2026-03-23/gate_l2_mix2_train/gate_l2_mix2_true_lambda_1p6/detector.json",
+    "router_ckpt": "outputs/experiments/components/router/router_v19/best_model.pt",
+    "experts_root": "outputs/experiments/components/experts/experts_v19",
+    "semantic_verifier_ckpt": "outputs/experiments/components/semantic/semantic_verifier_v19_u098_105/best_model.pt",
+    "multi_prototype_path": "outputs/experiments/components/prototypes/prototypes_v19/selective_expansion.json",
+    "prototype_alias_path": "outputs/multi_prototypes_v19/prototypes.json"
+  },
+  "source_code": {
+    "historical_profile_module": "tools/analysis/historical_best_pipeline_v19.py",
+    "frozen_repro_runner": "tools/analysis/run_prototype_gate_frozen_baseline_v19.py",
+    "evaluation_runner": "tools/eval/eval_system_pipeline_v19.py",
+    "data_rebuild_runner": "scripts/data/active/rebuild_multi_dataset_v19.py",
+    "multi_dataset_training_runner": "tools/analysis/run_multi_dataset_training_v19.py",
+    "multi_dataset_benchmark_runner": "tools/analysis/run_multi_dataset_benchmark_v19.py"
+  }
+}

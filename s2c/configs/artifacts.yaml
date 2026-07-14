@@ -1,0 +1,56 @@
+evidence_anchors:
+  - id: clinc150-kir25
+    dataset: clinc150
+    kir: 25
+    path: ../artifacts/s2c/outputs/paper_results/anchors/clinc150_kir25/eval_results.json
+    sha256: 2a8a5cad9241301b1c3c22f36159f2515b457fac0431b1c485d8dd9d4a241b40
+    reproducibility_status: results_only
+  - id: clinc150-kir50-frozen
+    dataset: clinc150
+    kir: 50
+    path: ../artifacts/s2c/outputs/paper_results/anchors/clinc150_kir50_frozen/prototype_gate_pipeline_frozen/eval_results.json
+    sha256: a0479f510c4efaedde4cf62e8167d5a7db9b0be59d7ce31fa00356d2b12557ab
+    reproducibility_status: canonical_historical_evaluation_anchor
+  - id: clinc150-kir75
+    dataset: clinc150
+    kir: 75
+    path: ../artifacts/s2c/outputs/paper_results/anchors/clinc150_kir75/eval_results.json
+    sha256: fdc0a47cfac35ced9921720a0f056194b8c98f1d70192cf14e0284bc8a3ed8fc
+    reproducibility_status: results_only
+  - id: banking77-kir25
+    dataset: banking77_oos
+    kir: 25
+    path: ../artifacts/s2c/outputs/paper_results/anchors/banking77_kir25/eval_results.json
+    sha256: dd8215fa08f8e60d8a48fda61c668c68764709e18cec68472c11133f3991679a
+    reproducibility_status: results_only
+  - id: banking77-kir50
+    dataset: banking77_oos
+    kir: 50
+    path: ../artifacts/s2c/outputs/paper_results/anchors/banking77_kir50/eval_results.json
+    sha256: 7be8c74348da9bf1b0192cdd4ed9447d01d8381efb9ecda3ae29bb8f7559593c
+    reproducibility_status: results_only
+  - id: banking77-kir75
+    dataset: banking77_oos
+    kir: 75
+    path: ../artifacts/s2c/outputs/paper_results/anchors/banking77_kir75/eval_results.json
+    sha256: 1692ff1b15ad78dff47ec20a30d4213106323f0deb46052837732f02d901db0d
+    reproducibility_status: results_only
+  - id: stackoverflow-kir25
+    dataset: stackoverflow
+    kir: 25
+    path: ../artifacts/s2c/outputs/paper_results/anchors/stackoverflow_kir25/eval_results.json
+    sha256: 0d5d1c13027fcecda1fd21fd8fa35b35a3b2a7a5dbdac8b585b519ebb642124b
+    reproducibility_status: results_only
+  - id: stackoverflow-kir50
+    dataset: stackoverflow
+    kir: 50
+    path: ../artifacts/s2c/outputs/paper_results/anchors/stackoverflow_kir50/eval_results.json
+    sha256: 42dcd39b4fe235d79c4966cb3dbe49d2fbef8a92b1c894a41e7383e5c7c19ea4
+    reproducibility_status: results_only
+  - id: stackoverflow-kir75
+    dataset: stackoverflow
+    kir: 75
+    path: ../artifacts/s2c/outputs/paper_results/anchors/stackoverflow_kir75/eval_results.json
+    sha256: c862fdd8a0830589eba0d5a3e1b0031d11b871e43fd351bfbcc163d81bd0630b
+    reproducibility_status: results_only
+runnable_components: {}

@@ -1,0 +1,21 @@
+defaults:
+  - _self_
+  - paths
+  - logging
+  - lora
+  - training
+  - curriculum
+  - clustering
+
+experiment_name: hilsa-llm-v4
+seed: 42
+mixed_precision: bf16  # fallback to fp16 if unavailable
+
+# Hydra configuration
+hydra:
+  run:
+    dir: outputs/training_runs/${now:%Y-%m-%d}/${now:%H-%M-%S}
+  sweep:
+    dir: outputs/training_runs/multirun/${now:%Y-%m-%d}/${now:%H-%M-%S}
+  job:
+    chdir: false  # Don't change directory into output_dir

@@ -1,0 +1,17 @@
+training:
+  num_epochs: 20
+  max_length: 64
+  physical_batch_size: 128
+  accumulate_grad_batches: 2  # effective 256; fallback 64/4 if OOM
+  learning_rate:
+    lora: 5.0e-4
+    heads: 1.0e-3
+  weight_decay: 0.01
+  gradient_clip_val: 1.0
+  warmup_ratio: 0.03
+  fp16: true
+  bf16: true
+  gradient_checkpointing: true
+  device: cuda
+  save_every_phase: true
+  save_dir: ${paths.artifacts_dir}/checkpoints

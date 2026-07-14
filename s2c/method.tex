@@ -1,0 +1,72 @@
+\section{Method}
+\subsection{Cascade Workflow for Intent Detection}
+Given a set of known intent labels $\mathcal{Y}_{\mathrm{ID}}$ and a domain set $\mathcal{D}$, the proposed method uses a three-stage cascade: Gate $\rightarrow$ Router $\rightarrow$ Expert, as shown in ~\Cref{fig:model_architecture}. The gate first determines whether an input belongs to the known intent space. The router then predicts the domain. The expert classifies the fine-grained intent within that domain. The router and expert are fine-tuned with LoRA~\citep{hu2021lora} on the known intent data. Each domain $d \in \mathcal{D}$ is associated with a label subset $\mathcal{Y}_d \subseteq \mathcal{Y}_{\mathrm{ID}}$.
+
+For an input utterance $x$, the gate $G(\cdot)$ first checks whether $x$ is OOS:
+\begin{equation}
+z = G(x), \quad z \in \{\mathrm{ID}, \mathrm{OOS}\},
+\end{equation}
+where $z$ is the binary decision, $\mathrm{ID}$ means the input is in-distribution, and $\mathrm{OOS}$ means the input is out-of-scope. If $z = \mathrm{OOS}$, an OOS label is returned. Otherwise, the router $R(\cdot)$ predicts the domain:
+\begin{equation}
+d = R(x), \quad d \in \mathcal{D},
+\end{equation}
+where $\mathcal{D}$ is the domain set. Then the expert $E_d(\cdot)$ classifies the intent:
+\begin{equation}
+y = E_d(x), \quad y \in \mathcal{Y}_d \subseteq \mathcal{Y}_{\mathrm{ID}},
+\end{equation}
+where $\mathcal{Y}_{\mathrm{ID}}$ is the known intent label set and $\mathcal{Y}_d$ is the intent subset for domain $d$.
+
+This cascade separates OOS detection from known-intent classification. Each module handles a simpler sub-task. The gate focuses only on distinguishing OOS from known intents, which allows lightweight geometric modeling. The router and expert focus on domain prediction and fine-grained intent classification, using a stronger language model with LoRA~\citep{hu2021lora} for semantic reasoning. OOS detection is performed before domain routing and intent classification, so OOS queries are rejected early without invoking the downstream modules.
+
+\begin{figure*}[t]
+    \centering
+    \includegraphics[width=\textwidth]{figures/model_architecture.eps}
+    \caption{Overview of the lightweight cascaded workflow for open intent detection. A MiniLM-based multi-cluster gate performs front-end OOS rejection, and accepted samples are processed by SmolLM-based router and expert modules.}
+    \label{fig:model_architecture}
+\end{figure*}
+
+\subsection{MiniLM-Based Intent Embedding}
+The gate uses a lightweight sentence encoder to map each input utterance $x$ to a dense embedding:
+\begin{equation}
+e = f_{\theta}(x),
+\end{equation}
+where $f_{\theta}(\cdot)$ denotes the encoder parameterized by $\theta$. The gate applies $L_2$ normalization before computing distances to the centroids:
+\begin{equation}
+\bar{e} = \frac{e}{\|e\|_2},
+\end{equation}
+where $\bar{e}$ is the $L_2$-normalized embedding and $\|e\|_2$ is the Euclidean norm of $e$. The normalized embedding $\bar{e}$ is then used to construct the known-intent geometry for OOS detection.
+
+The embedding space defines the local structure of known intents. A single centroid per intent is too restrictive. Utterances with the same intent may differ in wording, expression, and semantic focus. Forcing an intent into one compact region produces inaccurate boundaries. This increases the risk of rejecting valid in-domain samples or accepting OOS samples. Thus, each known intent is represented by multiple local clusters, each with a centroid. For intent $y$, its centroid set is:
+\begin{equation}
+\mathcal{C}_{y}=\{c_{y,1}, c_{y,2}, \ldots, c_{y,K_y}\},
+\end{equation}
+where $c_{y,k}$ is the $k$-th centroid of intent $y$, and $K_y$ is the number of centroids. The centroids are constructed via K-means clustering within each intent. The number of centroids is controlled by a global setting and can be overridden per intent. If the number of known intents is $M$ and each intent has $K$ centroids, the gate maintains $M \times K$ centroids in total. These centroids are local geometric representatives of the known intents. This representation provides the basis for boundary learning.
+
+\subsection{Multi-cluster Boundary Learning for OOS Intent Detection}
+The multi-cluster representation defines local semantic regions for known intents. OOS detection is formulated as a boundary learning problem in the embedding space. An input is accepted if it falls inside at least one learned cluster region. Otherwise it is rejected as OOS. To achieve this, the gate learns a local boundary around each centroid to separate supported inputs from OOS inputs.
+
+For each centroid $c_{y,k}$, the gate estimates a local radius from the training samples assigned to that cluster:
+\begin{equation}
+r_{y,k}=\mu_{y,k} + \lambda \sigma_{y,k},
+\end{equation}
+where $\mu_{y,k}$ and $\sigma_{y,k}$ are the mean and standard deviation of the distances from assigned samples to $c_{y,k}$, and $\lambda$ controls the boundary width.
+
+The distance function is a diagonal Mahalanobis distance:
+\begin{equation}
+d(\bar{e},c)=\sqrt{\sum_j(\bar{e}_j-c_j)^2\frac{1}{\sigma_j^2+\epsilon}},
+\end{equation}
+where $\sigma_j^2$ is the feature-wise variance estimated from samples assigned to the cluster, and $\epsilon$ is a small regularization constant. This weighting reduces the influence of dimensions with large natural variation.
+
+For an incoming utterance, the gate computes the normalized nearest-boundary score:
+\begin{equation}
+s(\bar{e})=\min_{y \in \mathcal{Y}_{\mathrm{ID}},\; 1 \le k \le K_y}\frac{d(\bar{e},c_{y,k})}{r_{y,k}},
+\end{equation}
+where the ratio measures the distance to the nearest centroid relative to its learned boundary size. The gate decision is:
+\begin{equation}
+G(x)=
+\begin{cases}
+\mathrm{ID}, & s(\bar{e}) \le 1 \\
+\mathrm{OOS}, & s(\bar{e}) > 1
+\end{cases}
+\end{equation}
+The threshold is one because each distance is normalized by its corresponding radius. Values no greater than one indicate membership in at least one known-intent region. Larger values lie outside all learned regions and are rejected as OOS. The gate performs geometric rejection before the router and expert are invoked, without assigning a final intent label.

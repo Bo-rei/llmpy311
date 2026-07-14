@@ -1,0 +1,13 @@
+clustering:
+  k_min: 8
+  k_max: 20
+  sample_rate: 0.5
+  sample_cap: 10000
+  metric: cosine
+  use_faiss: false  # Disabled for faster clustering with sklearn
+  warm_start: true
+  recluster_epochs: [2, 12]
+  lof:
+    n_neighbors: 20
+    contamination: auto
+    weight_scale: sigmoid

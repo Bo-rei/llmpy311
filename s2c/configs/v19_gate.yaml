@@ -1,0 +1,45 @@
+# HiLSA-MoE v19.2 - Gate SVDD Training Configuration
+
+# 数据配置
+data_dir: "data/v19/gate"
+backbone_name: "/home/bo/bo01/llmpy311/assets/models/smollm17b"
+
+# 模型配置
+lora_r: 64
+lora_alpha: 128
+projection_dim: 128
+
+# 训练配置
+batch_size: 32
+max_length: 128
+learning_rate: 2.0e-4
+min_lr: 1.0e-6
+epochs: 10
+weight_decay: 1.0e-4  # 仅作用于 Projection Head
+
+# 设备配置
+device: "cuda"
+num_workers: 4
+
+# 日志配置
+log_interval: 100
+save_interval: 1  # 每个 epoch 保存一次
+
+# 随机种子
+seed: 42
+
+# Phase 2 Hybrid Gate config (MiniLM fast gate + SmolLM semantic gate)
+semantic_gate_enabled: false
+uncertain_low: 0.98
+uncertain_high: 1.05
+semantic_gate_threshold: 0.55
+semantic_gate_batch_size: 64
+
+# 备注
+notes: |
+  v19 Gate SVDD Training
+  - Backbone: SmolLM2-1.7B (Frozen)
+  - Trainable: LoRA + Projection Head
+  - Loss: Deep SVDD (minimize distance to fixed center C)
+  - Center: Initialized from 7500 Pure Known samples
+  - Objective: Compact hypersphere for Known intents
