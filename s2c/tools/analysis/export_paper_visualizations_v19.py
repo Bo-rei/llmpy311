@@ -11,6 +11,7 @@ import argparse
 import csv
 import json
 import os
+import sys
 from collections import Counter
 from dataclasses import dataclass
 from pathlib import Path
@@ -26,8 +27,17 @@ from matplotlib.lines import Line2D
 from sklearn.decomposition import PCA
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
+if str(PROJECT_ROOT) not in sys.path:
+    # 保留 ``python tools/analysis/<script>.py`` 的历史调用方式。包内导入之前
+    # 先注册项目根，否则 Python 只会把 tools/analysis 视为 import root。
+    sys.path.insert(0, str(PROJECT_ROOT))
+
+from src.runtime import WorkspacePaths
+from tools.experiments.cluster_separability.protocol import gold_sample_kind
+
+PATHS = WorkspacePaths.discover(PROJECT_ROOT)
 DEFAULT_ROOT = (
-    PROJECT_ROOT
+    PATHS.artifact_root
     / "outputs"
     / "experiments"
     / "pipeline"
@@ -87,11 +97,10 @@ def load_json(path: Path) -> Any:
 
 
 def sample_kind(prediction: Dict[str, Any]) -> str:
-    if not bool(prediction.get("is_oos", False)):
-        return "known"
-    if str(prediction.get("true_intent")) == "oos":
-        return "native_oos"
-    return "heldout_unknown"
+    """仅根据 ground truth 字段分组，并将通用名称映射为本 exporter 的图例名称。"""
+
+    kind = gold_sample_kind(prediction)
+    return "native_oos" if kind == "native_or_provided_oos" else kind
 
 
 def prediction_score(prediction: Dict[str, Any]) -> float:
@@ -125,7 +134,9 @@ def select_known_intents(
     seed: int,
     min_support: int = 5,
 ) -> List[str]:
-    support = Counter(str(row["true_intent"]) for row in predictions if not bool(row.get("is_oos", False)))
+    """从真实 Known 样本中选取支持度足够的 intent，预测错误不改变候选集。"""
+
+    support = Counter(str(row["true_intent"]) for row in predictions if sample_kind(row) == "known")
     candidates = sorted(intent for intent, size in support.items() if size >= min_support)
     if len(candidates) <= count:
         return candidates
@@ -279,7 +290,13 @@ def _filter_clean_clinc_predictions(
     seed: int,
 ) -> List[Dict[str, Any]]:
     selected = set(selected_intents)
-    known = [row for row in predictions if not bool(row.get("is_oos", False)) and str(row["true_intent"]) in selected]
+    # Known/OOS 必须由真实 label 决定。如果使用预测 ``is_oos``，
+    # false-rejected Known 会从图中消失，false-accepted OOS 则会混入 Known。
+    known = [
+        row
+        for row in predictions
+        if sample_kind(row) == "known" and str(row["true_intent"]) in selected
+    ]
     heldout = [row for row in predictions if sample_kind(row) == "heldout_unknown"]
     native_oos = [row for row in predictions if sample_kind(row) == "native_oos"]
     rng = np.random.default_rng(seed)

@@ -3,6 +3,8 @@ import sys
 from pathlib import Path
 import tempfile
 
+import pytest
+
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
@@ -44,7 +46,12 @@ def test_profile_exposes_strict_historical_artifact_paths():
 
 
 def test_historical_gate_test_split_counts_are_stable():
-    data = json.loads(Path("data/v19/gate/test.json").read_text())
+    historical_test = Path("data/v19/gate/test.json")
+    if not historical_test.is_file():
+        # 严格历史快照不再复制到活跃仓库；只有显式挂载 repro bundle 时才校验
+        # 样本计数。跳过优于偷偷改用当前 5500 条的新协议数据冒充历史 5499 条。
+        pytest.skip("strict historical data/v19 snapshot is not mounted")
+    data = json.loads(historical_test.read_text())
     id_count = sum(
         1 for row in data if row.get("intent") != "oos" and row.get("label") != 1
     )

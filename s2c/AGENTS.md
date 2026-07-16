@@ -1,6 +1,6 @@
 # PROJECT KNOWLEDGE BASE
 
-**Generated:** 2026-04-04
+**Updated:** 2026-07-15
 **Project:** HiLSA-MoE v19 — Hierarchical LLM-based Mixture-of-Experts Intent Classifier
 
 ## OVERVIEW
@@ -14,18 +14,18 @@ Hierarchical intent classification pipeline: Gate (OOS detection) → Router (do
 │   ├── gate_minimal/ # Strict Deep SVDD baseline (ICML 2018)
 │   ├── models/       # Shared encoder, Expert, and SVDD model components
 │   ├── pipeline/     # End-to-end inference pipeline
+│   ├── router/       # The only Router implementation location
+│   ├── runtime/      # Workspace path and artifact contracts
 │   ├── inference/    # ExpertManager (memory-efficient LoRA switching)
 │   └── utils/        # Data loader, model factory
-├── tools/            # Analysis & eval scripts (versioned v19)
+├── tools/            # Train/eval workflows, vertical experiment packages, compat layers
 ├── scripts/          # Data build/rebuild scripts
 ├── configs/          # Hydra YAML configs
 ├── tests/            # pytest tests
-├── eval/             # Standalone OOS eval
 ├── docs/             # Chinese-language project docs (entry: docs/README.md)
-├── outputs/          # Experiment artifacts, checkpoints, reports
-├── data/             # Datasets
-├── archive/          # Historical cleanup outputs
-└── all-MiniLM-L6-v2/ # Local sentence-transformer model
+├── ../artifacts/s2c/ # Experiment artifacts, checkpoints, reports
+├── ../assets/        # Datasets and local model assets
+└── ../textoir/       # Independent upstream repository; never import as s2c package
 ```
 
 ## WHERE TO LOOK
@@ -44,6 +44,8 @@ Hierarchical intent classification pipeline: Gate (OOS detection) → Router (do
 | Gate training config | `configs/v19_gate.yaml` | SmolLM2-1.7B backbone |
 | Main training config | `configs/config.yaml` | Hydra, hilsa-llm-v4 experiment |
 | Run analysis/eval | `tools/analysis/`, `tools/eval/` | v19-versioned scripts |
+| Multi-cluster/OOS study | `tools/experiments/cluster_separability/` | One vertical package and thin module CLI |
+| TextOIR protocol | `tools/compat/textoir/` | External-process boundary and provenance |
 | Project docs (CN) | `docs/README.md` | Entry point for Chinese docs |
 
 ## CONVENTIONS
@@ -83,11 +85,14 @@ python tools/eval/eval_system_pipeline_v19.py
 
 # Run ablation matrix
 python tools/analysis/run_pipeline_ablation_matrix_paper_v19.py
+
+# Run MiniLM multi-cluster/OOS study
+python -m tools.experiments.cluster_separability --help
 ```
 
 ## NOTES
 - `src/router/` is the only Router implementation location; do not re-export Router classes from `src/models/`.
 - `environment.yml` has pinned versions — do not casually update
 - Chinese docs in `docs/` are the authoritative project documentation
-- `outputs/` contains all experiment artifacts — do not delete without archiving
-- `archive/` contains historical cleanup outputs — read-only reference
+- `../artifacts/s2c/` contains all experiment artifacts — do not delete without archiving
+- `../textoir/` is an independent clean checkout; all compatibility changes belong in runtime overlays

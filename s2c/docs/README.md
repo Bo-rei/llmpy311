@@ -28,6 +28,9 @@
 ## 当前主线提醒
 
 - Gate 的 canonical 兜底已切到 SmolLM semantic verifier。
+- 当前论文修订不重写级联方法；新实验主线是 MiniLM 已知意图多簇结构、
+  `K_gate` 消融与 Known/OOS（尤其 near-OOS）可分性。
+- 受控 Gate-only Baseline 与 TextOIR 外部协议分表报告，不与端到端意图分类数字混用。
 - 历史复现信息以 `docs/historical_repro_bundle/` 和实验产物 manifest 为准。
 
 ## 推荐入口速查
@@ -36,12 +39,14 @@
 - 多数据集训练主入口：`tools/analysis/run_multi_dataset_training_v19.py`
 - 系统评估：`tools/eval/eval_system_pipeline_v19.py`
 - 主消融：`tools/analysis/run_structure_backbone_ablation_v19.py`
+- MiniLM 多簇/OOS 实验：`python -m tools.experiments.cluster_separability --help`
+- TextOIR 协议兼容层：`tools/compat/textoir/`
 - 门控阈值/校准：`tools/analysis/validate_router_confidence_threshold_v19.py`
 - 历史参考：`docs/historical_repro_bundle/` 与对应实验产物 manifest
 
 ## 文档约定
 
 - 文档必须反映当前仓库真实状态，不写历史口号。
-- 所有结论必须能回到 `data/`、`outputs/`、`src/` 或 `tools/` 中的实际文件。
+- 所有结论必须能回到工作区 `assets/datasets/s2c/`、`artifacts/s2c/`，或仓库内 `src/`、`tools/` 中的实际文件。
 - 新实验、新基线、新归档，只更新本目录，不再分散写平行 md。
 - 如果某个结论还在实验中，必须明确写成“候选”或“未定”，不能写成既定事实。

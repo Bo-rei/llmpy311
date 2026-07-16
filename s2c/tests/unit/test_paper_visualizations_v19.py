@@ -11,15 +11,15 @@ from tools.analysis import export_paper_visualizations_v19 as viz
 
 
 def test_sample_kind_splits_known_heldout_and_native_oos():
-    assert viz.sample_kind({"is_oos": False, "true_intent": "weather"}) == "known"
-    assert viz.sample_kind({"is_oos": True, "true_intent": "oos"}) == "native_oos"
-    assert viz.sample_kind({"is_oos": True, "true_intent": "calendar"}) == "heldout_unknown"
+    assert viz.sample_kind({"label": 0, "is_oos": True, "true_intent": "weather"}) == "known"
+    assert viz.sample_kind({"label": 1, "is_oos": False, "true_intent": "oos"}) == "native_oos"
+    assert viz.sample_kind({"label": 1, "is_oos": False, "true_intent": "calendar"}) == "heldout_unknown"
 
 
 def test_gate_score_rows_use_real_prediction_fields(tmp_path: Path):
     predictions = [
-        {"is_oos": False, "true_intent": "weather", "gate_score": 0.8},
-        {"is_oos": True, "true_intent": "oos", "gate_distance": 9.0, "gate_radius": 3.0},
+        {"label": 0, "is_oos": False, "true_intent": "weather", "gate_score": 0.8},
+        {"label": 1, "is_oos": True, "true_intent": "oos", "gate_distance": 9.0, "gate_radius": 3.0},
     ]
     path = tmp_path / "predictions.json"
     path.write_text(json.dumps(predictions), encoding="utf-8")
@@ -79,18 +79,38 @@ def test_detector_centers_are_loaded_from_spheres(tmp_path: Path):
 
 def test_select_known_intents_is_seeded_and_supported():
     predictions = [
-        {"is_oos": False, "true_intent": "a"},
-        {"is_oos": False, "true_intent": "a"},
-        {"is_oos": False, "true_intent": "b"},
-        {"is_oos": False, "true_intent": "b"},
-        {"is_oos": False, "true_intent": "c"},
-        {"is_oos": False, "true_intent": "d"},
+        {"label": 0, "is_oos": False, "true_intent": "a"},
+        {"label": 0, "is_oos": False, "true_intent": "a"},
+        {"label": 0, "is_oos": False, "true_intent": "b"},
+        {"label": 0, "is_oos": False, "true_intent": "b"},
+        {"label": 0, "is_oos": False, "true_intent": "c"},
+        {"label": 0, "is_oos": False, "true_intent": "d"},
     ]
 
     selected = viz.select_known_intents(predictions, count=2, seed=7, min_support=2)
 
     assert len(selected) == 2
     assert set(selected) <= {"a", "b"}
+
+
+def test_clean_clinc_filter_uses_gold_kind_instead_of_gate_prediction():
+    predictions = [
+        {"label": 0, "is_oos": True, "true_intent": "weather"},
+        {"label": 1, "is_oos": False, "true_intent": "weather"},
+        {"label": 1, "is_oos": False, "true_intent": "oos"},
+    ]
+
+    selected = viz._filter_clean_clinc_predictions(
+        predictions,
+        selected_intents=["weather"],
+        max_oos_per_kind=10,
+        seed=42,
+    )
+
+    assert selected[0] is predictions[0]
+    assert predictions[1] in selected
+    assert predictions[2] in selected
+    assert sum(viz.sample_kind(row) == "known" for row in selected) == 1
 
 
 def test_space_metrics_separate_known_heldout_and_native_oos():
