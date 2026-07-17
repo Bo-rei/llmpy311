@@ -12,11 +12,14 @@ import argparse
 import csv
 import hashlib
 import json
+import math
 import statistics
 from collections import Counter, defaultdict
 from itertools import product
 from pathlib import Path
 from typing import Any, Iterable, Mapping, Sequence
+
+import numpy as np
 
 
 DATASETS = ("clinc150", "banking77_oos", "stackoverflow")
@@ -53,6 +56,14 @@ MATRIX_FIELDS = (
     "test_scoring_seconds",
     "test_samples_per_second",
     "process_peak_rss_mb",
+)
+
+CLUSTER_DETAIL_FIELDS = (
+    "phase", "dataset", "kir", "data_seed", "distance", "k_gate",
+    "intent", "support", "requested_k", "effective_k", "cluster_count",
+    "wcss", "wcss_per_sample", "minimum_cluster_size", "minimum_cluster_ratio",
+    "silhouette", "davies_bouldin", "calinski_harabasz",
+    "minimum_radius", "maximum_radius",
 )
 
 
@@ -230,6 +241,313 @@ def build_figure_manifest(root: Path) -> list[dict[str, Any]]:
             }
         )
     return rows
+
+
+def _finite_float(value: Any) -> float | None:
+    """将 CSV/JSON 数值规范为有限浮点数；NA/NaN 不参与统计。"""
+
+    try:
+        number = float(value)
+    except (TypeError, ValueError):
+        return None
+    return number if math.isfinite(number) else None
+
+
+def _mean_std(values: Iterable[Any]) -> tuple[float | str, float | str]:
+    finite = [number for value in values if (number := _finite_float(value)) is not None]
+    if not finite:
+        return "", ""
+    return statistics.fmean(finite), statistics.stdev(finite) if len(finite) > 1 else 0.0
+
+
+def collect_cluster_quality_rows(root: Path) -> list[dict[str, Any]]:
+    """汇总 fixed 主网格中已经逐 intent 保存的聚类诊断。
+
+    这里只聚合已有 ``cluster_metrics.csv``，不重新拟合 KMeans。K=8 stress
+    control 单独报告，因此不会混入 K=1..5 的论文聚类质量表。
+    """
+
+    output: list[dict[str, Any]] = []
+    for metrics_path in sorted((root / "fixed").rglob("cluster_metrics.csv")):
+        manifest_path = metrics_path.parent / "run_manifest.json"
+        if not manifest_path.is_file():
+            continue
+        manifest = _load_json(manifest_path)
+        config_value = manifest.get("config", {})
+        config = config_value if isinstance(config_value, Mapping) else {}
+        try:
+            k_gate = int(config["k_gate"])
+        except (KeyError, TypeError, ValueError):
+            continue
+        if k_gate not in K_VALUES:
+            continue
+        with metrics_path.open(encoding="utf-8", newline="") as handle:
+            for raw in csv.DictReader(handle):
+                support = int(raw["support"])
+                wcss = float(raw["wcss"])
+                output.append(
+                    {
+                        "phase": "fixed",
+                        "dataset": config["dataset"],
+                        "kir": int(config["kir"]),
+                        "data_seed": int(config["data_seed"]),
+                        "distance": config["distance"],
+                        "k_gate": k_gate,
+                        **raw,
+                        "wcss_per_sample": wcss / support if support else math.nan,
+                    }
+                )
+    return output
+
+
+def _cluster_quality_summary(rows: Iterable[Mapping[str, Any]]) -> list[dict[str, Any]]:
+    grouped: dict[tuple[str, int, str, int], list[Mapping[str, Any]]] = defaultdict(list)
+    for row in rows:
+        grouped[(str(row["dataset"]), int(row["kir"]), str(row["distance"]), int(row["k_gate"]))].append(row)
+
+    metric_names = (
+        "effective_k", "wcss_per_sample", "minimum_cluster_ratio",
+        "silhouette", "davies_bouldin", "calinski_harabasz",
+    )
+    output: list[dict[str, Any]] = []
+    for (dataset, kir, distance, k_gate), items in sorted(grouped.items()):
+        result: dict[str, Any] = {
+            "phase": "fixed",
+            "dataset": dataset,
+            "kir": kir,
+            "distance": distance,
+            "k_gate": k_gate,
+            "seed_count": len({int(item["data_seed"]) for item in items}),
+            "intent_rows": len(items),
+        }
+        fragmented = 0
+        for item in items:
+            ratio = _finite_float(item.get("minimum_cluster_ratio"))
+            effective = int(item["effective_k"])
+            requested = int(item["requested_k"])
+            fragmented += int(effective < requested or (ratio is not None and ratio < 0.10))
+        result["fragmented_intent_rate"] = fragmented / len(items) if items else math.nan
+        for metric in metric_names:
+            mean, std = _mean_std(item.get(metric) for item in items)
+            result[f"{metric}_mean"] = mean
+            result[f"{metric}_std"] = std
+        output.append(result)
+    return output
+
+
+def _paired_effect_summary(
+    deltas: Sequence[float],
+    *,
+    higher_is_better: bool,
+    seed_key: str,
+) -> dict[str, Any]:
+    """对同 split/seed 的差值给出均值、bootstrap CI 和胜率。
+
+    bootstrap 只重采样配对差值，不把不同 KIR 或 seed 当成不配对样本。
+    固定由分组键派生随机种子，保证 exporter 重跑时字节级稳定。
+    """
+
+    values = np.asarray(deltas, dtype=np.float64)
+    if values.size == 0:
+        raise ValueError("paired effect requires at least one delta")
+    seed = int(hashlib.sha256(seed_key.encode("utf-8")).hexdigest()[:16], 16)
+    rng = np.random.default_rng(seed)
+    sampled = rng.choice(values, size=(2000, values.size), replace=True).mean(axis=1)
+    tolerance = 1e-12
+    wins = values > tolerance if higher_is_better else values < -tolerance
+    ties = np.abs(values) <= tolerance
+    return {
+        "pair_count": int(values.size),
+        "mean_delta": float(values.mean()),
+        "std_delta": float(values.std(ddof=1)) if values.size > 1 else 0.0,
+        "ci95_low": float(np.quantile(sampled, 0.025)),
+        "ci95_high": float(np.quantile(sampled, 0.975)),
+        "win_rate": float(wins.mean()),
+        "tie_rate": float(ties.mean()),
+    }
+
+
+def build_paired_k_effects(rows: Iterable[Mapping[str, Any]]) -> list[dict[str, Any]]:
+    """比较 K=2..5 与相同 dataset/KIR/seed/distance 下的 K=1。"""
+
+    source = [dict(row) for row in rows if row.get("phase") in GRID_PHASES]
+    index = {
+        (
+            str(row["phase"]), str(row["dataset"]), int(row["kir"]),
+            int(row["data_seed"]), str(row["distance"]), int(row["k_gate"]),
+        ): row
+        for row in source
+        if row.get("k_gate") != "" and int(row["k_gate"]) in K_VALUES
+    }
+    metrics = {
+        "test_oos_f1": True,
+        "test_id_recall": True,
+        "test_fpr95": False,
+    }
+    output: list[dict[str, Any]] = []
+    for phase, dataset, distance, target_k in product(
+        GRID_PHASES, DATASETS, DISTANCES, (2, 3, 4, 5)
+    ):
+        for metric, higher_is_better in metrics.items():
+            deltas: list[float] = []
+            pairs: list[str] = []
+            for kir, seed in product(KIRS, DATA_SEEDS):
+                baseline = index.get((phase, dataset, kir, seed, distance, 1))
+                target = index.get((phase, dataset, kir, seed, distance, target_k))
+                if baseline is None or target is None:
+                    continue
+                base_value = _finite_float(baseline.get(metric))
+                target_value = _finite_float(target.get(metric))
+                if base_value is None or target_value is None:
+                    continue
+                deltas.append(target_value - base_value)
+                pairs.append(f"kir{kir}_seed{seed}")
+            if not deltas:
+                continue
+            key = f"k|{phase}|{dataset}|{distance}|{target_k}|{metric}"
+            output.append(
+                {
+                    "phase": phase,
+                    "dataset": dataset,
+                    "distance": distance,
+                    "reference_k": 1,
+                    "target_k": target_k,
+                    "metric": metric,
+                    "better_direction": "higher" if higher_is_better else "lower",
+                    "paired_cells": "|".join(pairs),
+                    **_paired_effect_summary(
+                        deltas, higher_is_better=higher_is_better, seed_key=key
+                    ),
+                }
+            )
+    return output
+
+
+def build_baseline_paired_effects(rows: Iterable[Mapping[str, Any]]) -> list[dict[str, Any]]:
+    """将各 Gate-only 方法与 validation-selected MultiSphere 做配对比较。"""
+
+    reference_method = "multisphere_selected_k"
+    source = [dict(row) for row in rows]
+    index = {
+        (str(row["dataset"]), int(row["kir"]), int(row["data_seed"]), str(row["method"])): row
+        for row in source
+    }
+    methods = sorted({str(row["method"]) for row in source if row.get("method") != reference_method})
+    metrics = {"test_oos_f1": True, "test_id_recall": True, "test_fpr95": False}
+    output: list[dict[str, Any]] = []
+    for dataset, method, metric in product(DATASETS, methods, metrics):
+        higher_is_better = metrics[metric]
+        deltas: list[float] = []
+        pairs: list[str] = []
+        for kir, seed in product(KIRS, DATA_SEEDS):
+            target = index.get((dataset, kir, seed, method))
+            reference = index.get((dataset, kir, seed, reference_method))
+            if target is None or reference is None:
+                continue
+            target_value = _finite_float(target.get(metric))
+            reference_value = _finite_float(reference.get(metric))
+            if target_value is None or reference_value is None:
+                continue
+            deltas.append(target_value - reference_value)
+            pairs.append(f"kir{kir}_seed{seed}")
+        if not deltas:
+            continue
+        key = f"baseline|{dataset}|{method}|{metric}"
+        output.append(
+            {
+                "dataset": dataset,
+                "method": method,
+                "reference_method": reference_method,
+                "metric": metric,
+                "better_direction": "higher" if higher_is_better else "lower",
+                "paired_cells": "|".join(pairs),
+                **_paired_effect_summary(
+                    deltas, higher_is_better=higher_is_better, seed_key=key
+                ),
+            }
+        )
+    return output
+
+
+def build_representative_intents(path: Path) -> list[dict[str, Any]]:
+    """从 KIR50 hard-intent 诊断中为每个数据集选择至多五个可解释案例。
+
+    选择规则同时覆盖“多模态程度高”“K=2 改善最大/最差”和“OOS false
+    accept 增减最大”。同一 intent 命中多个规则时只保留一行并合并原因，避免
+    人工挑选只支持主张的正面案例。
+    """
+
+    if not path.is_file():
+        return []
+    with path.open(encoding="utf-8", newline="") as handle:
+        raw_rows = [
+            row
+            for row in csv.DictReader(handle)
+            if int(row["kir"]) == 50 and row["multimodality_eligible"].lower() == "true"
+        ]
+    grouped: dict[tuple[str, str], list[Mapping[str, Any]]] = defaultdict(list)
+    for row in raw_rows:
+        grouped[(row["dataset"], row["intent"])].append(row)
+
+    aggregated: list[dict[str, Any]] = []
+    metric_names = (
+        "multimodality_score",
+        "false_reject_improvement_k1_minus_k2",
+        "oos_false_accept_delta_k2_minus_k1",
+        "intent_f1_delta_k2_minus_k1",
+    )
+    for (dataset, intent), items in sorted(grouped.items()):
+        row: dict[str, Any] = {
+            "dataset": dataset,
+            "intent": intent,
+            "observations": len(items),
+        }
+        for metric in metric_names:
+            mean, _ = _mean_std(item.get(metric) for item in items)
+            row[f"{metric}_mean"] = mean
+        aggregated.append(row)
+
+    output: list[dict[str, Any]] = []
+    for dataset in DATASETS:
+        candidates = [row for row in aggregated if row["dataset"] == dataset]
+        if not candidates:
+            continue
+        criteria = (
+            ("highest_multimodality", "multimodality_score_mean", True),
+            ("largest_false_reject_improvement", "false_reject_improvement_k1_minus_k2_mean", True),
+            ("largest_false_reject_degradation", "false_reject_improvement_k1_minus_k2_mean", False),
+            ("largest_oos_false_accept_reduction", "oos_false_accept_delta_k2_minus_k1_mean", False),
+            ("largest_oos_false_accept_increase", "oos_false_accept_delta_k2_minus_k1_mean", True),
+        )
+        selected: dict[str, dict[str, Any]] = {}
+        reasons: dict[str, list[str]] = defaultdict(list)
+        for reason, metric, descending in criteria:
+            eligible = [row for row in candidates if _finite_float(row.get(metric)) is not None]
+            if not eligible:
+                continue
+            winner = sorted(
+                eligible,
+                key=lambda row: (
+                    float(row[metric]) * (-1 if descending else 1),
+                    str(row["intent"]),
+                ),
+            )[0]
+            selected[winner["intent"]] = winner
+            reasons[winner["intent"]].append(reason)
+
+        # 规则可能多次选中同一个 intent；按多模态程度补足到五个案例。
+        for row in sorted(
+            candidates,
+            key=lambda item: (-float(item["multimodality_score_mean"]), str(item["intent"])),
+        ):
+            if len(selected) >= 5:
+                break
+            if row["intent"] not in selected:
+                selected[row["intent"]] = row
+                reasons[row["intent"]].append("high_multimodality_fill")
+        for intent, row in selected.items():
+            output.append({**row, "selection_reason": "|".join(reasons[intent])})
+    return sorted(output, key=lambda row: (row["dataset"], row["intent"]))
 
 
 def build_data_protocol_audit(
@@ -511,6 +829,26 @@ def export_artifacts(root: Path, output_dir: Path | None = None) -> dict[str, An
             _write_csv(output_dir / filename, selected, MATRIX_FIELDS)
             produced.append(filename)
 
+    paired_k = build_paired_k_effects(rows)
+    if paired_k:
+        _write_csv(output_dir / "paired_k_effects.csv", paired_k, paired_k[0].keys())
+        produced.append("paired_k_effects.csv")
+
+    cluster_rows = collect_cluster_quality_rows(root)
+    if cluster_rows:
+        _write_csv(
+            output_dir / "cluster_quality_by_intent.csv",
+            cluster_rows,
+            CLUSTER_DETAIL_FIELDS,
+        )
+        cluster_summary = _cluster_quality_summary(cluster_rows)
+        _write_csv(
+            output_dir / "cluster_quality_summary.csv",
+            cluster_summary,
+            cluster_summary[0].keys(),
+        )
+        produced.extend(("cluster_quality_by_intent.csv", "cluster_quality_summary.csv"))
+
     baseline_rows = _gate_baseline_rows(rows)
     if baseline_rows:
         _write_csv(output_dir / "gate_baseline_by_seed.csv", baseline_rows, MATRIX_FIELDS)
@@ -521,6 +859,14 @@ def export_artifacts(root: Path, output_dir: Path | None = None) -> dict[str, An
             baseline_summary[0].keys(),
         )
         produced.extend(("gate_baseline_by_seed.csv", "gate_baseline_summary.csv"))
+        baseline_effects = build_baseline_paired_effects(baseline_rows)
+        if baseline_effects:
+            _write_csv(
+                output_dir / "baseline_paired_effects.csv",
+                baseline_effects,
+                baseline_effects[0].keys(),
+            )
+            produced.append("baseline_paired_effects.csv")
 
     stress_rows = [
         row
@@ -551,6 +897,17 @@ def export_artifacts(root: Path, output_dir: Path | None = None) -> dict[str, An
         ]
         _write_csv(output_dir / "selected_k_frequency.csv", frequency_rows, frequency_rows[0].keys())
         produced.extend(("selected_k_summary.csv", "selected_k_frequency.csv"))
+
+    representative_intents = build_representative_intents(
+        root / "analysis" / "hard_intent_analysis.csv"
+    )
+    if representative_intents:
+        _write_csv(
+            output_dir / "representative_intents.csv",
+            representative_intents,
+            representative_intents[0].keys(),
+        )
+        produced.append("representative_intents.csv")
 
     figures = build_figure_manifest(root)
     (output_dir / "figure_manifest.json").write_text(

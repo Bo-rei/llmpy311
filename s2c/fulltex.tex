@@ -361,7 +361,7 @@ where $N$ is the size of test set, $y_i$ and $\hat{y}_i$ are the ground truth an
 
 \subsection{Performance on OOS Intent Detection}
 
-The performance on OOS intent detection is presented in table~\ref{tab:main_results_all}. The results show that the proposed method achieves the state-of-the-art OOS F1 scores across all settings. Compared to the baselines, the proposed method achieves 0.85\%$\sim17.12\%$ improvements on OOS F1 scores.
+The performance on OOS intent detection under the historical comparison protocol is presented in table~\ref{tab:main_results_all}. These results provide the original system-level reference point. We further conduct a controlled MiniLM Gate-only supplement below, because the historical table changes the encoder, cascade stage, and baseline implementation simultaneously.
 
 As shown in table~\ref{tab:main_results_all}, the OOS F1 scores of all methods decrease as KIR increases. That means the dense known intent distributions intensify the semantic overlap between in-domain and OOS queries.
 
@@ -422,6 +422,63 @@ But the proposed method performs stability on OOS F1 scores under different KIRs
 \caption{Performance comparison for all methods under different KIRs.}
 \label{tab:main_results_all}
 \end{table*}
+
+\subsection{Controlled Multi-cluster and OOS Separability Analysis}
+
+To directly test the multiple-cluster hypothesis, we freeze the MiniLM
+\texttt{all-MiniLM-L6-v2} embedding, use the same data splits and three data
+seeds ($13,42,87$), and only vary the number of local centers $K$. The gate
+uses the fixed boundary rule $s(\bar e)>1$, with Euclidean distance or
+per-cluster diagonal Mahalanobis distance. OOS is the positive class and the
+reported value is the standard OOS F1. This experiment is deliberately
+separated from the Router and Expert so that a change in known-intent
+classification cannot be mistaken for a change in OOS separability.
+
+\begin{table*}[t]
+\centering
+\small
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.05}
+\begin{tabular}{llccccc}
+\toprule
+\textbf{Dataset} & \textbf{Distance} & $K=1$ & $K=2$ & $K=3$ & $K=4$ & $K=5$ \\
+\midrule
+CLINC150 & Euclidean & 87.70$\pm$1.33 & 88.42$\pm$1.27 & 88.18$\pm$0.69 & 87.45$\pm$0.58 & 87.08$\pm$0.37 \\
+CLINC150 & Diag. Mahalanobis & 88.02$\pm$1.00 & 88.07$\pm$1.06 & 87.33$\pm$0.61 & 86.12$\pm$0.61 & 85.39$\pm$0.46 \\
+BANKING77-OOS & Euclidean & 80.06$\pm$1.40 & 82.26$\pm$1.83 & 83.58$\pm$0.90 & 84.54$\pm$0.55 & 85.60$\pm$0.59 \\
+BANKING77-OOS & Diag. Mahalanobis & 84.82$\pm$1.44 & 85.57$\pm$1.37 & 87.72$\pm$0.48 & 89.25$\pm$0.57 & 89.78$\pm$0.64 \\
+StackOverflow & Euclidean & 77.36$\pm$5.91 & 64.80$\pm$7.49 & 55.19$\pm$2.70 & 52.90$\pm$5.54 & 55.67$\pm$4.88 \\
+StackOverflow & Diag. Mahalanobis & 79.02$\pm$4.63 & 72.80$\pm$7.02 & 66.21$\pm$5.27 & 65.02$\pm$7.58 & 66.80$\pm$5.46 \\
+\bottomrule
+\end{tabular}
+\caption{Controlled fixed-boundary K ablation at KIR=0.50. Values are test OOS F1 (percentage, mean$\pm$standard deviation over three data seeds).}
+\label{tab:multicluster_k_ablation_v19}
+\end{table*}
+
+The controlled results do not support a universal ``more centers is better''
+claim. CLINC150 obtains a small Euclidean gain at $K=2$ and then declines;
+BANKING77-OOS benefits from larger $K$, especially with diagonal Mahalanobis
+distance; and StackOverflow degrades sharply as soon as the intent regions are
+split. Thus, the useful interpretation of multiple clusters is conditional:
+they can reduce under-coverage when an intent has stable local modes, but can
+also fragment the acceptance region and increase false rejection or false
+acceptance when the semantic partition is not aligned with the OOS boundary.
+
+The controlled Gate-only baselines reinforce this conclusion. At KIR=0.50,
+Entropy is strongest on CLINC150 (OOS F1 $0.9081$), kNN is strongest on
+BANKING77-OOS ($0.8675$), and Energy is strongest on StackOverflow ($0.8298$).
+Consequently, the multi-cluster gate should be reported as a geometry-based
+alternative whose benefit depends on the dataset and distance family, rather
+than as a uniformly superior replacement for confidence or neighborhood
+scoring.
+
+Finally, the near-OOS analysis shows the main remaining weakness of all gate
+variants. Using validation-only distance quantiles to define near, medium, and
+far OOS, and evaluating each bucket together with all Known test samples, the
+mean near-OOS F1 is only $0.3399$, $0.4864$, and $0.3531$ on BANKING77-OOS,
+CLINC150, and StackOverflow, respectively. The corresponding far-OOS F1 is
+$0.9492$, $0.8252$, and $0.6999$. This gap motivates future work on local
+Known/near-OOS separability rather than further tuning on easy far-OOS cases.
 
 \subsection{Interpretability Analysis for Gate Stage}
 

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import csv
 import json
+import math
 import sys
 from pathlib import Path
 
@@ -246,3 +247,108 @@ def test_k8_stress_is_separate_from_canonical_fixed_table(tmp_path: Path):
     stress = _read_csv(root / "k8_stress_control.csv")
     assert [row["k_gate"] for row in fixed] == ["1"]
     assert [row["k_gate"] for row in stress] == ["8"]
+
+
+def test_paired_k_effects_compare_same_kir_and_seed_against_k1(tmp_path: Path):
+    root = tmp_path / "experiments"
+    for seed, baseline, target in ((13, 0.70, 0.75), (42, 0.80, 0.78), (87, 0.60, 0.70)):
+        _write_unit(
+            root,
+            phase="fixed",
+            seed=seed,
+            distance="euclidean",
+            k_gate=1,
+            test_oos_f1=baseline,
+        )
+        _write_unit(
+            root,
+            phase="fixed",
+            seed=seed,
+            distance="euclidean",
+            k_gate=2,
+            test_oos_f1=target,
+        )
+
+    exporter.export_artifacts(root)
+
+    rows = _read_csv(root / "paired_k_effects.csv")
+    row = next(
+        item
+        for item in rows
+        if item["phase"] == "fixed"
+        and item["target_k"] == "2"
+        and item["metric"] == "test_oos_f1"
+    )
+    assert row["pair_count"] == "3"
+    assert math.isclose(float(row["mean_delta"]), (0.05 - 0.02 + 0.10) / 3)
+    assert math.isclose(float(row["win_rate"]), 2 / 3)
+    assert float(row["ci95_low"]) <= float(row["mean_delta"]) <= float(row["ci95_high"])
+
+
+def test_cluster_quality_export_aggregates_existing_per_intent_metrics(tmp_path: Path):
+    root = tmp_path / "experiments"
+    unit = _write_unit(root, phase="fixed", distance="euclidean", k_gate=2)
+    fields = [
+        "intent", "support", "requested_k", "effective_k", "minimum_radius",
+        "maximum_radius", "cluster_count", "wcss", "minimum_cluster_size",
+        "minimum_cluster_ratio", "silhouette", "davies_bouldin",
+        "calinski_harabasz",
+    ]
+    with (unit / "cluster_metrics.csv").open("w", encoding="utf-8", newline="") as handle:
+        writer = csv.DictWriter(handle, fieldnames=fields)
+        writer.writeheader()
+        writer.writerows(
+            [
+                {
+                    "intent": "a", "support": 10, "requested_k": 2,
+                    "effective_k": 2, "minimum_radius": 0.1, "maximum_radius": 0.2,
+                    "cluster_count": 2, "wcss": 5.0, "minimum_cluster_size": 4,
+                    "minimum_cluster_ratio": 0.4, "silhouette": 0.2,
+                    "davies_bouldin": 1.2, "calinski_harabasz": 3.0,
+                },
+                {
+                    "intent": "b", "support": 20, "requested_k": 2,
+                    "effective_k": 2, "minimum_radius": 0.1, "maximum_radius": 0.3,
+                    "cluster_count": 2, "wcss": 20.0, "minimum_cluster_size": 1,
+                    "minimum_cluster_ratio": 0.05, "silhouette": 0.1,
+                    "davies_bouldin": 1.8, "calinski_harabasz": 2.0,
+                },
+            ]
+        )
+
+    exporter.export_artifacts(root)
+
+    detail = _read_csv(root / "cluster_quality_by_intent.csv")
+    summary = _read_csv(root / "cluster_quality_summary.csv")[0]
+    assert len(detail) == 2
+    assert [float(row["wcss_per_sample"]) for row in detail] == [0.5, 1.0]
+    assert summary["intent_rows"] == "2"
+    assert math.isclose(float(summary["wcss_per_sample_mean"]), 0.75)
+    assert math.isclose(float(summary["fragmented_intent_rate"]), 0.5)
+
+
+def test_baseline_paired_effects_use_selected_multisphere_as_reference(tmp_path: Path):
+    root = tmp_path / "experiments"
+    for seed, msp_score, selected_score in ((13, 0.8, 0.7), (42, 0.6, 0.7)):
+        _write_unit(
+            root, phase="baselines", method="msp", seed=seed,
+            k_gate=1, test_oos_f1=msp_score,
+        )
+        # 让 validation-only selected-K 选择 K=2。
+        _write_unit(
+            root, phase="tuned", seed=seed, distance="mahalanobis_diag",
+            k_gate=1, test_oos_f1=0.65, validation_oos_f1=0.70,
+        )
+        _write_unit(
+            root, phase="tuned", seed=seed, distance="mahalanobis_diag",
+            k_gate=2, test_oos_f1=selected_score, validation_oos_f1=0.80,
+        )
+
+    exporter.export_artifacts(root)
+
+    rows = _read_csv(root / "baseline_paired_effects.csv")
+    row = next(item for item in rows if item["method"] == "msp" and item["metric"] == "test_oos_f1")
+    assert row["reference_method"] == "multisphere_selected_k"
+    assert row["pair_count"] == "2"
+    assert math.isclose(float(row["mean_delta"]), 0.0, abs_tol=1e-12)
+    assert math.isclose(float(row["win_rate"]), 0.5)
