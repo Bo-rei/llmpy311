@@ -28,7 +28,7 @@ configs/                     配置和 artifact 注册
 tests/                       回归与协议测试
 ```
 
-更晚的 v22/研究收口实现位于分支 `autoresearch/minilm-collision-20260718`。当前 `main` 不包含该分支后续新增的所有文件，但仍能看到它们留下的实验结果。
+更晚的 v22/研究收口实现位于本地分支 `autoresearch/minilm-collision-20260718`。该分支当前只作为本地研究历史，不是远程交付目标；`main` 不包含其后续新增的所有文件，但仍能看到它们留下的实验结果。
 
 ### 2. 结果
 

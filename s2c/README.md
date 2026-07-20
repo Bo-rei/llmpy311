@@ -13,7 +13,7 @@ s2c 是一个开放世界意图识别系统：输入先经过 `Gate` 判断是�
 | 层 | 位置/分支 | 作用 | 当前可信边界 |
 | --- | --- | --- | --- |
 | 当前主源码 | `main` 分支的 `s2c/src`、`s2c/tools` | 可运行的基础 Pipeline、v19 主网格和 v20/v21 研究入口 | 以当前 checkout 的文件为准 |
-| 最新研究收口源码 | `autoresearch/minilm-collision-20260718` 分支 | CE-Recon、边界形状、hard-negative、Cascade 收口等后续工具 | 只有切换到该分支后才能复现对应命令 |
+| 最新研究收口源码 | 本地 `autoresearch/minilm-collision-20260718` 分支 | CE-Recon、边界形状、hard-negative、Cascade 收口等后续工具 | 当前仅作为本地研究历史，不是远程交付目标 |
 | 实验结果 | `../artifacts/s2c/outputs/experiments/` | 已生成的 CSV、Parquet、JSON、模型和图表 | 先读 manifest；产物存在不等于当前分支有对应源码 |
 | 数据与模型 | `../assets/` | 数据集、split、MiniLM、SmolLM 等大文件 | 不属于 Git 源码仓库 |
 | 旧说明 | `docs/` 中未标为 active 的文件 | 历史背景、旧方案、论文草稿 | 只能解释历史，不能覆盖当前 manifest |
@@ -64,7 +64,7 @@ python -m tools.experiments.cluster_separability v20-analysis --help
 python -m tools.experiments.cluster_separability v21-semantic-probe --help
 ```
 
-`v22`、`study-closeout`、代表性 Cascade 的最新实现位于研究分支，不要在 `main` 上假设这些命令存在。切换前先确认没有未提交修改：
+`v22`、`study-closeout`、代表性 Cascade 的最新实现位于本地研究分支，不要在 `main` 上假设这些命令存在，也不要把该分支当作远程交付入口。切换前先确认没有未提交修改：
 
 ```bash
 git status --short
