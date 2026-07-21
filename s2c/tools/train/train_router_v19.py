@@ -249,7 +249,7 @@ def main():
     no_improve = 0
 
     for epoch in range(1, args.epochs + 1):
-        model.train()
+        model.train()#这行代码的意义是：将模型设置为训练模式，启用dropout和batch normalization等训练时特有的行为
         total_loss, correct, total = 0.0, 0, 0
         for step, batch in enumerate(train_loader, 1):
             input_ids = batch["input_ids"].to(device)
