@@ -16,6 +16,7 @@ from __future__ import annotations
 
 import json
 import logging
+import pickle
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Dict, List, Optional
@@ -23,7 +24,7 @@ from typing import Any, Dict, List, Optional
 import numpy as np
 import torch
 from sentence_transformers import SentenceTransformer
-from transformers import AutoTokenizer
+from transformers import AutoModel, AutoTokenizer
 
 from src.gate.intent_prototype_matcher import IntentPrototypeMatcher
 from src.gate.llm_semantic_verifier import LLMSemanticVerifier, LLMVerifierConfig
@@ -46,9 +47,59 @@ class PipelinePaths:
     experts_data_root: Path
     router_data_path: Path
     gate_train_path: Path
+    # 表示适配实验可选的 AutoModel checkpoint。为空时保持历史
+    # SentenceTransformer 加载路径，避免把两种 checkpoint 格式混用。
+    gate_encoder_checkpoint_path: Optional[Path] = None
+    # validation 选出的线性置信度 Gate（MSP/Entropy/Energy）序列化文件。
+    gate_baseline_path: Optional[Path] = None
     prompt_semantic_verifier_ckpt_path: Optional[Path] = None
     semantic_verifier_ckpt_path: Optional[Path] = None
     multi_prototype_path: Optional[Path] = None
+
+
+class _AdaptedSentenceEncoder:
+    """把表示适配训练输出接入 Gate 所需的 ``encode`` 接口。
+
+    CE/SupCon/CE-Recon 训练脚本保存的是 ``AutoModel.state_dict``，不是
+    sentence-transformers 目录。这里复用训练时的 mean pooling 和截断长度，
+    确保端到端评价使用与表示实验一致的语义空间。
+    """
+
+    def __init__(self, model_path: Path, checkpoint_path: Path, device: torch.device) -> None:
+        self.tokenizer = AutoTokenizer.from_pretrained(str(model_path), local_files_only=True)
+        self.model = AutoModel.from_pretrained(str(model_path), local_files_only=True)
+        payload = torch.load(checkpoint_path, map_location="cpu", weights_only=True)
+        self.model.load_state_dict(payload["encoder"])
+        self.model.to(device)
+        self.model.eval()
+        self.device = device
+
+    @staticmethod
+    def _mean_pool(hidden: torch.Tensor, mask: torch.Tensor) -> torch.Tensor:
+        mask_float = mask.unsqueeze(-1).to(hidden.dtype)
+        return (hidden * mask_float).sum(dim=1) / mask_float.sum(dim=1).clamp_min(1.0)
+
+    @torch.no_grad()
+    def encode(
+        self,
+        texts: List[str],
+        batch_size: int = 64,
+        show_progress_bar: bool = False,
+    ) -> np.ndarray:
+        outputs: List[np.ndarray] = []
+        for start in range(0, len(texts), int(batch_size)):
+            batch = self.tokenizer(
+                list(texts[start : start + int(batch_size)]),
+                padding=True,
+                truncation=True,
+                max_length=256,
+                return_tensors="pt",
+            ).to(self.device)
+            pooled = self._mean_pool(self.model(**batch).last_hidden_state, batch["attention_mask"])
+            outputs.append(pooled.detach().cpu().numpy().astype(np.float32))
+        if outputs:
+            return np.concatenate(outputs, axis=0)
+        return np.empty((0, int(self.model.config.hidden_size)), dtype=np.float32)
 
 
 class HiLSAMoEV19Pipeline:
@@ -119,6 +170,7 @@ class HiLSAMoEV19Pipeline:
 
         self.gate_encoder: Optional[SentenceTransformer] = None
         self.gate_detector: Optional[MultiSphereOOSDetector] = None
+        self.gate_baseline: Optional[Dict[str, Any]] = None
         self.multi_prototype_gate: Optional[MultiPrototypeGate] = None
         self.multi_prototype_intent_to_domain: Dict[str, str] = {}
         self.tokenizer = None
@@ -253,10 +305,17 @@ class HiLSAMoEV19Pipeline:
         self._build_binary_semantic_verifier()
 
     def _load_gate(self) -> None:
-        self.gate_encoder = SentenceTransformer(
-            str(self.paths.gate_encoder_path),
-            device=str(self.device),
-        )
+        if self.paths.gate_encoder_checkpoint_path is not None:
+            self.gate_encoder = _AdaptedSentenceEncoder(
+                self.paths.gate_encoder_path,
+                self.paths.gate_encoder_checkpoint_path,
+                self.device,
+            )
+        else:
+            self.gate_encoder = SentenceTransformer(
+                str(self.paths.gate_encoder_path),
+                device=str(self.device),
+            )
         if self.gate_mode == "multisphere":
             self.gate_detector = MultiSphereOOSDetector()
             self.gate_detector.load(self.paths.gate_detector_path)
@@ -326,6 +385,16 @@ class HiLSAMoEV19Pipeline:
             }
             return
 
+        if self.gate_mode == "linear_baseline":
+            if self.paths.gate_baseline_path is None:
+                raise ValueError("gate_mode=linear_baseline requires gate_baseline_path")
+            with self.paths.gate_baseline_path.open("rb") as file:
+                payload = pickle.load(file)
+            if not isinstance(payload, dict) or "classifier" not in payload:
+                raise ValueError("Invalid linear baseline payload")
+            self.gate_baseline = payload
+            return
+
         raise ValueError(f"Unsupported gate_mode: {self.gate_mode}")
 
     def _apply_gate_radius_scale(self) -> None:
@@ -349,6 +418,15 @@ class HiLSAMoEV19Pipeline:
     def _load_router(self) -> None:
         num_classes = self._infer_router_num_classes()
         self.router_num_classes = int(num_classes)
+        # 单域数据集（例如 BANKING77-OOS 和 StackOverflow）不存在路由
+        # 决策。旧流程仍会训练一个 1-class SmolLM head，既没有额外信息，
+        # 又容易在无意义的大 batch 训练中耗尽显存。这里显式采用常量路由，
+        # 由 ``_router_predict`` 返回唯一 domain；多域数据集仍严格加载
+        # 原有 checkpoint，保持历史 Cascade 行为不变。
+        if int(num_classes) == 1:
+            self.router_model = None
+            LOGGER.info("Single-domain router detected; using constant routing without loading a checkpoint.")
+            return
         self.router_model = SmolLMRouter(
             model_path=str(self.paths.model_path),
             num_classes=int(num_classes),
@@ -577,10 +655,53 @@ class HiLSAMoEV19Pipeline:
                 "nearest_intent": np.asarray(best_intents, dtype=object),
             }
 
+        if self.gate_mode == "linear_baseline":
+            if self.gate_baseline is None:
+                raise RuntimeError("Linear baseline gate is not initialized")
+            classifier = self.gate_baseline["classifier"]
+            method = str(self.gate_baseline["method"])
+            probabilities = np.asarray(classifier.predict_proba(embeddings_np), dtype=np.float64)
+            logits = np.asarray(classifier.decision_function(embeddings_np), dtype=np.float64)
+            if logits.ndim == 1:
+                logits = np.column_stack((-0.5 * logits, 0.5 * logits))
+            if method == "msp":
+                scores = 1.0 - np.max(probabilities, axis=1)
+            elif method == "entropy":
+                clipped = np.clip(probabilities, 1e-12, 1.0)
+                scores = -np.sum(clipped * np.log(clipped), axis=1) / np.log(probabilities.shape[1])
+            elif method == "energy":
+                shifted = logits - np.max(logits, axis=1, keepdims=True)
+                scores = -(np.max(logits, axis=1) + np.log(np.exp(shifted).sum(axis=1)))
+            else:
+                raise ValueError(f"Unsupported linear baseline method: {method}")
+            threshold = float(self.gate_baseline["threshold"])
+            pred = (scores > threshold).astype(np.int64)
+            nearest_intent = np.asarray(
+                [str(value) for value in classifier.classes_[np.argmax(probabilities, axis=1)]],
+                dtype=object,
+            )
+            return {
+                "pred": pred,
+                "score": np.asarray(scores, dtype=np.float64),
+                "distance": np.asarray(scores, dtype=np.float64),
+                "radius": np.full_like(scores, threshold, dtype=np.float64),
+                "margin_ok": pred == 0,
+                "nearest_cluster": np.full_like(pred, -1),
+                "nearest_intent": nearest_intent,
+            }
+
         raise ValueError(f"Unsupported gate_mode: {self.gate_mode}")
 
     @torch.no_grad()
     def _router_predict(self, texts: List[str], batch_size: int = 64) -> Dict[str, Any]:
+        # 单域路径不需要 tokenizer 或模型前向；仍返回与学习型 Router
+        # 完全相同的 schema，保证后续 Expert 分组无需特殊分支。
+        if self.router_model is None and int(self.router_num_classes or 0) == 1:
+            return {
+                "domain_ids": [0 for _ in texts],
+                "domain_probs": [1.0 for _ in texts],
+            }
+
         assert self.router_model is not None and self.tokenizer is not None
 
         all_domain_ids: List[int] = []

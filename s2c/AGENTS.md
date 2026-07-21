@@ -49,7 +49,9 @@ Hierarchical intent classification pipeline: Gate (OOS detection) → Router (do
 | Project docs (CN) | `docs/README.md` | Entry point for Chinese docs |
 
 ## CONVENTIONS
-- **Versioning**: All experiment scripts suffixed `_v19` (e.g., `run_pipeline_ablation_matrix_paper_v19.py`)
+- **Entrypoint naming**: Existing `_v19/_v20/_v21` names are historical compatibility names. New
+  entrypoints use a functional name (for example `run_cascade_repair.py`) and are registered in the
+  relevant current documentation; do not create another version-numbered CLI or Markdown tree.
 - **Hydra**: Config composition via `configs/config.yaml` with defaults list
 - **Import style**: `from src.module import Class` — repo root on sys.path
 - **Model wrappers**: LoRA via `peft`, backbone frozen, only LoRA + head trainable
@@ -94,5 +96,8 @@ python -m tools.experiments.cluster_separability --help
 - `src/router/` is the only Router implementation location; do not re-export Router classes from `src/models/`.
 - `environment.yml` has pinned versions — do not casually update
 - Chinese docs in `docs/` are the authoritative project documentation
+- Current reading entrypoints are `docs/README.md`, `docs/项目阅读指南.md`, `docs/PROJECT.md`,
+  `docs/07-当前状态与里程碑.md` and `docs/EXPERIMENTS.md`; other Markdown files are protocol/history
+  references and should not be read as a competing current status.
 - `../artifacts/s2c/` contains all experiment artifacts — do not delete without archiving
 - `../textoir/` is an independent clean checkout; all compatibility changes belong in runtime overlays

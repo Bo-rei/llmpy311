@@ -1024,6 +1024,38 @@ def _evaluate(records: List[Dict[str, Any]], preds: List[Dict[str, Any]]) -> Dic
     }
 
 
+def _cascade_error_stage(record: Dict[str, Any], prediction: Dict[str, Any]) -> str:
+    """为每条样本标记唯一 Cascade 错误阶段，便于归因而非只看总分。"""
+
+    true_oos = int(record["label"]) == 1
+    predicted_oos = bool(prediction.get("is_oos", prediction.get("gate_pred", 1)))
+    if true_oos:
+        return "correct_oos_rejection" if predicted_oos else "oos_accepted_by_gate"
+    if predicted_oos:
+        return "known_rejected_by_gate"
+    if str(prediction.get("domain", "")) != str(record.get("domain", "")):
+        return "known_wrong_domain"
+    if str(prediction.get("intent", OOS_LABEL)) != str(record.get("intent", "")):
+        return "known_wrong_expert"
+    return "correct_known_prediction"
+
+
+def _cascade_error_decomposition(predictions: List[Dict[str, Any]]) -> Dict[str, Any]:
+    """从样本级路径汇总计数和比例，不重新推理。"""
+
+    stages = (
+        "correct_oos_rejection",
+        "oos_accepted_by_gate",
+        "known_rejected_by_gate",
+        "known_wrong_domain",
+        "known_wrong_expert",
+        "correct_known_prediction",
+    )
+    counts = {stage: sum(row.get("error_stage") == stage for row in predictions) for stage in stages}
+    total = max(len(predictions), 1)
+    return {"counts": counts, "rates": {stage: float(count / total) for stage, count in counts.items()}}
+
+
 def _build_gate_diagnostics(
     metrics: Dict[str, Any],
     preds: List[Dict[str, Any]],
@@ -1111,6 +1143,11 @@ def main() -> None:
     parser.add_argument("--model_path", default=str(PATHS.smollm135m))
     parser.add_argument("--gate_encoder_path", default=str(PATHS.minilm))
     parser.add_argument(
+        "--gate_encoder_checkpoint_path",
+        default=None,
+        help="可选的 AutoModel encoder.pt，用于 CE/SupCon/CE-Recon Gate 表示。",
+    )
+    parser.add_argument(
         "--gate_detector_path",
         default=str(PATHS.artifact_root / "outputs/gate_production/detector.json"),
     )
@@ -1141,8 +1178,13 @@ def main() -> None:
     parser.add_argument(
         "--gate_mode",
         default="multisphere",
-        choices=["multisphere", "multi_prototype"],
+        choices=["multisphere", "multi_prototype", "linear_baseline"],
         help="Fast gate mode used before router/expert stages.",
+    )
+    parser.add_argument(
+        "--gate_baseline_path",
+        default=None,
+        help="linear_baseline 模式使用的 validation-selected 线性 Gate pickle。",
     )
     parser.add_argument(
         "--gate_radius_scale",
@@ -1360,6 +1402,10 @@ def main() -> None:
             experts_data_root=Path(args.experts_data_root),
             router_data_path=Path(args.router_train),
             gate_train_path=Path(args.gate_train),
+            gate_encoder_checkpoint_path=Path(args.gate_encoder_checkpoint_path)
+            if args.gate_encoder_checkpoint_path
+            else None,
+            gate_baseline_path=Path(args.gate_baseline_path) if args.gate_baseline_path else None,
             prompt_semantic_verifier_ckpt_path=Path(args.prompt_semantic_verifier_ckpt)
             if args.prompt_semantic_verifier_ckpt
             else None,
@@ -1631,15 +1677,19 @@ def main() -> None:
 
         merged_predictions: List[Dict[str, Any]] = []
         for row, pred in zip(gate_test_records, predictions):
-            merged_predictions.append(
-                {
-                    "text": row["text"],
-                    "true_intent": row["intent"],
-                    "true_domain": row["domain"],
-                    "true_gate_label": int(row["label"]),
-                    **pred,
-                }
-            )
+            merged = {
+                "text": row["text"],
+                "true_intent": row["intent"],
+                "true_domain": row["domain"],
+                "true_gate_label": int(row["label"]),
+                **pred,
+            }
+            merged["error_stage"] = _cascade_error_stage(row, merged)
+            merged_predictions.append(merged)
+
+        results["cascade_error_decomposition_sample_level"] = _cascade_error_decomposition(
+            merged_predictions
+        )
 
         with open(output_dir / "predictions.json", "w", encoding="utf-8") as file:
             json.dump(merged_predictions, file, indent=2, ensure_ascii=False)
@@ -1678,6 +1728,11 @@ def main() -> None:
             if args.router_confidence_threshold_source
             else None,
             "gate_detector_path": str(args.gate_detector_path),
+            "gate_encoder_path": str(args.gate_encoder_path),
+            "gate_encoder_checkpoint_path": str(args.gate_encoder_checkpoint_path)
+            if args.gate_encoder_checkpoint_path
+            else None,
+            "gate_baseline_path": str(args.gate_baseline_path) if args.gate_baseline_path else None,
             "router_ckpt": str(args.router_ckpt),
             "experts_root": str(args.experts_root),
             "gate_test": str(args.gate_test),
