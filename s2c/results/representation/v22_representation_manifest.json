@@ -1,0 +1,206 @@
+{
+  "blocked_events": [],
+  "complete_cells": 81,
+  "completed_events": [
+    {
+      "data_seed": 13,
+      "dataset": "clinc150",
+      "k_variant": "k1",
+      "representation": "frozen",
+      "status": "resumed_existing"
+    },
+    {
+      "data_seed": 13,
+      "dataset": "clinc150",
+      "k_variant": "k2",
+      "representation": "frozen",
+      "status": "resumed_existing"
+    },
+    {
+      "data_seed": 13,
+      "dataset": "clinc150",
+      "k_variant": "frozen_selected_k",
+      "representation": "frozen",
+      "status": "resumed_existing"
+    },
+    {
+      "data_seed": 42,
+      "dataset": "clinc150",
+      "k_variant": "k1",
+      "representation": "frozen",
+      "status": "resumed_existing"
+    },
+    {
+      "data_seed": 42,
+      "dataset": "clinc150",
+      "k_variant": "k2",
+      "representation": "frozen",
+      "status": "resumed_existing"
+    },
+    {
+      "data_seed": 42,
+      "dataset": "clinc150",
+      "k_variant": "frozen_selected_k",
+      "representation": "frozen",
+      "status": "resumed_existing"
+    },
+    {
+      "data_seed": 87,
+      "dataset": "clinc150",
+      "k_variant": "k1",
+      "representation": "frozen",
+      "status": "resumed_existing"
+    },
+    {
+      "data_seed": 87,
+      "dataset": "clinc150",
+      "k_variant": "k2",
+      "representation": "frozen",
+      "status": "resumed_existing"
+    },
+    {
+      "data_seed": 87,
+      "dataset": "clinc150",
+      "k_variant": "frozen_selected_k",
+      "representation": "frozen",
+      "status": "resumed_existing"
+    },
+    {
+      "data_seed": 13,
+      "dataset": "banking77_oos",
+      "k_variant": "k1",
+      "representation": "frozen",
+      "status": "resumed_existing"
+    },
+    {
+      "data_seed": 13,
+      "dataset": "banking77_oos",
+      "k_variant": "k2",
+      "representation": "frozen",
+      "status": "resumed_existing"
+    },
+    {
+      "data_seed": 13,
+      "dataset": "banking77_oos",
+      "k_variant": "frozen_selected_k",
+      "representation": "frozen",
+      "status": "resumed_existing"
+    },
+    {
+      "data_seed": 42,
+      "dataset": "banking77_oos",
+      "k_variant": "k1",
+      "representation": "frozen",
+      "status": "resumed_existing"
+    },
+    {
+      "data_seed": 42,
+      "dataset": "banking77_oos",
+      "k_variant": "k2",
+      "representation": "frozen",
+      "status": "resumed_existing"
+    },
+    {
+      "data_seed": 42,
+      "dataset": "banking77_oos",
+      "k_variant": "frozen_selected_k",
+      "representation": "frozen",
+      "status": "resumed_existing"
+    },
+    {
+      "data_seed": 87,
+      "dataset": "banking77_oos",
+      "k_variant": "k1",
+      "representation": "frozen",
+      "status": "resumed_existing"
+    },
+    {
+      "data_seed": 87,
+      "dataset": "banking77_oos",
+      "k_variant": "k2",
+      "representation": "frozen",
+      "status": "resumed_existing"
+    },
+    {
+      "data_seed": 87,
+      "dataset": "banking77_oos",
+      "k_variant": "frozen_selected_k",
+      "representation": "frozen",
+      "status": "resumed_existing"
+    },
+    {
+      "data_seed": 13,
+      "dataset": "stackoverflow",
+      "k_variant": "k1",
+      "representation": "frozen",
+      "status": "resumed_existing"
+    },
+    {
+      "data_seed": 13,
+      "dataset": "stackoverflow",
+      "k_variant": "k2",
+      "representation": "frozen",
+      "status": "resumed_existing"
+    },
+    {
+      "data_seed": 13,
+      "dataset": "stackoverflow",
+      "k_variant": "frozen_selected_k",
+      "representation": "frozen",
+      "status": "resumed_existing"
+    },
+    {
+      "data_seed": 42,
+      "dataset": "stackoverflow",
+      "k_variant": "k1",
+      "representation": "frozen",
+      "status": "resumed_existing"
+    },
+    {
+      "data_seed": 42,
+      "dataset": "stackoverflow",
+      "k_variant": "k2",
+      "representation": "frozen",
+      "status": "resumed_existing"
+    },
+    {
+      "data_seed": 42,
+      "dataset": "stackoverflow",
+      "k_variant": "frozen_selected_k",
+      "representation": "frozen",
+      "status": "resumed_existing"
+    },
+    {
+      "data_seed": 87,
+      "dataset": "stackoverflow",
+      "k_variant": "k1",
+      "representation": "frozen",
+      "status": "resumed_existing"
+    },
+    {
+      "data_seed": 87,
+      "dataset": "stackoverflow",
+      "k_variant": "k2",
+      "representation": "frozen",
+      "status": "resumed_existing"
+    },
+    {
+      "data_seed": 87,
+      "dataset": "stackoverflow",
+      "k_variant": "frozen_selected_k",
+      "representation": "frozen",
+      "status": "resumed_existing"
+    }
+  ],
+  "execute": true,
+  "expected_cells": 81,
+  "experiment_family": "minilm_semantic_collision_v22_representation",
+  "missing_cells": 0,
+  "output_root": "/home/bo/bo01/llmpy311/artifacts/s2c/outputs/experiments/minilm_semantic_collision_v22",
+  "schema_version": 1,
+  "status": "completed",
+  "test_used_for_selection": false,
+  "train_missing": false,
+  "used_oos_for_representation_training": false,
+  "v19_frozen": true
+}

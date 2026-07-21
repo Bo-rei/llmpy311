@@ -1,0 +1,123 @@
+{
+  "blockers": [
+    "missing_mogb_tsv_dataset",
+    "missing_bert_model",
+    "s2c_json_splits_need_explicit_export_and_label_mapping"
+  ],
+  "dataset_contract": {
+    "datasets": {
+      "banking": {
+        "present": false,
+        "root": "/tmp/s2c-mogb-audit/data/banking",
+        "splits": {
+          "dev": false,
+          "test": false,
+          "train": false
+        }
+      },
+      "snips": {
+        "present": false,
+        "root": "/tmp/s2c-mogb-audit/data/snips",
+        "splits": {
+          "dev": false,
+          "test": false,
+          "train": false
+        }
+      },
+      "stackoverflow": {
+        "present": false,
+        "root": "/tmp/s2c-mogb-audit/data/stackoverflow",
+        "splits": {
+          "dev": false,
+          "test": false,
+          "train": false
+        }
+      }
+    },
+    "expected_datasets": [
+      "banking",
+      "stackoverflow",
+      "snips"
+    ],
+    "missing_splits": [
+      "banking/train.tsv",
+      "banking/dev.tsv",
+      "banking/test.tsv",
+      "stackoverflow/train.tsv",
+      "stackoverflow/dev.tsv",
+      "stackoverflow/test.tsv",
+      "snips/train.tsv",
+      "snips/dev.tsv",
+      "snips/test.tsv"
+    ],
+    "uses_native_random_known_selection": {
+      "random_known_label_sampling": true,
+      "ratio_argument": true,
+      "uses_train_dev_test_tsv": true
+    }
+  },
+  "method": "MOGB",
+  "model_contract": {
+    "default_bert_model": "../uncased_L-12_H-768_A-12",
+    "present": false,
+    "resolved_default_bert_model": "/tmp/uncased_L-12_H-768_A-12"
+  },
+  "official_result_claim_allowed": false,
+  "repository": {
+    "branch": "main",
+    "clean": true,
+    "head": "5b689e2a03de0d86ec41212825e5db8d7f0e5c02",
+    "origin": "https://github.com/Liyanhuaa/MOGB.git",
+    "path": "/tmp/s2c-mogb-audit",
+    "required_code": {
+      "MOGB.py": true,
+      "dataloader.py": true,
+      "init_parameter.py": true,
+      "requirements.txt": true
+    },
+    "status_porcelain": []
+  },
+  "requirements": {
+    "boto3": "1.17.12",
+    "botocore": "1.20.12",
+    "certifi": "2020.12.5",
+    "chardet": "4.0.0",
+    "cycler": "0.10.0",
+    "dataclasses": "0.8",
+    "future": "0.18.2",
+    "idna": "2.10",
+    "jmespath": "0.10.0",
+    "joblib": "1.0.1",
+    "kiwisolver": "1.3.1",
+    "matplotlib": "3.3.3",
+    "numpy": "1.19.2",
+    "pandas": "1.1.4",
+    "pillow": "8.1.0",
+    "pyparsing": "2.4.7",
+    "python-dateutil": "2.8.1",
+    "pytorch-pretrained-bert": "0.6.2",
+    "pytz": "2021.1",
+    "regex": "2020.11.13",
+    "requests": "2.25.1",
+    "s3transfer": "0.3.4",
+    "scikit-learn": "0.23.2",
+    "scipy": "1.5.4",
+    "six": "1.15.0",
+    "threadpoolctl": "2.1.0",
+    "torch": "1.7.0",
+    "torchvision": "0.8.1",
+    "tornado": "6.0.4",
+    "tqdm": "4.52.0",
+    "typing-extensions": "3.7.4.3",
+    "urllib3": "1.26.3"
+  },
+  "s2c_data_contract": {
+    "format": "s2c prepared JSON; not directly consumable by MOGB TSV loader",
+    "oos_used_for_training": false,
+    "present": true,
+    "root": "/home/bo/bo01/llmpy311/assets/datasets/s2c/prepared/data/multidataset/v19",
+    "test_used_for_selection": false
+  },
+  "schema_version": 1,
+  "status": "blocked"
+}

@@ -13,3 +13,10 @@ __pycache__/
 .pytest_cache/
 .mypy_cache/
 .ruff_cache/
+.omx/
+/run.log
+/results.tsv
+*.log
+.coverage
+htmlcov/
+.DS_Store

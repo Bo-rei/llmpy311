@@ -1,0 +1,49 @@
+{
+  "cascade": {
+    "completed": [
+      "frozen_k1",
+      "frozen_selected_k",
+      "ce_recon_selected_k",
+      "best_controlled_baseline",
+      "full_kir50_three_seed_matrix"
+    ],
+    "matrix_manifest": "/home/bo/bo01/llmpy311/artifacts/s2c/outputs/experiments/cascade_full/gpu_kir50/evaluations/matrix_manifest.json",
+    "missing": [
+      "kir25_kir75_four_gate_matrix",
+      "cross_kir_ce_recon_checkpoints"
+    ],
+    "scope": "three_datasets/kir50_seed13_42_87/four_gate_variants",
+    "status": "full_36_unit_complete",
+    "summary": "/home/bo/bo01/llmpy311/artifacts/s2c/outputs/experiments/cascade_full/gpu_kir50/cascade_summary.csv"
+  },
+  "external_hard_negative": {
+    "completed": [
+      "frozen_k1",
+      "frozen_k2",
+      "ce_k1",
+      "supcon_k1",
+      "ce_recon_k1",
+      "ce_recon_selected_k",
+      "best_controlled_baseline"
+    ],
+    "missing": [
+      "stackoverflow_public_compatible_hard_negative_file"
+    ],
+    "scope": "clinc150_and_banking77_oos_seed42",
+    "status": "expanded_clinc_banking"
+  },
+  "mogb": {
+    "blockers": [
+      "missing_mogb_tsv_dataset",
+      "missing_bert_model",
+      "s2c_json_splits_need_explicit_export_and_label_mapping"
+    ],
+    "status": "audited_not_reproduced"
+  },
+  "statistics": {
+    "missing": [
+      "pre_registered_bootstrap_ci_for_three_primary_relationships"
+    ],
+    "status": "exploratory"
+  }
+}

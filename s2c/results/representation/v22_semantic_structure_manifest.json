@@ -1,0 +1,33 @@
+{
+  "alignment_rows": 4275,
+  "blocked_rows": 6,
+  "casebook_rows": 3000,
+  "completed_embedding_units": 30,
+  "cross_seed_rows": 501,
+  "datasets": [
+    "clinc150",
+    "banking77_oos",
+    "stackoverflow"
+  ],
+  "description_encoder": "/home/bo/bo01/llmpy311/assets/models/all-MiniLM-L6-v2",
+  "experiment": "v22_minilm_semantic_structure_audit",
+  "human_annotation_used": false,
+  "include_selected_k": true,
+  "kir": 50,
+  "lexical_rows": 1275,
+  "representations": [
+    "frozen",
+    "ce",
+    "supcon",
+    "unsupervised_simcse"
+  ],
+  "requested_k": 2,
+  "seeds": [
+    13,
+    42,
+    87
+  ],
+  "surface_nmi_rows": 10200,
+  "test_used_for_selection": false,
+  "v19_frozen": true
+}

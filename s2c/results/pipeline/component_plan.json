@@ -1,0 +1,567 @@
+{
+  "schema_version": 1,
+  "protocol": "cascade_full_kir50_downstream_components",
+  "execute": false,
+  "requested_datasets": [
+    "clinc150",
+    "banking77_oos",
+    "stackoverflow"
+  ],
+  "requested_seeds": [
+    13,
+    42,
+    87
+  ],
+  "datasets": [
+    "banking77_oos",
+    "clinc150",
+    "stackoverflow"
+  ],
+  "seeds": [
+    13,
+    42,
+    87
+  ],
+  "plans": [
+    {
+      "dataset": "banking77_oos",
+      "seed": 13,
+      "data_root": "/home/bo/bo01/llmpy311/assets/datasets/s2c/prepared/data/multidataset/v19/banking77_oos/kir50_seed13",
+      "router": "/home/bo/bo01/llmpy311/artifacts/s2c/outputs/experiments/cascade_full/gpu_kir50/seed13/downstream/banking77_oos/router/constant_router.json",
+      "experts": "/home/bo/bo01/llmpy311/artifacts/s2c/outputs/experiments/cascade_full/gpu_kir50/seed13/downstream/banking77_oos/experts",
+      "source": "gpu_trained_for_cascade_matrix",
+      "router_mode": "constant",
+      "domains": [
+        "banking"
+      ],
+      "commands": []
+    },
+    {
+      "dataset": "banking77_oos",
+      "seed": 42,
+      "data_root": "/home/bo/bo01/llmpy311/assets/datasets/s2c/prepared/data/multidataset/v19/banking77_oos/kir50_seed42",
+      "router": "/home/bo/bo01/llmpy311/artifacts/s2c/outputs/experiments/components/router/banking77_oos_kir50_seed42_router_v19/best_model.pt",
+      "experts": "/home/bo/bo01/llmpy311/artifacts/s2c/outputs/experiments/cascade_repair/gpu_kir50_seed42/expert_models",
+      "source": "existing_seed42_audited",
+      "domains": [
+        "banking"
+      ],
+      "commands": []
+    },
+    {
+      "dataset": "banking77_oos",
+      "seed": 87,
+      "data_root": "/home/bo/bo01/llmpy311/assets/datasets/s2c/prepared/data/multidataset/v19/banking77_oos/kir50_seed87",
+      "router": "/home/bo/bo01/llmpy311/artifacts/s2c/outputs/experiments/cascade_full/gpu_kir50/seed87/downstream/banking77_oos/router/constant_router.json",
+      "experts": "/home/bo/bo01/llmpy311/artifacts/s2c/outputs/experiments/cascade_full/gpu_kir50/seed87/downstream/banking77_oos/experts",
+      "source": "gpu_trained_for_cascade_matrix",
+      "router_mode": "constant",
+      "domains": [
+        "banking"
+      ],
+      "commands": []
+    },
+    {
+      "dataset": "clinc150",
+      "seed": 13,
+      "data_root": "/home/bo/bo01/llmpy311/assets/datasets/s2c/prepared/data/multidataset/v19/clinc150/kir50_seed13",
+      "router": "/home/bo/bo01/llmpy311/artifacts/s2c/outputs/experiments/cascade_full/gpu_kir50/seed13/downstream/clinc150/router/best_model.pt",
+      "experts": "/home/bo/bo01/llmpy311/artifacts/s2c/outputs/experiments/cascade_full/gpu_kir50/seed13/downstream/clinc150/experts",
+      "source": "gpu_trained_for_cascade_matrix",
+      "router_mode": "learned",
+      "domains": [
+        "auto_and_commute",
+        "banking",
+        "credit_cards",
+        "home",
+        "kitchen_and_dining",
+        "meta",
+        "small_talk",
+        "travel",
+        "utility",
+        "work"
+      ],
+      "commands": []
+    },
+    {
+      "dataset": "clinc150",
+      "seed": 42,
+      "data_root": "/home/bo/bo01/llmpy311/assets/datasets/s2c/prepared/data/multidataset/v19/clinc150/kir50_seed42",
+      "router": "/home/bo/bo01/llmpy311/artifacts/s2c/outputs/experiments/components/router/clinc150_kir50_seed42_router_v19/best_model.pt",
+      "experts": "/home/bo/bo01/llmpy311/artifacts/s2c/outputs/experiments/components/experts/clinc150_kir50_seed42_experts_v19",
+      "source": "existing_seed42_audited",
+      "domains": [
+        "auto_and_commute",
+        "banking",
+        "credit_cards",
+        "home",
+        "kitchen_and_dining",
+        "meta",
+        "small_talk",
+        "travel",
+        "utility",
+        "work"
+      ],
+      "commands": []
+    },
+    {
+      "dataset": "clinc150",
+      "seed": 87,
+      "data_root": "/home/bo/bo01/llmpy311/assets/datasets/s2c/prepared/data/multidataset/v19/clinc150/kir50_seed87",
+      "router": "/home/bo/bo01/llmpy311/artifacts/s2c/outputs/experiments/cascade_full/gpu_kir50/seed87/downstream/clinc150/router/best_model.pt",
+      "experts": "/home/bo/bo01/llmpy311/artifacts/s2c/outputs/experiments/cascade_full/gpu_kir50/seed87/downstream/clinc150/experts",
+      "source": "gpu_trained_for_cascade_matrix",
+      "router_mode": "learned",
+      "domains": [
+        "auto_and_commute",
+        "banking",
+        "credit_cards",
+        "home",
+        "kitchen_and_dining",
+        "meta",
+        "small_talk",
+        "travel",
+        "utility",
+        "work"
+      ],
+      "commands": []
+    },
+    {
+      "dataset": "stackoverflow",
+      "seed": 13,
+      "data_root": "/home/bo/bo01/llmpy311/assets/datasets/s2c/prepared/data/multidataset/v19/stackoverflow/kir50_seed13",
+      "router": "/home/bo/bo01/llmpy311/artifacts/s2c/outputs/experiments/cascade_full/gpu_kir50/seed13/downstream/stackoverflow/router/constant_router.json",
+      "experts": "/home/bo/bo01/llmpy311/artifacts/s2c/outputs/experiments/cascade_full/gpu_kir50/seed13/downstream/stackoverflow/experts",
+      "source": "gpu_trained_for_cascade_matrix",
+      "router_mode": "constant",
+      "domains": [
+        "stackoverflow"
+      ],
+      "commands": []
+    },
+    {
+      "dataset": "stackoverflow",
+      "seed": 42,
+      "data_root": "/home/bo/bo01/llmpy311/assets/datasets/s2c/prepared/data/multidataset/v19/stackoverflow/kir50_seed42",
+      "router": "/home/bo/bo01/llmpy311/artifacts/s2c/outputs/experiments/components/router/stackoverflow_kir50_seed42_router_v19/best_model.pt",
+      "experts": "/home/bo/bo01/llmpy311/artifacts/s2c/outputs/experiments/cascade_repair/gpu_kir50_seed42/expert_models",
+      "source": "existing_seed42_audited",
+      "domains": [
+        "stackoverflow"
+      ],
+      "commands": []
+    },
+    {
+      "dataset": "stackoverflow",
+      "seed": 87,
+      "data_root": "/home/bo/bo01/llmpy311/assets/datasets/s2c/prepared/data/multidataset/v19/stackoverflow/kir50_seed87",
+      "router": "/home/bo/bo01/llmpy311/artifacts/s2c/outputs/experiments/cascade_full/gpu_kir50/seed87/downstream/stackoverflow/router/constant_router.json",
+      "experts": "/home/bo/bo01/llmpy311/artifacts/s2c/outputs/experiments/cascade_full/gpu_kir50/seed87/downstream/stackoverflow/experts",
+      "source": "gpu_trained_for_cascade_matrix",
+      "router_mode": "constant",
+      "domains": [
+        "stackoverflow"
+      ],
+      "commands": []
+    }
+  ],
+  "audits_before_run": [
+    {
+      "dataset": "clinc150",
+      "seed": 13,
+      "status": "ready",
+      "missing": [],
+      "router": "/home/bo/bo01/llmpy311/artifacts/s2c/outputs/experiments/cascade_full/gpu_kir50/seed13/downstream/clinc150/router/best_model.pt",
+      "experts": "/home/bo/bo01/llmpy311/artifacts/s2c/outputs/experiments/cascade_full/gpu_kir50/seed13/downstream/clinc150/experts",
+      "domains": [
+        "auto_and_commute",
+        "banking",
+        "credit_cards",
+        "home",
+        "kitchen_and_dining",
+        "meta",
+        "small_talk",
+        "travel",
+        "utility",
+        "work"
+      ],
+      "source": "gpu_trained_for_cascade_matrix",
+      "checkpoint_sha256": {
+        "router": "5f035290a6e842455c43d3b343179a76a33bb883e92bd10fed5fa621623ddc1f",
+        "expert:auto_and_commute": "5170fa1bce35d6ffa84206f6e836da686b2331109cd7df52fa7ed88290104963",
+        "expert:banking": "0d51e4cd37cb249df34ce124cdb5155ca5a99303f912b1fcfad0ea0bf1e51894",
+        "expert:credit_cards": "28210461d80facd0a8e681fc677192657b43ead2c9be4396e4e637f0252a9fa9",
+        "expert:home": "ef5b3dec22cb91f919a1295df6cb4799669a2c830b3316678e22f6b30e43d9a5",
+        "expert:kitchen_and_dining": "153513f9a68b88fa34b7a98588f9a5afd75d98ac0954a78626951dbb07e55873",
+        "expert:meta": "1f18ddcb00e7cacd81ea88a7290db9e770da3e6192b280058d236c424b39b790",
+        "expert:small_talk": "2c25c4e07ffca4504e6d8e29a3ea9ad424b991461b94bbf0ae55e199b0be0429",
+        "expert:travel": "971eb78c1c90d0a679343fe9cd004ccf0cad07cc36090e7ed9f0346031bb8eb8",
+        "expert:utility": "045262c13d3b895c4ee9ed7d22fc9db6ab0291eb4eca7cfa8d0282a5f3fd66ce",
+        "expert:work": "432105534461ce9c1e7457968767256e636c978e7ce96f73f5b9dfd3dd06232b"
+      },
+      "checkpoint_stat": {
+        "router": {
+          "size": 545684059,
+          "mtime_ns": 1784531831964489572
+        },
+        "expert:auto_and_commute": {
+          "size": 541993051,
+          "mtime_ns": 1784532046248385858
+        },
+        "expert:banking": {
+          "size": 541993051,
+          "mtime_ns": 1784532107838735046
+        },
+        "expert:credit_cards": {
+          "size": 541993051,
+          "mtime_ns": 1784532179494492435
+        },
+        "expert:home": {
+          "size": 541993051,
+          "mtime_ns": 1784532227626608903
+        },
+        "expert:kitchen_and_dining": {
+          "size": 541993051,
+          "mtime_ns": 1784532283603430761
+        },
+        "expert:meta": {
+          "size": 541990747,
+          "mtime_ns": 1784532343126368449
+        },
+        "expert:small_talk": {
+          "size": 541990747,
+          "mtime_ns": 1784532402426905464
+        },
+        "expert:travel": {
+          "size": 541990747,
+          "mtime_ns": 1784532468543020310
+        },
+        "expert:utility": {
+          "size": 541990747,
+          "mtime_ns": 1784532518791655838
+        },
+        "expert:work": {
+          "size": 541990747,
+          "mtime_ns": 1784532593426196795
+        }
+      }
+    },
+    {
+      "dataset": "clinc150",
+      "seed": 42,
+      "status": "ready",
+      "missing": [],
+      "router": "/home/bo/bo01/llmpy311/artifacts/s2c/outputs/experiments/components/router/clinc150_kir50_seed42_router_v19/best_model.pt",
+      "experts": "/home/bo/bo01/llmpy311/artifacts/s2c/outputs/experiments/components/experts/clinc150_kir50_seed42_experts_v19",
+      "domains": [
+        "auto_and_commute",
+        "banking",
+        "credit_cards",
+        "home",
+        "kitchen_and_dining",
+        "meta",
+        "small_talk",
+        "travel",
+        "utility",
+        "work"
+      ],
+      "source": "existing_seed42_audited",
+      "checkpoint_sha256": {
+        "router": "00f49c80c458e9ec182e7bafeaafe8bd52449634de632de2cdf2b11d538e5a5e",
+        "expert:auto_and_commute": "819806dc587b6c32e389b7ad2367ca1b0d3f1e997f6c753acec73e86910e9a91",
+        "expert:banking": "bd72f3898fdb8195e5746017dbd73fa735ab4ab298f3c4ddeabba453bf39aad8",
+        "expert:credit_cards": "6e7733399a15ba6d2718c8f3149e2c8d1903fccd0973b1be08b02b91cd35b474",
+        "expert:home": "57525e067e40a2b0f15948473ec23ac15589c997c91de3ab6aae8152916e539f",
+        "expert:kitchen_and_dining": "b0843de04ca887996d84e80ae75d4cad08fada5f06cc7dec4505f9a9d015e847",
+        "expert:meta": "13d7ee9b20f96375dbe7e58fcd89699fad3c21571e486f6276df31e3bffde524",
+        "expert:small_talk": "0bf8824264e9d88e5f466c4cecdd56305bd89abaf27606ae53e0e6c7b9a242a5",
+        "expert:travel": "869562cdf6b7a21260de380bcf1954c92a785f42d7aeefdaaef12e7277c50074",
+        "expert:utility": "2ef1e6fc53bfe224c3a7bd85d260204fcb44fb71ac7c658311366e7c117255c1",
+        "expert:work": "7c371730c1fe9adefece4bedaa38e3e691f6d490e37d8ef0deb69b19703f6711"
+      },
+      "checkpoint_stat": {
+        "router": {
+          "size": 545683656,
+          "mtime_ns": 1784429487451245028
+        },
+        "expert:auto_and_commute": {
+          "size": 541992648,
+          "mtime_ns": 1784429679421787426
+        },
+        "expert:banking": {
+          "size": 541992648,
+          "mtime_ns": 1784429782358569945
+        },
+        "expert:credit_cards": {
+          "size": 541992648,
+          "mtime_ns": 1784429897192070295
+        },
+        "expert:home": {
+          "size": 541992648,
+          "mtime_ns": 1784430033541365406
+        },
+        "expert:kitchen_and_dining": {
+          "size": 541992648,
+          "mtime_ns": 1784430168715689535
+        },
+        "expert:meta": {
+          "size": 541990344,
+          "mtime_ns": 1784430241052667518
+        },
+        "expert:small_talk": {
+          "size": 541990344,
+          "mtime_ns": 1784430317948809879
+        },
+        "expert:travel": {
+          "size": 541990344,
+          "mtime_ns": 1784430398372975576
+        },
+        "expert:utility": {
+          "size": 541990344,
+          "mtime_ns": 1784430481466672220
+        },
+        "expert:work": {
+          "size": 541990344,
+          "mtime_ns": 1784430586358168168
+        }
+      }
+    },
+    {
+      "dataset": "clinc150",
+      "seed": 87,
+      "status": "ready",
+      "missing": [],
+      "router": "/home/bo/bo01/llmpy311/artifacts/s2c/outputs/experiments/cascade_full/gpu_kir50/seed87/downstream/clinc150/router/best_model.pt",
+      "experts": "/home/bo/bo01/llmpy311/artifacts/s2c/outputs/experiments/cascade_full/gpu_kir50/seed87/downstream/clinc150/experts",
+      "domains": [
+        "auto_and_commute",
+        "banking",
+        "credit_cards",
+        "home",
+        "kitchen_and_dining",
+        "meta",
+        "small_talk",
+        "travel",
+        "utility",
+        "work"
+      ],
+      "source": "gpu_trained_for_cascade_matrix",
+      "checkpoint_sha256": {
+        "router": "60215a74ea66e227e84d3026f1eba8a3fe645ff236c71915fd31d140fba1db3e",
+        "expert:auto_and_commute": "10ed6a8631689da9aae941ecd82a310d0d0a536f6df0264aeb4156e642d5807b",
+        "expert:banking": "38713f308232dc966735e09cb87a3e9a8c386ae46061cf86558ef2ce3279fc1e",
+        "expert:credit_cards": "d2da9cc7ab53250db7d3ba2cfe0c957c5fbd101d58d0e1f5fa1ed3b2acec4c29",
+        "expert:home": "948bf7bf6d4ee9e36ce0ae78e18afbd9d6b72a90b0042c84a87cbd97975bd399",
+        "expert:kitchen_and_dining": "72bcd2abf98db9761e57fd9a038a78b022003f2faf444ecf50c03b6b98efbe11",
+        "expert:meta": "6e90e44f11bbd4532dfa07332006c776cb0c668573e4e1140aeb886835acb9b2",
+        "expert:small_talk": "5df17816a892a53229b1415cf820967c8d2b651128fbd8c17577a4d465a1d69a",
+        "expert:travel": "9e1c2e4fc2e2c9356aee65a8f24f7a0a71b893a4b62de53a7ae52584c120581e",
+        "expert:utility": "6584aab43a992dd4cf24fe2cf8e33fe388618be991296eaf0d86519495d817fb",
+        "expert:work": "0e4c8b9e201579b2fcfabb3d83e5f6680d1dafb623fc47d65d63ce1dff0f4735"
+      },
+      "checkpoint_stat": {
+        "router": {
+          "size": 545684059,
+          "mtime_ns": 1784532751790985749
+        },
+        "expert:auto_and_commute": {
+          "size": 541993051,
+          "mtime_ns": 1784532947206503152
+        },
+        "expert:banking": {
+          "size": 541993051,
+          "mtime_ns": 1784533002761447126
+        },
+        "expert:credit_cards": {
+          "size": 541993051,
+          "mtime_ns": 1784533064076779626
+        },
+        "expert:home": {
+          "size": 541993051,
+          "mtime_ns": 1784533127742158131
+        },
+        "expert:kitchen_and_dining": {
+          "size": 541993051,
+          "mtime_ns": 1784533182863577951
+        },
+        "expert:meta": {
+          "size": 541990747,
+          "mtime_ns": 1784533249728037582
+        },
+        "expert:small_talk": {
+          "size": 541990747,
+          "mtime_ns": 1784533308660626860
+        },
+        "expert:travel": {
+          "size": 541990747,
+          "mtime_ns": 1784533364310785482
+        },
+        "expert:utility": {
+          "size": 541990747,
+          "mtime_ns": 1784533421791257033
+        },
+        "expert:work": {
+          "size": 541990747,
+          "mtime_ns": 1784533497414386271
+        }
+      }
+    },
+    {
+      "dataset": "banking77_oos",
+      "seed": 13,
+      "status": "ready",
+      "missing": [],
+      "router": "/home/bo/bo01/llmpy311/artifacts/s2c/outputs/experiments/cascade_full/gpu_kir50/seed13/downstream/banking77_oos/router/constant_router.json",
+      "experts": "/home/bo/bo01/llmpy311/artifacts/s2c/outputs/experiments/cascade_full/gpu_kir50/seed13/downstream/banking77_oos/experts",
+      "domains": [
+        "banking"
+      ],
+      "source": "gpu_trained_for_cascade_matrix",
+      "checkpoint_sha256": {
+        "router": "1868fbaa8f9cb240835e3e4f740ea6f07955ce24243f767ca7dad03e9506c6bd",
+        "expert:banking": "723c5d3af2f3582027f612dc00445fca2e392a2028366a0d259cf8667bacbf34"
+      },
+      "checkpoint_stat": {
+        "router": {
+          "size": 221,
+          "mtime_ns": 1784539154188149337
+        },
+        "expert:banking": {
+          "size": 542032283,
+          "mtime_ns": 1784533728977398285
+        }
+      }
+    },
+    {
+      "dataset": "banking77_oos",
+      "seed": 42,
+      "status": "ready",
+      "missing": [],
+      "router": "/home/bo/bo01/llmpy311/artifacts/s2c/outputs/experiments/components/router/banking77_oos_kir50_seed42_router_v19/best_model.pt",
+      "experts": "/home/bo/bo01/llmpy311/artifacts/s2c/outputs/experiments/cascade_repair/gpu_kir50_seed42/expert_models",
+      "domains": [
+        "banking"
+      ],
+      "source": "existing_seed42_audited",
+      "checkpoint_sha256": {
+        "router": "67a9bad310717b0d2269d0624e80abb4bf03800e1e157dfb107a59f5a35c1916",
+        "expert:banking": "fc42d603fa18465cbf5e9aca7f3c3758e9c738fb9c4c38f53efbe5a56772bdb0"
+      },
+      "checkpoint_stat": {
+        "router": {
+          "size": 545662920,
+          "mtime_ns": 1784449635138355924
+        },
+        "expert:banking": {
+          "size": 542032283,
+          "mtime_ns": 1784528079017123205
+        }
+      }
+    },
+    {
+      "dataset": "banking77_oos",
+      "seed": 87,
+      "status": "ready",
+      "missing": [],
+      "router": "/home/bo/bo01/llmpy311/artifacts/s2c/outputs/experiments/cascade_full/gpu_kir50/seed87/downstream/banking77_oos/router/constant_router.json",
+      "experts": "/home/bo/bo01/llmpy311/artifacts/s2c/outputs/experiments/cascade_full/gpu_kir50/seed87/downstream/banking77_oos/experts",
+      "domains": [
+        "banking"
+      ],
+      "source": "gpu_trained_for_cascade_matrix",
+      "checkpoint_sha256": {
+        "router": "238b8c5ecfb0542765e511b5f45820bd0a5809a567331d845eaf2030fb3ac55e",
+        "expert:banking": "c4295f6401d71e0f2baff092a328d99408705981a702ac1ad3fb4c87c1e65806"
+      },
+      "checkpoint_stat": {
+        "router": {
+          "size": 221,
+          "mtime_ns": 1784539154251735791
+        },
+        "expert:banking": {
+          "size": 542032283,
+          "mtime_ns": 1784533988005937325
+        }
+      }
+    },
+    {
+      "dataset": "stackoverflow",
+      "seed": 13,
+      "status": "ready",
+      "missing": [],
+      "router": "/home/bo/bo01/llmpy311/artifacts/s2c/outputs/experiments/cascade_full/gpu_kir50/seed13/downstream/stackoverflow/router/constant_router.json",
+      "experts": "/home/bo/bo01/llmpy311/artifacts/s2c/outputs/experiments/cascade_full/gpu_kir50/seed13/downstream/stackoverflow/experts",
+      "domains": [
+        "stackoverflow"
+      ],
+      "source": "gpu_trained_for_cascade_matrix",
+      "checkpoint_sha256": {
+        "router": "c253bf95298902ff6c4da2d8f23f8634afb123355ac0887514249e3b550d8a94",
+        "expert:stackoverflow": "8f82f24f13b089058cd5b887e01ceb725a8f63068dbb2bc71e4980111f48223e"
+      },
+      "checkpoint_stat": {
+        "router": {
+          "size": 227,
+          "mtime_ns": 1784539154270780625
+        },
+        "expert:stackoverflow": {
+          "size": 541997659,
+          "mtime_ns": 1784538149599010314
+        }
+      }
+    },
+    {
+      "dataset": "stackoverflow",
+      "seed": 42,
+      "status": "ready",
+      "missing": [],
+      "router": "/home/bo/bo01/llmpy311/artifacts/s2c/outputs/experiments/components/router/stackoverflow_kir50_seed42_router_v19/best_model.pt",
+      "experts": "/home/bo/bo01/llmpy311/artifacts/s2c/outputs/experiments/cascade_repair/gpu_kir50_seed42/expert_models",
+      "domains": [
+        "stackoverflow"
+      ],
+      "source": "existing_seed42_audited",
+      "checkpoint_sha256": {
+        "router": "2f0f441e7a02fddcfac9ad1b64c4cac77417ceec6c89f2a346f044632934943f",
+        "expert:stackoverflow": "e06e45a64b7b42eec84ba5220ae6865ed007df2ed3aa6ff5f954f561d4b6dc94"
+      },
+      "checkpoint_stat": {
+        "router": {
+          "size": 276627803,
+          "mtime_ns": 1784451602801266815
+        },
+        "expert:stackoverflow": {
+          "size": 541997659,
+          "mtime_ns": 1784527800831894631
+        }
+      }
+    },
+    {
+      "dataset": "stackoverflow",
+      "seed": 87,
+      "status": "ready",
+      "missing": [],
+      "router": "/home/bo/bo01/llmpy311/artifacts/s2c/outputs/experiments/cascade_full/gpu_kir50/seed87/downstream/stackoverflow/router/constant_router.json",
+      "experts": "/home/bo/bo01/llmpy311/artifacts/s2c/outputs/experiments/cascade_full/gpu_kir50/seed87/downstream/stackoverflow/experts",
+      "domains": [
+        "stackoverflow"
+      ],
+      "source": "gpu_trained_for_cascade_matrix",
+      "checkpoint_sha256": {
+        "router": "241230d9f08ea8adbe4e4a4d0f7454b4575e3cb2dc6cbb5c3abbedc14eeb8ed8",
+        "expert:stackoverflow": "613948dcf57dcb7162b298d3af1b84933069625a99854bcd7acd7f357e03eeab"
+      },
+      "checkpoint_stat": {
+        "router": {
+          "size": 227,
+          "mtime_ns": 1784539154335246262
+        },
+        "expert:stackoverflow": {
+          "size": 541997659,
+          "mtime_ns": 1784538434743940702
+        }
+      }
+    }
+  ],
+  "manifest_merge": "preserve existing dataset/seed plans and replace requested keys"
+}

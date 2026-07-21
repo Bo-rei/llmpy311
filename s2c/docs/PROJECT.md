@@ -1,91 +1,45 @@
 # s2c 项目契约
 
-这份文件只说明当前项目怎么组织、哪些结果可信，以及阅读时不能越过的边界。历史设计和旧实验不再作为当前入口。
+## 项目边界
 
-## 系统边界
-
-```text
-文本
- └─ MiniLM Gate：Known / OOS
-     └─ SmolLM Router：domain
-         └─ SmolLM Expert：intent
-```
-
-研究主线是 `MiniLM 表示 → Known 局部支持结构 → OOS 可分性`。Known intent 分类只用于检查 false reject、多簇收益和完整系统传递，不是本轮独立方法贡献。
-
-## 工作区布局
+s2c 是开放世界意图识别系统，运行链路固定为：
 
 ```text
-../assets/       数据集、split、预训练模型
-../artifacts/    被 Git 忽略的模型和实验产物
-s2c/src/         可复用 pipeline、Gate、Router、Expert 实现
-s2c/tools/       训练、评价、分析入口
-s2c/tests/       协议和回归测试
-s2c/configs/     运行配置和实验登记
-s2c/docs/        仅四份活动文档；历史材料在 docs/archive/
+文本 → MiniLM Gate（Known/OOS）→ Router（domain）→ Expert（intent）
 ```
 
-路径由 `src.runtime.WorkspacePaths` 推导。不要在仓库内复制 `data/`、`models/` 或 `outputs/`。
+当前活动代码、配置、测试和文档都在 `s2c/`。本轮不新增方法、不重跑训练，
+只维护可复现入口和轻量公开结果。
 
-## 当前可运行入口
+## 工作区职责
 
-| 工作 | 入口 | 当前状态 |
+| 目录 | 职责 | 是否提交父仓库 |
 | --- | --- | --- |
-| 数据准备/基础流程 | `python -m src.cli` | 可运行 |
-| Gate-only 机制实验 | `python -m tools.experiments.cluster_separability` | 结果冻结 |
-| 下游组件预检 | `python tools/train/run_cascade_components.py` | 9/9 ready |
-| Gate 适配预检 | `python tools/eval/prepare_cascade_gates.py` | 9/9 ready |
-| 完整 Cascade 预检 | `python tools/eval/run_cascade_matrix.py` | 36/36 complete |
-| 汇总与配对分析 | `python tools/analysis/export_cascade_repair_summary.py` | 当前 main 可运行 |
-| 结果登记审计 | `python tools/analysis/audit_experiment_registry.py` | 当前 main 可运行 |
+| `s2c/` | 活动源码、配置、测试、文档、轻量公开结果 | 是 |
+| `../assets/` | 数据集和基础模型 | 否，保持忽略 |
+| `../artifacts/` | 原始实验输出、checkpoint、embedding、逐样本结果 | 否，保持忽略 |
+| `../archives/` | 本地历史材料和日志 | 否，保持忽略 |
+| `../textoir/` | 独立上游仓库 | 否，保持独立 Git |
 
-活动入口和历史兼容脚本的分类见 `configs/active_entrypoints.json`。未引用脚本只生成报告，不自动删除。
+`s2c/results/` 只存由 `configs/public_results.yaml` 白名单导出的轻量 CSV/JSON，
+不替代 `../artifacts/`，也不包含模型、embedding、checkpoint 或逐样本输出。
 
-## Banking77/StackOverflow 是否已经修复
+## 源码边界
 
-已经修复并重新运行，不是待办事项：
+- Router 的实现位于 `src/router/`，当前入口主要是 `src/router/router_model.py`。
+- Expert 的实现位于 `src/models/expert.py`，级联推理由 `src/pipeline/` 组织。
+- Gate 实现位于 `src/gate/` 和 `src/gate_minimal/`；后者保持严格基线语义。
+- 训练/评价/导出入口位于 `tools/`；公开快照维护入口位于
+  `tools/maintenance/export_public_results.py`。
+- `configs/experiment_registry.yaml` 登记原始实验的入口、manifest 和汇总文件；
+  `configs/public_results.yaml` 登记允许进入 GitHub 的精确文件。
 
-1. 单域数据集不再训练无意义的 1-class SmolLM Router，而是使用 manifest 声明的 constant router。
-2. Expert 只按 `MANIFEST.json` 中声明的 domain 训练，避免把残留目录误当成真实 domain。
-3. Banking77/StackOverflow seed13、87 使用本轮 GPU 训练组件，seed42 使用已审计组件；四种 Gate 共用同一 dataset/seed 的下游组件。
-4. Expert 单点 test accuracy 约为 Banking77 `0.849`、StackOverflow `0.874`；旧 smoke 中的异常低数字不属于当前主结果。
+## 当前活动入口
 
-因此当前若看到 Known macro-F1 的变化，应先按 `cascade_banking_tradeoff.csv` 和 `cascade_error_decomposition_summary.csv` 判断是 Gate 的 false reject/false accept 权衡，而不是再次误判为下游组件坏掉。
+1. [README.md](../README.md)：项目入口。
+2. [EXPERIMENTS.md](EXPERIMENTS.md)：结果层次和公开快照。
+3. [RUNBOOK.md](RUNBOOK.md)：审计、测试和导出命令。
 
-## 证据优先级
-
-```text
-单元 eval_results.json / run_manifest.json
-  > matrix_manifest.json / 汇总 CSV
-  > 当前源码和测试
-  > 活动文档
-  > docs/archive/ 中的历史说明和旧论文稿
-```
-
-论文数字必须能追溯到 dataset、KIR、seed、split、Gate 配置、checkpoint、validation 选择规则和源码 commit。
-
-## 当前研究边界
-
-- 主数据集：CLINC150、BANKING77-OOS、StackOverflow。
-- 当前完整系统矩阵只冻结 KIR50、seed `{13,42,87}`、四种代表 Gate，共 36 个单元；不扩展 KIR25/75。
-- 不新增 Gate、K、encoder 或普通 baseline 家族。
-- MOGB 只有协议审计时，不把审计 JSON 当成性能结果。
-- 当前 `bo` 环境实际 sklearn 版本为 `1.8.0`，baseline 反序列化审计无 warning；不因不存在的 warning 重训。
-- 完整 Pipeline 的系统级结论必须同时报告 OOS F1、Known macro-F1、accuracy、ID Recall 和 Gate/Router/Expert 错误分解。
-
-## 结果位置
-
-```text
-../artifacts/s2c/outputs/experiments/cascade_full/gpu_kir50/
-├── component_plan.json
-├── gates/gate_manifest.json
-├── evaluations/matrix_manifest.json
-├── cascade_summary.csv
-├── cascade_gate_by_seed.csv
-├── cascade_gate_summary.csv
-├── cascade_error_decomposition.csv
-├── cascade_error_decomposition_summary.csv
-└── cascade_banking_tradeoff.csv
-```
-
-Gate-only、MiniLM、外部 hard-negative 和历史研究结果统一登记在 `configs/experiment_registry.yaml`；执行登记审计不会改变任何结果。
+历史说明只在 `docs/archive/`，不能覆盖当前事实。读取完整实验数字时，先看
+`../artifacts/s2c/outputs/experiments/` 下的 manifest，再看汇总 CSV；读取 GitHub
+数字时只看 `results/MANIFEST.csv` 及其对应文件。

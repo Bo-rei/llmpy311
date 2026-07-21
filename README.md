@@ -1,21 +1,12 @@
-# LLMPY311 workspace
+# LLMPY311 工作区
 
-This is a multi-project research workspace, not one Python package. Its
-top-level directories have one responsibility each:
+这是一个多项目研究工作区，不是单一 Python 包。
 
-- `s2c/` — active HiLSA-MoE v19 codebase. Start at its
-  [documentation index](./s2c/docs/README.md).
-- `assets/models/` and `assets/datasets/` — shared local models and small
-  standalone datasets.
-- `archives/` — legacy research, idea-search output, submissions, and dated source snapshots.
+- `s2c/`：当前活动项目，入口是 [s2c/README.md](s2c/README.md)。
+- `assets/`：本地数据集和基础模型，只供运行时使用。
+- `artifacts/`：原始实验产物、checkpoint、embedding 和逐样本输出，保持 Git 忽略。
+- `archives/`：本地历史材料和旧运行日志，保持 Git 忽略。
+- `textoir/`：独立 Git 仓库，父仓库不纳入其内容。
 
-## Migration plan and compatibility
-
-There are no root-level compatibility symlinks. Use `projects/s2c` for code,
-`assets` for models and datasets, `artifacts` for generated results, and
-`archives` for non-active material.
-
-The migration does not delete models, datasets, experiment outputs, or the
-submission/snapshot archives. `s2c_submission` remains whole under
-`archives/submissions/` because it is a self-contained reproduction bundle,
-not a source tree to merge into `s2c`.
+公开、可提交 GitHub 的轻量结果位于 `s2c/results/`；完整结果仍保留在
+`artifacts/`，两者不能混用。

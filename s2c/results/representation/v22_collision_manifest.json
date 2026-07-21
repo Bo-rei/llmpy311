@@ -1,0 +1,36 @@
+{
+  "blocked_units": 6,
+  "collision_definition": "nearest-known cosine >= q05 of same-intent known validation cosine",
+  "completed_units": 99,
+  "datasets": [
+    "clinc150",
+    "banking77_oos",
+    "stackoverflow"
+  ],
+  "experiment": "v22_minilm_collision_analysis",
+  "k_names": [
+    "1",
+    "2",
+    "frozen_selected_k",
+    "tuned_selected_k"
+  ],
+  "kir": 50,
+  "new_completed_units": 99,
+  "output_root": "/home/bo/bo01/llmpy311/artifacts/s2c/outputs/experiments/minilm_semantic_collision_v22",
+  "overcoverage_definition": "OOS is not a representation collision but score <= validation/fixed threshold",
+  "representations": [
+    "frozen",
+    "ce",
+    "supcon",
+    "unsupervised_simcse"
+  ],
+  "seeds": [
+    13,
+    42,
+    87
+  ],
+  "test_used_for_selection": false,
+  "used_oos_for_representation_training": false,
+  "v19_frozen": true,
+  "v21_root": "/home/bo/bo01/llmpy311/artifacts/s2c/outputs/experiments/cluster_separability_v21"
+}

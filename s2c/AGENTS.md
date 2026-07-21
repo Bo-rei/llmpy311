@@ -1,103 +1,56 @@
-# PROJECT KNOWLEDGE BASE
+# s2c 项目知识库
 
-**Updated:** 2026-07-15
-**Project:** HiLSA-MoE v19 — Hierarchical LLM-based Mixture-of-Experts Intent Classifier
+## 当前边界
 
-## OVERVIEW
-Hierarchical intent classification pipeline: Gate (OOS detection) → Router (domain classification) → Expert (fine-grained intent). Built on SmolLM-135M/1.7B + LoRA, PyTorch, sentence-transformers. Conda env `bo`, Python 3.11.
+这是 `Gate → Router → Expert` 开放世界意图识别项目。当前活动源码、配置、测试、
+文档和轻量公开结果均在 `s2c/`；本地原始产物在 `../artifacts/s2c/`，数据和基础模型
+在 `../assets/`，独立 TextOIR 仓库在 `../textoir/`。
 
-## STRUCTURE
+当前文档入口只有：
+
+- `README.md`
+- `docs/PROJECT.md`
+- `docs/EXPERIMENTS.md`
+- `docs/RUNBOOK.md`
+
+`docs/archive/` 仅保存历史资料，不是当前事实来源。不要重新建立平行文档索引或版本号
+文档树。
+
+## 源码位置
+
+```text
+src/gate/             Gate/OOS 实现
+src/gate_minimal/     严格 SVDD 基线，不做工程化改写
+src/router/           唯一 Router 实现位置
+src/models/expert.py  Expert 实现
+src/pipeline/         完整级联推理
+src/runtime/          WorkspacePaths 和 artifact 约定
+tools/                训练、评价、分析、兼容和维护入口
+configs/              运行配置、实验登记和公开导出白名单
+tests/                单元、协议和回归测试
+results/              GitHub 可提交的轻量 CSV/JSON 快照
 ```
-./
-├── src/              # Core library code
-│   ├── gate/         # OOS detection gates (multi-sphere, multi-prototype, LLM verifier)
-│   ├── gate_minimal/ # Strict Deep SVDD baseline (ICML 2018)
-│   ├── models/       # Shared encoder, Expert, and SVDD model components
-│   ├── pipeline/     # End-to-end inference pipeline
-│   ├── router/       # The only Router implementation location
-│   ├── runtime/      # Workspace path and artifact contracts
-│   ├── inference/    # ExpertManager (memory-efficient LoRA switching)
-│   └── utils/        # Data loader, model factory
-├── tools/            # Train/eval workflows, vertical experiment packages, compat layers
-├── scripts/          # Data build/rebuild scripts
-├── configs/          # Hydra YAML configs
-├── tests/            # pytest tests
-├── docs/             # Chinese-language project docs (entry: docs/README.md)
-├── ../artifacts/s2c/ # Experiment artifacts, checkpoints, reports
-├── ../assets/        # Datasets and local model assets
-└── ../textoir/       # Independent upstream repository; never import as s2c package
-```
 
-## WHERE TO LOOK
-| Task | Location | Notes |
-|------|----------|-------|
-| Run end-to-end inference | `src/pipeline/system_pipeline.py` | `HiLSAMoEV19Pipeline.predict_batch()` |
-| OOS gate logic | `src/gate/multi_prototype_gate.py` | K-means prototypes, cosine similarity |
-| OOS sphere detection | `src/gate/multi_sphere_oos_detector.py` | Multi-sphere SVDD |
-| LLM semantic verification | `src/gate/llm_semantic_verifier.py` | Router-based semantic check |
-| Router models | `src/router/router_model.py` | QwenRouter, SmolLMRouter |
-| Expert model | `src/models/expert.py` | SmolLMExpert |
-| Shared encoder | `src/models/transformer.py` | LoRA CausalLM loading and masked pooling |
-| SVDD gate model | `src/models/gate_svdd.py` | SVDDGate, BiasFreeMLP |
-| Minimal SVDD baseline | `src/gate_minimal/` | Strict ICML 2018, no engineering optimizations |
-| Expert LoRA switching | `src/inference/expert_manager.py` | Single base + 10 LoRA adapters |
-| Gate training config | `configs/v19_gate.yaml` | SmolLM2-1.7B backbone |
-| Main training config | `configs/config.yaml` | Hydra, hilsa-llm-v4 experiment |
-| Run analysis/eval | `tools/analysis/`, `tools/eval/` | v19-versioned scripts |
-| Multi-cluster/OOS study | `tools/experiments/cluster_separability/` | One vertical package and thin module CLI |
-| TextOIR protocol | `tools/compat/textoir/` | External-process boundary and provenance |
-| Project docs (CN) | `docs/README.md` | Entry point for Chinese docs |
+`tools/maintenance/export_public_results.py` 只按
+`configs/public_results.yaml` 导出公开文件；不得复制 `../artifacts` 整个目录。
 
-## CONVENTIONS
-- **Entrypoint naming**: Existing `_v19/_v20/_v21` names are historical compatibility names. New
-  entrypoints use a functional name (for example `run_cascade_repair.py`) and are registered in the
-  relevant current documentation; do not create another version-numbered CLI or Markdown tree.
-- **Hydra**: Config composition via `configs/config.yaml` with defaults list
-- **Import style**: `from src.module import Class` — repo root on sys.path
-- **Model wrappers**: LoRA via `peft`, backbone frozen, only LoRA + head trainable
-- **Data format**: JSON arrays of `{text, intent, domain, label}` objects
-- **Gate modes**: `multisphere` (default) or `multi_prototype` — controlled by `gate_mode` param
+## 维护规则
 
-## ANTI-PATTERNS (THIS PROJECT)
-- **NEVER** call `torch.cuda.is_available()` during init — can trigger native runtime aborts in some envs
-- **NEVER** use `torch.no_grad()` in training loops — breaks LoRA gradient flow (already fixed in `SmolLMExpert`)
-- **DO NOT** modify `gate_minimal/` with engineering optimizations — must stay strict to ICML 2018 paper
-- **DO NOT** introduce new config files parallel to `configs/` — use Hydra composition
-- **DO NOT** write new docs as parallel `.md` files — update existing `docs/` files only
+- 不运行训练来完成工作区整理，不修改或重命名 `../artifacts` 原始实验目录。
+- 不把 Gate-only 的 Frozen/CE/SupCon 结果写成完整 Pipeline 结果。
+- 不提交模型、checkpoint、embedding、Parquet、逐样本 scores 或运行日志。
+- 新实验入口使用功能命名；历史 `_v19/_v20/_v21` 文件保留为兼容入口，不再扩展同类版本号。
+- Router 只从 `src/router/` 导入；不要在 `src/models/` 重新导出 Router。
+- 训练循环不要添加会破坏 LoRA 梯度的 `torch.no_grad()`。
+- 不在初始化阶段调用 `torch.cuda.is_available()`；部分环境会触发原生运行时问题。
 
-## UNIQUE STYLES
-- Gate uses two-threshold uncertainty region (`tau_low`, `tau_high`) for accept/uncertain/reject
-- Semantic gate supports 3 modes: `prototype`, `llm_verifier`, `fusion` (weighted alpha/beta)
-- ExpertManager uses single shared base model with dynamic LoRA adapter switching (memory-efficient)
-- `gate_minimal/` is a deliberate minimal baseline — no projection heads, no multicenter unless in `*_multicenter.py`
+## 最小验证
 
-## COMMANDS
 ```bash
-# Activate env
-conda activate bo
-
-# Run tests
-pytest tests/
-
-# Run gate training (example)
-python -m src.gate_minimal.model  # adjust per script
-
-# Run system pipeline eval
-python tools/eval/eval_system_pipeline_v19.py
-
-# Run ablation matrix
-python tools/analysis/run_pipeline_ablation_matrix_paper_v19.py
-
-# Run MiniLM multi-cluster/OOS study
-python -m tools.experiments.cluster_separability --help
+pytest tests/unit -q
+python -m py_compile tools/maintenance/export_public_results.py
+python tools/analysis/audit_experiment_registry.py
+python tools/maintenance/export_public_results.py --verify
 ```
 
-## NOTES
-- `src/router/` is the only Router implementation location; do not re-export Router classes from `src/models/`.
-- `environment.yml` has pinned versions — do not casually update
-- Chinese docs in `docs/` are the authoritative project documentation
-- Current reading entrypoints are `docs/README.md`, `docs/项目阅读指南.md`, `docs/PROJECT.md`,
-  `docs/07-当前状态与里程碑.md` and `docs/EXPERIMENTS.md`; other Markdown files are protocol/history
-  references and should not be read as a competing current status.
-- `../artifacts/s2c/` contains all experiment artifacts — do not delete without archiving
-- `../textoir/` is an independent clean checkout; all compatibility changes belong in runtime overlays
+任何公开结果数字都必须能通过 `results/MANIFEST.csv` 或对应 artifact manifest 追溯。
