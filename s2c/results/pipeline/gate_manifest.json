@@ -1,0 +1,91 @@
+{
+  "schema_version": 1,
+  "protocol": "cascade_full_kir50_gate_adapters",
+  "execute": false,
+  "datasets": [
+    "clinc150",
+    "banking77_oos",
+    "stackoverflow"
+  ],
+  "seeds": [
+    13,
+    42,
+    87
+  ],
+  "units": [
+    {
+      "dataset": "clinc150",
+      "seed": 13,
+      "frozen_k1": "/home/bo/bo01/llmpy311/artifacts/s2c/outputs/experiments/cluster_separability_v19/fixed/clinc150/kir50_seed13/mahalanobis_diag/k1/detector.json",
+      "frozen_selected_k": "/home/bo/bo01/llmpy311/artifacts/s2c/outputs/experiments/cluster_separability_v19/fixed/clinc150/kir50_seed13/mahalanobis_diag/k1/detector.json",
+      "ce_recon_detector": "/home/bo/bo01/llmpy311/artifacts/s2c/outputs/experiments/cascade_full/gpu_kir50/gates/clinc150/kir50_seed13/ce_recon_selected_k.detector.json",
+      "baseline": "/home/bo/bo01/llmpy311/artifacts/s2c/outputs/experiments/cascade_full/gpu_kir50/gates/clinc150/kir50_seed13/best_linear_baseline.pkl"
+    },
+    {
+      "dataset": "clinc150",
+      "seed": 42,
+      "frozen_k1": "/home/bo/bo01/llmpy311/artifacts/s2c/outputs/experiments/cluster_separability_v19/fixed/clinc150/kir50_seed42/mahalanobis_diag/k1/detector.json",
+      "frozen_selected_k": "/home/bo/bo01/llmpy311/artifacts/s2c/outputs/experiments/cluster_separability_v19/fixed/clinc150/kir50_seed42/mahalanobis_diag/k1/detector.json",
+      "ce_recon_detector": "/home/bo/bo01/llmpy311/artifacts/s2c/outputs/experiments/cascade_full/gpu_kir50/gates/clinc150/kir50_seed42/ce_recon_selected_k.detector.json",
+      "baseline": "/home/bo/bo01/llmpy311/artifacts/s2c/outputs/experiments/cascade_full/gpu_kir50/gates/clinc150/kir50_seed42/best_linear_baseline.pkl"
+    },
+    {
+      "dataset": "clinc150",
+      "seed": 87,
+      "frozen_k1": "/home/bo/bo01/llmpy311/artifacts/s2c/outputs/experiments/cluster_separability_v19/fixed/clinc150/kir50_seed87/mahalanobis_diag/k1/detector.json",
+      "frozen_selected_k": "/home/bo/bo01/llmpy311/artifacts/s2c/outputs/experiments/cluster_separability_v19/fixed/clinc150/kir50_seed87/mahalanobis_diag/k1/detector.json",
+      "ce_recon_detector": "/home/bo/bo01/llmpy311/artifacts/s2c/outputs/experiments/cascade_full/gpu_kir50/gates/clinc150/kir50_seed87/ce_recon_selected_k.detector.json",
+      "baseline": "/home/bo/bo01/llmpy311/artifacts/s2c/outputs/experiments/cascade_full/gpu_kir50/gates/clinc150/kir50_seed87/best_linear_baseline.pkl"
+    },
+    {
+      "dataset": "banking77_oos",
+      "seed": 13,
+      "frozen_k1": "/home/bo/bo01/llmpy311/artifacts/s2c/outputs/experiments/cluster_separability_v19/fixed/banking77_oos/kir50_seed13/mahalanobis_diag/k1/detector.json",
+      "frozen_selected_k": "/home/bo/bo01/llmpy311/artifacts/s2c/outputs/experiments/cluster_separability_v19/fixed/banking77_oos/kir50_seed13/mahalanobis_diag/k4/detector.json",
+      "ce_recon_detector": "/home/bo/bo01/llmpy311/artifacts/s2c/outputs/experiments/cascade_full/gpu_kir50/gates/banking77_oos/kir50_seed13/ce_recon_selected_k.detector.json",
+      "baseline": "/home/bo/bo01/llmpy311/artifacts/s2c/outputs/experiments/cascade_full/gpu_kir50/gates/banking77_oos/kir50_seed13/best_linear_baseline.pkl"
+    },
+    {
+      "dataset": "banking77_oos",
+      "seed": 42,
+      "frozen_k1": "/home/bo/bo01/llmpy311/artifacts/s2c/outputs/experiments/cluster_separability_v19/fixed/banking77_oos/kir50_seed42/mahalanobis_diag/k1/detector.json",
+      "frozen_selected_k": "/home/bo/bo01/llmpy311/artifacts/s2c/outputs/experiments/cluster_separability_v19/fixed/banking77_oos/kir50_seed42/mahalanobis_diag/k5/detector.json",
+      "ce_recon_detector": "/home/bo/bo01/llmpy311/artifacts/s2c/outputs/experiments/cascade_full/gpu_kir50/gates/banking77_oos/kir50_seed42/ce_recon_selected_k.detector.json",
+      "baseline": "/home/bo/bo01/llmpy311/artifacts/s2c/outputs/experiments/cascade_full/gpu_kir50/gates/banking77_oos/kir50_seed42/best_linear_baseline.pkl"
+    },
+    {
+      "dataset": "banking77_oos",
+      "seed": 87,
+      "frozen_k1": "/home/bo/bo01/llmpy311/artifacts/s2c/outputs/experiments/cluster_separability_v19/fixed/banking77_oos/kir50_seed87/mahalanobis_diag/k1/detector.json",
+      "frozen_selected_k": "/home/bo/bo01/llmpy311/artifacts/s2c/outputs/experiments/cluster_separability_v19/fixed/banking77_oos/kir50_seed87/mahalanobis_diag/k1/detector.json",
+      "ce_recon_detector": "/home/bo/bo01/llmpy311/artifacts/s2c/outputs/experiments/cascade_full/gpu_kir50/gates/banking77_oos/kir50_seed87/ce_recon_selected_k.detector.json",
+      "baseline": "/home/bo/bo01/llmpy311/artifacts/s2c/outputs/experiments/cascade_full/gpu_kir50/gates/banking77_oos/kir50_seed87/best_linear_baseline.pkl"
+    },
+    {
+      "dataset": "stackoverflow",
+      "seed": 13,
+      "frozen_k1": "/home/bo/bo01/llmpy311/artifacts/s2c/outputs/experiments/cluster_separability_v19/fixed/stackoverflow/kir50_seed13/mahalanobis_diag/k1/detector.json",
+      "frozen_selected_k": "/home/bo/bo01/llmpy311/artifacts/s2c/outputs/experiments/cluster_separability_v19/fixed/stackoverflow/kir50_seed13/mahalanobis_diag/k2/detector.json",
+      "ce_recon_detector": "/home/bo/bo01/llmpy311/artifacts/s2c/outputs/experiments/cascade_full/gpu_kir50/gates/stackoverflow/kir50_seed13/ce_recon_selected_k.detector.json",
+      "baseline": "/home/bo/bo01/llmpy311/artifacts/s2c/outputs/experiments/cascade_full/gpu_kir50/gates/stackoverflow/kir50_seed13/best_linear_baseline.pkl"
+    },
+    {
+      "dataset": "stackoverflow",
+      "seed": 42,
+      "frozen_k1": "/home/bo/bo01/llmpy311/artifacts/s2c/outputs/experiments/cluster_separability_v19/fixed/stackoverflow/kir50_seed42/mahalanobis_diag/k1/detector.json",
+      "frozen_selected_k": "/home/bo/bo01/llmpy311/artifacts/s2c/outputs/experiments/cluster_separability_v19/fixed/stackoverflow/kir50_seed42/mahalanobis_diag/k1/detector.json",
+      "ce_recon_detector": "/home/bo/bo01/llmpy311/artifacts/s2c/outputs/experiments/cascade_full/gpu_kir50/gates/stackoverflow/kir50_seed42/ce_recon_selected_k.detector.json",
+      "baseline": "/home/bo/bo01/llmpy311/artifacts/s2c/outputs/experiments/cascade_full/gpu_kir50/gates/stackoverflow/kir50_seed42/best_linear_baseline.pkl"
+    },
+    {
+      "dataset": "stackoverflow",
+      "seed": 87,
+      "frozen_k1": "/home/bo/bo01/llmpy311/artifacts/s2c/outputs/experiments/cluster_separability_v19/fixed/stackoverflow/kir50_seed87/mahalanobis_diag/k1/detector.json",
+      "frozen_selected_k": "/home/bo/bo01/llmpy311/artifacts/s2c/outputs/experiments/cluster_separability_v19/fixed/stackoverflow/kir50_seed87/mahalanobis_diag/k1/detector.json",
+      "ce_recon_detector": "/home/bo/bo01/llmpy311/artifacts/s2c/outputs/experiments/cascade_full/gpu_kir50/gates/stackoverflow/kir50_seed87/ce_recon_selected_k.detector.json",
+      "baseline": "/home/bo/bo01/llmpy311/artifacts/s2c/outputs/experiments/cascade_full/gpu_kir50/gates/stackoverflow/kir50_seed87/best_linear_baseline.pkl"
+    }
+  ],
+  "missing_before_or_after_run": [],
+  "status": "complete"
+}

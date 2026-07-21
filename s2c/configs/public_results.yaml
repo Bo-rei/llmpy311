@@ -1,0 +1,206 @@
+# GitHub 公开结果白名单。
+# source paths are relative to the s2c project root; public paths are relative
+# to results/. Only small CSV/JSON provenance files belong here.
+schema_version: 1
+limits:
+  max_file_bytes: 10485760
+  max_total_bytes: 104857600
+
+files:
+  # Gate -> Router -> Expert pipeline summaries and provenance.
+  - experiment_id: cascade_full_kir50
+    category: pipeline
+    source: ../artifacts/s2c/outputs/experiments/cascade_full/gpu_kir50/component_plan.json
+    public: pipeline/component_plan.json
+  - experiment_id: cascade_full_kir50
+    category: pipeline
+    source: ../artifacts/s2c/outputs/experiments/cascade_full/gpu_kir50/gates/gate_manifest.json
+    public: pipeline/gate_manifest.json
+  - experiment_id: cascade_full_kir50
+    category: pipeline
+    source: ../artifacts/s2c/outputs/experiments/cascade_full/gpu_kir50/evaluations/matrix_manifest.json
+    public: pipeline/matrix_manifest.json
+  - experiment_id: cascade_full_kir50
+    category: pipeline
+    source: ../artifacts/s2c/outputs/experiments/cascade_full/gpu_kir50/cascade_gate_by_seed.csv
+    public: pipeline/cascade_gate_by_seed.csv
+  - experiment_id: cascade_full_kir50
+    category: pipeline
+    source: ../artifacts/s2c/outputs/experiments/cascade_full/gpu_kir50/cascade_gate_summary.csv
+    public: pipeline/cascade_gate_summary.csv
+  - experiment_id: cascade_full_kir50
+    category: pipeline
+    source: ../artifacts/s2c/outputs/experiments/cascade_full/gpu_kir50/cascade_error_decomposition_summary.csv
+    public: pipeline/cascade_error_decomposition_summary.csv
+  - experiment_id: cascade_full_kir50
+    category: pipeline
+    source: ../artifacts/s2c/outputs/experiments/cascade_full/gpu_kir50/cascade_banking_tradeoff.csv
+    public: pipeline/cascade_banking_tradeoff.csv
+  - experiment_id: cascade_full_kir50
+    category: pipeline
+    source: ../artifacts/s2c/outputs/experiments/cascade_full/gpu_kir50/repair_provenance.json
+    public: pipeline/repair_provenance.json
+  - experiment_id: study_closeout
+    category: pipeline
+    source: ../artifacts/s2c/outputs/experiments/study_closeout/paper_source_map.csv
+    public: pipeline/paper_source_map.csv
+  - experiment_id: study_closeout
+    category: pipeline
+    source: ../artifacts/s2c/outputs/experiments/study_closeout/known_gaps.json
+    public: pipeline/known_gaps.json
+
+  # Fixed/tuned K, baselines, near-OOS and multi-cluster controls.
+  - experiment_id: cluster_separability_v19
+    category: gate_only
+    source: ../artifacts/s2c/outputs/experiments/cluster_separability_v19/experiment_matrix.csv
+    public: gate_only/v19_experiment_matrix.csv
+  - experiment_id: cluster_separability_v19
+    category: gate_only
+    source: ../artifacts/s2c/outputs/experiments/cluster_separability_v19/kir_k_fixed_mean_std.csv
+    public: gate_only/kir_k_fixed_mean_std.csv
+  - experiment_id: cluster_separability_v19
+    category: gate_only
+    source: ../artifacts/s2c/outputs/experiments/cluster_separability_v19/kir_k_tuned_mean_std.csv
+    public: gate_only/kir_k_tuned_mean_std.csv
+  - experiment_id: cluster_separability_v19
+    category: gate_only
+    source: ../artifacts/s2c/outputs/experiments/cluster_separability_v19/paired_k_effects.csv
+    public: gate_only/paired_k_effects.csv
+  - experiment_id: cluster_separability_v19
+    category: gate_only
+    source: ../artifacts/s2c/outputs/experiments/cluster_separability_v19/selected_k_summary.csv
+    public: gate_only/selected_k_summary.csv
+  - experiment_id: cluster_separability_v19
+    category: gate_only
+    source: ../artifacts/s2c/outputs/experiments/cluster_separability_v19/gate_baseline_summary.csv
+    public: gate_only/gate_baseline_summary.csv
+  - experiment_id: cluster_separability_v19
+    category: gate_only
+    source: ../artifacts/s2c/outputs/experiments/cluster_separability_v19/baseline_paired_effects.csv
+    public: gate_only/baseline_paired_effects.csv
+  - experiment_id: cluster_separability_v19
+    category: gate_only
+    source: ../artifacts/s2c/outputs/experiments/cluster_separability_v19/cluster_quality_summary.csv
+    public: gate_only/cluster_quality_summary.csv
+  - experiment_id: cluster_separability_v19
+    category: gate_only
+    source: ../artifacts/s2c/outputs/experiments/cluster_separability_v19/analysis/near_far_oos_summary.csv
+    public: gate_only/near_far_oos_summary.csv
+  - experiment_id: cluster_separability_v20
+    category: gate_only
+    source: ../artifacts/s2c/outputs/experiments/cluster_separability_v20/random_partition_summary.csv
+    public: gate_only/random_partition_summary.csv
+  - experiment_id: cluster_separability_v20
+    category: gate_only
+    source: ../artifacts/s2c/outputs/experiments/cluster_separability_v20/analysis/k_selection_reliability_summary.csv
+    public: gate_only/k_selection_reliability_summary.csv
+  - experiment_id: cluster_separability_v20
+    category: gate_only
+    source: ../artifacts/s2c/outputs/experiments/cluster_separability_v20/analysis/near_oos_method_comparison.csv
+    public: gate_only/near_oos_method_comparison.csv
+  - experiment_id: cluster_separability_v20
+    category: gate_only
+    source: ../artifacts/s2c/outputs/experiments/cluster_separability_v20/adaptive_boundary_summary.csv
+    public: gate_only/adaptive_boundary_summary.csv
+  - experiment_id: cluster_separability_v20
+    category: gate_only
+    source: ../artifacts/s2c/outputs/experiments/cluster_separability_v20/analysis/efficiency_summary.csv
+    public: gate_only/efficiency_summary.csv
+
+  # MiniLM semantic probes, representation adaptation and collision analysis.
+  - experiment_id: cluster_separability_v21
+    category: representation
+    source: ../artifacts/s2c/outputs/experiments/cluster_separability_v21/minilm_probe_metrics.csv
+    public: representation/minilm_probe_metrics.csv
+  - experiment_id: cluster_separability_v21
+    category: representation
+    source: ../artifacts/s2c/outputs/experiments/cluster_separability_v21/minilm_intent_geometry.csv
+    public: representation/minilm_intent_geometry.csv
+  - experiment_id: cluster_separability_v21
+    category: representation
+    source: ../artifacts/s2c/outputs/experiments/cluster_separability_v21/minilm_intent_margin.csv
+    public: representation/minilm_intent_margin.csv
+  - experiment_id: cluster_separability_v21
+    category: representation
+    source: ../artifacts/s2c/outputs/experiments/cluster_separability_v21/near_oos_representation_boundary_decomposition.csv
+    public: representation/near_oos_representation_boundary_decomposition.csv
+  - experiment_id: minilm_semantic_collision_v22
+    category: representation
+    source: ../artifacts/s2c/outputs/experiments/minilm_semantic_collision_v22/representation_fixed_results.csv
+    public: representation/representation_fixed_results.csv
+  - experiment_id: minilm_semantic_collision_v22
+    category: representation
+    source: ../artifacts/s2c/outputs/experiments/minilm_semantic_collision_v22/representation_tuned_results.csv
+    public: representation/representation_tuned_results.csv
+  - experiment_id: minilm_semantic_collision_v22
+    category: representation
+    source: ../artifacts/s2c/outputs/experiments/minilm_semantic_collision_v22/representation_geometry_summary.csv
+    public: representation/representation_geometry_summary.csv
+  - experiment_id: minilm_semantic_collision_v22
+    category: representation
+    source: ../artifacts/s2c/outputs/experiments/minilm_semantic_collision_v22/representation_paired_effects.csv
+    public: representation/representation_paired_effects.csv
+  - experiment_id: minilm_semantic_collision_v22
+    category: representation
+    source: ../artifacts/s2c/outputs/experiments/minilm_semantic_collision_v22/collision_summary.csv
+    public: representation/collision_summary.csv
+  - experiment_id: minilm_semantic_collision_v22
+    category: representation
+    source: ../artifacts/s2c/outputs/experiments/minilm_semantic_collision_v22/v22_representation_manifest.json
+    public: representation/v22_representation_manifest.json
+  - experiment_id: minilm_semantic_collision_v22
+    category: representation
+    source: ../artifacts/s2c/outputs/experiments/minilm_semantic_collision_v22/v22_collision_manifest.json
+    public: representation/v22_collision_manifest.json
+  - experiment_id: minilm_semantic_collision_v22
+    category: representation
+    source: ../artifacts/s2c/outputs/experiments/minilm_semantic_collision_v22/v22_semantic_structure_manifest.json
+    public: representation/v22_semantic_structure_manifest.json
+  - experiment_id: minilm_representation_analysis
+    category: representation
+    source: ../artifacts/s2c/outputs/experiments/minilm_representation_analysis/adaptation/fixed_results.csv
+    public: representation/adaptation_fixed_results.csv
+  - experiment_id: minilm_representation_analysis
+    category: representation
+    source: ../artifacts/s2c/outputs/experiments/minilm_representation_analysis/adaptation/collision_by_bucket.csv
+    public: representation/adaptation_collision_by_bucket.csv
+  - experiment_id: minilm_representation_analysis
+    category: representation
+    source: ../artifacts/s2c/outputs/experiments/minilm_representation_analysis/adaptation/collision_similarity_bins.csv
+    public: representation/adaptation_collision_similarity_bins.csv
+
+  # Robustness and descriptive mechanism summaries.
+  - experiment_id: sample_efficiency
+    category: robustness
+    source: ../artifacts/s2c/outputs/experiments/sample_efficiency/sample_efficiency_results.csv
+    public: robustness/sample_efficiency_results.csv
+  - experiment_id: minilm_representation_analysis
+    category: robustness
+    source: ../artifacts/s2c/outputs/experiments/minilm_representation_analysis/boundary_shapes/boundary_results.csv
+    public: robustness/boundary_shape_results.csv
+  - experiment_id: mechanism_analysis
+    category: robustness
+    source: ../artifacts/s2c/outputs/experiments/mechanism_analysis/mechanism_correlations.csv
+    public: robustness/mechanism_correlations.csv
+  - experiment_id: mechanism_analysis
+    category: robustness
+    source: ../artifacts/s2c/outputs/experiments/mechanism_analysis/mechanism_regression.csv
+    public: robustness/mechanism_regression.csv
+  - experiment_id: mechanism_analysis
+    category: robustness
+    source: ../artifacts/s2c/outputs/experiments/mechanism_analysis/sample_size_effect_curve.csv
+    public: robustness/sample_size_effect_curve.csv
+  - experiment_id: minilm_semantic_collision_v22
+    category: robustness
+    source: ../artifacts/s2c/outputs/experiments/minilm_semantic_collision_v22/robustness/natural_known_oos_pair_summary.csv
+    public: robustness/natural_known_oos_pair_summary.csv
+
+  # External validation: hard-negative summary and MOGB protocol only.
+  - experiment_id: hard_negative_oos
+    category: external
+    source: ../artifacts/s2c/outputs/experiments/external_validation/hard_negative_oos/external_hard_negative_summary.csv
+    public: external/hard_negative_oos_summary.csv
+  - experiment_id: mogb
+    category: external
+    source: ../artifacts/s2c/outputs/experiments/external_validation/mogb_protocol_audit.json
+    public: external/mogb_protocol_audit.json

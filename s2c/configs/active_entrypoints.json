@@ -111,6 +111,7 @@
     "tools/experiments/cluster_separability/v20_end_to_end.py",
     "tools/experiments/cluster_separability/v21_cluster_casebook.py",
     "tools/gate/train_multisphere_corrected.py",
+    "tools/maintenance/export_public_results.py",
     "tools/train/train_all_experts_snips_v19.py",
     "tools/train/train_all_experts_v19.py",
     "tools/train/train_expert_v19.py",

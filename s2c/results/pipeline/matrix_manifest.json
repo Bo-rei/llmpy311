@@ -1,0 +1,279 @@
+{
+  "schema_version": 1,
+  "protocol": "cascade_full_kir50_three_seed_four_gate",
+  "execute": false,
+  "datasets": [
+    "clinc150",
+    "banking77_oos",
+    "stackoverflow"
+  ],
+  "seeds": [
+    13,
+    42,
+    87
+  ],
+  "gates": [
+    "frozen_k1",
+    "frozen_selected_k",
+    "ce_recon_selected_k",
+    "best_controlled_baseline"
+  ],
+  "expected_unit_count": 36,
+  "missing_components": [],
+  "units": [
+    {
+      "dataset": "clinc150",
+      "seed": 13,
+      "gate": "frozen_k1",
+      "output_dir": "/home/bo/bo01/llmpy311/artifacts/s2c/outputs/experiments/cascade_full/gpu_kir50/evaluations/clinc150/kir50_seed13/frozen_k1",
+      "status": "cached"
+    },
+    {
+      "dataset": "clinc150",
+      "seed": 13,
+      "gate": "frozen_selected_k",
+      "output_dir": "/home/bo/bo01/llmpy311/artifacts/s2c/outputs/experiments/cascade_full/gpu_kir50/evaluations/clinc150/kir50_seed13/frozen_selected_k",
+      "status": "cached"
+    },
+    {
+      "dataset": "clinc150",
+      "seed": 13,
+      "gate": "ce_recon_selected_k",
+      "output_dir": "/home/bo/bo01/llmpy311/artifacts/s2c/outputs/experiments/cascade_full/gpu_kir50/evaluations/clinc150/kir50_seed13/ce_recon_selected_k",
+      "status": "cached"
+    },
+    {
+      "dataset": "clinc150",
+      "seed": 13,
+      "gate": "best_controlled_baseline",
+      "output_dir": "/home/bo/bo01/llmpy311/artifacts/s2c/outputs/experiments/cascade_full/gpu_kir50/evaluations/clinc150/kir50_seed13/best_controlled_baseline",
+      "status": "cached"
+    },
+    {
+      "dataset": "clinc150",
+      "seed": 42,
+      "gate": "frozen_k1",
+      "output_dir": "/home/bo/bo01/llmpy311/artifacts/s2c/outputs/experiments/cascade_full/gpu_kir50/evaluations/clinc150/kir50_seed42/frozen_k1",
+      "status": "cached"
+    },
+    {
+      "dataset": "clinc150",
+      "seed": 42,
+      "gate": "frozen_selected_k",
+      "output_dir": "/home/bo/bo01/llmpy311/artifacts/s2c/outputs/experiments/cascade_full/gpu_kir50/evaluations/clinc150/kir50_seed42/frozen_selected_k",
+      "status": "cached"
+    },
+    {
+      "dataset": "clinc150",
+      "seed": 42,
+      "gate": "ce_recon_selected_k",
+      "output_dir": "/home/bo/bo01/llmpy311/artifacts/s2c/outputs/experiments/cascade_full/gpu_kir50/evaluations/clinc150/kir50_seed42/ce_recon_selected_k",
+      "status": "cached"
+    },
+    {
+      "dataset": "clinc150",
+      "seed": 42,
+      "gate": "best_controlled_baseline",
+      "output_dir": "/home/bo/bo01/llmpy311/artifacts/s2c/outputs/experiments/cascade_full/gpu_kir50/evaluations/clinc150/kir50_seed42/best_controlled_baseline",
+      "status": "cached"
+    },
+    {
+      "dataset": "clinc150",
+      "seed": 87,
+      "gate": "frozen_k1",
+      "output_dir": "/home/bo/bo01/llmpy311/artifacts/s2c/outputs/experiments/cascade_full/gpu_kir50/evaluations/clinc150/kir50_seed87/frozen_k1",
+      "status": "cached"
+    },
+    {
+      "dataset": "clinc150",
+      "seed": 87,
+      "gate": "frozen_selected_k",
+      "output_dir": "/home/bo/bo01/llmpy311/artifacts/s2c/outputs/experiments/cascade_full/gpu_kir50/evaluations/clinc150/kir50_seed87/frozen_selected_k",
+      "status": "cached"
+    },
+    {
+      "dataset": "clinc150",
+      "seed": 87,
+      "gate": "ce_recon_selected_k",
+      "output_dir": "/home/bo/bo01/llmpy311/artifacts/s2c/outputs/experiments/cascade_full/gpu_kir50/evaluations/clinc150/kir50_seed87/ce_recon_selected_k",
+      "status": "cached"
+    },
+    {
+      "dataset": "clinc150",
+      "seed": 87,
+      "gate": "best_controlled_baseline",
+      "output_dir": "/home/bo/bo01/llmpy311/artifacts/s2c/outputs/experiments/cascade_full/gpu_kir50/evaluations/clinc150/kir50_seed87/best_controlled_baseline",
+      "status": "cached"
+    },
+    {
+      "dataset": "banking77_oos",
+      "seed": 13,
+      "gate": "frozen_k1",
+      "output_dir": "/home/bo/bo01/llmpy311/artifacts/s2c/outputs/experiments/cascade_full/gpu_kir50/evaluations/banking77_oos/kir50_seed13/frozen_k1",
+      "status": "cached"
+    },
+    {
+      "dataset": "banking77_oos",
+      "seed": 13,
+      "gate": "frozen_selected_k",
+      "output_dir": "/home/bo/bo01/llmpy311/artifacts/s2c/outputs/experiments/cascade_full/gpu_kir50/evaluations/banking77_oos/kir50_seed13/frozen_selected_k",
+      "status": "cached"
+    },
+    {
+      "dataset": "banking77_oos",
+      "seed": 13,
+      "gate": "ce_recon_selected_k",
+      "output_dir": "/home/bo/bo01/llmpy311/artifacts/s2c/outputs/experiments/cascade_full/gpu_kir50/evaluations/banking77_oos/kir50_seed13/ce_recon_selected_k",
+      "status": "cached"
+    },
+    {
+      "dataset": "banking77_oos",
+      "seed": 13,
+      "gate": "best_controlled_baseline",
+      "output_dir": "/home/bo/bo01/llmpy311/artifacts/s2c/outputs/experiments/cascade_full/gpu_kir50/evaluations/banking77_oos/kir50_seed13/best_controlled_baseline",
+      "status": "cached"
+    },
+    {
+      "dataset": "banking77_oos",
+      "seed": 42,
+      "gate": "frozen_k1",
+      "output_dir": "/home/bo/bo01/llmpy311/artifacts/s2c/outputs/experiments/cascade_full/gpu_kir50/evaluations/banking77_oos/kir50_seed42/frozen_k1",
+      "status": "cached"
+    },
+    {
+      "dataset": "banking77_oos",
+      "seed": 42,
+      "gate": "frozen_selected_k",
+      "output_dir": "/home/bo/bo01/llmpy311/artifacts/s2c/outputs/experiments/cascade_full/gpu_kir50/evaluations/banking77_oos/kir50_seed42/frozen_selected_k",
+      "status": "cached"
+    },
+    {
+      "dataset": "banking77_oos",
+      "seed": 42,
+      "gate": "ce_recon_selected_k",
+      "output_dir": "/home/bo/bo01/llmpy311/artifacts/s2c/outputs/experiments/cascade_full/gpu_kir50/evaluations/banking77_oos/kir50_seed42/ce_recon_selected_k",
+      "status": "cached"
+    },
+    {
+      "dataset": "banking77_oos",
+      "seed": 42,
+      "gate": "best_controlled_baseline",
+      "output_dir": "/home/bo/bo01/llmpy311/artifacts/s2c/outputs/experiments/cascade_full/gpu_kir50/evaluations/banking77_oos/kir50_seed42/best_controlled_baseline",
+      "status": "cached"
+    },
+    {
+      "dataset": "banking77_oos",
+      "seed": 87,
+      "gate": "frozen_k1",
+      "output_dir": "/home/bo/bo01/llmpy311/artifacts/s2c/outputs/experiments/cascade_full/gpu_kir50/evaluations/banking77_oos/kir50_seed87/frozen_k1",
+      "status": "cached"
+    },
+    {
+      "dataset": "banking77_oos",
+      "seed": 87,
+      "gate": "frozen_selected_k",
+      "output_dir": "/home/bo/bo01/llmpy311/artifacts/s2c/outputs/experiments/cascade_full/gpu_kir50/evaluations/banking77_oos/kir50_seed87/frozen_selected_k",
+      "status": "cached"
+    },
+    {
+      "dataset": "banking77_oos",
+      "seed": 87,
+      "gate": "ce_recon_selected_k",
+      "output_dir": "/home/bo/bo01/llmpy311/artifacts/s2c/outputs/experiments/cascade_full/gpu_kir50/evaluations/banking77_oos/kir50_seed87/ce_recon_selected_k",
+      "status": "cached"
+    },
+    {
+      "dataset": "banking77_oos",
+      "seed": 87,
+      "gate": "best_controlled_baseline",
+      "output_dir": "/home/bo/bo01/llmpy311/artifacts/s2c/outputs/experiments/cascade_full/gpu_kir50/evaluations/banking77_oos/kir50_seed87/best_controlled_baseline",
+      "status": "cached"
+    },
+    {
+      "dataset": "stackoverflow",
+      "seed": 13,
+      "gate": "frozen_k1",
+      "output_dir": "/home/bo/bo01/llmpy311/artifacts/s2c/outputs/experiments/cascade_full/gpu_kir50/evaluations/stackoverflow/kir50_seed13/frozen_k1",
+      "status": "cached"
+    },
+    {
+      "dataset": "stackoverflow",
+      "seed": 13,
+      "gate": "frozen_selected_k",
+      "output_dir": "/home/bo/bo01/llmpy311/artifacts/s2c/outputs/experiments/cascade_full/gpu_kir50/evaluations/stackoverflow/kir50_seed13/frozen_selected_k",
+      "status": "cached"
+    },
+    {
+      "dataset": "stackoverflow",
+      "seed": 13,
+      "gate": "ce_recon_selected_k",
+      "output_dir": "/home/bo/bo01/llmpy311/artifacts/s2c/outputs/experiments/cascade_full/gpu_kir50/evaluations/stackoverflow/kir50_seed13/ce_recon_selected_k",
+      "status": "cached"
+    },
+    {
+      "dataset": "stackoverflow",
+      "seed": 13,
+      "gate": "best_controlled_baseline",
+      "output_dir": "/home/bo/bo01/llmpy311/artifacts/s2c/outputs/experiments/cascade_full/gpu_kir50/evaluations/stackoverflow/kir50_seed13/best_controlled_baseline",
+      "status": "cached"
+    },
+    {
+      "dataset": "stackoverflow",
+      "seed": 42,
+      "gate": "frozen_k1",
+      "output_dir": "/home/bo/bo01/llmpy311/artifacts/s2c/outputs/experiments/cascade_full/gpu_kir50/evaluations/stackoverflow/kir50_seed42/frozen_k1",
+      "status": "cached"
+    },
+    {
+      "dataset": "stackoverflow",
+      "seed": 42,
+      "gate": "frozen_selected_k",
+      "output_dir": "/home/bo/bo01/llmpy311/artifacts/s2c/outputs/experiments/cascade_full/gpu_kir50/evaluations/stackoverflow/kir50_seed42/frozen_selected_k",
+      "status": "cached"
+    },
+    {
+      "dataset": "stackoverflow",
+      "seed": 42,
+      "gate": "ce_recon_selected_k",
+      "output_dir": "/home/bo/bo01/llmpy311/artifacts/s2c/outputs/experiments/cascade_full/gpu_kir50/evaluations/stackoverflow/kir50_seed42/ce_recon_selected_k",
+      "status": "cached"
+    },
+    {
+      "dataset": "stackoverflow",
+      "seed": 42,
+      "gate": "best_controlled_baseline",
+      "output_dir": "/home/bo/bo01/llmpy311/artifacts/s2c/outputs/experiments/cascade_full/gpu_kir50/evaluations/stackoverflow/kir50_seed42/best_controlled_baseline",
+      "status": "cached"
+    },
+    {
+      "dataset": "stackoverflow",
+      "seed": 87,
+      "gate": "frozen_k1",
+      "output_dir": "/home/bo/bo01/llmpy311/artifacts/s2c/outputs/experiments/cascade_full/gpu_kir50/evaluations/stackoverflow/kir50_seed87/frozen_k1",
+      "status": "cached"
+    },
+    {
+      "dataset": "stackoverflow",
+      "seed": 87,
+      "gate": "frozen_selected_k",
+      "output_dir": "/home/bo/bo01/llmpy311/artifacts/s2c/outputs/experiments/cascade_full/gpu_kir50/evaluations/stackoverflow/kir50_seed87/frozen_selected_k",
+      "status": "cached"
+    },
+    {
+      "dataset": "stackoverflow",
+      "seed": 87,
+      "gate": "ce_recon_selected_k",
+      "output_dir": "/home/bo/bo01/llmpy311/artifacts/s2c/outputs/experiments/cascade_full/gpu_kir50/evaluations/stackoverflow/kir50_seed87/ce_recon_selected_k",
+      "status": "cached"
+    },
+    {
+      "dataset": "stackoverflow",
+      "seed": 87,
+      "gate": "best_controlled_baseline",
+      "output_dir": "/home/bo/bo01/llmpy311/artifacts/s2c/outputs/experiments/cascade_full/gpu_kir50/evaluations/stackoverflow/kir50_seed87/best_controlled_baseline",
+      "status": "cached"
+    }
+  ],
+  "status": "complete",
+  "completed_unit_count": 36
+}

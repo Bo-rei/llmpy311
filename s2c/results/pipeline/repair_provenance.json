@@ -1,0 +1,27 @@
+{
+  "banking_tradeoff_path": "/home/bo/bo01/llmpy311/artifacts/s2c/outputs/experiments/cascade_full/gpu_kir50/cascade_banking_tradeoff.csv",
+  "datasets": [
+    "banking77_oos",
+    "clinc150",
+    "stackoverflow"
+  ],
+  "decomposition_path": "/home/bo/bo01/llmpy311/artifacts/s2c/outputs/experiments/cascade_full/gpu_kir50/cascade_error_decomposition.csv",
+  "error_summary_path": "/home/bo/bo01/llmpy311/artifacts/s2c/outputs/experiments/cascade_full/gpu_kir50/cascade_error_decomposition_summary.csv",
+  "gate_summary_path": "/home/bo/bo01/llmpy311/artifacts/s2c/outputs/experiments/cascade_full/gpu_kir50/cascade_gate_summary.csv",
+  "gates": [
+    "best_controlled_baseline",
+    "ce_recon_selected_k",
+    "frozen_k1",
+    "frozen_selected_k"
+  ],
+  "git_commit": "d9d7a33ac5ed709a6015a39809e808a668259df1",
+  "input_root": "/home/bo/bo01/llmpy311/artifacts/s2c/outputs/experiments/cascade_full/gpu_kir50",
+  "paired_summary_path": "/home/bo/bo01/llmpy311/artifacts/s2c/outputs/experiments/cascade_full/gpu_kir50/cascade_gate_by_seed.csv",
+  "protocol": "cascade_full_kir50_three_seed_four_gate",
+  "python": "/home/bo/anaconda3/envs/bo/bin/python",
+  "summary_path": "/home/bo/bo01/llmpy311/artifacts/s2c/outputs/experiments/cascade_full/gpu_kir50/cascade_summary.csv",
+  "unit_count": 36,
+  "used_oos_for_expert_training": false,
+  "used_test_for_selection": false,
+  "working_tree_dirty": true
+}
