@@ -1,0 +1,228 @@
+# s2c 研究结果的唯一小型登记表。
+#
+# 大型模型、Parquet 和逐样本输出仍保留在 ../artifacts；这里仅登记如何从
+# 当前 main checkout 找到入口、manifest 和论文汇总。历史目录名称不改名。
+schema_version: 1
+project: s2c
+artifact_root: ../artifacts/s2c/outputs/experiments
+
+experiments:
+  pipeline:
+    cascade_full_kir50:
+      id: pipeline.cascade_full_kir50
+      research_question: "Gate 改善能否在固定 Router/Expert 上传递到完整 Cascade？"
+      status: complete
+      entrypoints:
+        - tools/train/run_cascade_components.py
+        - tools/eval/prepare_cascade_gates.py
+        - tools/eval/run_cascade_matrix.py
+        - tools/analysis/export_cascade_repair_summary.py
+      protocol: cascade_full_kir50_three_seed_four_gate
+      artifact_root: cascade_full/gpu_kir50
+      manifest:
+        - component_plan.json
+        - gates/gate_manifest.json
+        - evaluations/matrix_manifest.json
+        - repair_provenance.json
+      summary:
+        - cascade_summary.csv
+        - cascade_gate_by_seed.csv
+        - cascade_gate_summary.csv
+        - cascade_error_decomposition.csv
+        - cascade_error_decomposition_summary.csv
+        - cascade_banking_tradeoff.csv
+      expected_unit_count: 36
+      count_source: matrix_manifest
+      count_manifest: evaluations/matrix_manifest.json
+      checkpoint_globs:
+        - seed*/downstream/**/*.pt
+        - seed*/downstream/**/*.json
+        - gates/**/*.pkl
+        - gates/**/*.detector.json
+        - ../components/**/*.pt
+        - ../minilm_representation_analysis/adaptation/**/*.pt
+
+    cascade_repair_seed42:
+      id: pipeline.cascade_repair_seed42
+      research_question: "修复后的 Banking77/StackOverflow Expert 是否能稳定支持代表 Cascade？"
+      status: complete
+      entrypoints:
+        - tools/eval/run_cascade_repair.py
+        - tools/analysis/export_cascade_repair_summary.py
+      protocol: representative_cascade_repair_fixed_downstream
+      artifact_root: cascade_repair/gpu_kir50_seed42
+      manifest:
+        - repair_manifest.json
+        - evaluations/matrix_manifest.json
+        - repair_provenance.json
+      summary:
+        - cascade_summary.csv
+        - cascade_error_decomposition.csv
+      expected_unit_count: 12
+      count_source: csv_rows
+      count_summary: cascade_summary.csv
+      checkpoint_globs:
+        - expert_models/**/*.pt
+
+  gate_mechanism:
+    cluster_separability_v19:
+      id: gate_mechanism.cluster_separability_v19
+      research_question: "KIR、每意图子中心数和距离族如何改变 Known/OOS 可分性？"
+      status: frozen
+      entrypoints:
+        - tools/experiments/cluster_separability/__main__.py
+      protocol: v19_kir_k_distance_gate_grid
+      artifact_root: cluster_separability_v19
+      manifest:
+        - data_protocol_audit.json
+      summary:
+        - experiment_matrix.csv
+        - kir_k_fixed_boundary.csv
+        - kir_k_tuned_boundary.csv
+        - gate_baseline_summary.csv
+      expected_unit_count: 685
+      count_source: csv_rows
+      count_summary: experiment_matrix.csv
+
+    cluster_separability_v20_random_partition:
+      id: gate_mechanism.cluster_separability_v20_random_partition
+      research_question: "多簇收益是否来自语义聚类，而不是仅增加边界数量？"
+      status: frozen
+      entrypoints:
+        - tools/experiments/cluster_separability/v20_random_partition.py
+      protocol: v20_kmeans_vs_size_matched_random_partition
+      artifact_root: cluster_separability_v20
+      manifest:
+        - random_partition_manifest.json
+      summary:
+        - random_partition_by_repeat.csv
+        - random_partition_summary.csv
+      expected_unit_count: 105
+      count_source: csv_rows
+      count_summary: random_partition_by_repeat.csv
+
+    cluster_separability_v20_adaptive_boundary:
+      id: gate_mechanism.cluster_separability_v20_adaptive_boundary
+      research_question: "自适应局部边界相对固定 K 的收益是否稳定？"
+      status: frozen
+      entrypoints:
+        - tools/experiments/cluster_separability/v20_adaptive_boundary.py
+      protocol: v20_adaptive_boundary_control
+      artifact_root: cluster_separability_v20
+      manifest:
+        - adaptive_boundary_manifest.json
+      summary:
+        - adaptive_boundary_by_seed.csv
+        - adaptive_boundary_summary.csv
+      expected_unit_count: 18
+      count_source: csv_rows
+      count_summary: adaptive_boundary_by_seed.csv
+
+    cluster_separability_v21_minilm:
+      id: gate_mechanism.cluster_separability_v21_minilm
+      research_question: "MiniLM 局部邻域、语义间隔和表示碰撞如何影响多簇 Gate？"
+      status: frozen
+      entrypoints:
+        - tools/experiments/cluster_separability/v21_semantic_probe.py
+        - tools/experiments/cluster_separability/v21_representation_adaptation.py
+      protocol: v21_frozen_minilm_semantic_probe
+      artifact_root: cluster_separability_v21
+      manifest:
+        - v21_semantic_probe_manifest.json
+      summary:
+        - minilm_probe_metrics.csv
+        - minilm_intent_neighborhood_purity.csv
+        - minilm_intent_geometry.csv
+        - near_oos_representation_boundary_decomposition.csv
+      expected_unit_count: 36
+      count_source: csv_rows
+      count_summary: minilm_probe_metrics.csv
+
+    minilm_semantic_collision:
+      id: gate_mechanism.minilm_semantic_collision
+      research_question: "Frozen、CE、SupCon 的表示碰撞与类内结构有何差异？"
+      status: historical_artifact_only
+      entrypoints:
+        - artifact-only
+      protocol: minilm_semantic_collision_study
+      artifact_root: minilm_semantic_collision_v22
+      manifest:
+        - v22_representation_manifest.json
+        - v22_collision_manifest.json
+        - v22_semantic_structure_manifest.json
+        - v22_summary_manifest.json
+      summary:
+        - representation_fixed_results.csv
+        - representation_tuned_results.csv
+        - collision_summary.csv
+      expected_unit_count: 81
+      count_source: csv_rows
+      count_summary: representation_fixed_results.csv
+
+    sample_efficiency:
+      id: gate_mechanism.sample_efficiency
+      research_question: "每个意图需要多少样本才能可靠支持多簇边界？"
+      status: frozen
+      entrypoints:
+        - artifact-only
+      protocol: sample_efficiency_label_ratio
+      artifact_root: sample_efficiency
+      manifest:
+        - run_manifest.json
+      summary:
+        - sample_efficiency_results.csv
+      expected_unit_count: 270
+      count_source: csv_rows
+      count_summary: sample_efficiency_results.csv
+
+    mechanism_analysis:
+      id: gate_mechanism.mechanism_analysis
+      research_question: "表示碰撞、碎片化和 near-OOS 性能之间是否存在稳定关联？"
+      status: descriptive_only
+      entrypoints:
+        - artifact-only
+      protocol: mechanism_descriptive_analysis
+      artifact_root: mechanism_analysis
+      manifest:
+        - mechanism_manifest.json
+      summary:
+        - mechanism_correlations.csv
+        - mechanism_regression.csv
+        - mechanism_unit_level.csv
+      expected_unit_count: 36
+      count_source: csv_rows
+      count_summary: mechanism_unit_level.csv
+
+  external_validation:
+    hard_negative_oos:
+      id: external_validation.hard_negative_oos
+      research_question: "内部 near-OOS 碰撞结论能否迁移到外部困难 OOS？"
+      status: limited_complete
+      entrypoints:
+        - artifact-only
+      protocol: external_hard_negative_zero_adjustment
+      artifact_root: external_validation/hard_negative_oos
+      manifest:
+        - ../../minilm_representation_analysis/hard_oos_manifest.json
+      summary:
+        - external_hard_negative_summary.csv
+      expected_unit_count: 14
+      count_source: csv_rows
+      count_summary: external_hard_negative_summary.csv
+
+    mogb:
+      id: external_validation.mogb
+      research_question: "与直接多粒度局部边界方法相比，s2c 的条件性多簇结论是否成立？"
+      status: audited_not_reproduced
+      entrypoints:
+        - tools/compat/mogb
+      protocol: mogb_official_protocol_audit
+      artifact_root: external_validation
+      manifest:
+        - mogb_protocol_audit.json
+        - mogb_official_reproduction.json
+      summary:
+        - mogb_protocol_audit.json
+        - mogb_official_reproduction.json
+      expected_unit_count: 0
+      count_source: none

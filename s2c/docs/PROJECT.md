@@ -1,108 +1,91 @@
-# s2c 当前项目契约
+# s2c 项目契约
 
-这份文件是项目的“边界说明”，用于回答：代码在哪里、数据在哪里、结果是否可复现、哪些数字可以写进论文。
+这份文件只说明当前项目怎么组织、哪些结果可信，以及阅读时不能越过的边界。历史设计和旧实验不再作为当前入口。
 
-## 一句话
+## 系统边界
 
 ```text
-文本 → Gate（Known/OOS）→ Router（domain）→ Expert（intent）
+文本
+ └─ MiniLM Gate：Known / OOS
+     └─ SmolLM Router：domain
+         └─ SmolLM Expert：intent
 ```
 
-当前研究重点是冻结 MiniLM 语义空间中的 Known 多簇结构与 Known/OOS 可分性；Gate-only 机制实验是主体，完整 Cascade 是系统级验证。
+研究主线是 `MiniLM 表示 → Known 局部支持结构 → OOS 可分性`。Known intent 分类只用于检查 false reject、多簇收益和完整系统传递，不是本轮独立方法贡献。
 
 ## 工作区布局
 
-从 `s2c/` 项目根目录看：
-
 ```text
-../assets/       数据集、预训练模型和大文件
-../artifacts/    被 .gitignore 忽略的实验产物
-s2c/src/         可复用实现
-s2c/tools/       训练、评价和实验编排入口
+../assets/       数据集、split、预训练模型
+../artifacts/    被 Git 忽略的模型和实验产物
+s2c/src/         可复用 pipeline、Gate、Router、Expert 实现
+s2c/tools/       训练、评价、分析入口
 s2c/tests/       协议和回归测试
-s2c/docs/        当前契约、实验说明和历史参考
+s2c/configs/     运行配置和实验登记
+s2c/docs/        仅四份活动文档；历史材料在 docs/archive/
 ```
 
-不要在仓库内复制 `data/`、`models/` 或 `outputs/`；路径由 `src.runtime.WorkspacePaths` 统一解析。
+路径由 `src.runtime.WorkspacePaths` 推导。不要在仓库内复制 `data/`、`models/` 或 `outputs/`。
 
-## 当前可依赖的源码
+## 当前可运行入口
 
-| 任务 | 入口 | 状态 |
+| 工作 | 入口 | 当前状态 |
 | --- | --- | --- |
-| 数据准备/主流程 | `python -m src.cli` | main 可运行 |
-| v19/v20/v21 Gate-only 研究 | `python -m tools.experiments.cluster_separability` | main 可运行 |
-| Gate→Router→Expert 评价 | `tools/eval/eval_system_pipeline_v19.py` | main 可运行 |
-| 本轮下游修复后的代表 Cascade | `tools/eval/run_cascade_repair.py` | main 可运行，输出到独立目录 |
-| 完整 KIR50 Cascade 组件 | `tools/train/run_cascade_components.py` | 9 个 dataset×seed 组件均已 ready；以 `cascade_full/gpu_kir50/component_plan.json` 为准 |
-| 完整 KIR50 Cascade Gate 适配 | `tools/eval/prepare_cascade_gates.py` | 9 个 Gate adapter 均已 ready；以 `cascade_full/gpu_kir50/gates/gate_manifest.json` 为准 |
-| 完整 KIR50 Cascade 评价 | `tools/eval/run_cascade_matrix.py` | 36/36 完成；以 `cascade_full/gpu_kir50/evaluations/matrix_manifest.json` 为准 |
-| CE-Recon/Cascade 收口入口 | 当前 `main` 工作树中的 `tools/eval/`、`tools/train/` 和 `tools/analysis/` | 当前工作树可运行；对应新增文件尚未形成独立提交，结果仍以 manifest 为准 |
+| 数据准备/基础流程 | `python -m src.cli` | 可运行 |
+| Gate-only 机制实验 | `python -m tools.experiments.cluster_separability` | 结果冻结 |
+| 下游组件预检 | `python tools/train/run_cascade_components.py` | 9/9 ready |
+| Gate 适配预检 | `python tools/eval/prepare_cascade_gates.py` | 9/9 ready |
+| 完整 Cascade 预检 | `python tools/eval/run_cascade_matrix.py` | 36/36 complete |
+| 汇总与配对分析 | `python tools/analysis/export_cascade_repair_summary.py` | 当前 main 可运行 |
+| 结果登记审计 | `python tools/analysis/audit_experiment_registry.py` | 当前 main 可运行 |
 
-本轮不提交或推送 `autoresearch` 分支。若某个旧 artifact 的 manifest 记录该分支，只表示历史来源；不能把它当成当前交付分支。
+活动入口和历史兼容脚本的分类见 `configs/active_entrypoints.json`。未引用脚本只生成报告，不自动删除。
+
+## Banking77/StackOverflow 是否已经修复
+
+已经修复并重新运行，不是待办事项：
+
+1. 单域数据集不再训练无意义的 1-class SmolLM Router，而是使用 manifest 声明的 constant router。
+2. Expert 只按 `MANIFEST.json` 中声明的 domain 训练，避免把残留目录误当成真实 domain。
+3. Banking77/StackOverflow seed13、87 使用本轮 GPU 训练组件，seed42 使用已审计组件；四种 Gate 共用同一 dataset/seed 的下游组件。
+4. Expert 单点 test accuracy 约为 Banking77 `0.849`、StackOverflow `0.874`；旧 smoke 中的异常低数字不属于当前主结果。
+
+因此当前若看到 Known macro-F1 的变化，应先按 `cascade_banking_tradeoff.csv` 和 `cascade_error_decomposition_summary.csv` 判断是 Gate 的 false reject/false accept 权衡，而不是再次误判为下游组件坏掉。
 
 ## 证据优先级
 
-发生冲突时按以下顺序判断：
-
 ```text
-单元 run_manifest.json / matrix_manifest.json
-  > 汇总 CSV/JSON/Parquet
-  > 当前源码与测试
-  > docs/ 中的 active 文档
-  > 历史说明、旧论文草稿
+单元 eval_results.json / run_manifest.json
+  > matrix_manifest.json / 汇总 CSV
+  > 当前源码和测试
+  > 活动文档
+  > docs/archive/ 中的历史说明和旧论文稿
 ```
 
-每个可写入论文的数字至少要能追溯到：dataset、KIR、seed、split、Gate 配置、checkpoint、阈值选择集和源码 commit。
+论文数字必须能追溯到 dataset、KIR、seed、split、Gate 配置、checkpoint、validation 选择规则和源码 commit。
 
-## 当前实验边界
+## 当前研究边界
 
 - 主数据集：CLINC150、BANKING77-OOS、StackOverflow。
-- Gate-only 主体：KIR、每意图子中心数、Euclidean/对角 Mahalanobis、受控 Baseline、near-OOS、MiniLM 表示诊断。
-- 完整 Cascade 修复：先固定 KIR50/seed42，四种 Gate 共用同一套 Router/Expert；不把旧 smoke 结果覆盖掉。
-- 完整 Cascade 扩展：固定 KIR50、seed13/42/87 和四种 Gate，共 36 个系统单元，已全部完成；seed13/87 的下游组件由 GPU 训练，seed42 复用已审计模型。
-- MOGB：目前只能在官方协议复现成功后进入主表；审计状态不等于性能结果。
-- Gate-only 的 OOS F1 不能替代完整系统的 Known macro-F1 或 overall accuracy。
-- 代表性 Cascade 中的线性 controlled baseline 读取了旧 sklearn 版本序列化的
-  LogisticRegression；当前 `bo` 环境会给出兼容性 warning。它可作受控参考，若要把
-  该 baseline 作为最终主结论，应在当前环境重新训练并固定其模型 hash。
+- 当前完整系统矩阵只冻结 KIR50、seed `{13,42,87}`、四种代表 Gate，共 36 个单元；不扩展 KIR25/75。
+- 不新增 Gate、K、encoder 或普通 baseline 家族。
+- MOGB 只有协议审计时，不把审计 JSON 当成性能结果。
+- 当前 `bo` 环境实际 sklearn 版本为 `1.8.0`，baseline 反序列化审计无 warning；不因不存在的 warning 重训。
+- 完整 Pipeline 的系统级结论必须同时报告 OOS F1、Known macro-F1、accuracy、ID Recall 和 Gate/Router/Expert 错误分解。
 
-## 运行前检查
-
-```bash
-git status --short
-python -m py_compile src/pipeline/system_pipeline.py tools/eval/eval_system_pipeline_v19.py tools/eval/run_cascade_repair.py
-python tools/eval/run_cascade_repair.py
-```
-
-GPU 运行需要当前 `bo` 环境和 RTX 5070 兼容的 PyTorch/CUDA；训练和评价命令的实际环境变量以运行记录中的 `LD_LIBRARY_PATH` 为准，不要把本机临时环境当成方法协议。
-
-## 结果入口
-
-完整 Cascade 修复结果：
-
-```text
-../artifacts/s2c/outputs/experiments/cascade_repair/gpu_kir50_seed42/
-├── repair_manifest.json  # checkpoint hash、训练参数、GPU/PyTorch环境
-├── cascade_summary.csv   # 12个单元的论文可读汇总
-├── cascade_error_decomposition.csv
-├── expert_models/   # 本轮 GPU 重训的 Banking/StackOverflow Expert
-└── evaluations/     # 12 个代表性 Gate→Router→Expert 单元
-```
-
-Gate-only 和历史研究结果仍在：
-
-```text
-../artifacts/s2c/outputs/experiments/
-```
-
-先读对应目录的 manifest，再读汇总文件；不要从某个 `predictions.json` 单独推断结论。
-
-完整 KIR50 矩阵结果（独立于 seed42 修复目录，当前已完成 36/36）：
+## 结果位置
 
 ```text
 ../artifacts/s2c/outputs/experiments/cascade_full/gpu_kir50/
 ├── component_plan.json
 ├── gates/gate_manifest.json
-├── downstream/              # GPU 训练组件 provenance 与模型
-└── evaluations/             # 36 个系统单元；matrix_manifest.json status=complete
+├── evaluations/matrix_manifest.json
+├── cascade_summary.csv
+├── cascade_gate_by_seed.csv
+├── cascade_gate_summary.csv
+├── cascade_error_decomposition.csv
+├── cascade_error_decomposition_summary.csv
+└── cascade_banking_tradeoff.csv
 ```
+
+Gate-only、MiniLM、外部 hard-negative 和历史研究结果统一登记在 `configs/experiment_registry.yaml`；执行登记审计不会改变任何结果。

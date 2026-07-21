@@ -21,6 +21,7 @@ from pathlib import Path
 from typing import Any
 
 import numpy as np
+import sklearn
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import f1_score
 
@@ -195,6 +196,7 @@ def _prepare_baseline(dataset: str, seed: int, embeddings: dict[str, np.ndarray]
         "method": selected_method["method"],
         "threshold": float(operating["threshold"]),
         "classifier": classifier,
+        "sklearn_version": str(sklearn.__version__),
         "selection_path": "validation_only_current_sklearn",
         "selection": {"C": selected_c, "methods": method_rows, "id_recall_guard": guard, "fixed_k1_validation_id_recall": fixed_recall},
         "test_used_for_selection": False,

@@ -1,0 +1,17 @@
+{
+  "protocol": "cascade_full_kir50_baseline_pickle_load_audit",
+  "sklearn_version": "1.8.0",
+  "warning_count": 0,
+  "test_used_for_selection": false,
+  "files": [
+    {"path": "../artifacts/s2c/outputs/experiments/cascade_full/gpu_kir50/gates/banking77_oos/kir50_seed13/best_linear_baseline.pkl", "sha256": "29a5592bcdc85ef7b8c06109575d6f3d1dc7d6abc9ac29793432a392ae25aee3", "method": "entropy"},
+    {"path": "../artifacts/s2c/outputs/experiments/cascade_full/gpu_kir50/gates/banking77_oos/kir50_seed42/best_linear_baseline.pkl", "sha256": "034aaaaaa8ad3ac773d49c9d7b32ea169edaa993c0e0bff7085aa2d576a959dc", "method": "msp"},
+    {"path": "../artifacts/s2c/outputs/experiments/cascade_full/gpu_kir50/gates/banking77_oos/kir50_seed87/best_linear_baseline.pkl", "sha256": "dd5016a70b1125d0a2234a940dc062893fb1db54fc725814353bba3c4db4d63c", "method": "energy"},
+    {"path": "../artifacts/s2c/outputs/experiments/cascade_full/gpu_kir50/gates/clinc150/kir50_seed13/best_linear_baseline.pkl", "sha256": "418db0f1e986edca8cbf0c665a36e116036227c07d215fb67e513e6c78c223b0", "method": "msp"},
+    {"path": "../artifacts/s2c/outputs/experiments/cascade_full/gpu_kir50/gates/clinc150/kir50_seed42/best_linear_baseline.pkl", "sha256": "16342452a2bffed7226906db525a8d8f8f1d111ec6eccf504420b901b0f651eb", "method": "entropy"},
+    {"path": "../artifacts/s2c/outputs/experiments/cascade_full/gpu_kir50/gates/clinc150/kir50_seed87/best_linear_baseline.pkl", "sha256": "daf5c01e6a812df9383cd226224b6068e3015041ffe794ddf9ae2fb8e23eb919", "method": "entropy"},
+    {"path": "../artifacts/s2c/outputs/experiments/cascade_full/gpu_kir50/gates/stackoverflow/kir50_seed13/best_linear_baseline.pkl", "sha256": "67ab6c846644114c7f0c41ef8e61f2f9209347079e5eef6ad7a6211db9322161", "method": "entropy"},
+    {"path": "../artifacts/s2c/outputs/experiments/cascade_full/gpu_kir50/gates/stackoverflow/kir50_seed42/best_linear_baseline.pkl", "sha256": "e259e0d7a9f69a6260a637cf791e9a6fc53d42cb57fbeb35e0532b90e71c2603", "method": "energy"},
+    {"path": "../artifacts/s2c/outputs/experiments/cascade_full/gpu_kir50/gates/stackoverflow/kir50_seed87/best_linear_baseline.pkl", "sha256": "b47a3145e5181aa50fb856c2ca3e7b946b0ae34cebd970c8ab8adf951ffd5e7b", "method": "energy"}
+  ]
+}
