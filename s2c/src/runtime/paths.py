@@ -25,9 +25,8 @@ class WorkspacePaths:
 
     @property
     def workspace_root(self) -> Path:
-        # The active project may live at ``<workspace>/s2c`` or
-        # ``<workspace>/projects/s2c``. Prefer the nearest parent containing
-        # the canonical asset layers so the layout can be moved safely.
+        # Prefer the nearest parent containing the canonical asset layers so
+        # the active ``<workspace>/s2c`` layout remains relocatable.
         for candidate in (self.project_root.parent, *self.project_root.parents):
             if (candidate / "assets").is_dir() and (candidate / "artifacts").is_dir():
                 return candidate
