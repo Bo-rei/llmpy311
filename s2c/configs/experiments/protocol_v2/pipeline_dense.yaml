@@ -1,0 +1,7 @@
+name: pipeline_dense
+datasets: [clinc150, banking77, stackoverflow]
+kirs: [0.10, 0.20, 0.25, 0.30, 0.40, 0.50, 0.60, 0.70, 0.75, 0.80, 0.90]
+seeds: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+gate_candidates: [k_1, k_2, best_fixed_k, adaptive_k, reliability_aware_k]
+sharing_rule: shared_router_expert_checkpoint_per_dataset_kir_seed
+

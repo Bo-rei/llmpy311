@@ -1,0 +1,25 @@
+# Data manifests and registries are small provenance records.  Raw corpora and
+# derived views stay local even though they live below the project root.
+*
+!.gitignore
+!README.md
+
+!manifests/
+!manifests/**
+!registries/
+!registries/**
+!reports/
+!reports/README.md
+!reports/*.json
+!reports/*.yaml
+!reports/*.csv
+
+sources/
+canonical/
+views/
+exports/
+cache/
+tmp/
+reports/full/
+reports/per_sample/
+

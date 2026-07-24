@@ -1,0 +1,5 @@
+dataset,decision,dataset_version,official_source,textoir_exact_record_match_rate,textoir_normalized_text_match_rate,s2c_raw_exact_record_match_rate,s2c_official_reconstruction_match_rate,official_reconstruction_split_match_rate,license_status,protocol_v2_candidate_status
+clinc150,reconstructed_from_official,protocol_v2_official_v1,clinc/oos-eval:data/data_full.json,1.0,1.0,1.0,1.0,1.0,verified,rejected_textoir_candidate
+banking77,reconstructed_from_official,protocol_v2_official_v1,PolyAI-LDN/task-specific-datasets:banking_data/{train;test}.csv,0.9997706947947719,1.0,0.999006344110678,1.0,1.0,verified,rejected_textoir_candidate
+banking77_oos,blocked_unverified,legacy_extension_unverified,none,,,,,,blocked,blocked
+stackoverflow,blocked_unverified,stackoverflow_source_unverified_7c207f51e649,jacoxu/StackOverflow:rawText/{title;label}_StackOverflow.txt,0.99995,1.0,0.999,,,blocked,blocked

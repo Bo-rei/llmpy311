@@ -37,8 +37,9 @@ s2c 是开放世界意图识别系统，运行链路固定为：
 ## 当前活动入口
 
 1. [README.md](../README.md)：项目入口。
-2. [EXPERIMENTS.md](EXPERIMENTS.md)：结果层次和公开快照。
-3. [RUNBOOK.md](RUNBOOK.md)：审计、测试和导出命令。
+2. [DATASETS.md](DATASETS.md)：数据来源裁决与准入状态。
+3. [EXPERIMENTS.md](EXPERIMENTS.md)：结果层次和公开快照。
+4. [RUNBOOK.md](RUNBOOK.md)：审计、测试和导出命令。
 
 历史说明只在 `docs/archive/`，不能覆盖当前事实。读取完整实验数字时，先看
 `../artifacts/s2c/outputs/experiments/` 下的 manifest，再看汇总 CSV；读取 GitHub

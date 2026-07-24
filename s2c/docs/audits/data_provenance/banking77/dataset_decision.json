@@ -1,0 +1,31 @@
+{
+  "dataset": "banking77",
+  "decision": "reconstructed_from_official",
+  "dataset_version": "protocol_v2_official_v1",
+  "official_source": "https://github.com/PolyAI-LDN/task-specific-datasets:banking_data/{train,test}.csv",
+  "official_revision": "57ec275d8078af65b7731c2a98be812d844a6d6b",
+  "official_file_sha256": "b06e26ac675513959a63135f11b94ea7786ed02da65db93a5650d8838cbc664b;d12d6e3bc4c3103966ae786dc435913c0c563dfa328f5a3646d0e62cfeeb474d",
+  "textoir_commit": "dffe2b1b848a069a6808f8089b4cb9bd16e2062b",
+  "textoir_match_rate": 0.9997706947947719,
+  "textoir_normalized_text_match_rate": 1.0,
+  "s2c_match_rate": 0.999006344110678,
+  "s2c_protocol_v2_candidate_match_rate": 0.9997706947947719,
+  "s2c_official_reconstruction_match_rate": 1.0,
+  "split_match": true,
+  "split_match_rate": 1.0,
+  "license_status": "verified",
+  "canonical_source": "official_banking/banking_data",
+  "protocol_v2_candidate_status": "rejected_textoir_candidate",
+  "canonical_rebuild_status": "materialized_and_validated",
+  "calibration_derivation": "stratified_sha256_rank_v1; official train only; target 1000",
+  "rejected_sources": [
+    "textoir_banking_snapshot_as_raw_canonical",
+    "legacy_banking77_oos_extension"
+  ],
+  "rejection_reasons": [
+    "TEXTOIR creates dev by moving 1,000 official-train records; the conversion rule must be versioned separately from the raw source.",
+    "The existing s2c/data candidate was imported from that TEXTOIR snapshot, not directly from the official raw source.",
+    "BANKING77-OOS is a different, unverified legacy extension and cannot be merged with standard Banking77."
+  ],
+  "legacy_result_policy": "Use official standard Banking77 plus the recorded calibration derivation. Legacy BANKING77-OOS remains incomparable."
+}

@@ -12,6 +12,7 @@
 - `docs/PROJECT.md`
 - `docs/EXPERIMENTS.md`
 - `docs/RUNBOOK.md`
+- `docs/DEVELOPMENT_LOG.md`
 
 `docs/archive/` 仅保存历史资料，不是当前事实来源。不要重新建立平行文档索引或版本号
 文档树。
@@ -36,6 +37,9 @@ results/              GitHub 可提交的轻量 CSV/JSON 快照
 
 ## 维护规则
 
+- 所有 Codex 或其他智能体的实质性修改都必须同步追加
+  `docs/DEVELOPMENT_LOG.md`；纯只读且不产生文件的任务可以例外。日志必须记录
+  base commit、修改文件、数据影响、artifact 影响、测试、风险和下一步。
 - 不运行训练来完成工作区整理，不修改或重命名 `../artifacts` 原始实验目录。
 - 不把 Gate-only 的 Frozen/CE/SupCon 结果写成完整 Pipeline 结果。
 - 不提交模型、checkpoint、embedding、Parquet、逐样本 scores 或运行日志。
@@ -43,6 +47,10 @@ results/              GitHub 可提交的轻量 CSV/JSON 快照
 - Router 只从 `src/router/` 导入；不要在 `src/models/` 重新导出 Router。
 - 训练循环不要添加会破坏 LoRA 梯度的 `torch.no_grad()`。
 - 不在初始化阶段调用 `torch.cuda.is_available()`；部分环境会触发原生运行时问题。
+- `configs/data/protocol_v2_admission.json` 是唯一数据准入开关。只有同时满足 dataset_version、
+  dataset-level admission 和 materialized view/export 的任务才可运行；不得绕过 Gate runner 或 E4
+  adapter 向任何 `../artifacts/s2c/runs/<dataset_version>/` 写入。TEXTOIR candidate、StackOverflow
+  和 BANKING77-OOS 仍被拒绝。
 
 ## 最小验证
 

@@ -10,7 +10,6 @@ Implements Deep SVDD projection head with:
 
 import torch
 import torch.nn as nn
-import numpy as np
 import logging
 
 logger = logging.getLogger(__name__)

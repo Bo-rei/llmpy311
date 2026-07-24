@@ -1,0 +1,28 @@
+{
+  "status": "partially_admitted",
+  "updated_at": "2026-07-22",
+  "reason": "CLINC150 and Banking77 were rebuilt from verified official raw sources under protocol_v2_official_v1. StackOverflow and legacy BANKING77-OOS remain blocked; the TEXTOIR candidate remains inadmissible.",
+  "audit_root": "../artifacts/s2c/reports/data_provenance_audit/2026-07-22_three_way_verification",
+  "admitted_dataset_versions": [
+    "protocol_v2_official_v1"
+  ],
+  "dataset_admission": {
+    "clinc150": "admitted",
+    "banking77": "admitted",
+    "stackoverflow": "blocked",
+    "banking77_oos": "blocked"
+  },
+  "dataset_decisions": {
+    "clinc150": "reconstructed_from_official",
+    "banking77": "reconstructed_from_official",
+    "stackoverflow": "blocked_unverified",
+    "banking77_oos": "blocked_unverified"
+  },
+  "permitted_actions": {
+    "formal_experiments": "clinc150_and_banking77_only_after_materialized_views",
+    "embedding_generation": "clinc150_and_banking77_only_after_materialized_views",
+    "training": "clinc150_and_banking77_only_after_materialized_views",
+    "mogb_or_dcl_reproduction": "clinc150_and_banking77_only_after_materialized_views",
+    "textoir_fair_comparability_claim": false
+  }
+}

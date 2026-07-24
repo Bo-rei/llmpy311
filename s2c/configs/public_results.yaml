@@ -7,6 +7,12 @@ limits:
   max_total_bytes: 104857600
 
 files:
+  # Official-source protocol smoke: Gate-only, two admitted datasets only.
+  - experiment_id: protocol_v2_official_e1_admitted
+    category: gate_only
+    source: ../artifacts/s2c/runs/protocol_v2_official_v1/summaries/official_e1_admitted.csv
+    public: gate_only/protocol_v2_official_e1_admitted.csv
+
   # Gate -> Router -> Expert pipeline summaries and provenance.
   - experiment_id: cascade_full_kir50
     category: pipeline

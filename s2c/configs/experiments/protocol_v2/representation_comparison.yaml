@@ -1,0 +1,11 @@
+name: representation_comparison
+datasets: [clinc150, banking77, stackoverflow]
+kirs: [0.50]
+seeds: [0]
+k_values: [1, 2]
+distances: [mahalanobis_diag]
+representations: [frozen_minilm, ce_minilm, supcon_minilm, ce_recon_minilm, frozen_bert, finetuned_bert]
+defaults:
+  boundary: mean_std
+  radius_lambda: 1.0
+

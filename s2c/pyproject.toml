@@ -1,0 +1,51 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "s2c-open-intent"
+version = "0.2.0"
+description = "Protocol-v2 data and experiment infrastructure for s2c"
+requires-python = ">=3.11"
+dependencies = ["numpy>=1.24"]
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "ruff>=0.6"]
+
+[project.scripts]
+s2c-data-import = "s2c.data.import_textoir:main"
+s2c-data-build = "s2c.data.build_canonical:main"
+s2c-data-validate = "s2c.data.validate_protocol:main"
+s2c-experiment-plan = "s2c.experiments.plan:main"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["s2c*", "src*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"
+pythonpath = ["."]
+markers = [
+  "smoke: local protocol_v2 data/export smoke checks",
+]
+
+[tool.ruff]
+target-version = "py311"
+line-length = 100
+extend-exclude = [
+  "data",
+  "results",
+  "scripts/data/active",
+  "tests/historical_repro",
+  "tests/unit/test_*.py",
+  "tools/analysis",
+  "tools/compat",
+  "tools/eval",
+  "tools/experiments/cluster_separability",
+  "tools/gate",
+  "tools/train",
+]

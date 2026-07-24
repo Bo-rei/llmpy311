@@ -1,0 +1,23 @@
+{
+  "dataset": "banking77_oos",
+  "decision": "blocked_unverified",
+  "official_source": "https://github.com/PolyAI-LDN/task-specific-datasets (base Banking77 only; no official OOS extension found)",
+  "official_revision": "57ec275d8078af65b7731c2a98be812d844a6d6b",
+  "official_file_sha256": "b06e26ac675513959a63135f11b94ea7786ed02da65db93a5650d8838cbc664b;d12d6e3bc4c3103966ae786dc435913c0c563dfa328f5a3646d0e62cfeeb474d",
+  "textoir_commit": "dffe2b1b848a069a6808f8089b4cb9bd16e2062b",
+  "textoir_match_rate": null,
+  "s2c_match_rate": null,
+  "split_match": false,
+  "license_status": "blocked",
+  "canonical_source": null,
+  "rejected_sources": [
+    "s2c_banking_oos_raw",
+    "s2c_prepared_banking77_oos_kir50_seed42"
+  ],
+  "rejection_reasons": [
+    "No traceable official OOS-extension source or license",
+    "Known base records contain text-label conflicts against official Banking77",
+    "TEXTOIR has standard Banking77 but not this OOS extension"
+  ],
+  "legacy_result_policy": "Do not start protocol_v2 or claim official/TEXTOIR comparability; historical BANKING77-OOS results remain legacy-only."
+}

@@ -1,0 +1,17 @@
+# 此文件描述 2026-07-22 前生成的 TEXTOIR candidate；不是可执行的 canonical 协议。
+protocol_version: protocol_v2_candidate
+admission_status: blocked
+admission_record: configs/data/protocol_v2_admission.json
+candidate_source_name: textoir
+candidate_source_commit: dffe2b1b848a069a6808f8089b4cb9bd16e2062b
+datasets:
+  clinc150:
+    source_directory: oos
+    native_oos_label: oos
+  banking77:
+    source_directory: banking
+    native_oos_label: null
+  stackoverflow:
+    source_directory: stackoverflow
+    native_oos_label: null
+    public_data_tracking: false

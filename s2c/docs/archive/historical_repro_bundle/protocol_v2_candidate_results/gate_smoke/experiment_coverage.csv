@@ -1,0 +1,2 @@
+source_summary,source_sha256,complete_rows,failed_rows
+artifacts/s2c/runs/protocol_v2/summaries/smoke_gate.csv,ccba5dcf6977d32e2b0f1412e44b135f6f427a8839c267276efa24968d6e939c,36,0

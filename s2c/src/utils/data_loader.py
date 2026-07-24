@@ -1,7 +1,6 @@
-import torch
 from torch.utils.data import Dataset
 from transformers import AutoTokenizer
-from typing import List, Dict
+from typing import List
 
 
 class FastDataset(Dataset):

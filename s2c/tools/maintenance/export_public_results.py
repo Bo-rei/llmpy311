@@ -190,7 +190,8 @@ def _manifest_rows(records: Iterable[ExportRecord]) -> list[dict[str, str | int]
 def _write_manifest(path: Path, records: list[ExportRecord]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("w", encoding="utf-8", newline="") as handle:
-        writer = csv.DictWriter(handle, fieldnames=MANIFEST_FIELDS)
+        # 固定 LF，避免 Git 将 CSV 的默认 CRLF 行尾报告为尾随空白。
+        writer = csv.DictWriter(handle, fieldnames=MANIFEST_FIELDS, lineterminator="\n")
         writer.writeheader()
         writer.writerows(_manifest_rows(records))
 

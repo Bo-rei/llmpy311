@@ -1,0 +1,14 @@
+name: smoke_gate
+protocol_version: protocol_v2
+datasets: [clinc150, banking77, stackoverflow]
+kirs: [0.25, 0.50, 0.75]
+seeds: [42]
+k_values: [1, 2]
+distances: [euclidean, mahalanobis_diag]
+defaults:
+  representation: frozen_minilm
+  encoder_name: all-MiniLM-L6-v2
+  encoder_device: cuda
+  boundary: mean_std
+  radius_lambda: 1.0
+

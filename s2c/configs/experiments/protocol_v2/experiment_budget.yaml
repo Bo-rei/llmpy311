@@ -1,0 +1,11 @@
+protocol_version: protocol_v2
+smoke_gate_units: 36
+core_gate_units: 3300
+execution:
+  resume: true
+  atomic_run_directories: true
+  retry_failed_once: true
+  max_gpu_workers: 1
+  max_cpu_workers: 4
+  embedding_cache_root: artifacts/s2c/cache/embeddings/protocol_v2
+

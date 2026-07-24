@@ -1,4 +1,3 @@
-import torch
 from transformers import AutoTokenizer
 from peft import PeftModel
 from typing import Tuple

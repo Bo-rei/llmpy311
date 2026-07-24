@@ -1,0 +1,15 @@
+name: boundary_dense
+protocol_version: protocol_v2
+datasets: [clinc150, banking77, stackoverflow]
+kirs: [0.25, 0.50, 0.75]
+seeds: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+k_values: [1, 2]
+distances: [euclidean, mahalanobis_diag]
+boundary_methods: [mean_std, quantile_90, quantile_95, quantile_975, median_mad, known_conformal]
+defaults:
+  representation: frozen_minilm
+  encoder_name: all-MiniLM-L6-v2
+  encoder_device: cuda
+  boundary: mean_std
+  radius_lambda: 1.0
+

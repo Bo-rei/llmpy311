@@ -174,18 +174,18 @@ if __name__ == "__main__":
     
     outputs = model(embeddings)
     
-    print(f"\n✅ Forward Pass 成功:")
+    print("\n✅ Forward Pass 成功:")
     print(f"  Features shape: {outputs['features'].shape}")
     print(f"  Distances: {outputs['distances']}")
     print(f"  Distances²: {outputs['distances_squared']}")
     
     # 验证约束
-    print(f"\n✅ 约束验证:")
+    print("\n✅ 约束验证:")
     for name, module in model.named_modules():
         if isinstance(module, nn.Linear):
             assert module.bias is None, f"❌ {name} 不应该有 bias！"
             print(f"  ✓ {name}: bias=None")
     
-    print(f"\n✅ Center 验证:")
+    print("\n✅ Center 验证:")
     print(f"  Center requires_grad: {model.center.requires_grad} (应为 False)")
     print(f"  Center shape: {model.center.shape}")

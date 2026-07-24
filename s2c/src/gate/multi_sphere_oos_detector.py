@@ -21,7 +21,6 @@ from typing import Dict, List, Tuple, Optional
 from dataclasses import dataclass
 from sklearn.cluster import KMeans
 from sklearn.metrics import silhouette_score
-from sentence_transformers import SentenceTransformer
 import logging
 
 logger = logging.getLogger(__name__)

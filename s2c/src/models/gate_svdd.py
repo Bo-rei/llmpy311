@@ -10,7 +10,7 @@ HiLSA-MoE v19.2 - Deep SVDD Gate Model
 
 import torch
 import torch.nn as nn
-from transformers import AutoModel, AutoTokenizer
+from transformers import AutoModel
 from peft import LoraConfig, get_peft_model, TaskType
 from typing import Optional, Dict
 import logging

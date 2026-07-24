@@ -1,0 +1,10 @@
+representation: frozen_minilm
+encoder_name: all-MiniLM-L6-v2
+encoder_device: cuda
+normalization: l2
+center_mode: class_centroid_mixture
+radius_method: mean_std
+radius_lambda: 1.0
+covariance_scope: per_cluster
+covariance_eps: 1.0e-6
+

@@ -1,0 +1,28 @@
+{
+  "audit_scope": "three_way_data_provenance",
+  "generated_at": "2026-07-24",
+  "full_audit_root": "../artifacts/s2c/reports/data_provenance_audit/2026-07-22_three_way_verification",
+  "textoir_commit": "dffe2b1b848a069a6808f8089b4cb9bd16e2062b",
+  "decisions": {
+    "clinc150": "reconstructed_from_official",
+    "banking77": "reconstructed_from_official",
+    "banking77_oos": "blocked_unverified",
+    "stackoverflow": "blocked_unverified"
+  },
+  "protocol_v2_status": "partially_admitted_official_v1_clinc150_banking77_only",
+  "public_files": [
+    "summary.csv",
+    "source_license_report.csv",
+    "clinc150/dataset_decision.json",
+    "banking77/dataset_decision.json",
+    "banking77_oos/dataset_decision.json",
+    "stackoverflow/dataset_decision.json",
+    "stackoverflow/source_trace.md"
+  ],
+  "experiment_admission": {
+    "training": "clinc150_and_banking77_only_after_materialized_inputs",
+    "embedding_generation": "clinc150_and_banking77_only_after_materialized_inputs",
+    "mogb_or_dcl_reproduction": "clinc150_and_banking77_only_after_materialized_inputs",
+    "textoir_fair_comparability_claim": false
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "dataset": "clinc150",
+  "decision": "reconstructed_from_official",
+  "dataset_version": "protocol_v2_official_v1",
+  "official_source": "https://github.com/clinc/oos-eval:data/data_full.json",
+  "official_revision": "828f8093932c8fe6ca7936c3d2e52903b1c523de",
+  "official_file_sha256": "36923c3705a59e08fe9c3883d8bc2dd966ef93e22cb78ac41171782a698d56e0",
+  "textoir_commit": "dffe2b1b848a069a6808f8089b4cb9bd16e2062b",
+  "textoir_match_rate": 1.0,
+  "textoir_normalized_text_match_rate": 1.0,
+  "s2c_match_rate": 1.0,
+  "s2c_protocol_v2_candidate_match_rate": 1.0,
+  "s2c_official_reconstruction_match_rate": 1.0,
+  "split_match": true,
+  "split_match_rate": 1.0,
+  "license_status": "verified",
+  "canonical_source": "official_clinc/data/data_full.json",
+  "protocol_v2_candidate_status": "rejected_textoir_candidate",
+  "canonical_rebuild_status": "materialized_and_validated",
+  "rejected_sources": [
+    "textoir_oos_snapshot_as_raw_canonical",
+    "historical_s2c_prepared_v19"
+  ],
+  "rejection_reasons": [
+    "TEXTOIR content matches the official corpus but collapses native-OOS sub-splits into test.",
+    "The existing s2c/data candidate was imported from that TEXTOIR snapshot, so it is not an official-raw canonical dataset.",
+    "Historical prepared snapshots are KIR-derived experiment inputs, not raw sources."
+  ],
+  "legacy_result_policy": "Historical results remain traceable only. protocol_v2_official_v1 uses the official data_full.json reconstruction."
+}

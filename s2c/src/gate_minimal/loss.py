@@ -15,7 +15,7 @@ where:
 
 import torch
 import torch.nn as nn
-from typing import Dict, Tuple
+from typing import Dict
 import logging
 
 logger = logging.getLogger(__name__)

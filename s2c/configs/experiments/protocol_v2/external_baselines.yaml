@@ -1,0 +1,11 @@
+name: external_baselines
+protocol_version: protocol_v2
+datasets: [clinc150, banking77, stackoverflow]
+kirs: [0.50]
+seeds: [0]
+methods: [msp, energy, knn, lof, doc, adb, da_adb, k_plus_1_way, mogb]
+defaults:
+  source: protocol_v2_exports
+  representation: frozen_minilm
+  encoder_name: all-MiniLM-L6-v2
+  encoder_device: cuda

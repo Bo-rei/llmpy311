@@ -1,0 +1,30 @@
+# 官方 raw source 重建的数据版本；与被阻断的 protocol_v2_candidate 路径完全隔离。
+protocol_version: protocol_v2_official_v1
+protocol_family: protocol_v2
+status: partially_admitted
+canonical_datasets:
+  clinc150:
+    decision: reconstructed_from_official
+    source_format: clinc_data_full_json_v1
+    source_repository: https://github.com/clinc/oos-eval.git
+    source_commit: 828f8093932c8fe6ca7936c3d2e52903b1c523de
+    license: CC-BY-3.0
+  banking77:
+    decision: reconstructed_from_official
+    source_format: banking77_csv_v1
+    source_repository: https://github.com/PolyAI-LDN/task-specific-datasets.git
+    source_commit: 57ec275d8078af65b7731c2a98be812d844a6d6b
+    license: CC-BY-4.0
+    calibration_derivation: stratified_sha256_rank_v1
+    calibration_target_count: 1000
+blocked_datasets:
+  stackoverflow:
+    decision: blocked_unverified
+    reason: original source license is not yet verified
+  banking77_oos:
+    decision: blocked_unverified
+    reason: legacy extension is not an official Banking77 raw source
+materialization_policy:
+  registries: all formal KIRs and seeds
+  views_and_exports: generate on demand from immutable canonical records
+  formal_experiments: require a materialized view/export plus dataset admission
