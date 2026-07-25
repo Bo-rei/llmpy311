@@ -278,7 +278,17 @@ def build_canonical_dataset(paths: ProtocolV2Paths, dataset: str) -> dict[str, A
     normalized_duplicates = sum(
         count - 1 for count in Counter(_normalized_text(str(row["text"])) for row in records).values() if count > 1
     )
-    known_intents = sorted({str(row["intent"]) for row in records if not bool(row["native_oos"])})
+    observed_intents = {str(row["intent"]) for row in records if not bool(row["native_oos"])}
+    declared_order = source_manifest.get("intent_universe_order")
+    # Only the imported source manifest supplies this order.  It freezes
+    # TEXTOIR's label array so registry generation does not need to read the
+    # external repository again.  Legacy sources retain deterministic sorting.
+    if isinstance(declared_order, list) and all(isinstance(value, str) for value in declared_order):
+        known_intents = [str(value) for value in declared_order]
+        if set(known_intents) != observed_intents or len(known_intents) != len(observed_intents):
+            raise ValueError(f"TEXTOIR label universe does not match imported rows for {dataset}")
+    else:
+        known_intents = sorted(observed_intents)
     manifest: dict[str, Any] = {
         "schema_version": "protocol_v2.dataset_manifest.v2",
         "protocol_version": paths.dataset_version,
@@ -294,6 +304,7 @@ def build_canonical_dataset(paths: ProtocolV2Paths, dataset: str) -> dict[str, A
         "view_role_counts": dict(sorted(Counter(str(row["view_role"]) for row in records).items())),
         "known_label_count": len(known_intents),
         "intent_universe": known_intents,
+        "intent_universe_order_source": "textoir_benchmark_labels" if isinstance(declared_order, list) else "sorted_canonical_labels",
         "native_oos_count": sum(bool(row["native_oos"]) for row in records),
         "exact_duplicate_count": exact_duplicates,
         "normalized_duplicate_count": normalized_duplicates,

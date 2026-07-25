@@ -287,3 +287,65 @@
   `data/exports/protocol_v2_official_v1`，`uses_textoir_data=false`，未载入模型或生成 embedding。
 - 验证：`py_compile`、Ruff 以及 admission/runner-import/implementation-report 定向 pytest 通过
   （9 passed）；实际 bare CLI 默认 scope 打印为 `protocol_v2_official_v1`。
+
+### Correction：建立唯一活动的 TEXTOIR-compatible 三数据集协议
+
+- Base commit：`ea210083b331c489059f275edcc2e0c3241cfba7`。
+- 触发原因：此前 StackOverflow 的 `blocked_unverified` 将“公开重新分发完整语料”的高标准错误地
+  用作“固定 benchmark snapshot 的本地科研使用”前置条件，导致三数据集 TEXTOIR-compatible 实验
+  无法启动。该限制已按当前研究范围收缩：本地使用与公开再分发分开管理。
+- 修改范围：新增活动 `protocol_v2_textoir_v1`；`ProtocolV2Paths` 默认切换到该版本；准入状态新增
+  `admitted_official`、`admitted_benchmark_local_only`、`blocked_content_unverified` 与 `legacy_only`
+  的兼容处理。`protocol_v2_official_v1` 保留为 frozen audit，legacy `protocol_v2` 保持拒绝。
+- 数据影响：从干净的 TEXTOIR commit `dffe2b1b848a069a6808f8089b4cb9bd16e2062b` 字节复制
+  `oos`、`banking`、`stackoverflow` 到 `data/sources/textoir/<commit>/`；不改文本、标签、split 或
+  重复行。StackOverflow 保留 20,000 条/20 标签，标记 `local_research_only=true` 与
+  `redistribution_by_s2c=false`，完整语料继续被 Git 忽略。
+- 协议影响：canonical 记录冻结 TEXTOIR `benchmark_labels` 的标签顺序，并使用
+  `numpy.random.seed(seed)`/无放回 choice 生成 KIR registry，兼容 TEXTOIR 当前 Known-class
+  选择语义。新增 ADB/DA-ADB compatible TSV export；它们只是固定输入格式，不是方法复现结果。
+- E0：完成三份 canonical（CLINC150 23,700/150/1,200 native OOS；Banking77 13,083/77；
+  StackOverflow 20,000/20）、165 registry、165 views 与 990 exports。临时将 `../textoir` 改名后，
+  全量 validate、36-cell dry-run 和三数据集 Gate view loading 均通过；恢复后 TEXTOIR 工作树仍干净。
+- E1：执行 `configs/experiments/protocol_v2_textoir_v1/smoke_gate.yaml`，36/36 frozen-MiniLM Gate
+  单元完成、0 失败、关键指标无 NaN。结果仅写入
+  `../artifacts/s2c/runs/protocol_v2_textoir_v1/`，不覆盖历史 artifact。
+- E2：生成 1,650 单元计划并按 `--resume --shard-name e2_core` 启动；状态写入同一 run root 的
+  `plans/gate_core_dense.e2_core.state.json`。E3--E7 未启动。
+- 修改文件：`src/s2c/runtime/paths.py`、`src/s2c/data/*` 的协议/导出/验证路径、Gate matrix/runner/
+  summary、活动 configs、数据与运行文档、测试与 implementation audit generator。
+- 验证：19 个针对 data/admission/registry/export/runner 的单元与集成测试通过；`py_compile` 通过；
+  E0 全量验证返回 3 datasets / 165 registries / 165 views / 990 exports；E1 verify 返回 36 complete /
+  0 missing / 0 invalid；data tracking check 通过。
+- 风险与下一步：E2 是长时间可恢复 sweep，完成前不得解释 dense-grid 结论或启动 E3--E7；公开 Git
+  只能跟踪 manifest/轻量汇总，绝不能包含 StackOverflow 完整文本、embedding、checkpoint、Parquet
+  或逐样本输出。完成 E2 后先生成 summary 和机制分析，再决定后续 boundary/baseline/representation/Pipeline 阶段。
+
+### Validation update：活动协议测试与审计收口
+
+- 验证：`pytest tests/unit -q`（213 passed）、`pytest tests/integration -q`（8 passed）、
+  `pytest tests/smoke -q`（3 passed）以及 `python -m compileall src scripts tools` 均通过；公开结果
+  SHA256 verify、data-tracking check、registry audit 和 `git diff --check` 也通过。
+- 审计影响：implementation audit 现在分别报告 E1 的固定 36 单元和 E2 的实时可恢复进度，避免把
+  E2 已完成单元错误计入 E1。此更新不改数据、历史 artifact 或 E2 的配置；E2 继续只写入 ignored
+  artifact run root，E3--E7 仍未启动。
+
+### E2 closeout：冻结三数据集 dense Gate sweep 并完成配对分析
+
+- Base commit：`ea210083b331c489059f275edcc2e0c3241cfba7`；E2 代码身份由
+  `artifacts/s2c/runs/protocol_v2_textoir_v1/E2_CODE_SNAPSHOT.patch` 及其 SHA256
+  `127c80ecb2ae57e96e51dc3f146d5c8083dcc8653acad6940d6d42840a020b6f` 绑定。closeout 只新增派生汇总和文档，未改写任何 E2 run、配置、canonical、registry 或 embedding。
+- 目标：审计 `dataset × 11 KIR × 5 seed × 5 K × 2 distance = 1,650` 个
+  `protocol_v2_textoir_v1/e2_gate_core_dense` 单元，并以
+  `dataset × KIR × seed × distance` 为配对单位比较 K=2--5 与 K=1。
+- 完成状态：`1,650/1,650`，失败 `0`，缺失 `0`，重复 `0`，无效 `0`；所有 run 的
+  protocol、canonical manifest、registry、resolved config、MiniLM encoder 文件哈希通过审计。
+- 输出：派生证据位于
+  `artifacts/s2c/runs/protocol_v2_textoir_v1/summaries/e2_closeout/`，包括完整性报告、
+  dataset/KIR/K 汇总、配对 K 效应、距离比较、Known/OOS trade-off、K 选择边界和无效 run 清单。
+  核心指标使用固定 RNG seed `20260725` 的 10,000 次 paired percentile bootstrap；计时和簇规模字段仅作描述性 mean/std。
+- 结论边界：E2 使用固定 Known-only `mean_std` 边界，没有 per-K validation 选择，因此
+  `oracle_test_best_k` 只作测试敏感性上限，`validation_selected_k` 不可从本 sweep 推出。
+  E2 之后没有启动 E3--E7，也没有重新训练或生成新表示。
+- 风险与下一步：CLINC150、Banking77 和 StackOverflow 的多中心效应分别呈现条件性、条件性和明显有害信号；
+  后续若继续，只能先根据配对区间决定是否做 KMeans/random-balanced、tiny-cluster 和 Known-only reliability 分析。

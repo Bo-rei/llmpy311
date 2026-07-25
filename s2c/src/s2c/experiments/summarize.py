@@ -18,6 +18,7 @@ from .resume import completed_run
 
 SUMMARY_FIELDS = (
     "run_id",
+    "protocol_version",
     "dataset",
     "kir",
     "seed",
@@ -58,6 +59,7 @@ def _row(paths: ProtocolV2Paths, spec: GateRunSpec) -> dict[str, Any]:
     run_dir = _run_dir(paths, spec)
     base: dict[str, Any] = {
         "run_id": spec.run_id,
+        "protocol_version": spec.protocol_version,
         "dataset": spec.dataset,
         "kir": f"{spec.kir:.2f}",
         "seed": spec.seed,
@@ -70,6 +72,7 @@ def _row(paths: ProtocolV2Paths, spec: GateRunSpec) -> dict[str, Any]:
         "manifest_sha256": "",
     }
     config = {
+        "protocol_version": spec.protocol_version,
         "dataset": spec.dataset,
         "kir": spec.kir,
         "seed": spec.seed,

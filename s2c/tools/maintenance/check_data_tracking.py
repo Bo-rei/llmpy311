@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import os
 import subprocess
 import sys
 from pathlib import Path
@@ -10,6 +11,7 @@ from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 DATA_ROOT = PROJECT_ROOT / "data"
+ACTIVE_DATASET_VERSION = os.environ.get("S2C_DATASET_VERSION", "protocol_v2_textoir_v1")
 FORBIDDEN_PREFIXES = ("sources/", "canonical/", "views/", "exports/", "cache/", "tmp/")
 FORBIDDEN_SUFFIXES = (".jsonl", ".parquet", ".npz", ".pt")
 
@@ -35,7 +37,7 @@ def tracked_data_paths() -> list[Path]:
 
 def validate_local_manifests() -> list[str]:
     errors: list[str] = []
-    manifest_root = DATA_ROOT / "manifests" / "protocol_v2"
+    manifest_root = DATA_ROOT / "manifests" / ACTIVE_DATASET_VERSION
     source_root = DATA_ROOT / "sources" / "textoir"
     if source_root.exists():
         for dataset_dir in source_root.glob("*"):
@@ -44,16 +46,23 @@ def validate_local_manifests() -> list[str]:
             for dataset in dataset_dir.iterdir():
                 if dataset.is_dir() and not (manifest_root / dataset.name / "SOURCE_MANIFEST.json").is_file():
                     errors.append(f"missing SOURCE_MANIFEST for imported data: {dataset.name}")
-    for canonical in (DATA_ROOT / "canonical" / "protocol_v2").glob("*") if (DATA_ROOT / "canonical" / "protocol_v2").exists() else ():
+    for canonical in (DATA_ROOT / "canonical" / ACTIVE_DATASET_VERSION).glob("*") if (DATA_ROOT / "canonical" / ACTIVE_DATASET_VERSION).exists() else ():
         if canonical.is_dir() and not (manifest_root / canonical.name / "DATASET_MANIFEST.json").is_file():
             errors.append(f"missing DATASET_MANIFEST for canonical data: {canonical.name}")
-    for path in (DATA_ROOT / "registries" / "protocol_v2").rglob("*.json") if (DATA_ROOT / "registries" / "protocol_v2").exists() else ():
+    for path in (DATA_ROOT / "registries" / ACTIVE_DATASET_VERSION).rglob("*.json") if (DATA_ROOT / "registries" / ACTIVE_DATASET_VERSION).exists() else ():
         payload = json.loads(path.read_text(encoding="utf-8"))
         dataset = str(payload.get("dataset", ""))
         if not (manifest_root / dataset / "SOURCE_MANIFEST.json").is_file():
             errors.append(f"registry points to missing source manifest: {path}")
         if not (manifest_root / dataset / "DATASET_MANIFEST.json").is_file():
             errors.append(f"registry points to missing canonical manifest: {path}")
+    stack_manifest = manifest_root / "stackoverflow" / "SOURCE_MANIFEST.json"
+    if stack_manifest.is_file():
+        payload = json.loads(stack_manifest.read_text(encoding="utf-8"))
+        if payload.get("redistribution_by_s2c") is not False:
+            errors.append("StackOverflow manifest must forbid s2c redistribution")
+        if payload.get("local_research_only") is not True:
+            errors.append("StackOverflow manifest must be marked local-research-only")
     return errors
 
 
@@ -78,4 +87,3 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
-

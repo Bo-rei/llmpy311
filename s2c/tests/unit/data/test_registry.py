@@ -1,5 +1,7 @@
 from pathlib import Path
 
+import numpy as np
+
 from s2c.data import source_import
 from s2c.data.canonicalize import build_canonical_dataset
 from s2c.data.registry import build_registry, validate_registry
@@ -19,4 +21,6 @@ def test_registry_is_deterministic_and_partitions_intents(tmp_path: Path, monkey
     assert first == second
     assert first["known_count"] == 1
     assert set(first["known_intents"]).isdisjoint(first["heldout_intents"])
-
+    expected = np.random.RandomState(0).choice(np.asarray(["alpha", "beta"]), size=1, replace=False).tolist()
+    assert first["known_intents"] == expected
+    assert "numpy.random.seed(seed)" in first["selection_algorithm"]

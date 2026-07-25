@@ -1,0 +1,15 @@
+# E2: dense frozen-MiniLM Gate sweep.  It is intentionally resumable one cell
+# at a time; do not broaden it with E3--E7 methods before its summary exists.
+name: e2_gate_core_dense
+protocol_version: protocol_v2_textoir_v1
+datasets: [clinc150, banking77, stackoverflow]
+kirs: [0.10, 0.20, 0.25, 0.30, 0.40, 0.50, 0.60, 0.70, 0.75, 0.80, 0.90]
+seeds: [13, 42, 87, 100, 123]
+k_values: [1, 2, 3, 4, 5]
+distances: [euclidean, mahalanobis_diag]
+defaults:
+  representation: frozen_minilm
+  encoder_name: all-MiniLM-L6-v2
+  encoder_device: cuda
+  boundary: mean_std
+  radius_lambda: 1.0

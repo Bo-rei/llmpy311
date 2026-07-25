@@ -1,2 +1,3 @@
 experiment,complete_runs,failed_runs
-smoke_gate,24,0
+e1_gate_smoke,36,0
+e2_gate_core_dense,1650,0

@@ -2,59 +2,79 @@
 
 ## Status
 
-- Base commit: `fcd9df5249a7e5388080277795c81afa49ed6f7d`
-- Dataset version: `protocol_v2_official_v1`
-- Materialized canonical datasets: `banking77, clinc150`
-- Source revisions: `57ec275d8078af65b7731c2a98be812d844a6d6b, 828f8093932c8fe6ca7936c3d2e52903b1c523de`
-- Canonical datasets: 2
-- Fixed registries: 286
-- Materialized views: 8
-- Materialized exports: 32
-- Completed protocol_v2 runs: 24
+- Base commit: `ea210083b331c489059f275edcc2e0c3241cfba7`
+- Dataset version: `protocol_v2_textoir_v1`
+- Materialized canonical datasets: `banking77, clinc150, stackoverflow`
+- Source revisions: `dffe2b1b848a069a6808f8089b4cb9bd16e2062b`
+- Canonical datasets: 3
+- Fixed registries: 165
+- Materialized views: 165
+- Materialized exports: 990
+- Completed protocol_v2 runs: 1,686 (36 E1 smoke + 1,650 E2 dense Gate)
 - Failed protocol_v2 runs: 0
 
 ## Data-admission decision
 
 | Dataset | Provenance decision | Formal admission |
 | --- | --- | --- |
-| banking77 | reconstructed_from_official | admitted |
-| clinc150 | reconstructed_from_official | admitted |
+| banking77 | accepted_textoir_snapshot | admitted_official |
+| clinc150 | accepted_textoir_snapshot | admitted_official |
+| stackoverflow | accepted_textoir_snapshot_local_only | admitted_benchmark_local_only |
 
-This report is scoped to the selected dataset version.  It does not upgrade a
-blocked dataset, a historical candidate snapshot, or a legacy experiment into
-official evidence.
+This report is scoped to the selected dataset version. It preserves frozen and
+legacy protocols for audit but does not mix their results into this protocol.
 
 ## Materialized data inventory
 
 | Dataset | Samples | Known intents | Native OOS | Local source copy |
 | --- | ---: | ---: | ---: | --- |
-| banking77 | 13083 | 77 | 0 | `sources/official/polyai-banking77-57ec275d8078af65b7731c2a98be812d844a6d6b/banking77` |
-| clinc150 | 23700 | 150 | 1200 | `sources/official/clinc-oos-eval-828f8093932c8fe6ca7936c3d2e52903b1c523de/clinc150` |
+| banking77 | 13083 | 77 | 0 | `sources/textoir/dffe2b1b848a069a6808f8089b4cb9bd16e2062b/banking77` |
+| clinc150 | 23700 | 150 | 1200 | `sources/textoir/dffe2b1b848a069a6808f8089b4cb9bd16e2062b/clinc150` |
+| stackoverflow | 20000 | 20 | 0 | `sources/textoir/dffe2b1b848a069a6808f8089b4cb9bd16e2062b/stackoverflow` |
 
-The authoritative raw source for this version is the source manifest above;
-TEXTOIR is retained only as a three-way audit and export-format reference, not
-as a runtime dependency.
+The authoritative local source for this version is the fixed TEXTOIR snapshot
+described by the source manifests. TEXTOIR is import-only; no model, view,
+export, Gate or Pipeline runtime reads `textoir/data`.
 
 ## Completed implementation work
 
-The approved raw source is byte-copied into `data/sources`, canonical records preserve original text and
-splits, and each experimental method consumes the same registry and fixed views. `textoir/data` is not a
-runtime dependency. Gate runs use immutable directories beneath `artifacts/s2c/runs/protocol_v2_official_v1`
-and keep embedding cache separate from formal evidence.
+The fixed snapshot is byte-copied into `data/sources`, canonical records preserve original text, labels and
+splits, and every method consumes the same registry and fixed views. Gate runs use immutable directories
+beneath `artifacts/s2c/runs/protocol_v2_textoir_v1` and keep embedding cache separate from formal evidence.
 
 ## Deliberately not claimed
 
-Declared boundary, representation, external-baseline and full-pipeline matrices are not experimental evidence
-until their run manifests exist. Historical v19-v22 artifacts remain untouched and are not mixed with this
-protocol. The StackOverflow corpus remains local-only because its redistribution licence is not verified.
+E3--E7 are not experimental evidence until their own manifests exist. Historical v19-v22 artifacts remain
+untouched and are not mixed with this protocol. The StackOverflow corpus remains local-only and is excluded
+from public Git/result attachments.
 
 ## Requirement status
 
 `requirement_matrix.csv` maps the original implementation goals to current evidence. A status of
-`complete_for_admitted_scope` applies only to the two officially admitted datasets; it never upgrades the
-blocked three-dataset protocol into a completed claim.
+`complete_local_benchmark` distinguishes local scientific use from public corpus redistribution.
 
-## Remaining gate
+## E2 closeout
 
-The completed Gate evidence is limited to 24 run(s) on admitted dataset(s): banking77, clinc150. The legacy three-dataset E1 is intentionally not completed because blocked StackOverflow (blocked) cannot enter this official version. Before a new model experiment is accepted, its own dataset admission, materialized views/exports, runtime-independence check and targeted tests must pass. See `experiment_plan.csv`, `experiment_coverage.csv` and `failed_runs.csv` for the
-current state rather than inferring completion from configuration files.
+The active three-dataset protocol has 36 completed E1 smoke Gate runs and all
+1,650 E2 dense Gate runs on banking77, clinc150 and stackoverflow. The E2
+integrity audit reports 1,650 planned, 1,650 observed, 0 failed, 0 missing,
+0 duplicate and 0 invalid cells. Every run is bound to the frozen base commit,
+code patch, resolved configuration, protocol_v2_textoir_v1 canonical manifest,
+registry and MiniLM encoder file hashes.
+
+The derived closeout evidence is kept outside Git in
+`artifacts/s2c/runs/protocol_v2_textoir_v1/summaries/e2_closeout/`:
+
+- `E2_integrity_report.md`
+- `E2_dataset_kir_summary.csv`
+- `E2_paired_k_effects.csv`
+- `E2_distance_comparison.csv`
+- `E2_known_oos_tradeoff.csv`
+- `E2_k_selection.csv`
+- `E2_k_selection_analysis.md`
+
+E2 uses a fixed Known-only `mean_std` boundary and does not provide a formal
+validation-selected K. Test-set oracle K is analysis-only; no E3--E7 experiment
+has been started. StackOverflow remains `admitted_benchmark_local_only`: it is
+permitted for local training, evaluation and baseline reproduction, but its
+corpus must not be tracked in public Git or redistributed by s2c.

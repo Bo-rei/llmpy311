@@ -1,0 +1,4 @@
+location,baseline_bytes,current_bytes,measurement
+s2c,,9055682698,recursive_project_tree
+s2c/data,0,9044820774,recursive_project_tree
+artifacts/s2c,,,not_scanned: immutable raw artifacts may be large

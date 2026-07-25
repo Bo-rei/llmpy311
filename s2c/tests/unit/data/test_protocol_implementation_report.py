@@ -86,40 +86,39 @@ def test_report_manifest_excludes_unmaterialized_schema_datasets(tmp_path: Path)
     assert manifest["executed_commands"] == ["pytest -q tests/unit/data"]
     assert manifest["moved_files"] == ["results/old=>docs/archive/old"]
     blocker = (output / "blocker_report.md").read_text(encoding="utf-8")
-    assert "scope blocker report" in blocker
+    assert "active-protocol constraint report" in blocker
     assert "StackOverflow" in blocker
     requirement_matrix = list(
         csv.DictReader(StringIO((output / "requirement_matrix.csv").read_text(encoding="utf-8")))
     )
-    # The report may record evidence for one admitted dataset in this fixture,
-    # but it must never silently turn the blocked three-dataset request into a
-    # completed protocol claim.
+    # The active contract has no model evidence in this fixture, so E1 remains
+    # in progress even though the source/canonical inventory is materialized.
     requirement_statuses = {row["requirement"]: row["status"] for row in requirement_matrix}
-    assert requirement_statuses["E1 three-dataset 36-cell Gate smoke"] == "blocked_unverified"
-    assert requirement_statuses["E2 three-dataset 3,300-cell Gate grid"] == "not_authorised"
+    assert requirement_statuses["E1 three-dataset 36-cell Gate smoke"] == "in_progress"
+    assert requirement_statuses["E2 three-dataset 1,650-cell Gate grid"] == "in_progress"
 
 
-def test_remaining_gate_does_not_promote_blocked_legacy_matrix() -> None:
-    """An official two-dataset run cannot be described as a missing 36-cell E1."""
+def test_remaining_gate_records_local_only_stackoverflow_without_blocking() -> None:
+    """The active snapshot permits local StackOverflow experiments, not release."""
     text = _remaining_gate_text(
         {
             "dataset_admission": {
                 "clinc150": "admitted",
                 "banking77": "admitted",
-                "stackoverflow": "blocked",
+                "stackoverflow": "admitted_benchmark_local_only",
             }
         },
         ("banking77", "clinc150"),
         completed_runs=24,
     )
 
-    assert "24 run(s)" in text
+    assert "24 completed E1 smoke Gate run(s)" in text
     assert "StackOverflow" in text
-    assert "three-dataset E1 is intentionally not completed" in text
+    assert "must not be tracked in public Git" in text
 
 
-def test_report_cli_defaults_to_admitted_official_version(monkeypatch, tmp_path: Path) -> None:
-    """A bare audit command must not fall back to the legacy candidate version."""
+def test_report_cli_defaults_to_active_textoir_version(monkeypatch, tmp_path: Path) -> None:
+    """A bare audit command must use the sole active local benchmark version."""
     captured: dict[str, object] = {}
     discovered = make_paths(tmp_path)
 
@@ -137,4 +136,4 @@ def test_report_cli_defaults_to_admitted_official_version(monkeypatch, tmp_path:
     )
 
     assert report_module.main(["--output", str(tmp_path / "audit")]) == 0
-    assert captured["paths"].dataset_version == "protocol_v2_official_v1"
+    assert captured["paths"].dataset_version == "protocol_v2_textoir_v1"

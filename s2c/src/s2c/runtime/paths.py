@@ -34,11 +34,10 @@ class ProtocolV2Paths:
     results_root: Path
     legacy_root: Path
     textoir_import_root: Path | None
-    # The rejected TEXTOIR-derived candidate remains at ``protocol_v2`` for
-    # historical audit only.  New commands must be safe by default and resolve
-    # the admitted official reconstruction unless callers deliberately select
-    # a different version through ``S2C_DATASET_VERSION``.
-    dataset_version: str = "protocol_v2_official_v1"
+    # ``protocol_v2_textoir_v1`` is the sole active experiment contract.  The
+    # two older versions remain addressable through S2C_DATASET_VERSION for
+    # historical audit, but must never become an implicit runtime input.
+    dataset_version: str = "protocol_v2_textoir_v1"
 
     @classmethod
     def discover(cls, start: Path | None = None) -> "ProtocolV2Paths":
@@ -51,7 +50,7 @@ class ProtocolV2Paths:
             results_root=_env_path("S2C_RESULTS_ROOT") or project / "results",
             legacy_root=workspace / "assets" / "datasets" / "s2c",
             textoir_import_root=_env_path("S2C_TEXTOIR_IMPORT_ROOT"),
-            dataset_version=os.environ.get("S2C_DATASET_VERSION", "protocol_v2_official_v1"),
+            dataset_version=os.environ.get("S2C_DATASET_VERSION", "protocol_v2_textoir_v1"),
         )
 
     @property
@@ -100,11 +99,16 @@ class ProtocolV2Paths:
         admitted_versions = payload.get("admitted_dataset_versions")
         version_allowed = not admitted_versions or self.dataset_version in admitted_versions
         dataset_statuses = payload.get("dataset_admission", {})
-        dataset_allowed = (
-            dataset is None
-            or not dataset_statuses
-            or dataset_statuses.get(dataset) == "admitted"
-        )
+        # Admission separates local benchmark use from public redistribution.
+        # A local-only snapshot may train/evaluate here, while its full text
+        # remains excluded from Git and other public release paths.
+        admitted_dataset_states = {
+            "admitted",
+            "admitted_official",
+            "admitted_local_benchmark",
+            "admitted_benchmark_local_only",
+        }
+        dataset_allowed = dataset is None or not dataset_statuses or dataset_statuses.get(dataset) in admitted_dataset_states
         if payload.get("status") not in {"admitted", "partially_admitted"} or not version_allowed or not dataset_allowed:
             reason = payload.get("reason", "data provenance has not admitted formal experiments")
             target = f" dataset={dataset}" if dataset is not None else ""

@@ -1,13 +1,13 @@
 requirement,status,scope,evidence
-canonical raw-source decision,complete_for_admitted_scope,"banking77, clinc150",configs/data/protocol_v2_admission.json; docs/audits/data_provenance/
-independent runtime data copy,complete_for_admitted_scope,protocol_v2_official_v1,data/sources + source/canonical manifests; runtime_independence_report.md
-safe default formal dataset version,complete,protocol_v2_official_v1; candidate requires explicit S2C_DATASET_VERSION,src/s2c/runtime/paths.py; test_protocol_v2_admission.py
-TEXTOIR as fixed canonical raw source,superseded_by_source_adjudication,all datasets,official raw source wins when source/license are verified; TEXTOIR remains audit/export reference
-three-dataset canonical protocol,blocked_unverified,StackOverflow; legacy BANKING77-OOS,blocker_report.md; docs/audits/data_provenance/stackoverflow/source_trace.md
-KIR registries,complete_for_admitted_scope,286 fixed registries,registry_statistics.csv
-materialized views and method exports,partial_materialized_on_demand,8 views; 32 exports,view_statistics.csv; export_statistics.csv
-E1 three-dataset 36-cell Gate smoke,blocked_unverified,24/36 not claimable; 24 admitted-scope runs only,experiment_coverage.csv; blocker_report.md
-"E2 three-dataset 3,300-cell Gate grid",not_authorised,requires all three canonical datasets,blocker_report.md
-"representation, external baseline, and official full-Cascade matrices",not_started_under_official_protocol,protocol_v2_official_v1,implementation_report.md; blocker_report.md
-frozen MiniLM embedding provenance,used_for_completed_gate_runs,24 completed Gate run(s),completed run manifest embedding_cache fields
-full test-suite verification,targeted_pass_full_suite_pending,host filesystem I/O limited,test_report.md; DEVELOPMENT_LOG.md
+canonical raw-source decision,complete,"banking77, clinc150, stackoverflow",configs/data/protocol_v2_admission.json; docs/audits/data_provenance/
+independent runtime data copy,complete,protocol_v2_textoir_v1,data/sources + source/canonical manifests; runtime_independence_report.md
+safe default formal dataset version,complete,protocol_v2_textoir_v1; older versions require explicit S2C_DATASET_VERSION,src/s2c/runtime/paths.py; test_protocol_v2_admission.py
+fixed TEXTOIR-compatible local source snapshot,complete,all datasets,SOURCE_MANIFEST.json; configs/data/protocol_v2_textoir_v1.yaml
+three-dataset canonical protocol,complete_local_benchmark,StackOverflow is local-only; no corpus redistribution,source_copy_report.csv; blocker_report.md
+KIR registries,complete,165 fixed registries,registry_statistics.csv
+materialized views and method exports,complete,165 views; 990 exports,view_statistics.csv; export_statistics.csv
+E1 three-dataset 36-cell Gate smoke,complete,36/36 completed,experiment_coverage.csv; e1_gate_smoke.csv
+"E2 three-dataset 1,650-cell Gate grid",complete,"1,650/1,650 complete; 3 datasets × 11 KIR × 5 seeds × 5 K × 2 distances",plans/e2_gate_core_dense.plan.json; gate_core_dense.e2_core.state.json; artifacts/s2c/runs/protocol_v2_textoir_v1/summaries/e2_closeout/E2_integrity_report.md
+"E3--E7 mechanisms, baselines, representations and Pipeline",not_started_pending_e2,protocol_v2_textoir_v1,implementation_report.md; blocker_report.md
+frozen MiniLM embedding provenance,used_for_completed_gate_runs,1,686 completed Gate run(s),completed run manifest embedding_cache fields; E2 closeout provenance audit
+full test-suite verification,passed,"unit, integration and smoke suites",test_report.md; DEVELOPMENT_LOG.md

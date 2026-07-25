@@ -1,28 +1,55 @@
 {
-  "status": "partially_admitted",
-  "updated_at": "2026-07-22",
-  "reason": "CLINC150 and Banking77 were rebuilt from verified official raw sources under protocol_v2_official_v1. StackOverflow and legacy BANKING77-OOS remain blocked; the TEXTOIR candidate remains inadmissible.",
-  "audit_root": "../artifacts/s2c/reports/data_provenance_audit/2026-07-22_three_way_verification",
+  "status": "admitted",
+  "updated_at": "2026-07-25",
+  "active_protocol_version": "protocol_v2_textoir_v1",
+  "reason": "The active local experiment protocol is the fixed TEXTOIR snapshot. Admission distinguishes local benchmark use from public corpus redistribution; StackOverflow is admitted only for local benchmark reproduction.",
+  "audit_root": "docs/audits/protocol_v2_implementation",
   "admitted_dataset_versions": [
-    "protocol_v2_official_v1"
+    "protocol_v2_textoir_v1"
   ],
   "dataset_admission": {
-    "clinc150": "admitted",
-    "banking77": "admitted",
-    "stackoverflow": "blocked",
-    "banking77_oos": "blocked"
+    "clinc150": "admitted_official",
+    "banking77": "admitted_official",
+    "stackoverflow": "admitted_benchmark_local_only",
+    "banking77_oos": "legacy_only"
   },
   "dataset_decisions": {
-    "clinc150": "reconstructed_from_official",
-    "banking77": "reconstructed_from_official",
-    "stackoverflow": "blocked_unverified",
-    "banking77_oos": "blocked_unverified"
+    "clinc150": "accepted_textoir_snapshot",
+    "banking77": "accepted_textoir_snapshot",
+    "stackoverflow": "accepted_textoir_snapshot_local_only",
+    "banking77_oos": "legacy_only"
   },
   "permitted_actions": {
-    "formal_experiments": "clinc150_and_banking77_only_after_materialized_views",
-    "embedding_generation": "clinc150_and_banking77_only_after_materialized_views",
-    "training": "clinc150_and_banking77_only_after_materialized_views",
-    "mogb_or_dcl_reproduction": "clinc150_and_banking77_only_after_materialized_views",
-    "textoir_fair_comparability_claim": false
+    "formal_experiments": "all_three_datasets_after_materialized_views",
+    "embedding_generation": "all_three_datasets_after_materialized_views",
+    "training": "all_three_datasets_after_materialized_views",
+    "external_baseline_reproduction": "all_three_datasets_after_materialized_exports",
+    "textoir_fair_comparability_claim": "true_with_fixed_snapshot",
+    "dataset_redistribution": "false_for_stackoverflow"
+  },
+  "protocol_versions": {
+    "protocol_v2_textoir_v1": "active_admitted",
+    "protocol_v2_official_v1": "frozen_audit_version",
+    "protocol_v2": "rejected_legacy_candidate"
+  },
+  "dataset_policies": {
+    "clinc150": {
+      "local_training": true,
+      "local_evaluation": true,
+      "redistribution_by_s2c": "follow_source_terms"
+    },
+    "banking77": {
+      "local_training": true,
+      "local_evaluation": true,
+      "redistribution_by_s2c": "follow_source_terms"
+    },
+    "stackoverflow": {
+      "local_training": true,
+      "local_evaluation": true,
+      "external_baseline_reproduction": true,
+      "redistribution_by_s2c": false,
+      "public_git_tracking": false,
+      "provenance_note": "Fixed TEXTOIR-compatible 20,000-title, 20-label benchmark snapshot. Content and label mapping are reproducible, but per-row post attribution and exact redistribution licence are not fully recoverable."
+    }
   }
 }

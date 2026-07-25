@@ -1,0 +1,3 @@
+dataset,sample_count,intent_count,native_oos_count,exact_duplicate_count,normalized_duplicate_count,canonical_file_sha256,source_manifest_sha256,split_counts
+banking77,13083,77,0,0,12,7a0a53556f9ed23c63104652a3df8b1b3429190e78887f8744d8e1505ec7030d,4f1ea7164452579b8ce9e6e1e18e0c6e933e4ea64fc9759076995a982d2a0838,"{""test"": 3080, ""train"": 10003}"
+clinc150,23700,150,1200,5,5,eda92aa18949c68d5680d8eb1ae53de12c05d15b660cc98927364d901c71faa4,3550b65a50fba6a37489dc9fc76b45b103241a7b0f1804abf33d1e3b307ca270,"{""oos_test"": 1000, ""oos_train"": 100, ""oos_val"": 100, ""test"": 4500, ""train"": 15000, ""val"": 3000}"

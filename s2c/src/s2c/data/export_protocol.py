@@ -7,13 +7,15 @@ from typing import Any, Iterable
 
 from s2c.runtime.paths import ProtocolV2Paths
 
-from .exporters import export_k_plus_1_way, export_mogb, export_s2c, export_textoir
+from .exporters import export_adb, export_da_adb, export_k_plus_1_way, export_mogb, export_s2c, export_textoir
 from .schema import ALL_REGISTRY_SEEDS, DATASET_SPECS, FORMAL_KIRS
 
 
 EXPORTERS = {
     "s2c": export_s2c,
     "textoir": export_textoir,
+    "adb": export_adb,
+    "da_adb": export_da_adb,
     "mogb": export_mogb,
     "k_plus_1_way": export_k_plus_1_way,
 }
@@ -55,4 +57,3 @@ def main(argv: list[str] | None = None) -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
-

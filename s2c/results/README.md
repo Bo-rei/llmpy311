@@ -1,12 +1,16 @@
 # s2c 公开结果快照
 
-这里是可以随源码提交 GitHub 的轻量、可审计结果。历史原始产物在
+这里是可以随源码提交 GitHub 的轻量、可审计结果。当前活动协议
+`protocol_v2_textoir_v1` 的公开汇总位于
+`protocol_v2_textoir_v1/`；历史原始产物在
 `../../artifacts/s2c/outputs/experiments/`，candidate raw run 在
 `../../artifacts/s2c/runs/protocol_v2/`，官方重建 run 在
 `../../artifacts/s2c/runs/protocol_v2_official_v1/`；三者都不会整体复制到本目录。
 
 - 结果文件由 `configs/public_results.yaml` 白名单生成。
 - `MANIFEST.csv` 记录每个公开文件的来源相对路径、大小和 SHA256。
+- `protocol_v2_textoir_v1/gate_only/e1_gate_smoke.csv` 是当前三数据集
+  TEXTOIR-compatible 协议的 36 单元 Gate-only smoke 摘要；它不含原始文本。
 - `gate_only/` 只包含 Gate、多簇、near-OOS 和表示对照结果。
 - `pipeline/` 包含完整 `Gate → Router → Expert` 的汇总和 provenance。
 - `representation/` 包含 Frozen、CE、SupCon、CE-Recon 和 MiniLM 语义分析。

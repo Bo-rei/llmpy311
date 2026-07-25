@@ -1,0 +1,15 @@
+protocol_version: protocol_v2_textoir_v1
+formal_kirs: [0.10, 0.20, 0.25, 0.30, 0.40, 0.50, 0.60, 0.70, 0.75, 0.80, 0.90]
+formal_seeds: [13, 42, 87, 100, 123]
+stages:
+  e0_protocol_validation:
+    required: true
+    outputs: [source_manifests, canonical, registries, views, exports, runtime_independence]
+  e1_gate_smoke:
+    config: smoke_gate.yaml
+    planned_units: 36
+    gate: frozen_minilm
+  e2_dense_gate_grid:
+    config: gate_core_dense.yaml
+    planned_units: 1650
+    start_condition: e1_36_of_36_complete_and_validated

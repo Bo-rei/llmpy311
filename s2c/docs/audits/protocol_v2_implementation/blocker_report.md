@@ -1,36 +1,34 @@
-# protocol_v2 scope blocker report
+# protocol_v2 active-protocol constraint report
 
 ## Decision
 
-The original three-dataset protocol is **not eligible for a formal completion claim**. The current
-official version admits only: `banking77, clinc150`. It has 24 completed Gate-only run(s), which
-are limited to that admitted scope.
+`banking77, clinc150, stackoverflow` is the active fixed TEXTOIR-compatible local benchmark scope. It has
+36/36 completed E1 Gate-only smoke run(s) and 1,650/1,650 E2 dense Gate run(s).
 
 | Dataset | Provenance decision | Admission |
 | --- | --- | --- |
-| banking77 | reconstructed_from_official | admitted |
-| banking77_oos | blocked_unverified | blocked |
-| clinc150 | reconstructed_from_official | admitted |
-| stackoverflow | blocked_unverified | blocked |
+| banking77 | accepted_textoir_snapshot | admitted_official |
+| banking77_oos | legacy_only | legacy_only |
+| clinc150 | accepted_textoir_snapshot | admitted_official |
+| stackoverflow | accepted_textoir_snapshot_local_only | admitted_benchmark_local_only |
 
-## Blocking condition
+## Local-only boundary
 
-StackOverflow has a reproducible public content snapshot, but its raw-source and redistribution-license
-chain cannot be independently verified at the record level. Historical `BANKING77-OOS` also lacks a
-traceable official OOS-extension source. Neither dataset may be replaced by TEXTOIR, a legacy s2c
-prepared copy, a deduplicated StackOverflow variant, or a merged substitute.
+StackOverflow is a fixed 20,000-title, 20-label TEXTOIR-compatible snapshot for **local** scientific
+experiments. Its provenance does not establish a per-row redistribution licence. Consequently s2c must
+not track its complete text in Git, repackage it in an appendix, call it an official Stack Overflow
+classification release, or claim complete per-row attribution. These limits do not block canonical
+construction, embedding generation, Gate/Pipeline experiments, or external baseline reproduction.
 
 ## Affected work
 
-- The legacy three-dataset 36-cell E1 smoke cannot be completed with the current evidence.
-- The 3,300-cell E2 grid, boundary grid, representation grid, external-method comparison and full
-  three-dataset Cascade are not authorised as `protocol_v2_official_v1` claims.
-- Existing v19-v22, candidate `protocol_v2`, and historical Cascade outputs remain traceable evidence
-  only; they cannot fill a blocked official protocol cell.
+- `protocol_v2_official_v1` is frozen for audit and may not be mixed with this active protocol.
+- Legacy `protocol_v2` remains rejected and may not be revived as a formal result source.
+- E2 is complete and has a dedicated integrity/paired-effects closeout under
+  `artifacts/s2c/runs/protocol_v2_textoir_v1/summaries/e2_closeout/`. E3--E7
+  remain deliberately unstarted until that closeout is reviewed.
 
 ## Unblocking evidence
 
-To admit StackOverflow, record one immutable raw source, original file names and SHA256 values, the
-20-label mapping and 20,000-row count, a verifiable redistribution license, and a three-way sample/split
-comparison against both TEXTOIR and historical s2c inputs. Until then, no training, embedding generation,
-MOGB/DCL reproduction or TEXTOIR-fair-comparability claim may use it.
+If public redistribution becomes necessary, a separate source/licence review is required. It is not a
+precondition for the present local benchmark protocol.

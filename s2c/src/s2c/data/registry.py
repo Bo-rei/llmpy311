@@ -29,15 +29,18 @@ def registry_path(paths: ProtocolV2Paths, dataset: str, seed: int, kir: float) -
 def _registry_payload(paths: ProtocolV2Paths, dataset: str, seed: int, kir: float) -> dict[str, Any]:
     manifest_path = dataset_manifest_path(paths.manifest_root, dataset)
     canonical_manifest = read_json(manifest_path)
-    intents = tuple(sorted(str(intent) for intent in canonical_manifest["intent_universe"]))
+    # Keep the order recorded by canonicalization.  For the active snapshot it
+    # is TEXTOIR's benchmark_labels order; sorting here would quietly change
+    # the labels selected by a seed and invalidate fair baseline comparisons.
+    intents = tuple(str(intent) for intent in canonical_manifest["intent_universe"])
     known_count = int(round(len(intents) * kir))
     if not 1 <= known_count < len(intents):
         raise ValueError(
             f"Invalid known_count for dataset={dataset}, KIR={kir}, seed={seed}: "
             f"{known_count} of {len(intents)}"
         )
-    generator = np.random.default_rng(seed)
-    known = tuple(sorted(str(value) for value in generator.choice(np.array(intents), size=known_count, replace=False)))
+    legacy_rng = np.random.RandomState(seed)
+    known = tuple(str(value) for value in legacy_rng.choice(np.array(intents), size=known_count, replace=False))
     heldout = tuple(intent for intent in intents if intent not in set(known))
     payload: dict[str, Any] = {
         "schema_version": REGISTRY_SCHEMA_VERSION,
@@ -54,7 +57,7 @@ def _registry_payload(paths: ProtocolV2Paths, dataset: str, seed: int, kir: floa
         "source_manifest_sha256": str(canonical_manifest["source_manifest_sha256"]),
         "canonical_manifest_sha256": sha256_file(manifest_path),
         "numpy_version": np.__version__,
-        "selection_algorithm": "numpy.random.default_rng(seed).choice(sorted(intent_universe), replace=False); PCG64",
+        "selection_algorithm": "numpy.random.seed(seed); numpy.random.choice(intent_universe_in_manifest_order, round(n_labels * KIR), replace=False); MT19937-compatible RandomState",
     }
     payload["registry_sha256"] = sha256_json(payload)
     return payload

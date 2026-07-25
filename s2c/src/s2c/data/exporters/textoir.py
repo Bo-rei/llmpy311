@@ -23,9 +23,24 @@ def _tsv(rows: list[dict[str, Any]], *, oos_test: bool) -> str:
     return buffer.getvalue()
 
 
-def export_textoir(paths: ProtocolV2Paths, dataset: str, seed: int, kir: float) -> dict[str, Any]:
+def _export_textoir_tsv_contract(
+    paths: ProtocolV2Paths,
+    dataset: str,
+    seed: int,
+    kir: float,
+    *,
+    export_name: str,
+    method_note: str,
+) -> dict[str, Any]:
+    """Materialize one fixed TSV adapter from the canonical registry.
+
+    ADB and DA-ADB consume the same train/dev/test interchange as TEXTOIR.
+    Keeping separate export roots makes the downstream method explicit without
+    letting any adapter choose its own Known-label subset or silently reshape
+    the shared split.
+    """
     registry, dataset_manifest, views = load_export_inputs(paths, dataset, seed, kir)
-    root = export_directory(paths, "textoir", dataset, seed, kir)
+    root = export_directory(paths, export_name, dataset, seed, kir)
     mapping = {"train": (views["train_known"], False), "dev": (views["calibration_known"], False), "test": (views["test_combined"], True)}
     files: list[dict[str, object]] = []
     sample_ids: dict[str, list[str]] = {}
@@ -41,10 +56,42 @@ def export_textoir(paths: ProtocolV2Paths, dataset: str, seed: int, kir: float) 
     for name in ("known_labels.json", "label_map.json", "sample_ids.json"):
         files.append(output_file_info(root, root / name))
     manifest = export_base_manifest(
-        paths, "textoir", dataset, seed, kir, registry, dataset_manifest, root, files, sample_ids,
-        "test_combined: all held-out and native OOS rows use literal label 'oos'",
+        paths, export_name, dataset, seed, kir, registry, dataset_manifest, root, files, sample_ids,
+        method_note,
     )
     atomic_write_json(root / "export_manifest.json", manifest)
-    write_manifest(export_manifest_path(paths.manifest_root, "textoir", dataset, seed, kir), manifest)
+    write_manifest(export_manifest_path(paths.manifest_root, export_name, dataset, seed, kir), manifest)
     return manifest
 
+
+def export_textoir(paths: ProtocolV2Paths, dataset: str, seed: int, kir: float) -> dict[str, Any]:
+    return _export_textoir_tsv_contract(
+        paths,
+        dataset,
+        seed,
+        kir,
+        export_name="textoir",
+        method_note="test_combined: all held-out and native OOS rows use literal label 'oos'",
+    )
+
+
+def export_adb(paths: ProtocolV2Paths, dataset: str, seed: int, kir: float) -> dict[str, Any]:
+    return _export_textoir_tsv_contract(
+        paths,
+        dataset,
+        seed,
+        kir,
+        export_name="adb",
+        method_note="ADB-compatible TSV: fixed Known-only train/dev; test maps held-out and native OOS to literal label 'oos'",
+    )
+
+
+def export_da_adb(paths: ProtocolV2Paths, dataset: str, seed: int, kir: float) -> dict[str, Any]:
+    return _export_textoir_tsv_contract(
+        paths,
+        dataset,
+        seed,
+        kir,
+        export_name="da_adb",
+        method_note="DA-ADB-compatible TSV: fixed Known-only train/dev; test maps held-out and native OOS to literal label 'oos'",
+    )

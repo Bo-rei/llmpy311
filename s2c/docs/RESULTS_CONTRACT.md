@@ -2,26 +2,19 @@
 
 ## Gate-only
 
-protocol_v2 Gate-only 输出 OOS 为正类、分数越大越 OOS，并至少记录 OOS F1、precision、
-recall、ID recall、AUROC、AUPR-OOS、FPR95、false accept/reject、评分时间、吞吐、峰值
-内存、有效 cluster 数和最小 cluster size。CLINC150 还必须分别给出 held-out intent、native
-OOS 与 combined 结果。
+`protocol_v2_textoir_v1` 中 OOS 为正类，分数越高越倾向 OOS。每个 Gate run 至少保存 OOS F1、
+precision、recall、ID recall、AUROC、AUPR-OOS、FPR95、false accept/reject、有效 cluster 数、
+最小 cluster size、评分时间、吞吐和峰值内存。CLINC150 还分别保留 held-out/native/combined OOS。
 
 ## 完整 Pipeline
 
-`Gate → Router → Expert` 结果与 Gate-only 分表，且至少包括 Known macro-F1、OOS F1、
-overall accuracy、router/expert error 和 Gate false accept/reject。不能把 Frozen/CE/SupCon
-Gate-only 表述为完整 pipeline 效果。
+`Gate → Router → Expert` 必须与 Gate-only 分表，至少报告 Known macro-F1、OOS F1、overall
+accuracy、Gate false accept/reject、Router error、Expert error 和端到端耗时。Frozen/CE/SupCon 的
+Gate-only 表不等于完整 Pipeline 结论。
 
-## 文件位置
+## 路径隔离
 
-- Raw、逐样本、模型和日志：`../artifacts/s2c/`。
-- 被封锁 candidate run：`../artifacts/s2c/runs/protocol_v2/`。
-- 官方重建 run：`../artifacts/s2c/runs/protocol_v2_official_v1/`；当前只含 CLINC150、Banking77
-  的 E1 Gate-only 子矩阵，公开 CSV 为 `results/gate_only/protocol_v2_official_e1_admitted.csv`。
-- Git 可公开汇总：`results/`（只含 `configs/public_results.yaml` 白名单中的小型 CSV/JSON）。
-- 旧 `protocol_v2` candidate 的公开快照仅作历史审计，位于
-  `docs/archive/historical_repro_bundle/protocol_v2_candidate_results/`；它不属于当前公开结果，
-  也不得用于 official 或 TEXTOIR 公平可比性声明。
-
-结果没有 manifest 或输入 SHA256 时不应进入论文表格。
+- 活动 raw run：`../artifacts/s2c/runs/protocol_v2_textoir_v1/`。
+- 活动轻量结果：`results/protocol_v2_textoir_v1/`（只含小型 CSV/JSON/manifest）。
+- 原始语料、embedding、checkpoint、Parquet、逐样本分数和运行日志只留在 Git 忽略的本地路径。
+- `protocol_v2_official_v1` 与 legacy `protocol_v2` 只能作审计，不能与活动协议混表。

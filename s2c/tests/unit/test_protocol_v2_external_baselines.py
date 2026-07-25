@@ -30,6 +30,12 @@ def _write_runnable_snapshot(tmp_path: Path) -> Path:
     """Create enough Known examples for logistic, kNN and LOF smoke paths."""
     root = tmp_path / "textoir"
     labels = ("alpha", "beta", "gamma", "delta")
+    # The importer intentionally reads TEXTOIR's declared label order rather
+    # than deriving one from TSV encounter order.  Keep this tiny metadata file
+    # in the fake snapshot so the test exercises the same compatibility path.
+    metadata = root / "open_intent_detection" / "dataloaders" / "__init__.py"
+    metadata.parent.mkdir(parents=True, exist_ok=True)
+    metadata.write_text(f"benchmark_labels = {{'oos': {list(labels)!r}}}\n", encoding="utf-8")
     for split in ("train", "dev", "test"):
         rows = [
             (f"{split} {label} request {repeat}", label)

@@ -49,8 +49,10 @@ results/              GitHub 可提交的轻量 CSV/JSON 快照
 - 不在初始化阶段调用 `torch.cuda.is_available()`；部分环境会触发原生运行时问题。
 - `configs/data/protocol_v2_admission.json` 是唯一数据准入开关。只有同时满足 dataset_version、
   dataset-level admission 和 materialized view/export 的任务才可运行；不得绕过 Gate runner 或 E4
-  adapter 向任何 `../artifacts/s2c/runs/<dataset_version>/` 写入。TEXTOIR candidate、StackOverflow
-  和 BANKING77-OOS 仍被拒绝。
+  adapter 向任何 `../artifacts/s2c/runs/<dataset_version>/` 写入。唯一活动版本是
+  `protocol_v2_textoir_v1`；StackOverflow 为 `admitted_benchmark_local_only`，允许本地实验但
+  禁止完整语料进入 Git、论文附件或任何 s2c 再分发包。`protocol_v2_official_v1` 冻结审计，
+  legacy `protocol_v2` 仍被拒绝。
 
 ## 最小验证
 

@@ -1,0 +1,15 @@
+# E1: isolated three-dataset smoke.  Its protocol_version is part of every
+# run_id and manifest, so these cells can never resume an older protocol run.
+name: e1_gate_smoke
+protocol_version: protocol_v2_textoir_v1
+datasets: [clinc150, banking77, stackoverflow]
+kirs: [0.25, 0.50, 0.75]
+seeds: [42]
+k_values: [1, 2]
+distances: [euclidean, mahalanobis_diag]
+defaults:
+  representation: frozen_minilm
+  encoder_name: all-MiniLM-L6-v2
+  encoder_device: cuda
+  boundary: mean_std
+  radius_lambda: 1.0

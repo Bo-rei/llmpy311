@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+import ast
 import csv
 import os
 import shutil
@@ -17,6 +18,34 @@ from s2c.runtime.paths import ProtocolV2Paths
 from .hashing import sha256_file
 from .manifests import source_manifest_path, write_manifest
 from .schema import DATASET_SPECS, get_dataset_spec
+
+
+def _textoir_label_universe(textoir_root: Path, dataset: str) -> list[str]:
+    """Read TEXTOIR's declared label order without importing its runtime code.
+
+    TEXTOIR chooses Known intents from ``benchmark_labels`` with NumPy's legacy
+    global RNG.  The order therefore affects every seed.  Capturing this small
+    metadata in the local source manifest makes s2c compatible with that
+    benchmark contract while keeping all later stages independent of
+    ``textoir/``.
+    """
+    module = textoir_root / "open_intent_detection" / "dataloaders" / "__init__.py"
+    tree = ast.parse(module.read_text(encoding="utf-8"), filename=str(module))
+    values: dict[str, object] | None = None
+    for node in tree.body:
+        if isinstance(node, ast.Assign) and any(isinstance(target, ast.Name) and target.id == "benchmark_labels" for target in node.targets):
+            candidate = ast.literal_eval(node.value)
+            if not isinstance(candidate, dict):
+                raise ValueError("TEXTOIR benchmark_labels must be a dictionary")
+            values = candidate
+            break
+    if values is None:
+        raise ValueError(f"TEXTOIR label metadata is missing: {module}")
+    source_name = get_dataset_spec(dataset).textoir_directory
+    labels = values.get(source_name)
+    if not isinstance(labels, list) or not all(isinstance(value, str) for value in labels):
+        raise ValueError(f"TEXTOIR label metadata is invalid for dataset={dataset}")
+    return list(labels)
 
 
 def _git_commit(root: Path) -> str:
@@ -104,15 +133,33 @@ def import_dataset(paths: ProtocolV2Paths, textoir_root: Path, dataset: str) -> 
         "source_name": "textoir",
         "source_repository": "https://github.com/thuiar/TEXTOIR.git",
         "source_commit": commit,
+        "source_format": "textoir_tsv_v1",
         "original_directory": f"textoir/data/{spec.textoir_directory}",
         "imported_at": datetime.now(UTC).isoformat(),
         "import_command": "python -m s2c.data.import_textoir",
         "source_relative_directory": f"sources/textoir/{commit}/{dataset}",
+        "intent_universe_order": _textoir_label_universe(textoir_root, dataset),
+        "intent_universe_selection": "numpy.random.seed(seed); numpy.random.choice(benchmark_labels[dataset], round(n_labels * KIR), replace=False)",
         "license_provenance_note": (
             "Local data import only; see docs/audits/data_provenance for source and tracking policy."
         ),
         "files": manifest_files,
     }
+    if dataset == "stackoverflow":
+        # This snapshot is legitimate for local benchmark reproduction but is
+        # not a corpus s2c may redistribute.  Keep that boundary with the
+        # copied files rather than treating it as a training prohibition.
+        manifest.update(
+            {
+                "upstream_reference": "jacoxu/StackOverflow",
+                "expected_samples": 20_000,
+                "expected_labels": 20,
+                "local_research_only": True,
+                "redistribution_by_s2c": False,
+                "per_row_attribution_complete": False,
+                "license_provenance_status": "benchmark_snapshot_local_only",
+            }
+        )
     write_manifest(source_manifest_path(paths.manifest_root, dataset), manifest)
     return manifest
 

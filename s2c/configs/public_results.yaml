@@ -7,6 +7,13 @@ limits:
   max_total_bytes: 104857600
 
 files:
+  # Active fixed-TEXTOIR snapshot smoke.  This is a Gate-only summary; it must
+  # never be combined with the historical pipeline table below.
+  - experiment_id: protocol_v2_textoir_v1_e1_gate_smoke
+    category: gate_only
+    source: ../artifacts/s2c/runs/protocol_v2_textoir_v1/summaries/e1_gate_smoke.csv
+    public: protocol_v2_textoir_v1/gate_only/e1_gate_smoke.csv
+
   # Official-source protocol smoke: Gate-only, two admitted datasets only.
   - experiment_id: protocol_v2_official_e1_admitted
     category: gate_only

@@ -20,5 +20,4 @@ def test_protocol_build_from_import_to_export(tmp_path: Path, monkeypatch) -> No
     export_protocol(paths, ["clinc150"], [0.5], [0])
 
     result = validate_protocol(paths, ["clinc150"], [0.5], [0], require_views=True, require_exports=True)
-    assert result == {"datasets": 1, "registries": 1, "views": 1, "exports": 4}
-
+    assert result == {"datasets": 1, "registries": 1, "views": 1, "exports": 6}

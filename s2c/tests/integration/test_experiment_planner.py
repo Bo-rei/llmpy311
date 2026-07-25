@@ -12,7 +12,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[2]
 
 
 def test_planner_writes_a_unique_declared_smoke_matrix(tmp_path: Path) -> None:
-    specs = load_gate_matrix(PROJECT_ROOT / "configs/experiments/protocol_v2/smoke_gate.yaml")
+    specs = load_gate_matrix(PROJECT_ROOT / "configs/experiments/protocol_v2_textoir_v1/smoke_gate.yaml")
     output = tmp_path / "smoke.json"
     write_plan(output, specs)
     text = output.read_text(encoding="utf-8")
@@ -30,7 +30,7 @@ def test_shard_name_isolates_plan_and_state_files(tmp_path: Path, monkeypatch) -
         legacy_root=tmp_path / "legacy",
         textoir_import_root=None,
     )
-    config = PROJECT_ROOT / "configs/experiments/protocol_v2/smoke_gate.yaml"
+    config = PROJECT_ROOT / "configs/experiments/protocol_v2_textoir_v1/smoke_gate.yaml"
     monkeypatch.setattr(runner.ProtocolV2Paths, "discover", classmethod(lambda cls: paths))
     monkeypatch.setattr(runner, "run_matrix", lambda *args, **kwargs: ([], []))
 
@@ -54,7 +54,7 @@ def test_boundary_matrix_expands_declared_methods() -> None:
 
 
 def test_matrix_filter_keeps_the_declared_official_smoke_shard() -> None:
-    specs = load_gate_matrix(PROJECT_ROOT / "configs/experiments/protocol_v2/smoke_gate.yaml")
+    specs = load_gate_matrix(PROJECT_ROOT / "configs/experiments/protocol_v2_textoir_v1/smoke_gate.yaml")
     selected = filter_gate_specs(specs, datasets=["clinc150"], seeds=[42], kirs=[0.50])
     assert len(selected) == 4
     assert {spec.dataset for spec in selected} == {"clinc150"}

@@ -1,0 +1,44 @@
+# 唯一活动协议：固定 TEXTOIR commit 的本地三数据集 benchmark 快照。
+# 语料只留在被 Git 忽略的 s2c/data；本文件与 manifests 仅记录复现元数据。
+protocol_version: protocol_v2_textoir_v1
+protocol_family: protocol_v2
+status: admitted
+source_repository: https://github.com/thuiar/TEXTOIR.git
+source_commit: dffe2b1b848a069a6808f8089b4cb9bd16e2062b
+registry_selection:
+  label_order: textoir.open_intent_detection.dataloaders.benchmark_labels
+  algorithm: numpy.random.seed(seed) plus numpy.random.choice without replacement
+  known_count: round(label_count * KIR)
+  seeds: [13, 42, 87, 100, 123]
+  kirs: [0.10, 0.20, 0.25, 0.30, 0.40, 0.50, 0.60, 0.70, 0.75, 0.80, 0.90]
+canonical_datasets:
+  clinc150:
+    source_directory: oos
+    admission: admitted_official
+    native_oos_label: oos
+    local_training: true
+    local_evaluation: true
+    redistribution_by_s2c: follow_source_terms
+  banking77:
+    source_directory: banking
+    admission: admitted_official
+    native_oos_label: null
+    local_training: true
+    local_evaluation: true
+    redistribution_by_s2c: follow_source_terms
+  stackoverflow:
+    source_directory: stackoverflow
+    admission: admitted_benchmark_local_only
+    expected_samples: 20000
+    expected_labels: 20
+    upstream_reference: jacoxu/StackOverflow
+    local_training: true
+    local_evaluation: true
+    external_baseline_reproduction: true
+    redistribution_by_s2c: false
+    public_git_tracking: false
+    per_row_attribution_complete: false
+    provenance_note: Fixed TEXTOIR-compatible local benchmark snapshot; it is not an s2c-collected or officially released Stack Overflow classification corpus.
+historical_protocols:
+  protocol_v2_official_v1: frozen_audit_version
+  protocol_v2: rejected_legacy_candidate

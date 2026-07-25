@@ -46,5 +46,11 @@ def make_textoir_snapshot(tmp_path: Path) -> Path:
     for directory, split_rows in rows.items():
         for split, values in split_rows.items():
             write_tsv(root / "data" / directory / f"{split}.tsv", values)
+    # The source importer reads this metadata with ast.literal_eval rather than
+    # importing TEXTOIR.  Keeping the fixture shaped the same way tests the
+    # active protocol's fixed label-order contract without a real checkout.
+    labels = {name: ["alpha", "beta"] for name in rows}
+    metadata = root / "open_intent_detection" / "dataloaders" / "__init__.py"
+    metadata.parent.mkdir(parents=True, exist_ok=True)
+    metadata.write_text(f"benchmark_labels = {labels!r}\n", encoding="utf-8")
     return root
-

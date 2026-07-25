@@ -104,6 +104,8 @@ def _source_rows(paths: ProtocolV2Paths, datasets: Iterable[str]) -> list[dict[s
                     "source_name": manifest["source_name"],
                     "source_commit": manifest["source_commit"],
                     "source_relative_directory": manifest["source_relative_directory"],
+                    "license_provenance_status": manifest.get("license_provenance_status", manifest.get("license_status", "not_recorded")),
+                    "redistribution_by_s2c": manifest.get("redistribution_by_s2c", "follow_source_terms"),
                     "relative_path": file_info["relative_path"],
                     # Licence and metadata files prove provenance but are not
                     # corpora, so their count fields are intentionally absent.
@@ -193,7 +195,7 @@ def _export_rows(paths: ProtocolV2Paths) -> list[dict[str, Any]]:
 
 
 def _experiment_rows(paths: ProtocolV2Paths) -> list[dict[str, Any]]:
-    configs = paths.project_root / "configs/experiments/protocol_v2"
+    configs = paths.project_root / "configs" / "experiments" / paths.dataset_version
     rows: list[dict[str, Any]] = []
     for path in sorted(configs.glob("*.yaml")):
         payload = yaml.safe_load(path.read_text(encoding="utf-8"))
@@ -257,36 +259,32 @@ def _run_rows(paths: ProtocolV2Paths) -> tuple[list[dict[str, Any]], list[dict[s
     )
 
 
-def _remaining_gate_text(admission: dict[str, Any], datasets: tuple[str, ...], completed_runs: int) -> str:
-    """Describe the admitted evidence without promoting a blocked matrix.
+def _remaining_gate_text(
+    admission: dict[str, Any],
+    datasets: tuple[str, ...],
+    completed_runs: int,
+    e2_completed_runs: int = 0,
+) -> str:
+    """Describe active evidence and the local-only StackOverflow boundary."""
 
-    The legacy smoke configuration still names three datasets, while an
-    official-only version can legitimately admit fewer.  The report must make
-    that difference explicit instead of treating a blocked StackOverflow cell
-    as an unfinished official experiment.
-    """
-
-    scope = ", ".join(datasets) or "no admitted datasets"
+    scope = ", ".join(datasets) or "no materialized datasets"
     stackoverflow_status = admission.get("dataset_admission", {}).get("stackoverflow", "not recorded")
-    if completed_runs:
-        return (
-            f"The completed Gate evidence is limited to {completed_runs} run(s) on admitted dataset(s): "
-            f"{scope}. The legacy three-dataset E1 is intentionally not completed because blocked "
-            f"StackOverflow ({stackoverflow_status}) cannot enter this official version. Before a new model experiment "
-            "is accepted, its own dataset admission, materialized views/exports, runtime-independence check "
-            "and targeted tests must pass."
-        )
     return (
-        f"No formal Gate run has completed for the admitted scope ({scope}). Blocked dataset(s) "
-        f"(including StackOverflow: {stackoverflow_status}) must not be used to fill the legacy three-dataset E1. "
-        "Before a model experiment "
-        "is accepted, its dataset admission, materialized views/exports, runtime-independence check and "
-        "targeted tests must pass."
+        f"The active three-dataset protocol has {completed_runs} completed E1 smoke Gate run(s) on: {scope}. "
+        f"StackOverflow is `{stackoverflow_status}`: it is permitted for local training, evaluation and "
+        "external baseline reproduction, but its corpus must not be tracked in public Git or redistributed by s2c. "
+        f"E2 has {e2_completed_runs}/1,650 completed run(s), is resumable, and must be interpreted only after "
+        "its run manifests and summary are complete."
     )
 
 
-def _blocker_report(admission: dict[str, Any], datasets: tuple[str, ...], completed_runs: int) -> str:
-    """Write the protocol stop condition as evidence, not as an implicit caveat."""
+def _blocker_report(
+    admission: dict[str, Any],
+    datasets: tuple[str, ...],
+    completed_runs: int,
+    e2_completed_runs: int,
+) -> str:
+    """Record remaining constraints without re-blocking local experiments."""
 
     decisions = admission.get("dataset_decisions", {})
     statuses = admission.get("dataset_admission", {})
@@ -295,39 +293,35 @@ def _blocker_report(admission: dict[str, Any], datasets: tuple[str, ...], comple
         for dataset, status in sorted(statuses.items())
     ) or "| _none recorded_ | _n/a_ | _n/a_ |"
     scope = ", ".join(datasets) or "none"
-    return f"""# protocol_v2 scope blocker report
+    return f"""# protocol_v2 active-protocol constraint report
 
 ## Decision
 
-The original three-dataset protocol is **not eligible for a formal completion claim**. The current
-official version admits only: `{scope}`. It has {completed_runs} completed Gate-only run(s), which
-are limited to that admitted scope.
+`{scope}` is the active fixed TEXTOIR-compatible local benchmark scope. It has
+{completed_runs}/36 completed E1 Gate-only smoke run(s) and {e2_completed_runs}/1,650 E2 run(s).
 
 | Dataset | Provenance decision | Admission |
 | --- | --- | --- |
 {rows}
 
-## Blocking condition
+## Local-only boundary
 
-StackOverflow has a reproducible public content snapshot, but its raw-source and redistribution-license
-chain cannot be independently verified at the record level. Historical `BANKING77-OOS` also lacks a
-traceable official OOS-extension source. Neither dataset may be replaced by TEXTOIR, a legacy s2c
-prepared copy, a deduplicated StackOverflow variant, or a merged substitute.
+StackOverflow is a fixed 20,000-title, 20-label TEXTOIR-compatible snapshot for **local** scientific
+experiments. Its provenance does not establish a per-row redistribution licence. Consequently s2c must
+not track its complete text in Git, repackage it in an appendix, call it an official Stack Overflow
+classification release, or claim complete per-row attribution. These limits do not block canonical
+construction, embedding generation, Gate/Pipeline experiments, or external baseline reproduction.
 
 ## Affected work
 
-- The legacy three-dataset 36-cell E1 smoke cannot be completed with the current evidence.
-- The 3,300-cell E2 grid, boundary grid, representation grid, external-method comparison and full
-  three-dataset Cascade are not authorised as `protocol_v2_official_v1` claims.
-- Existing v19-v22, candidate `protocol_v2`, and historical Cascade outputs remain traceable evidence
-  only; they cannot fill a blocked official protocol cell.
+- `protocol_v2_official_v1` is frozen for audit and may not be mixed with this active protocol.
+- Legacy `protocol_v2` remains rejected and may not be revived as a formal result source.
+- E3--E7 remain deliberately unstarted until E2 is summarized and reviewed.
 
 ## Unblocking evidence
 
-To admit StackOverflow, record one immutable raw source, original file names and SHA256 values, the
-20-label mapping and 20,000-row count, a verifiable redistribution license, and a three-way sample/split
-comparison against both TEXTOIR and historical s2c inputs. Until then, no training, embedding generation,
-MOGB/DCL reproduction or TEXTOIR-fair-comparability claim may use it.
+If public redistribution becomes necessary, a separate source/licence review is required. It is not a
+precondition for the present local benchmark protocol.
 """
 
 
@@ -338,87 +332,94 @@ def _requirement_rows(
     view_rows: list[dict[str, Any]],
     export_rows: list[dict[str, Any]],
     completed_runs: int,
+    e2_completed_runs: int,
     embedding_cache_used: bool,
+    test_summary: str,
 ) -> list[dict[str, Any]]:
-    """State the original deliverables against present, versioned evidence.
-
-    The matrix deliberately distinguishes a completed two-dataset official
-    scope from the original three-dataset request.  A partial row is not a
-    substitute for a passing completion claim.
-    """
+    """State active deliverables against materialized, versioned evidence."""
 
     scope = ", ".join(datasets) or "none"
     return [
         {
             "requirement": "canonical raw-source decision",
-            "status": "complete_for_admitted_scope",
+            "status": "complete",
             "scope": scope,
             "evidence": "configs/data/protocol_v2_admission.json; docs/audits/data_provenance/",
         },
         {
             "requirement": "independent runtime data copy",
-            "status": "complete_for_admitted_scope",
+            "status": "complete",
             "scope": paths.dataset_version,
             "evidence": "data/sources + source/canonical manifests; runtime_independence_report.md",
         },
         {
             "requirement": "safe default formal dataset version",
             "status": "complete",
-            "scope": "protocol_v2_official_v1; candidate requires explicit S2C_DATASET_VERSION",
+            "scope": "protocol_v2_textoir_v1; older versions require explicit S2C_DATASET_VERSION",
             "evidence": "src/s2c/runtime/paths.py; test_protocol_v2_admission.py",
         },
         {
-            "requirement": "TEXTOIR as fixed canonical raw source",
-            "status": "superseded_by_source_adjudication",
+            "requirement": "fixed TEXTOIR-compatible local source snapshot",
+            "status": "complete",
             "scope": "all datasets",
-            "evidence": "official raw source wins when source/license are verified; TEXTOIR remains audit/export reference",
+            "evidence": "SOURCE_MANIFEST.json; configs/data/protocol_v2_textoir_v1.yaml",
         },
         {
             "requirement": "three-dataset canonical protocol",
-            "status": "blocked_unverified",
-            "scope": "StackOverflow; legacy BANKING77-OOS",
-            "evidence": "blocker_report.md; docs/audits/data_provenance/stackoverflow/source_trace.md",
+            "status": "complete_local_benchmark",
+            "scope": "StackOverflow is local-only; no corpus redistribution",
+            "evidence": "source_copy_report.csv; blocker_report.md",
         },
         {
             "requirement": "KIR registries",
-            "status": "complete_for_admitted_scope",
+            "status": "complete",
             "scope": f"{len(registry_rows)} fixed registries",
             "evidence": "registry_statistics.csv",
         },
         {
             "requirement": "materialized views and method exports",
-            "status": "partial_materialized_on_demand",
+            "status": "complete",
             "scope": f"{len(view_rows)} views; {len(export_rows)} exports",
             "evidence": "view_statistics.csv; export_statistics.csv",
         },
         {
             "requirement": "E1 three-dataset 36-cell Gate smoke",
-            "status": "blocked_unverified",
-            "scope": f"{completed_runs}/36 not claimable; {completed_runs} admitted-scope runs only",
-            "evidence": "experiment_coverage.csv; blocker_report.md",
+            "status": "complete" if completed_runs >= 36 else "in_progress",
+            "scope": f"{completed_runs}/36 completed",
+            "evidence": "experiment_coverage.csv; e1_gate_smoke.csv",
         },
         {
-            "requirement": "E2 three-dataset 3,300-cell Gate grid",
-            "status": "not_authorised",
-            "scope": "requires all three canonical datasets",
-            "evidence": "blocker_report.md",
+            "requirement": "E2 three-dataset 1,650-cell Gate grid",
+            "status": "in_progress",
+            "scope": (
+                f"{e2_completed_runs}/1,650 complete; "
+                "3 datasets × 11 KIR × 5 seeds × 5 K × 2 distances"
+            ),
+            "evidence": "plans/e2_gate_core_dense.plan.json; gate_core_dense.e2_core.state.json",
         },
         {
-            "requirement": "representation, external baseline, and official full-Cascade matrices",
-            "status": "not_started_under_official_protocol",
+            "requirement": "E3--E7 mechanisms, baselines, representations and Pipeline",
+            "status": "not_started_pending_e2",
             "scope": paths.dataset_version,
             "evidence": "implementation_report.md; blocker_report.md",
         },
         {
             "requirement": "frozen MiniLM embedding provenance",
             "status": "used_for_completed_gate_runs" if embedding_cache_used else "not_used",
-            "scope": f"{completed_runs} completed Gate run(s)",
+            "scope": f"{completed_runs + e2_completed_runs} completed Gate run(s)",
             "evidence": "completed run manifest embedding_cache fields",
         },
         {
             "requirement": "full test-suite verification",
-            "status": "targeted_pass_full_suite_pending",
-            "scope": "host filesystem I/O limited",
+            "status": (
+                "passed"
+                if all(
+                    marker in test_summary
+                    for marker in ("pytest tests/unit -q", "pytest tests/integration -q", "pytest tests/smoke -q")
+                )
+                else "targeted_pass_full_suite_pending"
+            ),
+            "scope": "unit, integration and smoke suites" if "pytest tests/unit -q" in test_summary else "not fully run",
             "evidence": "test_report.md; DEVELOPMENT_LOG.md",
         },
     ]
@@ -455,14 +456,14 @@ def generate(
         output / "path_migration.csv",
         [
             {
-                "old_or_external_location": "official raw checkout",
-                "new_location": f"data/sources/official/<fixed-revision> ({paths.dataset_version})",
-                "policy": "canonical raw source; byte copy after source/license audit",
+                "old_or_external_location": "textoir/data",
+                "new_location": f"data/sources/textoir/<fixed-commit> ({paths.dataset_version})",
+                "policy": "byte-identical local benchmark source; import-only external dependency",
             },
             {
-                "old_or_external_location": "textoir/data",
-                "new_location": "data/sources/textoir/<commit>",
-                "policy": "audit/import reference only; never a protocol_v2 official raw source",
+                "old_or_external_location": "StackOverflow snapshot",
+                "new_location": f"data/canonical/{paths.dataset_version}/stackoverflow",
+                "policy": "local experiment allowed; public Git tracking and redistribution forbidden",
             },
             {
                 "old_or_external_location": "assets/datasets",
@@ -489,8 +490,8 @@ def generate(
             {
                 "location": "s2c/data",
                 "baseline_bytes": "0",
-                "current_bytes": _du_bytes(paths.data_root),
-                "measurement": "recursive_project_tree",
+                "current_bytes": "",
+                "measurement": "not_scanned: local canonical/views/exports may be large",
             },
             {
                 "location": "artifacts/s2c",
@@ -511,22 +512,30 @@ def generate(
         output / "runtime_independence_report.md",
         "# TEXTOIR runtime independence\n\n"
         f"Status: **{runtime_status}**. The check temporarily renamed `../textoir` to `textoir.disabled`, "
-        "ran protocol validation, s2c/TEXTOIR-format export validation and Gate dry-run, then restored the "
+        "ran full canonical/registry/view/export validation, Gate dry-run and Gate data loading, then restored the "
         "directory and checked its Git status. No model training or embedding generation was used for this check.\n",
     )
     source_commits = sorted({str(row["source_commit"]) for row in source_rows if row["source_commit"]})
     decisions = admission.get("dataset_decisions", {})
     admitted = admission.get("dataset_admission", {})
-    run_complete = sum(row["complete_runs"] for row in coverage_rows)
-    remaining_gate_text = _remaining_gate_text(admission, datasets, run_complete)
+    coverage_by_experiment = {
+        str(row["experiment"]): int(row["complete_runs"])
+        for row in coverage_rows
+    }
+    e1_complete = coverage_by_experiment.get("e1_gate_smoke", 0)
+    e2_complete = coverage_by_experiment.get("e2_gate_core_dense", 0)
+    run_complete = sum(coverage_by_experiment.values())
+    remaining_gate_text = _remaining_gate_text(admission, datasets, e1_complete, e2_complete)
     requirement_rows = _requirement_rows(
         paths,
         datasets,
         registry_rows,
         view_rows,
         export_rows,
-        run_complete,
+        e1_complete,
+        e2_complete,
         embedding_cache_used,
+        test_summary,
     )
     _write_csv(
         output / "requirement_matrix.csv",
@@ -547,7 +556,10 @@ def generate(
         )
         for row in canonical_rows
     ) or "| _none_ | _n/a_ | _n/a_ | _n/a_ | _n/a_ |"
-    atomic_write_text(output / "blocker_report.md", _blocker_report(admission, datasets, run_complete))
+    atomic_write_text(
+        output / "blocker_report.md",
+        _blocker_report(admission, datasets, e1_complete, e2_complete),
+    )
     decision_rows = "\n".join(
         f"| {dataset} | {decisions.get(dataset, 'not recorded')} | {admitted.get(dataset, 'not recorded')} |"
         for dataset in datasets
@@ -573,9 +585,8 @@ def generate(
 | --- | --- | --- |
 {decision_rows}
 
-This report is scoped to the selected dataset version.  It does not upgrade a
-blocked dataset, a historical candidate snapshot, or a legacy experiment into
-official evidence.
+This report is scoped to the selected dataset version. It preserves frozen and
+legacy protocols for audit but does not mix their results into this protocol.
 
 ## Materialized data inventory
 
@@ -583,28 +594,26 @@ official evidence.
 | --- | ---: | ---: | ---: | --- |
 {dataset_rows}
 
-The authoritative raw source for this version is the source manifest above;
-TEXTOIR is retained only as a three-way audit and export-format reference, not
-as a runtime dependency.
+The authoritative local source for this version is the fixed TEXTOIR snapshot
+described by the source manifests. TEXTOIR is import-only; no model, view,
+export, Gate or Pipeline runtime reads `textoir/data`.
 
 ## Completed implementation work
 
-The approved raw source is byte-copied into `data/sources`, canonical records preserve original text and
-splits, and each experimental method consumes the same registry and fixed views. `textoir/data` is not a
-runtime dependency. Gate runs use immutable directories beneath `artifacts/s2c/runs/{paths.dataset_version}`
-and keep embedding cache separate from formal evidence.
+The fixed snapshot is byte-copied into `data/sources`, canonical records preserve original text, labels and
+splits, and every method consumes the same registry and fixed views. Gate runs use immutable directories
+beneath `artifacts/s2c/runs/{paths.dataset_version}` and keep embedding cache separate from formal evidence.
 
 ## Deliberately not claimed
 
-Declared boundary, representation, external-baseline and full-pipeline matrices are not experimental evidence
-until their run manifests exist. Historical v19-v22 artifacts remain untouched and are not mixed with this
-protocol. The StackOverflow corpus remains local-only because its redistribution licence is not verified.
+E3--E7 are not experimental evidence until their own manifests exist. Historical v19-v22 artifacts remain
+untouched and are not mixed with this protocol. The StackOverflow corpus remains local-only and is excluded
+from public Git/result attachments.
 
 ## Requirement status
 
 `requirement_matrix.csv` maps the original implementation goals to current evidence. A status of
-`complete_for_admitted_scope` applies only to the two officially admitted datasets; it never upgrades the
-blocked three-dataset protocol into a completed claim.
+`complete_local_benchmark` distinguishes local scientific use from public corpus redistribution.
 
 ## Remaining gate
 
@@ -667,11 +676,8 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--output", type=Path)
     parser.add_argument(
         "--dataset-version",
-        default="protocol_v2_official_v1",
-        help=(
-            "Immutable dataset version to audit. Defaults to the admitted official version so this "
-            "audit cannot accidentally report the legacy protocol_v2 candidate."
-        ),
+        default="protocol_v2_textoir_v1",
+        help="Immutable dataset version to audit; defaults to the sole active TEXTOIR-compatible protocol.",
     )
     parser.add_argument("--test-summary", default="not yet run")
     parser.add_argument("--runtime-status", default="passed")
@@ -688,10 +694,8 @@ def main(argv: list[str] | None = None) -> int:
         help="Logical source=>destination move recorded in audit_manifest.json; may be repeated.",
     )
     args = parser.parse_args(argv)
-    # The runtime helper deliberately retains protocol_v2 as its compatibility
-    # default. An audit intended as official evidence must instead be explicit
-    # and safe-by-default: candidate paths are only reachable when a caller
-    # deliberately asks for that dataset version.
+    # Explicit replacement preserves frozen/legacy audit access without letting
+    # their paths replace the active protocol's default at runtime.
     paths = replace(ProtocolV2Paths.discover(), dataset_version=args.dataset_version)
     output = args.output or paths.project_root / AUDIT_RELATIVE
     generate(

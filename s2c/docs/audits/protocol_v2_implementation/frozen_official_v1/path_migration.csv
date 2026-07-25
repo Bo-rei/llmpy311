@@ -1,0 +1,5 @@
+old_or_external_location,new_location,policy
+official raw checkout,data/sources/official/<fixed-revision> (protocol_v2_official_v1),canonical raw source; byte copy after source/license audit
+textoir/data,data/sources/textoir/<commit>,audit/import reference only; never a protocol_v2 official raw source
+assets/datasets,data/canonical/protocol_v2_official_v1,legacy evidence only; no official runtime read
+artifacts/s2c/outputs/experiments,artifacts/s2c/runs/protocol_v2_official_v1,historical artifacts preserved; no overwrite

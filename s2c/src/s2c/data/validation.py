@@ -22,6 +22,12 @@ from .schema import ALL_REGISTRY_SEEDS, DATASET_SPECS, FORMAL_KIRS, format_kir
 from .views import VIEW_NAMES, view_directory
 
 
+def _required_export_names(paths: ProtocolV2Paths) -> tuple[str, ...]:
+    """Keep historical audit validation compatible with its original exports."""
+    base = ("s2c", "textoir", "mogb", "k_plus_1_way")
+    return base + ("adb", "da_adb") if paths.dataset_version == "protocol_v2_textoir_v1" else base
+
+
 def validate_source_snapshot(paths: ProtocolV2Paths, dataset: str) -> None:
     manifest_path = source_manifest_path(paths.manifest_root, dataset)
     manifest = read_json(manifest_path)
@@ -40,6 +46,23 @@ def validate_source_snapshot(paths: ProtocolV2Paths, dataset: str) -> None:
             raise ValueError(f"Official source license provenance is incomplete for dataset={dataset}")
         if manifest.get("license_file_sha256") != license_files[0].get("sha256"):
             raise ValueError(f"Official license SHA256 mismatch for dataset={dataset}")
+    if manifest.get("source_name") == "textoir":
+        if manifest.get("source_format") != "textoir_tsv_v1":
+            raise ValueError(f"Unexpected TEXTOIR source format for dataset={dataset}")
+        labels = manifest.get("intent_universe_order")
+        if not isinstance(labels, list) or not labels or len(labels) != len(set(labels)):
+            raise ValueError(f"TEXTOIR label-order manifest is invalid for dataset={dataset}")
+        if dataset == "stackoverflow":
+            expected = {
+                "expected_samples": 20_000,
+                "expected_labels": 20,
+                "local_research_only": True,
+                "redistribution_by_s2c": False,
+                "per_row_attribution_complete": False,
+            }
+            for field, value in expected.items():
+                if manifest.get(field) != value:
+                    raise ValueError(f"StackOverflow local-benchmark policy mismatch: {field}")
 
 
 def validate_canonical_dataset(paths: ProtocolV2Paths, dataset: str) -> None:
@@ -54,8 +77,13 @@ def validate_canonical_dataset(paths: ProtocolV2Paths, dataset: str) -> None:
         raise ValueError(f"Canonical row count mismatch for dataset={dataset}")
     if len({str(row["sample_id"]) for row in rows}) != len(rows):
         raise ValueError(f"Canonical sample_id is not unique for dataset={dataset}")
-    if dataset == "stackoverflow" and len(rows) != 20_000:
-        raise ValueError("StackOverflow protocol_v2 must retain all 20,000 TEXTOIR rows")
+    if dataset == "stackoverflow":
+        if len(rows) != 20_000:
+            raise ValueError("StackOverflow protocol_v2 must retain all 20,000 TEXTOIR rows")
+        if len({str(row["intent"]) for row in rows}) != 20:
+            raise ValueError("StackOverflow protocol_v2 must retain all 20 TEXTOIR labels")
+        if manifest.get("native_oos_count") != 0:
+            raise ValueError("StackOverflow protocol_v2 must not invent native OOS rows")
     # 这些固定计数只约束已核验的官方版本，避免小型 synthetic fixture 或历史
     # TEXTOIR candidate 被误判为官方 raw reconstruction。
     if manifest.get("source_name") == "official":
@@ -148,7 +176,7 @@ def validate_protocol(
                     validate_view(paths, dataset, seed, kir)
                     view_count += 1
                 if require_exports:
-                    for name in ("s2c", "textoir", "mogb", "k_plus_1_way"):
+                    for name in _required_export_names(paths):
                         validate_export(paths, name, dataset, seed, kir)
                         export_count += 1
     return {"datasets": len(datasets), "registries": registry_count, "views": view_count, "exports": export_count}

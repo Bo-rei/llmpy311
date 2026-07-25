@@ -8,8 +8,8 @@ s2c 是开放世界意图识别系统，运行链路固定为：
 文本 → MiniLM Gate（Known/OOS）→ Router（domain）→ Expert（intent）
 ```
 
-当前活动代码、配置、测试和文档都在 `s2c/`。本轮不新增方法、不重跑训练，
-只维护可复现入口和轻量公开结果。
+当前活动代码、配置、测试和文档都在 `s2c/`。当前正式实验协议是
+`protocol_v2_textoir_v1`；Gate-only E2 可以运行，但 E3--E7 与完整 Pipeline 必须等待 E2 汇总。
 
 ## 工作区职责
 
@@ -37,10 +37,10 @@ s2c 是开放世界意图识别系统，运行链路固定为：
 ## 当前活动入口
 
 1. [README.md](../README.md)：项目入口。
-2. [DATASETS.md](DATASETS.md)：数据来源裁决与准入状态。
+2. [DATASETS.md](DATASETS.md)：固定 TEXTOIR snapshot、local-only StackOverflow 边界与准入状态。
 3. [EXPERIMENTS.md](EXPERIMENTS.md)：结果层次和公开快照。
 4. [RUNBOOK.md](RUNBOOK.md)：审计、测试和导出命令。
 
 历史说明只在 `docs/archive/`，不能覆盖当前事实。读取完整实验数字时，先看
-`../artifacts/s2c/outputs/experiments/` 下的 manifest，再看汇总 CSV；读取 GitHub
+`../artifacts/s2c/runs/protocol_v2_textoir_v1/` 下的 manifest，再看汇总 CSV；读取 GitHub
 数字时只看 `results/MANIFEST.csv` 及其对应文件。

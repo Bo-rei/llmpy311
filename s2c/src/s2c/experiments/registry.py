@@ -17,6 +17,7 @@ def write_plan(path: Path, specs: list[GateRunSpec]) -> None:
             "runs": [
                 {
                     "run_id": spec.run_id,
+                    "protocol_version": spec.protocol_version,
                     "dataset": spec.dataset,
                     "kir": spec.kir,
                     "seed": spec.seed,
@@ -27,4 +28,3 @@ def write_plan(path: Path, specs: list[GateRunSpec]) -> None:
             ],
         },
     )
-

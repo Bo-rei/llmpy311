@@ -262,6 +262,7 @@ def _prediction_rows(
 
 def _config_payload(spec: GateRunSpec) -> dict[str, Any]:
     return {
+        "protocol_version": spec.protocol_version,
         "dataset": spec.dataset,
         "kir": spec.kir,
         "seed": spec.seed,
@@ -287,6 +288,10 @@ def _run_paths(paths: ProtocolV2Paths, spec: GateRunSpec) -> Path:
 
 
 def dry_run(paths: ProtocolV2Paths, spec: GateRunSpec) -> dict[str, Any]:
+    if spec.protocol_version != paths.dataset_version:
+        raise ValueError(
+            f"Experiment config targets {spec.protocol_version}, but active data protocol is {paths.dataset_version}"
+        )
     paths.reject_textoir_runtime_path(paths.data_root)
     root = paths.export_root / "s2c" / spec.dataset / f"seed_{spec.seed}" / f"kir_{spec.kir:.2f}"
     required = [root / "gate" / f"{name}.json" for name in ("train", "val", "test")]
@@ -309,6 +314,10 @@ def run_gate(
     model: dict[str, Any] | None = None,
     canonical_embeddings: CanonicalEmbeddings | None = None,
 ) -> Path:
+    if spec.protocol_version != paths.dataset_version:
+        raise ValueError(
+            f"Experiment config targets {spec.protocol_version}, but active data protocol is {paths.dataset_version}"
+        )
     if spec.representation != "frozen_minilm" or spec.boundary not in SUPPORTED_BOUNDARIES:
         raise NotImplementedError(f"Unsupported protocol_v2 Gate configuration: {spec.run_id}")
     paths.require_experiment_admission(spec.dataset)
@@ -426,6 +435,7 @@ def run_gate(
             temporary / "manifest.json",
             {
                 "status": "complete",
+                "protocol_version": spec.protocol_version,
                 "run_id": spec.run_id,
                 "config": config,
                 "config_hash": config_hash,
@@ -470,6 +480,7 @@ def run_matrix(
                 state_path,
                 {
                     "planned": len(spec_list),
+                    "protocol_version": paths.dataset_version,
                     "completed": len(completed),
                     "failed": failed,
                     "last_run_id": last_run_id,

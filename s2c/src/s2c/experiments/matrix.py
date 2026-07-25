@@ -24,12 +24,13 @@ class GateRunSpec:
     radius_lambda: float
     encoder_name: str
     encoder_device: str
+    protocol_version: str = "protocol_v2"
 
     @property
     def run_id(self) -> str:
         return "__".join(
             (
-                "protocol_v2",
+                self.protocol_version,
                 self.dataset,
                 f"kir_{format_kir(self.kir)}",
                 f"seed_{self.seed}",
@@ -56,6 +57,7 @@ def load_gate_matrix(path: Path) -> list[GateRunSpec]:
     if not isinstance(defaults, dict):
         raise ValueError(f"Experiment defaults must be a mapping: {path}")
     name = str(payload.get("name", path.stem))
+    protocol_version = str(payload.get("protocol_version", "protocol_v2"))
     boundaries = payload.get("boundary_methods", [defaults.get("boundary", "mean_std")])
     if not isinstance(boundaries, list) or not boundaries:
         raise ValueError("Experiment boundary_methods must be a non-empty list when provided")
@@ -72,6 +74,7 @@ def load_gate_matrix(path: Path) -> list[GateRunSpec]:
             radius_lambda=float(defaults.get("radius_lambda", 1.0)),
             encoder_name=str(defaults.get("encoder_name", "all-MiniLM-L6-v2")),
             encoder_device=str(defaults.get("encoder_device", "cuda")),
+            protocol_version=protocol_version,
         )
         for dataset in _required(payload, "datasets")
         for kir in _required(payload, "kirs")
