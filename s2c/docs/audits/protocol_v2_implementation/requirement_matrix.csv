@@ -8,6 +8,8 @@ KIR registries,complete,165 fixed registries,registry_statistics.csv
 materialized views and method exports,complete,165 views; 990 exports,view_statistics.csv; export_statistics.csv
 E1 three-dataset 36-cell Gate smoke,complete,36/36 completed,experiment_coverage.csv; e1_gate_smoke.csv
 "E2 three-dataset 1,650-cell Gate grid",complete,"1,650/1,650 complete; 3 datasets × 11 KIR × 5 seeds × 5 K × 2 distances",plans/e2_gate_core_dense.plan.json; gate_core_dense.e2_core.state.json; artifacts/s2c/runs/protocol_v2_textoir_v1/summaries/e2_closeout/E2_integrity_report.md
-"E3--E7 mechanisms, baselines, representations and Pipeline",not_started_pending_e2,protocol_v2_textoir_v1,implementation_report.md; blocker_report.md
+"E3 mechanism diagnostics",complete,"720 partition-control cells + 180 train/calibration diagnostic groups; no final adaptive-K",implementation_report.md; ../artifacts/s2c/runs/protocol_v2_textoir_v1/e3_mechanisms/summaries/
+"R1 Geometry-Preserving CE-Recon pilot",complete,"108/108 Gate rows; Known-only beta selection; no R1_full or Pipeline",../artifacts/s2c/runs/protocol_v2_textoir_v1/r1_geometry_preserving_representation/summaries/R1_CLOSEOUT.md; docs/research/EXPERIMENT_LEDGER.csv
+"E4--E7 boundaries, baselines, representations and Pipeline",not_started,protocol_v2_textoir_v1,implementation_report.md
 frozen MiniLM embedding provenance,used_for_completed_gate_runs,1,686 completed Gate run(s),completed run manifest embedding_cache fields; E2 closeout provenance audit
 full test-suite verification,passed,"unit, integration and smoke suites",test_report.md; DEVELOPMENT_LOG.md

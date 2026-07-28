@@ -49,8 +49,71 @@ python -m s2c.experiments.runner \
   --resume --shard-name e2_core
 ```
 
-Runner 每个完成/失败单元都更新 state JSON；`--resume` 只跳过 config hash 相同的完整 run。E2 尚未
-汇总前，不启动 E3--E7。
+Runner 每个完成/失败单元都更新 state JSON；`--resume` 只跳过 config hash 相同的完整 run。E2
+已经完成且只读引用，E2 run/config/data/cache 不得修改。
+
+## E3：多中心机制诊断（当前阶段）
+
+先只检查计划，不写正式 run：
+
+```bash
+PYTHONPATH=src python scripts/experiments/plan_e3_mechanisms.py
+PYTHONPATH=src python -m s2c.experiments.mechanism_runner partition-control \
+  --config configs/experiments/protocol_v2_textoir_v1/e3_partition_control.yaml --dry-run
+```
+
+完成 E3-0 provenance 冻结后，运行 E3-A：
+
+```bash
+PYTHONPATH=src python -m s2c.experiments.mechanism_runner partition-control \
+  --config configs/experiments/protocol_v2_textoir_v1/e3_partition_control.yaml --resume
+PYTHONPATH=src python scripts/experiments/verify_e3_mechanisms.py \
+  --partition-config configs/experiments/protocol_v2_textoir_v1/e3_partition_control.yaml \
+  --diagnostic-config configs/experiments/protocol_v2_textoir_v1/e3_cluster_diagnostics.yaml \
+  --check-equivalence
+```
+
+E3-A 完整性通过后再运行稳定性/覆盖诊断：
+
+```bash
+PYTHONPATH=src python -m s2c.experiments.mechanism_runner cluster-diagnostics \
+  --config configs/experiments/protocol_v2_textoir_v1/e3_cluster_diagnostics.yaml --resume
+PYTHONPATH=src python scripts/experiments/summarize_e3_mechanisms.py
+```
+
+E3 已完成 720 个 partition-control 单元和 180 个 train/calibration-only 诊断组。收口复核：
+
+```bash
+PYTHONPATH=src python scripts/experiments/verify_e3_mechanisms.py \
+  --partition-config configs/experiments/protocol_v2_textoir_v1/e3_partition_control.yaml \
+  --diagnostic-config configs/experiments/protocol_v2_textoir_v1/e3_cluster_diagnostics.yaml \
+  --require-complete --check-equivalence
+PYTHONPATH=src python scripts/experiments/summarize_e3_mechanisms.py
+```
+
+摘要位于 `../artifacts/s2c/runs/protocol_v2_textoir_v1/e3_mechanisms/summaries/`。
+E3 不启动 ADB、DA-ADB、MOGB、表示学习、边界网格或完整 Cascade；E4--E7 仍未启动。
+
+## R1：Geometry-Preserving CE-Recon pilot
+
+R1 已完成且只写入独立目录；不得重复 E2/E3，也不自动进入 R1_full：
+
+```bash
+python scripts/experiments/plan_r1_geometry_preserving.py \
+  --output ../artifacts/s2c/runs/protocol_v2_textoir_v1/r1_geometry_preserving_representation/plans/R1_plan.json
+python tools/maintenance/check_research_state.py \
+  --plan ../artifacts/s2c/runs/protocol_v2_textoir_v1/r1_geometry_preserving_representation/plans/R1_plan.json
+python scripts/experiments/run_r1_geometry_preserving.py freeze \
+  --config configs/experiments/protocol_v2_textoir_v1/r1_geometry_preserving.yaml
+python scripts/experiments/run_r1_geometry_preserving.py select-beta \
+  --config configs/experiments/protocol_v2_textoir_v1/r1_geometry_preserving.yaml
+python scripts/experiments/run_r1_geometry_preserving.py pilot \
+  --config configs/experiments/protocol_v2_textoir_v1/r1_geometry_preserving.yaml
+```
+
+R1 训练只使用 Known train，checkpoint 只用 Known calibration macro-F1 选择；beta 选择不读取
+OOS。Pilot 收口文件为 `R1_CLOSEOUT.md`、`R1_method_decision.md`、`R1_gate_summary.csv` 和
+`R1_geometry_analysis.csv`。运行前后必须执行 `check_research_state.py`，并确认 E2/E3 根目录未被写入。
 
 ## 审计与公开结果
 

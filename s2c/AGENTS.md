@@ -13,6 +13,10 @@
 - `docs/EXPERIMENTS.md`
 - `docs/RUNBOOK.md`
 - `docs/DEVELOPMENT_LOG.md`
+- `docs/research/RESEARCH_STATUS.md`（唯一研究状态入口）
+- `docs/research/EXPERIMENT_LEDGER.csv`（追加式实验总账）
+- `docs/research/DECISION_LOG.md`
+- `docs/research/PAPER_CLAIM_AUDIT.md`
 
 `docs/archive/` 仅保存历史资料，不是当前事实来源。不要重新建立平行文档索引或版本号
 文档树。
@@ -44,6 +48,12 @@ results/              GitHub 可提交的轻量 CSV/JSON 快照
 - 不把 Gate-only 的 Frozen/CE/SupCon 结果写成完整 Pipeline 结果。
 - 不提交模型、checkpoint、embedding、Parquet、逐样本 scores 或运行日志。
 - 新实验入口使用功能命名；历史 `_v19/_v20/_v21` 文件保留为兼容入口，不再扩展同类版本号。
+- 涉及实验、指标、数据协议或论文论断的任务，开始前必须读取
+  `docs/research/RESEARCH_STATUS.md`、`EXPERIMENT_LEDGER.csv` 和 `DECISION_LOG.md`，结束前运行
+  `python tools/maintenance/check_research_state.py` 并追加状态台账、开发日志和阶段 closeout。
+- 新计划若与 ledger 中 `do_not_repeat` 且已完成的 protocol/dataset/KIR/seed/representation/K/distance/
+  partition/boundary 完全相同，必须拒绝为 `duplicate_completed_experiment`；只有带明确 rerun reason
+  的显式覆盖才允许继续。
 - Router 只从 `src/router/` 导入；不要在 `src/models/` 重新导出 Router。
 - 训练循环不要添加会破坏 LoRA 梯度的 `torch.no_grad()`。
 - 不在初始化阶段调用 `torch.cuda.is_available()`；部分环境会触发原生运行时问题。

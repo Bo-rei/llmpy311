@@ -9,7 +9,10 @@ s2c 是开放世界意图识别系统，运行链路固定为：
 ```
 
 当前活动代码、配置、测试和文档都在 `s2c/`。当前正式实验协议是
-`protocol_v2_textoir_v1`；Gate-only E2 可以运行，但 E3--E7 与完整 Pipeline 必须等待 E2 汇总。
+`protocol_v2_textoir_v1`；E2 已冻结，E3 机制诊断已收口，R1 Geometry-Preserving CE-Recon
+pilot 已完成并获得条件性支持。E3 只比较分簇方式并分析 Known-only 稳定性/覆盖信号，不定义
+最终 adaptive-K；R1/R1_full 只提供条件性表示层证据。R1_full 已完成 Gate-only 收口，E4--E7
+与完整 Pipeline 仍未启动。
 
 ## 工作区职责
 
@@ -43,4 +46,9 @@ s2c 是开放世界意图识别系统，运行链路固定为：
 
 历史说明只在 `docs/archive/`，不能覆盖当前事实。读取完整实验数字时，先看
 `../artifacts/s2c/runs/protocol_v2_textoir_v1/` 下的 manifest，再看汇总 CSV；读取 GitHub
-数字时只看 `results/MANIFEST.csv` 及其对应文件。
+数字时只看 `results/MANIFEST.csv` 及其对应文件。E3 收口摘要位于
+`../artifacts/s2c/runs/protocol_v2_textoir_v1/e3_mechanisms/summaries/`；其中
+`E3_partition_paired_effects.csv` 是分簇配对证据，`E3_cluster_stability.csv` 和
+`E3_reliability_features.csv` 是诊断证据。R1 收口证据位于
+`../artifacts/s2c/runs/protocol_v2_textoir_v1/r1_geometry_preserving_representation/summaries/`，
+入口是 `R1_CLOSEOUT.md`；R1 的 beta 选择只使用 Known train/calibration。

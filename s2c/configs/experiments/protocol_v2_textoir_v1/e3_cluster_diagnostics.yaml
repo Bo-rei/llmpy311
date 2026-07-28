@@ -1,0 +1,18 @@
+name: e3_cluster_diagnostics
+stage: E3-B-C
+protocol_version: protocol_v2_textoir_v1
+datasets:
+  - clinc150
+  - banking77
+  - stackoverflow
+kirs: [0.25, 0.50, 0.75]
+seeds: [13, 42, 87, 100, 123]
+k_values: [2, 3, 4, 5]
+partition_seeds: [0, 1, 2, 3, 4, 42, 87, 100, 123, 20260725]
+distances:
+  - euclidean
+  - mahalanobis_diag
+representation: frozen_minilm
+boundary: mean_std
+radius_lambda: 1.0
+

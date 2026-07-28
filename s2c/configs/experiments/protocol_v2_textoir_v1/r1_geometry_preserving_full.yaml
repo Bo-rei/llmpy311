@@ -1,0 +1,38 @@
+protocol_version: protocol_v2_textoir_v1
+stage: R1_full
+experiment: r1_geometry_preserving_representation_full
+datasets:
+  - clinc150
+  - banking77
+  - stackoverflow
+kirs:
+  - 0.25
+  - 0.50
+  - 0.75
+seeds:
+  - 13
+  - 42
+  - 87
+  - 100
+  - 123
+representations:
+  - frozen_minilm
+  - ce_recon
+  - ce_recon_geometry
+k_values:
+  - 1
+  - 2
+distance_by_dataset:
+  clinc150: mahalanobis_diag
+  banking77: mahalanobis_diag
+  stackoverflow: mahalanobis_diag
+boundary: mean_std
+radius_lambda: 1.0
+alpha: 1.0
+beta: 1.0
+beta_source: R1_pilot_known_only_global_selection
+epochs: 1
+batch_size: 64
+learning_rate: 0.00002
+max_length: 256
+model_path: ../assets/models/all-MiniLM-L6-v2

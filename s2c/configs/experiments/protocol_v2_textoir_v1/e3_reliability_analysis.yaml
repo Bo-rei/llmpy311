@@ -1,0 +1,10 @@
+name: e3_reliability_analysis
+stage: E3-D
+protocol_version: protocol_v2_textoir_v1
+source_stage: E3-B-C
+partition_control_stage: E3-A
+bootstrap:
+  rng_seed: 20260725
+  n_resamples: 10000
+  confidence_level: 0.95
+

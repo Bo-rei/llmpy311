@@ -1,0 +1,20 @@
+name: e3_partition_control
+stage: E3-A
+protocol_version: protocol_v2_textoir_v1
+datasets:
+  - clinc150
+  - banking77
+  - stackoverflow
+kirs: [0.25, 0.50, 0.75]
+seeds: [13, 42, 87, 100, 123]
+k_values: [2, 3, 4, 5]
+partitions:
+  - kmeans
+  - random_balanced
+distances:
+  - euclidean
+  - mahalanobis_diag
+boundary: mean_std
+radius_lambda: 1.0
+representation: frozen_minilm
+

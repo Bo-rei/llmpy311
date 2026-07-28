@@ -348,4 +348,117 @@
   `oracle_test_best_k` 只作测试敏感性上限，`validation_selected_k` 不可从本 sweep 推出。
   E2 之后没有启动 E3--E7，也没有重新训练或生成新表示。
 - 风险与下一步：CLINC150、Banking77 和 StackOverflow 的多中心效应分别呈现条件性、条件性和明显有害信号；
-  后续若继续，只能先根据配对区间决定是否做 KMeans/random-balanced、tiny-cluster 和 Known-only reliability 分析。
+后续若继续，只能先根据配对区间决定是否做 KMeans/random-balanced、tiny-cluster 和 Known-only reliability 分析。
+
+### E3 closeout：多中心机制诊断完成
+
+- Base commit：`1f299d33bee949d934a74cadbf6adb1962d620ea`；活动协议为
+  `protocol_v2_textoir_v1`。E2 保持只读，E3 使用独立根目录
+  `artifacts/s2c/runs/protocol_v2_textoir_v1/e3_mechanisms/`。
+- Provenance：`E3_PROVENANCE_SNAPSHOT.json` SHA256 为
+  `58478682570e78afa5f35e903c33fae51d3af42eaad42cb3da5f0be34faec93c`；
+  `E3_CODE_SNAPSHOT.patch` SHA256 为
+  `ac1ecb5c9813c5e70665a967ab822abe4929fe3c01bda8772fc9971cb789d7ce`。快照记录
+  E2 closeout、canonical/registry、MiniLM 和 Python/NumPy/SciPy/scikit-learn 版本哈希。
+- 目标：在不改变 legacy detector、E2 配置或 embedding 的前提下，比较 KMeans 与
+  random-balanced 分簇，并使用 train/calibration-only 信号诊断稳定性、tiny cluster、覆盖和
+  reliability；不定义最终 adaptive-K。
+- 执行：E3-A `720/720` 完成、失败 `0`；E3-B/C `180/180` 诊断组完成、失败 `0`，每组
+  40 个 partition/seed/distance 组合，共 `7,200` 行诊断。KMeans seed=42 与 E2 固定参考单元
+  的指标逐项相等（`max_abs_delta=0.0`）。E2 run 未被写入或修改，E4--E7、ADB、DA-ADB、
+  MOGB、表示学习和完整 Pipeline 未启动。
+- 结果摘要：`../artifacts/s2c/runs/protocol_v2_textoir_v1/e3_mechanisms/summaries/`，包括
+  `E3_partition_paired_effects.csv`、`E3_cluster_stability.csv`、
+  `E3_known_coverage_analysis.csv`、`E3_reliability_features.csv`、
+  `E3_dataset_mechanism_decision.md` 和 `E3_integrity_report.md`。Combined OOS 的 KMeans−random
+  OOS F1 平均差约为 Banking77 `+0.0437`、CLINC150 `-0.0137`、StackOverflow `-0.1543`；
+  这支持“数据集条件性”而非统一多中心收益。Known-only reliability 关联为探索性证据，不能
+  作为测试集选 K 或最终 adaptive-K 声明。
+- 验证：E3 verifier（含 E2 等价性）、逐组 40 行结构审计、Ruff 新增模块检查和定向 E3 测试
+  已通过；完整 unit/integration/smoke、compileall、data tracking、development-log 和 registry
+  audit 在最终交付前复跑。风险：诊断文件保留全局 tiny-cluster 字段，同时 intent-level features
+  提供按意图阈值的信号；解释时应优先使用后者，避免将全局阈值误读为每意图碎片化。
+- 下一步：停止在 E3；先完成全套回归验证和结果审计，再决定是否另行批准 E4--E7。
+
+### E3 mechanism diagnostics：开始独立多中心机制层
+
+- Base commit：`1f299d33bee949d934a74cadbf6adb1962d620ea`；E2 保持冻结，E3 使用独立的
+  `artifacts/s2c/runs/protocol_v2_textoir_v1/e3_mechanisms/` 根目录，不覆盖或 resume E2。
+- 目标：在固定 Frozen MiniLM、mean+std 边界和相同 E2 embedding cache 下，比较 KMeans 与
+  random-balanced 分簇，并用 train/calibration-only 特征诊断稳定性、tiny cluster、覆盖风险和
+  reliability signal；本阶段不实现最终 adaptive-K，也不启动 E4--E7。
+- 修改范围：新增 `src/s2c/experiments/partitions.py`、`mechanism_runner.py`、`mechanism_summary.py`、
+  `mechanism_verify.py`，E3 配置与 `scripts/experiments/run_e3_*`、摘要/验证入口，以及对应单元测试。
+  分簇适配通过注入 legacy detector 的中心和标签实现，未修改 E2 detector 行为。
+- 计划：E3-A 为 720 个 Gate 单元；E3-B/C 为 180 个诊断组、每组 2 种分簇 × 10 个初始化 × 2
+  个距离；K=1 只读引用 E2。E3 formal run 要求先冻结 `E3_PROVENANCE_SNAPSHOT.json` 和
+  `E3_CODE_SNAPSHOT.patch`。
+- 验证：E3-A/E3-B/C 计划分别解析为 720/180；random-balanced、seed 可复现、分簇尺寸和
+  KMeans(seed=42) 注入适配器单测通过；真实 `clinc150/KIR=.50/seed=42/K=2/euclidean`
+  的适配器指标与 E2 对应单元逐项相等（浮点容差 `1e-12`）。尚未启动正式 E3 run。
+- 风险与下一步：E2 仍需保持原始 hash；先完成 E3 provenance 冻结，再运行 E3-A 并做完整性审计，
+  随后运行 train/calibration-only 稳定性诊断与汇总。E4--E7、ADB、DA-ADB、MOGB、表示学习和
+  完整 Cascade 在 E3 收口前保持未启动。
+
+### R1 Geometry-Preserving CE-Recon pilot：收口（2026-07-28）
+
+- Base commit：`1f299d33bee949d934a74cadbf6adb1962d620ea`；活动协议为
+  `protocol_v2_textoir_v1`。E2/E3 run、配置、canonical、registry、views、exports 和 embedding
+  保持只读；R1 使用独立根目录
+  `artifacts/s2c/runs/protocol_v2_textoir_v1/r1_geometry_preserving_representation/`。
+- 方法：在 Known-only CE-Recon 上加入 batch 内 pairwise cosine relation preservation；teacher
+  MiniLM 冻结，训练只读取 Known train，checkpoint 只使用 Known calibration macro-F1 选择。
+  beta 候选 `0.1/0.5/1.0` 由三个数据集 seed=42 的 Known-only 目标统一选择，结果为 `beta=1.0`。
+- 规模：9 个 beta 候选训练、9 个 CE-Recon 正式训练、6 个非 seed-42 Geometry checkpoint
+  训练；3 个 seed-42 Geometry 行复用 beta-selection checkpoint，共 24 次实际训练；Gate
+  `3 datasets × 3 seeds × 3 representations × 2 K × 2 distance = 108/108`，失败 0。
+- 结果：相对 CE-Recon，K=1 OOS F1 在 CLINC150/Banking77/StackOverflow 分别变化
+  `+0.0035/+0.0215/+0.0255`，平均 ID Recall `-0.0054`；effective rank、pairwise relation
+  correlation、kNN preservation 均提高，collision 平均下降 `0.0131`。Banking77 near-OOS
+  下降 `-0.0291`，StackOverflow K=2 仍严重退化 `-0.5908`，因此结论为条件性表示层证据，
+  不宣称普遍解决多中心问题。
+- Provenance：`R1_PROVENANCE_SNAPSHOT.json`、`R1_CODE_SNAPSHOT.patch`、配置 hash 和 E2 closeout
+  hash 已保存；`R1_CLOSEOUT.md`、`R1_method_decision.md`、`R1_gate_summary.csv`、
+  `R1_geometry_analysis.csv` 和 `R1_pilot_effects.csv` 是收口证据。
+- 验证：R1 单元测试、编译和 Ruff 定向检查通过；E2/E3 没有被写入；ADB、DA-ADB、MOGB、R1_full
+  和完整 Pipeline 未启动。
+- 决策：`pilot_success_conditionally_r1_full_candidate`。下一步只能生成 R1_full 计划并进行
+  论文 claim 审阅，不能自动扩展 KIR、运行外部 baseline 或接入完整 Pipeline。
+
+## 2026-07-28：R1_full 计划与预检
+
+- 目标：将 R1 pilot 的条件性表示证据扩展到 KIR `0.25/0.50/0.75` 和五个正式 seed，仍以 K=1 为主、K=2 为结构诊断。
+- 新增：`configs/experiments/protocol_v2_textoir_v1/r1_geometry_preserving_full.yaml`、
+  `src/s2c/experiments/r1_full_runner.py`、`scripts/experiments/plan_r1_full.py`。
+- 范围：135 个表示 cell、270 个 Gate 单元；冻结 `beta=1.0`，距离按 pilot 选择为 `mahalanobis_diag`。
+- 数据影响：只读取 protocol_v2_textoir_v1 的 canonical/views 和 E2 embedding cache，不修改 E2/E3 artifact。
+- 状态：仅完成 plan/dry-run 与语法检查，未开始训练；R1_full 的 provenance 在正式启动前冻结。
+- 下一步：冻结 provenance 后按 `--run` 执行并支持断点恢复；不启动 ADB、DA-ADB、MOGB 或完整 Pipeline。
+
+## 2026-07-28：R1_full 受控运行启动
+
+- provenance：`../artifacts/s2c/runs/protocol_v2_textoir_v1/r1_geometry_preserving_representation_full/R1_FULL_PROVENANCE_SNAPSHOT.json`。
+- 规模：135 个表示 cell、270 个 Gate 单元；三数据集、KIR `0.25/0.50/0.75`、5 seed、Frozen/CE-Recon/Geometry。
+- 固定项：`beta=1.0`（R1 pilot Known-only 选择）、`mahalanobis_diag`、`mean_std`、K `{1,2}`。
+- 隔离：不修改 E2/E3，不使用 OOS 训练或 test 选择，不启动外部 baseline/Pipeline。
+- 状态：已启动，支持按 cell 断点恢复；完成后生成 R1_full integrity/closeout。
+
+## 2026-07-28：R1_full 收口
+
+- 完成：135/135 表示 cell、270/270 Gate 单元，0 failed、0 invalid；摘要位于 `../artifacts/s2c/runs/protocol_v2_textoir_v1/r1_geometry_preserving_representation_full/summaries/`。
+- 结果：K=1 OOS F1 相对 CE-Recon 三数据集均为正；near-OOS 仅 CLINC150 小幅提升，Banking77 与 StackOverflow 下降；K=2 在 Banking77 条件性有效，StackOverflow 仍严重退化。
+- 研究决策：将 R1 定位为条件性单中心表示适配证据，不宣称普遍多中心或完整 Pipeline 改善。
+- 风险记录：`R1_full_geometry_analysis.csv` 中历史几何函数的 intra/inter 字段仅作 teacher-reference 诊断，closeout 不使用它们；论文主结论使用 effective rank、relation correlation、kNN preservation、collision 和 Gate 指标。
+- 下一步：claim 审阅与外部直接 baseline 规划；不启动 E4--E7。
+
+## 2026-07-28：R1 K=1/K=2 指标审计
+
+- 目标：核对 StackOverflow `-0.5908` 是否由指标列、聚合顺序或协议混用造成。
+- 方法：仅读取 R1 pilot/R1_full 配对 CSV、R1 原始 metrics 和历史 Frozen v19 汇总；没有重跑实验，
+  没有修改 E2/E3/R1 原始结果。
+- 结果：pilot 的 `-0.5908` 为 Geometry CE-Recon combined OOS F1 的 K=2−K=1 配对均值；
+  R1_full Geometry 15 个单元均值为 `-0.4852`，Frozen MiniLM 为 `-0.0915`。历史 v19
+  Frozen KIR50 对角马氏结果为约 `-0.0622`，协议和表示不同。
+- 决策：保留该差异作为表示依赖的机制证据，后续论文表格必须显式包含 metric、representation、KIR、
+  seed 和 distance，避免将 near-OOS 单元差值写成 combined OOS 均值。
+- 证据：`R1_FULL_K1_K2_AUDIT.md`。

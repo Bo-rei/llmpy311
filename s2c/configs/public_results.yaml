@@ -182,6 +182,28 @@ files:
     source: ../artifacts/s2c/outputs/experiments/minilm_representation_analysis/adaptation/collision_similarity_bins.csv
     public: representation/adaptation_collision_similarity_bins.csv
 
+  # R1_full: geometry-preserving CE-Recon, Gate-only closeout and paired effects.
+  - experiment_id: r1_geometry_preserving_representation_full
+    category: representation
+    source: ../artifacts/s2c/runs/protocol_v2_textoir_v1/r1_geometry_preserving_representation_full/summaries/R1_full_dataset_summary.csv
+    public: representation/r1_full_dataset_summary.csv
+  - experiment_id: r1_geometry_preserving_representation_full
+    category: representation
+    source: ../artifacts/s2c/runs/protocol_v2_textoir_v1/r1_geometry_preserving_representation_full/summaries/R1_full_paired_effects.csv
+    public: representation/r1_full_paired_effects.csv
+  - experiment_id: r1_geometry_preserving_representation_full
+    category: representation
+    source: ../artifacts/s2c/runs/protocol_v2_textoir_v1/r1_geometry_preserving_representation_full/summaries/R1_full_geometry_summary.csv
+    public: representation/r1_full_geometry_summary.csv
+  - experiment_id: r1_geometry_preserving_representation_full
+    category: representation
+    source: ../artifacts/s2c/runs/protocol_v2_textoir_v1/r1_geometry_preserving_representation_full/summaries/R1_full_k1_k2_comparison.csv
+    public: representation/r1_full_k1_k2_comparison.csv
+  - experiment_id: r1_geometry_preserving_representation_full
+    category: representation
+    source: ../artifacts/s2c/runs/protocol_v2_textoir_v1/r1_geometry_preserving_representation_full/summaries/R1_full_integrity.json
+    public: representation/r1_full_integrity.json
+
   # Robustness and descriptive mechanism summaries.
   - experiment_id: sample_efficiency
     category: robustness
