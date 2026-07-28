@@ -20,3 +20,13 @@ CE-Recon 相对 CE-Recon 的 K=1 OOS F1 在三个数据集均为正向变化，�
 Banking77/StackOverflow near-OOS 下降，StackOverflow 的 K=2 仍严重退化。因此只能把“几何保持
 可条件性缓解单中心表示碰撞”作为 pending/softened claim，不能改回“多中心普遍有效”或“完整
 Cascade 已被新方法验证”。直接 baseline 和完整 Pipeline 仍待独立阶段。
+
+## Contract-repair 更新
+
+| 新审计问题 | 当前证据 | 状态 | 建议 |
+| --- | --- | --- | --- |
+| CE classifier input 是否与历史契约一致 | `R1_CONTRACT_REPAIR_GATE.csv` 明确区分 pooled 与 normalized_pooled；K=1 均值差异很小，K=2 差异明显 | keep_with_scope | 论文必须显式写出 classifier input，不能把旧 R1 与修复 pilot 合并 |
+| student intra/inter 是否真实反映 student 几何 | `R1_CONTRACT_REPAIR_GEOMETRY.csv` 同时报告 student 和 teacher 字段；单元测试覆盖不同几何 | keep | 旧 R1 geometry columns 标记 invalid_metric_implementation，修复列才可用于新分析 |
+| near/medium/far 是否无 test leakage | 当前 Known-only calibration 没有 validation OOS；30 行均标记 `exploratory_unavailable_validation_oos`，未使用 test quantile | soften | near-OOS 不能进入正式成功标准；旧 test-defined bucket 仅作 exploratory |
+| Geometry loss 在 pooled-head 下是否修复 K=2 | pooled-head K=1 仅 `+0.0009`，K=2 仍严重退化 | soften | 仅声称 contract repair 澄清了机制，不声称修复多中心 |
+| 是否允许 corrected R1_full | pilot 仅 StackOverflow/KIR50/3 seeds，near-OOS formal contract 未满足 | pending | 不自动扩展；需另行批准并先解决 validation OOS 设计 |

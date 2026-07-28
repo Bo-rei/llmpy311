@@ -5,10 +5,10 @@
 ## 当前状态
 
 - 活动协议：`protocol_v2_textoir_v1`
-- 当前阶段：`R1_geometry_preserving_representation_full` 已收口（135 cells / 270 Gate units）
-- Git：`main`，基准 commit `1f299d33bee949d934a74cadbf6adb1962d620ea`
+- 当前阶段：`r1_contract_repair_v1` 已收口（12 trainable checkpoints / 30 Gate units）
+- Git：`main`，基准 commit `5880a339c809a3dada72b1a21f92c4a9ece42676`
 - Git dirty：`true`（E3 源码、文档和本轮 R1 变更尚未提交）
-- 最近冻结代码快照：R1_full `R1_FULL_CODE_SNAPSHOT.patch`，SHA256 `21b923d67d6b4169e6261c0e4675f508a4caa67f9e4c9577d42c8c6bdc373b81`；R1 pilot 与 E3 快照仍保留用于历史复现。
+- 最近冻结代码快照：contract repair `R1_CONTRACT_REPAIR_CODE.patch`，SHA256 `a1f8302d5c512348e8adffeca01c9245b9da1a79d6c1d62b9f4973947650802d`；旧 R1 pilot/full 与 E3 快照仍保留用于历史复现。
 - GitHub 状态：落后于本地；本轮不得自动 commit/push
 - 最近更新：2026-07-28
 
@@ -21,8 +21,9 @@
 | E2 | complete 1650/1650 | `do_not_repeat` | `../artifacts/s2c/runs/protocol_v2_textoir_v1/summaries/e2_closeout/` |
 | E3-A | complete 720/720 | `do_not_repeat` | `../artifacts/s2c/runs/protocol_v2_textoir_v1/e3_mechanisms/summaries/` |
 | E3-B/C | complete 180/180 | `do_not_repeat` | 同上 |
-| R1 pilot | complete 108/108；24 次实际训练、3 个 beta=1.0 复用引用 | `do_not_repeat`；仅可另行计划 R1_full | `../artifacts/s2c/runs/protocol_v2_textoir_v1/r1_geometry_preserving_representation/summaries/R1_CLOSEOUT.md` |
-| R1_full | complete 270 个 Gate 单元；0 失败/无效；独立 provenance 已冻结 | `do_not_repeat`；不与 R1 pilot 重复 | `../artifacts/s2c/runs/protocol_v2_textoir_v1/r1_geometry_preserving_representation_full/summaries/R1_FULL_CLOSEOUT.md` |
+| R1 pilot | completed but superseded by contract audit；Gate 预测保留，几何字段 invalid，near-OOS exploratory | `do_not_repeat`；不覆盖原始 artifacts | `../artifacts/s2c/runs/protocol_v2_textoir_v1/r1_geometry_preserving_representation/summaries/R1_CLOSEOUT.md` |
+| R1_full | completed but superseded by contract audit；Gate 预测保留，几何字段 invalid，near-OOS exploratory | `do_not_repeat`；不覆盖原始 artifacts | `../artifacts/s2c/runs/protocol_v2_textoir_v1/r1_geometry_preserving_representation_full/summaries/R1_FULL_CLOSEOUT.md` |
+| R1 contract repair | complete 12 checkpoints + 30 Gate units；0 失败/无效；独立 provenance 已冻结 | `do_not_repeat`；不覆盖旧 R1 | `../artifacts/s2c/runs/protocol_v2_textoir_v1/r1_contract_repair_v1/R1_CONTRACT_REPAIR_CLOSEOUT.md` |
 
 E2/E3 的 K、KIR、random partition、聚类稳定性和 tiny-cluster 矩阵不得再次运行。
 
@@ -33,9 +34,11 @@ E2/E3 的 K、KIR、random partition、聚类稳定性和 tiny-cluster 矩阵不
 3. StackOverflow 的 K>1 明显有害。
 4. 聚类稳定性不是多中心有效的充分条件，Known-only reliability 也没有稳定跨数据集选 K 的证据。
 5. 不存在跨数据集统一最优 K；`oracle_test_best_k` 不能作为正式选择规则。
-6. R1_full 的 Geometry-Preserving CE-Recon 相对普通 CE-Recon 在三个数据集的 K=1 OOS F1 均有正向变化，平均 Known Recall 变化约为 `-0.0057`；但 Banking77/StackOverflow near-OOS 下降，StackOverflow 的 K=2 仍严重退化，因此只能称为条件性表示层证据。
+6. 旧 R1 pilot/full 的几何统计和 test-defined near-OOS 结果已被 contract audit 标记为 superseded；旧 Gate prediction 保留为历史证据。
 7. R1 的 StackOverflow K=2 大幅退化已经完成配对审计：pilot 的 `-0.5908` 是 Geometry CE-Recon 的 combined OOS F1 配对均值；R1_full Geometry 的 15 个单元均值为 `-0.4852`，Frozen MiniLM 为 `-0.0915`。历史 Frozen v19 的约 `-0.0622` 属于不同协议/表示，不能直接混比。
 8. 代表性 Geometry 单元中 K=2 的 ID Recall 上升而 false acceptance 大幅上升，当前更支持“多球接受区域并集过覆盖”是主要失败方向，而不是 Known 误拒绝。
+9. Contract repair 在 StackOverflow/KIR50/3 seeds 下确认：pooled 与 normalized classifier head 对 K=1 影响很小、对 K=2 影响明显；修复后的 student intra/inter 距离与 teacher 指标分离；当前 Known-only calibration 没有合法 validation OOS，因此 near/medium/far 只能标记 exploratory，不能进入正式成功标准。
+10. Geometry loss 在 pooled-head 契约下的 K=1 平均 OOS F1 仅有小幅描述性变化（`+0.0009`），K=2 仍严重退化；该 pilot 不授权 corrected R1_full。
 
 ## 历史依据（不混入当前主表）
 
@@ -45,10 +48,9 @@ Pipeline 结果仍可作为研究依据，但它们来自旧实验族，必须�
 
 ## 当前唯一下一步
 
-R1_full 已完成完整性审计：135 个表示 cell、270 个 Gate 单元、0 失败/无效；固定全局 `beta=1.0`，
-只使用 Known calibration 选择 checkpoint。K=1 的 OOS F1 相对 CE-Recon 三个数据集均为正，但
-near-OOS 不一致，StackOverflow K=2 仍严重退化。当前唯一下一步是将 R1_full 结果接入论文 claim
-审阅并决定外部 baseline；不得继续扫描更多 K 或启动完整 Pipeline。
+只进行 contract-repair 结果审阅和论文 claim 边界更新：确认 pooled-head、student geometry 和
+validation-only bucket 契约后，决定是否结束表示实验或另行提出经过批准的 corrected R1_full 计划。
+当前不得自动运行 corrected R1_full、外部 baseline、ADB、DA-ADB、MOGB 或完整 Pipeline。
 
 ## 当前风险
 

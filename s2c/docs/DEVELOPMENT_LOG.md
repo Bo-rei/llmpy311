@@ -462,3 +462,32 @@
 - 决策：保留该差异作为表示依赖的机制证据，后续论文表格必须显式包含 metric、representation、KIR、
   seed 和 distance，避免将 near-OOS 单元差值写成 combined OOS 均值。
 - 证据：`R1_FULL_K1_K2_AUDIT.md`。
+
+## 2026-07-28：R1 contract repair pilot 收口
+
+- Base commit：`5880a339c809a3dada72b1a21f92c4a9ece42676`；活动协议为
+  `protocol_v2_textoir_v1`；新阶段为 `r1_contract_repair_v1`。
+- 目标：隔离并修复三项契约问题：classifier 使用 pooled/normalized pooled 不明确；student
+  intra/inter 几何统计误用 teacher distance；near/medium/far 使用 test OOS quantile。
+- 修改文件：`src/s2c/experiments/geometry_preserving.py`、`src/s2c/experiments/r1_contract_repair.py`、
+  `scripts/experiments/run_r1_contract_repair.py`、`configs/experiments/protocol_v2_textoir_v1/r1_contract_repair.yaml`、
+  `tests/unit/test_r1_geometry.py`；更新研究台账、决策和 claim 审计。
+- 数据影响：只读取 StackOverflow/KIR50/seed `{42,87,100}` 的 protocol_v2_textoir_v1 E2 cache 和
+  Known train/calibration；不读取 `textoir/data`，不改变 canonical、registry、views、exports 或旧 artifacts。
+- 方法：12 个 trainable checkpoints（4 个 trainable representation × 3 seeds）和 30 个 Gate 单元；
+  explicit `pooled/pooled_norm/teacher_pooled/teacher_norm`；默认 `classifier_input=pooled`、
+  `geometry_input=normalized_pooled`、`gate_embedding=normalized_pooled`；geometry loss 固定 beta=1.0。
+- 分桶：当前 calibration 是 Known-only，没有合法 validation OOS，因此 30 个 Gate 行均为
+  `exploratory_unavailable_validation_oos`，q20/q80 为空，未使用 test OOS 选桶或调参。
+- 结果：pooled vs normalized head 的 K1 OOS F1 均值为 `0.8840` vs `0.8842`，K2 为 `0.3002` vs
+  `0.2444`；pooled-head Geometry vs CE-Recon 的 K1 变化 `+0.0009`，K2 仍为结构性退化；
+  student/teacher intra/inter 和 relation correlation 已分离记录。
+- 产物：`../artifacts/s2c/runs/protocol_v2_textoir_v1/r1_contract_repair_v1/`，包含 provenance、
+  code patch、12 个 checkpoint manifest、五份 Gate/geometry/near/K1-K2 CSV、integrity、decision 和 closeout。
+- 测试：R1 geometry unit tests `6 passed`（包含不同 teacher/student geometry 和 validation-only bucket）；
+  pilot `12/12` checkpoints、`30/30` Gate、`0` failures；E2/E3/R1 legacy artifacts 修改状态为 false。
+- 研究决策：旧 R1 标记 `completed_but_superseded_by_contract_audit`；旧 Gate prediction 保留，旧
+  geometry 标记 `invalid_metric_implementation`，旧 near-OOS 标记 `exploratory_test_defined_bucket`。
+  corrected R1_full 未获授权；不启动外部 baseline、ADB、DA-ADB、MOGB 或完整 Pipeline。
+- 风险与下一步：near-OOS 正式结论仍缺 validation OOS 契约；下一步只能是 contract-repair claim
+  审阅和是否另行批准 corrected R1_full 的决策。

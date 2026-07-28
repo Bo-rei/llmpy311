@@ -1,0 +1,45 @@
+stage: r1_contract_repair_v1
+protocol_version: protocol_v2_textoir_v1
+dataset: stackoverflow
+kir: 0.50
+seeds: [42, 87, 100]
+representations:
+  frozen_minilm:
+    classifier_input: pooled
+    geometry_input: normalized_pooled
+    gate_embedding: normalized_pooled
+    geometry_enabled: false
+  ce_recon_pooled_head:
+    classifier_input: pooled
+    geometry_input: normalized_pooled
+    gate_embedding: normalized_pooled
+    geometry_enabled: false
+  ce_recon_normalized_head:
+    classifier_input: normalized_pooled
+    geometry_input: normalized_pooled
+    gate_embedding: normalized_pooled
+    geometry_enabled: false
+  geometry_ce_recon_pooled_head:
+    classifier_input: pooled
+    geometry_input: normalized_pooled
+    gate_embedding: normalized_pooled
+    geometry_enabled: true
+  geometry_ce_recon_normalized_head:
+    classifier_input: normalized_pooled
+    geometry_input: normalized_pooled
+    gate_embedding: normalized_pooled
+    geometry_enabled: true
+k_values: [1, 2]
+distance: mahalanobis_diag
+covariance_scope: per_cluster
+boundary: mean_std
+radius_lambda: 1.0
+threshold: 1.0
+alpha: 1.0
+beta: 1.0
+epochs: 1
+batch_size: 64
+learning_rate: 0.00002
+max_length: 256
+model_path: ../assets/models/all-MiniLM-L6-v2
+near_oos_policy: validation_oos_only

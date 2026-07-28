@@ -70,3 +70,21 @@
 - 机制提示：代表性 Geometry 单元的 ID Recall 从 `0.8420` 升至 `0.9577`，而 false
   acceptance 从 `0.0240` 升至 `0.8173`；当前证据更支持多球接受区域并集过覆盖，而非
   Known 碎片化误拒绝是该单元的主因。
+
+## D11：R1 contract repair 收口（2026-07-28）
+
+- 动机：审计发现历史 CE 使用 `head(pooled)`，旧 R1 使用 `head(student_norm)`；
+  `pairwise_relation_metrics` 用 teacher distance 计算了 student intra/inter；near/medium/far
+  cutpoints 使用了 test OOS quantile。
+- 修复：新阶段 `r1_contract_repair_v1` 显式记录 `pooled/pooled_norm/teacher_pooled/teacher_norm`，
+  默认分类输入为 pooled，几何关系输入为 normalized_pooled；student 与 teacher 几何统计分开；
+  当前 Known-only calibration 没有 validation OOS，near/far 不再从 test 生成。
+- 规模：StackOverflow/KIR50/data seed `{42,87,100}`，12 个 trainable checkpoints、30 个 Gate
+  单元，0 失败；旧 R1、E0--E3 artifacts 未修改。
+- 结果：pooled 与 normalized head 对 K=1 OOS F1 的差异很小（`+0.0002`），对 K=2 差异明显
+  （normalized 相对 pooled `-0.0558`）；pooled-head 下 geometry loss 的 K=1 变化仅 `+0.0009`，
+  K=2 仍严重退化。修复后的 student geometry 指标不再复用 teacher distances。
+- 决策：旧 R1 标记 `completed_but_superseded_by_contract_audit`；旧 Gate predictions 保留，旧
+  geometry statistics 标记 `invalid_metric_implementation`，旧 near-OOS 标记
+  `exploratory_test_defined_bucket`。本 pilot 不授权 corrected R1_full。
+- 下一步：只做 contract-repair 结果的 claim 边界审阅；不自动运行 R1_full、外部 baseline 或完整 Pipeline。

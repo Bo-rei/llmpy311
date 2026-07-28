@@ -146,12 +146,19 @@ def pairwise_relation_metrics(
         second = rng.integers(0, len(teacher), pair_count)
         valid = first != second
         first, second = first[valid], second[valid]
-        distances = 1.0 - teacher_rel[first, second]
+        # Class-separation metrics must be measured in the representation they
+        # claim to describe.  The old implementation accidentally reused the
+        # teacher distances for both teacher and student fields, which made a
+        # collapsed student appear to preserve teacher class geometry.
+        teacher_distances = 1.0 - teacher_rel[first, second]
+        student_distances = 1.0 - student_rel[first, second]
         same = label_array[first] == label_array[second]
-        intra = float(np.mean(distances[same])) if same.any() else math.nan
-        inter = float(np.mean(distances[~same])) if (~same).any() else math.nan
+        teacher_intra = float(np.mean(teacher_distances[same])) if same.any() else math.nan
+        teacher_inter = float(np.mean(teacher_distances[~same])) if (~same).any() else math.nan
+        intra = float(np.mean(student_distances[same])) if same.any() else math.nan
+        inter = float(np.mean(student_distances[~same])) if (~same).any() else math.nan
     else:
-        intra = inter = math.nan
+        intra = inter = teacher_intra = teacher_inter = math.nan
     return {
         "effective_rank": effective_rank(student),
         "teacher_effective_rank": effective_rank(teacher),
@@ -160,6 +167,13 @@ def pairwise_relation_metrics(
         "intra_class_distance": intra,
         "inter_class_distance": inter,
         "relative_separation": (inter - intra) / inter if math.isfinite(intra) and math.isfinite(inter) and inter else math.nan,
+        "teacher_intra_class_distance": teacher_intra,
+        "teacher_inter_class_distance": teacher_inter,
+        "teacher_relative_separation": (
+            (teacher_inter - teacher_intra) / teacher_inter
+            if math.isfinite(teacher_intra) and math.isfinite(teacher_inter) and teacher_inter
+            else math.nan
+        ),
         "embedding_norm_mean": float(np.linalg.norm(student, axis=1).mean()),
         "embedding_norm_std": float(np.linalg.norm(student, axis=1).std()),
     }
@@ -199,6 +213,7 @@ def _classification_metrics(
     device: torch.device,
     batch_size: int,
     max_length: int,
+    classifier_input: str = "pooled",
 ) -> dict[str, float]:
     model.eval()
     head.eval()
@@ -214,8 +229,10 @@ def _classification_metrics(
                 max_length=max_length,
                 return_tensors="pt",
             ).to(device)
-            pooled = torch.nn.functional.normalize(mean_pool(model(**tokens).last_hidden_state, tokens["attention_mask"]), dim=-1)
-            predictions.extend(head(pooled).argmax(dim=-1).cpu().tolist())
+            pooled = mean_pool(model(**tokens).last_hidden_state, tokens["attention_mask"])
+            pooled_norm = torch.nn.functional.normalize(pooled, dim=-1)
+            classifier_features = pooled if classifier_input == "pooled" else pooled_norm
+            predictions.extend(head(classifier_features).argmax(dim=-1).cpu().tolist())
             labels.extend(label_map[str(row["intent"])] for row in batch_rows)
     return {
         "known_validation_macro_f1": float(f1_score(labels, predictions, average="macro", zero_division=0)) if labels else math.nan,
@@ -238,11 +255,17 @@ def train_representation(
     batch_size: int = 64,
     learning_rate: float = 2e-5,
     max_length: int = 256,
+    classifier_input: str = "pooled",
+    geometry_input: str = "normalized_pooled",
+    gate_embedding: str = "normalized_pooled",
 ) -> dict[str, Any]:
     """Train CE-Recon or CE-Recon-Geometry using Known train only."""
 
     if method not in {"ce_recon", "ce_recon_geometry"}:
         raise ValueError(f"Unsupported trainable representation: {method}")
+    valid_inputs = {"pooled", "normalized_pooled"}
+    if classifier_input not in valid_inputs or geometry_input not in valid_inputs or gate_embedding not in valid_inputs:
+        raise ValueError("Representation inputs must be pooled or normalized_pooled")
     if len(train_rows) != len(teacher_train):
         raise ValueError("Teacher cache and train rows are not aligned")
     set_seed(seed)
@@ -251,7 +274,14 @@ def train_representation(
     manifest_path = output_dir / "training_manifest.json"
     if checkpoint.is_file() and manifest_path.is_file():
         manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
-        if manifest.get("method") == method and float(manifest.get("beta", -1.0)) == float(beta) and manifest.get("status") == "complete":
+        if (
+            manifest.get("method") == method
+            and float(manifest.get("beta", -1.0)) == float(beta)
+            and manifest.get("classifier_input") == classifier_input
+            and manifest.get("geometry_input") == geometry_input
+            and manifest.get("gate_embedding") == gate_embedding
+            and manifest.get("status") == "complete"
+        ):
             return manifest
     tokenizer = AutoTokenizer.from_pretrained(model_path, local_files_only=True)
     student = AutoModel.from_pretrained(model_path, local_files_only=True)
@@ -289,13 +319,16 @@ def train_representation(
                 return_tensors="pt",
             ).to(device)
             pooled = mean_pool(student(**tokens).last_hidden_state, tokens["attention_mask"])
-            student_norm = torch.nn.functional.normalize(pooled, dim=-1)
-            teacher_batch = teacher_train_tensor[torch.as_tensor(batch_indices, dtype=torch.long)].to(device)
-            teacher_norm = torch.nn.functional.normalize(teacher_batch, dim=-1)
+            pooled_norm = torch.nn.functional.normalize(pooled, dim=-1)
+            teacher_pooled = teacher_train_tensor[torch.as_tensor(batch_indices, dtype=torch.long)].to(device)
+            teacher_norm = torch.nn.functional.normalize(teacher_pooled, dim=-1)
+            classifier_features = pooled if classifier_input == "pooled" else pooled_norm
+            geometry_student = pooled if geometry_input == "pooled" else pooled_norm
+            geometry_teacher = teacher_pooled if geometry_input == "pooled" else teacher_norm
             target = torch.as_tensor([label_map[str(row["intent"])] for row in batch_rows], dtype=torch.long, device=device)
-            ce_loss = torch.nn.functional.cross_entropy(head(student_norm), target)
-            recon_loss = torch.nn.functional.mse_loss(student_norm, teacher_norm.detach())
-            geometry_loss = pairwise_cosine_relation_loss(student_norm, teacher_norm)
+            ce_loss = torch.nn.functional.cross_entropy(head(classifier_features), target)
+            recon_loss = torch.nn.functional.mse_loss(geometry_student, geometry_teacher.detach())
+            geometry_loss = pairwise_cosine_relation_loss(geometry_student, geometry_teacher) if method == "ce_recon_geometry" else geometry_student.sum() * 0.0
             total = ce_loss + alpha * recon_loss + beta * geometry_loss
             optimizer.zero_grad(set_to_none=True)
             total.backward()
@@ -304,7 +337,9 @@ def train_representation(
             ce_losses.append(float(ce_loss.detach().cpu()))
             recon_losses.append(float(recon_loss.detach().cpu()))
             geometry_losses.append(float(geometry_loss.detach().cpu()))
-        validation = _classification_metrics(student, head, tokenizer, calibration_rows, label_map, device, batch_size, max_length)
+        validation = _classification_metrics(
+            student, head, tokenizer, calibration_rows, label_map, device, batch_size, max_length, classifier_input
+        )
         history.append(
             {
                 "epoch": epoch,
@@ -352,6 +387,11 @@ def train_representation(
         "used_test_for_selection": False,
         "teacher_frozen": True,
         "teacher_source": "frozen_minilm_teacher_cache",
+        "classifier_input": classifier_input,
+        "geometry_input": geometry_input,
+        "gate_embedding": gate_embedding,
+        "pooled_semantics": "mean_pool(last_hidden_state, attention_mask)",
+        "teacher_pooled_source": "frozen_minilm_train_embedding_cache",
     }
     atomic_write_json(manifest_path, manifest)
     del student, teacher, head, optimizer
@@ -379,19 +419,55 @@ def class_centers(embeddings: np.ndarray, intents: Sequence[str]) -> tuple[np.nd
     return centers, names
 
 
-def fixed_oos_buckets(frozen_train: np.ndarray, frozen_test: np.ndarray, test_rows: Sequence[Mapping[str, Any]], intents: Sequence[str]) -> tuple[np.ndarray, dict[str, float]]:
-    """Freeze near/medium/far cut points from the Frozen K=1 space once per cell."""
+def fixed_oos_buckets(
+    frozen_train: np.ndarray,
+    frozen_test: np.ndarray,
+    test_rows: Sequence[Mapping[str, Any]],
+    intents: Sequence[str],
+    *,
+    frozen_validation: np.ndarray | None = None,
+    validation_rows: Sequence[Mapping[str, Any]] | None = None,
+) -> tuple[np.ndarray, dict[str, Any]]:
+    """Apply Frozen-reference OOS cut points learned from validation only.
 
+    The active protocol deliberately uses Known-only calibration.  In that
+    case there is no legal validation OOS population from which to estimate
+    q20/q80.  We therefore return an explicit exploratory/unavailable status
+    instead of silently leaking test OOS distances into the bucket definition.
+    """
+
+    if frozen_validation is None or validation_rows is None:
+        return np.full(len(test_rows), "all", dtype=object), {
+            "q20": math.nan,
+            "q80": math.nan,
+            "source": "validation_oos_unavailable_known_only_calibration",
+            "bucket_status": "exploratory_unavailable_validation_oos",
+            "used_test_oos_for_cutpoints": False,
+        }
     centers, _ = class_centers(frozen_train, intents)
+    validation_norm = frozen_validation / np.clip(np.linalg.norm(frozen_validation, axis=1, keepdims=True), 1e-12, None)
     test_norm = frozen_test / np.clip(np.linalg.norm(frozen_test, axis=1, keepdims=True), 1e-12, None)
-    distances = 1.0 - np.max(test_norm @ centers.T, axis=1)
-    labels = np.asarray([int(row["label"]) for row in test_rows], dtype=np.int64)
-    oos_distances = distances[labels == 1]
+    validation_distances = 1.0 - np.max(validation_norm @ centers.T, axis=1)
+    test_distances = 1.0 - np.max(test_norm @ centers.T, axis=1)
+    validation_labels = np.asarray([int(row["label"]) for row in validation_rows], dtype=np.int64)
+    oos_distances = validation_distances[validation_labels == 1]
     if not len(oos_distances):
-        return np.full(len(test_rows), "all", dtype=object), {"q20": math.nan, "q80": math.nan, "source": "frozen_test_no_oos"}
+        return np.full(len(test_rows), "all", dtype=object), {
+            "q20": math.nan,
+            "q80": math.nan,
+            "source": "validation_oos_unavailable_known_only_calibration",
+            "bucket_status": "exploratory_unavailable_validation_oos",
+            "used_test_oos_for_cutpoints": False,
+        }
     q20, q80 = np.quantile(oos_distances, [0.20, 0.80])
-    buckets = np.where(distances <= q20, "near", np.where(distances <= q80, "medium", "far"))
-    return buckets.astype(object), {"q20": float(q20), "q80": float(q80), "source": "frozen_k1_test_descriptive_cutpoints"}
+    buckets = np.where(test_distances <= q20, "near", np.where(test_distances <= q80, "medium", "far"))
+    return buckets.astype(object), {
+        "q20": float(q20),
+        "q80": float(q80),
+        "source": "frozen_k1_validation_oos_quantiles",
+        "bucket_status": "formal_validation_oos_cutpoints",
+        "used_test_oos_for_cutpoints": False,
+    }
 
 
 def representation_collision(train: np.ndarray, calibration: np.ndarray, test: np.ndarray, train_rows: Sequence[Mapping[str, Any]], calibration_rows: Sequence[Mapping[str, Any]], test_rows: Sequence[Mapping[str, Any]]) -> float:

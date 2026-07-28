@@ -12,8 +12,9 @@ Banking77 与 StackOverflow snapshot。StackOverflow 是 local-only benchmark，
 | E1 | 3 datasets × 3 KIR × K{1,2} × 2 distances | complete: 36/36 | `../artifacts/s2c/runs/protocol_v2_textoir_v1/summaries/e1_gate_smoke.csv` |
 | E2 | 11 KIR × 5 seeds × K{1..5} × 2 distances | complete: 1,650/1,650 | `../artifacts/s2c/runs/protocol_v2_textoir_v1/summaries/e2_closeout/` |
 | E3 | KMeans/random-balanced, stability, Known-only coverage/reliability | complete: 720 + 180 groups | `../artifacts/s2c/runs/protocol_v2_textoir_v1/e3_mechanisms/summaries/` |
-| R1 | Geometry-Preserving CE-Recon 表示 pilot | complete: 108/108；条件性支持 | `../artifacts/s2c/runs/protocol_v2_textoir_v1/r1_geometry_preserving_representation/summaries/R1_CLOSEOUT.md` |
-| R1_full | KIR `0.25/0.50/0.75`、5 seeds 的几何保持扩展 | complete: 135 cells / 270 Gate units；0 failed | `../artifacts/s2c/runs/protocol_v2_textoir_v1/r1_geometry_preserving_representation_full/summaries/R1_FULL_CLOSEOUT.md` |
+| R1 pilot | Geometry-Preserving CE-Recon 表示 pilot | completed but superseded by contract audit | `../artifacts/s2c/runs/protocol_v2_textoir_v1/r1_geometry_preserving_representation/summaries/R1_CLOSEOUT.md` |
+| R1_full | KIR `0.25/0.50/0.75`、5 seeds 的几何保持扩展 | completed but superseded by contract audit | `../artifacts/s2c/runs/protocol_v2_textoir_v1/r1_geometry_preserving_representation_full/summaries/R1_FULL_CLOSEOUT.md` |
+| R1 contract repair | pooled/normalized head、student/teacher geometry、validation-only buckets | complete: 12 checkpoints / 30 Gate units；0 failed；near-OOS exploratory only | `../artifacts/s2c/runs/protocol_v2_textoir_v1/r1_contract_repair_v1/R1_CONTRACT_REPAIR_CLOSEOUT.md` |
 | E4--E7 | boundary grid, external baselines, representation, Pipeline | not started | R1 closeout 后另行决定 |
 
 E1 和 E2 是 Gate-only 证据，不应与历史完整 Cascade 或 v19--v22 结果混合解释。E3 的 K=1 只读引用
@@ -33,7 +34,7 @@ Known-only 诊断显示 KMeans 的初始化稳定性通常高于 random-balanced
 StackOverflow 的稳定子簇仍导致更高的 false acceptance，符合 boundary-union/支持区域失配解释。
 可靠性特征仅作事后关联分析，不能用于本阶段的测试集选 K。
 
-## R1 表示几何保持 pilot
+## R1 表示几何保持 pilot（历史，已被 contract audit supersede）
 
 R1 在同一 Frozen MiniLM teacher 上比较 `CE-Recon` 与加入 batch 内 pairwise cosine relation
 preservation 的 `CE-Recon-Geometry`。全局 `beta=1.0` 只由三个数据集 seed=42 的 Known
@@ -41,7 +42,18 @@ train/calibration 指标选择；108 个 Gate 单元（3 dataset × 3 seed × 3 
 2 K × 2 distance）全部完成。相对 CE-Recon，K=1 OOS F1 三个数据集均改善，但 Banking77
 near-OOS 下降，StackOverflow K=2 仍严重退化；因此 R1 不是普遍多中心或完整 Pipeline 结论。
 详细几何、碰撞和 K=1/K=2 对照见 R1 summaries；R1_full 已完成完整性审计，closeout 明确区分
-K=1 表示结果与 K=2 结构诊断。
+K=1 表示结果与 K=2 结构诊断。旧 R1 的几何字段已被 contract audit 标记为
+`invalid_metric_implementation`，旧 near-OOS 分桶标记为 `exploratory_test_defined_bucket`。
+
+## R1 contract repair
+
+该阶段不重复 E2/E3，也不启动新数据集或 KIR。它只在 StackOverflow/KIR50、seed `{42,87,100}`
+下修复三个可比性问题：CE classifier 显式使用 pooled 或 normalized_pooled；student 的
+intra/inter distance 与 teacher 指标分开；near/medium/far 只有在 validation OOS 存在时才正式定义。
+当前 protocol 的 calibration 是 Known-only，因此 30 个 Gate 行的 bucket status 均为
+`exploratory_unavailable_validation_oos`，不能用于正式 near-OOS 成功标准。修复结果显示 pooled
+head 对 K=1/K=2 的差异分别很小/明显，Geometry loss 在 pooled-head K=1 只有小幅描述性变化，K=2
+仍是结构性退化。不要把该 pilot 写成 corrected R1_full 的授权。
 
 ## 历史版本
 

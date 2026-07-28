@@ -36,6 +36,7 @@ FROZEN_REQUIRED = {
 
 R1_CLOSEOUT = ROOT.parent / "artifacts/s2c/runs/protocol_v2_textoir_v1/r1_geometry_preserving_representation/summaries/R1_CLOSEOUT.md"
 R1_FULL_CLOSEOUT = ROOT.parent / "artifacts/s2c/runs/protocol_v2_textoir_v1/r1_geometry_preserving_representation_full/summaries/R1_FULL_CLOSEOUT.md"
+R1_CONTRACT_REPAIR_CLOSEOUT = ROOT.parent / "artifacts/s2c/runs/protocol_v2_textoir_v1/r1_contract_repair_v1/R1_CONTRACT_REPAIR_CLOSEOUT.md"
 
 
 def read_ledger(path: Path = LEDGER_PATH) -> list[dict[str, str]]:
@@ -137,6 +138,12 @@ def check_state() -> list[str]:
             errors.append("r1_full_completed_units_mismatch")
         if not R1_FULL_CLOSEOUT.is_file():
             errors.append(f"missing_closeout:r1_geometry_preserving_representation_full:{R1_FULL_CLOSEOUT}")
+    repair_rows = [row for row in ledger if row.get("experiment_id") == "r1_contract_repair_v1"]
+    if repair_rows and repair_rows[0].get("status") == "complete":
+        if int(repair_rows[0].get("completed_units", "-1")) != 42:
+            errors.append("r1_contract_repair_completed_units_mismatch")
+        if not R1_CONTRACT_REPAIR_CLOSEOUT.is_file():
+            errors.append(f"missing_closeout:r1_contract_repair_v1:{R1_CONTRACT_REPAIR_CLOSEOUT}")
     status = STATUS_PATH.read_text(encoding="utf-8")
     if status.count("## 当前唯一下一步") != 1:
         errors.append("status_must_have_one_current_next_step")

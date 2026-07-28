@@ -1,6 +1,8 @@
 {
   "active": [
+    "scripts/experiments/run_r1_contract_repair.py",
     "src/cli.py",
+    "src/s2c/experiments/r1_contract_repair.py",
     "tools/analysis/audit_experiment_registry.py",
     "tools/analysis/export_cascade_repair_summary.py",
     "tools/compat/mogb",

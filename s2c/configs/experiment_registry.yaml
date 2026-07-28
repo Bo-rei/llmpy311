@@ -193,6 +193,26 @@ experiments:
       count_source: csv_rows
       count_summary: mechanism_unit_level.csv
 
+    r1_contract_repair:
+      id: gate_mechanism.r1_contract_repair
+      research_question: "修复表示输入、student/teacher 几何指标和 OOS 分桶契约后，R1 结论是否稳定？"
+      status: complete
+      entrypoints:
+        - scripts/experiments/run_r1_contract_repair.py
+        - src/s2c/experiments/r1_contract_repair.py
+      protocol: r1_contract_repair_v1
+      artifact_root: ../../runs/protocol_v2_textoir_v1/r1_contract_repair_v1
+      manifest:
+        - R1_CONTRACT_REPAIR_PROVENANCE.json
+        - R1_CONTRACT_REPAIR_INTEGRITY.json
+      summary:
+        - summaries/R1_CONTRACT_REPAIR_GATE.csv
+        - summaries/R1_CONTRACT_REPAIR_GEOMETRY.csv
+        - R1_CONTRACT_REPAIR_CLOSEOUT.md
+      expected_unit_count: 30
+      count_source: csv_rows
+      count_summary: summaries/R1_CONTRACT_REPAIR_GATE.csv
+
   external_validation:
     hard_negative_oos:
       id: external_validation.hard_negative_oos

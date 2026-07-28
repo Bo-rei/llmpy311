@@ -9,10 +9,11 @@ s2c 是开放世界意图识别系统，运行链路固定为：
 ```
 
 当前活动代码、配置、测试和文档都在 `s2c/`。当前正式实验协议是
-`protocol_v2_textoir_v1`；E2 已冻结，E3 机制诊断已收口，R1 Geometry-Preserving CE-Recon
-pilot 已完成并获得条件性支持。E3 只比较分簇方式并分析 Known-only 稳定性/覆盖信号，不定义
-最终 adaptive-K；R1/R1_full 只提供条件性表示层证据。R1_full 已完成 Gate-only 收口，E4--E7
-与完整 Pipeline 仍未启动。
+`protocol_v2_textoir_v1`；E2/E3 已冻结，旧 R1 pilot/full 已通过 contract audit 标记为 superseded，
+新的 `r1_contract_repair_v1` 已完成 StackOverflow/KIR50 的 12 个 checkpoint 和 30 个 Gate 单元。
+E3 只比较分簇方式并分析 Known-only 稳定性/覆盖信号，不定义最终 adaptive-K；contract repair
+明确区分 classifier input、student/teacher geometry 和 validation-only OOS bucket。当前仍不允许
+自动运行 corrected R1_full、外部 baseline 或完整 Pipeline。
 
 ## 工作区职责
 
@@ -52,3 +53,5 @@ pilot 已完成并获得条件性支持。E3 只比较分簇方式并分析 Know
 `E3_reliability_features.csv` 是诊断证据。R1 收口证据位于
 `../artifacts/s2c/runs/protocol_v2_textoir_v1/r1_geometry_preserving_representation/summaries/`，
 入口是 `R1_CLOSEOUT.md`；R1 的 beta 选择只使用 Known train/calibration。
+旧 R1 的几何字段和 test-defined near-OOS 已被 contract audit 标记为无效/探索性；修复 pilot 的
+入口是 `../artifacts/s2c/runs/protocol_v2_textoir_v1/r1_contract_repair_v1/R1_CONTRACT_REPAIR_CLOSEOUT.md`。
