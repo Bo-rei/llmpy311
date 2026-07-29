@@ -1,6 +1,6 @@
 """Stable CLI wrapper for importing audited official raw data."""
 
-from s2c.data.official_import import main
+from protocol_v2.data.official_import import main
 
 
 if __name__ == "__main__":

@@ -4,7 +4,7 @@ from dataclasses import replace
 
 import pytest
 
-from s2c.runtime.paths import ProtocolV2Paths
+from protocol_v2.runtime.paths import ProtocolV2Paths
 
 
 def test_default_provenance_decision_uses_active_textoir_version() -> None:

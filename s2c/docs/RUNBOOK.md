@@ -18,7 +18,7 @@ python tools/maintenance/check_data_tracking.py
 ## E0：验证数据契约
 
 ```bash
-python -m s2c.data.validate_protocol --require-views --require-exports
+python -m protocol_v2.data.validate_protocol --require-views --require-exports
 python tools/maintenance/check_data_tracking.py
 ```
 
@@ -28,13 +28,13 @@ E0 通过条件：三个 source/canonical、165 registry、165 views、990 expor
 ## E1：36 单元 Gate smoke
 
 ```bash
-python -m s2c.experiments.runner \
+python -m protocol_v2.experiments.runner \
   --config configs/experiments/protocol_v2_textoir_v1/smoke_gate.yaml \
   --resume --shard-name e1_smoke
-python -m s2c.experiments.verify \
+python -m protocol_v2.experiments.verify \
   --config configs/experiments/protocol_v2_textoir_v1/smoke_gate.yaml \
   --require-complete
-python -m s2c.experiments.summarize \
+python -m protocol_v2.experiments.summarize \
   --config configs/experiments/protocol_v2_textoir_v1/smoke_gate.yaml \
   --output ../artifacts/s2c/runs/protocol_v2_textoir_v1/summaries/e1_gate_smoke.csv
 ```
@@ -42,9 +42,9 @@ python -m s2c.experiments.summarize \
 ## E2：1,650 单元密集 Gate 网格
 
 ```bash
-python -m s2c.experiments.plan \
+python -m protocol_v2.experiments.plan \
   --config configs/experiments/protocol_v2_textoir_v1/gate_core_dense.yaml
-python -m s2c.experiments.runner \
+python -m protocol_v2.experiments.runner \
   --config configs/experiments/protocol_v2_textoir_v1/gate_core_dense.yaml \
   --resume --shard-name e2_core
 ```
@@ -58,14 +58,14 @@ Runner 每个完成/失败单元都更新 state JSON；`--resume` 只跳过 conf
 
 ```bash
 PYTHONPATH=src python scripts/experiments/plan_e3_mechanisms.py
-PYTHONPATH=src python -m s2c.experiments.mechanism_runner partition-control \
+PYTHONPATH=src python -m protocol_v2.experiments.mechanism_runner partition-control \
   --config configs/experiments/protocol_v2_textoir_v1/e3_partition_control.yaml --dry-run
 ```
 
 完成 E3-0 provenance 冻结后，运行 E3-A：
 
 ```bash
-PYTHONPATH=src python -m s2c.experiments.mechanism_runner partition-control \
+PYTHONPATH=src python -m protocol_v2.experiments.mechanism_runner partition-control \
   --config configs/experiments/protocol_v2_textoir_v1/e3_partition_control.yaml --resume
 PYTHONPATH=src python scripts/experiments/verify_e3_mechanisms.py \
   --partition-config configs/experiments/protocol_v2_textoir_v1/e3_partition_control.yaml \
@@ -76,7 +76,7 @@ PYTHONPATH=src python scripts/experiments/verify_e3_mechanisms.py \
 E3-A 完整性通过后再运行稳定性/覆盖诊断：
 
 ```bash
-PYTHONPATH=src python -m s2c.experiments.mechanism_runner cluster-diagnostics \
+PYTHONPATH=src python -m protocol_v2.experiments.mechanism_runner cluster-diagnostics \
   --config configs/experiments/protocol_v2_textoir_v1/e3_cluster_diagnostics.yaml --resume
 PYTHONPATH=src python scripts/experiments/summarize_e3_mechanisms.py
 ```

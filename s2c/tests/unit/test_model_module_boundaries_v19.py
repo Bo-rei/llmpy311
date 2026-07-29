@@ -12,14 +12,14 @@ if str(PROJECT_ROOT) not in sys.path:
 
 
 def test_router_package_exports_the_canonical_router():
-    from src.router import QwenRouter
-    from src.router import router_model
+    from legacy.router import QwenRouter
+    from legacy.router import router_model
 
     assert QwenRouter is router_model.QwenRouter
 
 
 def test_gate_default_backbone_uses_the_canonical_workspace_assets_path():
-    from src.models.gate_svdd import DEFAULT_BACKBONE_PATH, SVDDGate
+    from legacy.models.gate_svdd import DEFAULT_BACKBONE_PATH, SVDDGate
 
     assert DEFAULT_BACKBONE_PATH == str(
         PROJECT_ROOT.parent / "assets/models/smollm17b"

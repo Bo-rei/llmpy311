@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from s2c.data.hashing import atomic_write_jsonl, sha256_file, sha256_json
+from protocol_v2.data.hashing import atomic_write_jsonl, sha256_file, sha256_json
 
 
 def test_stable_hashing_and_atomic_jsonl(tmp_path: Path) -> None:

@@ -1,0 +1,23 @@
+stage: minilm_training_and_stackoverflow_repair_v1
+protocol_version: protocol_v2_textoir_v1
+model_path: ../assets/models/all-MiniLM-L6-v2
+datasets: [clinc150, banking77, stackoverflow]
+kir: 0.50
+seeds: [42, 87, 100]
+representations: [frozen_minilm, head_only_ce, full_ce, supcon, ce_recon]
+k_values: [1, 2]
+distances: [euclidean, mahalanobis_diag]
+boundary: mean_std
+radius_lambda: 1.0
+threshold: 1.0
+classifier_input: pooled
+gate_embedding: normalized_pooled
+epochs: 1
+batch_size: 64
+learning_rate: 0.00002
+alpha: 1.0
+temperature: 0.07
+max_length: 256
+selection: known_calibration_only
+test_used_for_selection: false
+oos_used_for_training: false

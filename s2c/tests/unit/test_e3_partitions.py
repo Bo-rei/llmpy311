@@ -3,8 +3,8 @@ from __future__ import annotations
 import numpy as np
 import pytest
 
-from gate.multi_sphere_oos_detector import MultiSphereOOSDetector
-from s2c.experiments.partitions import (
+from protocol_v2.gate.multi_sphere_oos_detector import MultiSphereOOSDetector
+from protocol_v2.experiments.partitions import (
     build_partition,
     fit_injected_detector,
     normalize_for_detector,
@@ -32,7 +32,7 @@ def test_partition_seed_is_reproducible() -> None:
     assert np.array_equal(left.centers, right.centers)
 
 
-def test_kmeans_seed_42_injected_detector_matches_legacy_detector() -> None:
+def test_kmeans_seed_42_injected_detector_matches_active_detector() -> None:
     rng = np.random.default_rng(11)
     embeddings = rng.normal(size=(24, 8))
     intents = np.array(["a"] * 8 + ["b"] * 8 + ["c"] * 8, dtype=object)
@@ -45,7 +45,7 @@ def test_kmeans_seed_42_injected_detector_matches_legacy_detector() -> None:
         radius_lambda=1.0,
         random_state=42,
     )
-    legacy = MultiSphereOOSDetector(
+    reference = MultiSphereOOSDetector(
         radius_method="mean_std",
         radius_lambda=1.0,
         center_mode="class_centroid_mixture",
@@ -55,21 +55,21 @@ def test_kmeans_seed_42_injected_detector_matches_legacy_detector() -> None:
         subcenters_per_intent=2,
         random_state=42,
     )
-    legacy.fit(embeddings, intents)
-    assert np.array_equal(injected._train_cluster_labels, legacy._train_cluster_labels)
+    reference.fit(embeddings, intents)
+    assert np.array_equal(injected._train_cluster_labels, reference._train_cluster_labels)
     assert np.allclose(
         [sphere.center for sphere in injected.spheres],
-        [sphere.center for sphere in legacy.spheres],
+        [sphere.center for sphere in reference.spheres],
         atol=1e-12,
     )
     assert np.allclose(
         [sphere.radius for sphere in injected.spheres],
-        [sphere.radius for sphere in legacy.spheres],
+        [sphere.radius for sphere in reference.spheres],
         atol=1e-12,
     )
     probe = rng.normal(size=(7, 8))
     left = injected.predict_with_scores(probe)
-    right = legacy.predict_with_scores(probe)
+    right = reference.predict_with_scores(probe)
     assert np.allclose(left["score"], right["score"], atol=1e-12)
     assert np.array_equal(left["pred"], right["pred"])
 
@@ -88,3 +88,50 @@ def test_partition_sizes_are_stable() -> None:
         42,
     )
     assert np.array_equal(partition_sizes(result), np.array([3, 3, 3, 3]))
+
+
+def test_normalized_union_accepts_a_non_nearest_sphere() -> None:
+    """The opt-in union contract must not depend on raw center proximity."""
+
+    nearest_contract = MultiSphereOOSDetector(
+        center_mode="class_centroid_mixture",
+        radius_method="mean_std",
+        acceptance_mode="nearest_sphere",
+    )
+    union_contract = MultiSphereOOSDetector(
+        center_mode="class_centroid_mixture",
+        radius_method="mean_std",
+        acceptance_mode="normalized_union",
+    )
+    # A query is closer to sphere 0 in raw distance, but is inside sphere 1.
+    # This is exactly the case that raw-nearest d/r scoring mishandles.
+    from protocol_v2.gate.multi_sphere_oos_detector import SphereConfig
+
+    spheres = [
+        SphereConfig(center=np.asarray([0.0, 0.0]), radius=0.1, cluster_id=0, intent_name="a"),
+        SphereConfig(center=np.asarray([0.3, 0.0]), radius=0.5, cluster_id=1, intent_name="a"),
+    ]
+    for detector in (nearest_contract, union_contract):
+        detector.spheres = spheres
+        detector.fitted = True
+
+    probe = np.asarray([[0.05, 0.0]])
+    nearest = nearest_contract.predict_with_scores(probe)
+    union = union_contract.predict_with_scores(probe)
+    assert nearest["pred"].tolist() == [0]
+    assert union["pred"].tolist() == [0]
+
+    # Move the probe just outside the raw-nearest tiny sphere but inside the
+    # wider, farther sphere.
+    probe = np.asarray([[0.12, 0.0]])
+    nearest = nearest_contract.predict_with_scores(probe)
+    union = union_contract.predict_with_scores(probe)
+    assert nearest["pred"].tolist() == [1]
+    assert union["pred"].tolist() == [0]
+    assert union["score"][0] <= 1.0
+    assert union["nearest_cluster"].tolist() == [1]
+
+
+def test_detector_defaults_to_historical_nearest_sphere_contract() -> None:
+    detector = MultiSphereOOSDetector()
+    assert detector.acceptance_mode == "nearest_sphere"

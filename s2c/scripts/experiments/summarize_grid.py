@@ -1,6 +1,6 @@
 """Compatibility wrapper for protocol_v2 Gate summary export."""
 
-from s2c.experiments.summarize import main
+from protocol_v2.experiments.summarize import main
 
 
 if __name__ == "__main__":

@@ -36,7 +36,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Optional, Sequence, Tuple
 
-from src.runtime import WorkspacePaths
+from legacy.runtime import WorkspacePaths
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[3]

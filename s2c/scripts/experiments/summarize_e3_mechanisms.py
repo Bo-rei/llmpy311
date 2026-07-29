@@ -6,8 +6,8 @@ import argparse
 import json
 from pathlib import Path
 
-from s2c.experiments.mechanism_summary import summarize_e3
-from s2c.runtime.paths import ProtocolV2Paths
+from protocol_v2.experiments.mechanism_summary import summarize_e3
+from protocol_v2.runtime.paths import ProtocolV2Paths
 
 
 def main() -> int:

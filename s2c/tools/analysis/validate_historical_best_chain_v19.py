@@ -98,7 +98,7 @@ CALL_CHAIN: List[Dict[str, Any]] = [
     },
     {
         "stage": "pipeline_assembly",
-        "owner": "src/pipeline/system_pipeline.py",
+        "owner": "src/legacy/pipeline/system_pipeline.py",
         "role": "Assemble gate + router + experts into one inference pipeline.",
         "fixed_vs_variable": "fixed(profile); no data mutation",
         "inputs": [
@@ -152,27 +152,27 @@ SUPPORTING_CODE: List[Dict[str, str]] = [
         "role": "Resolves frozen router and experts paths.",
     },
     {
-        "path": "src/gate/multi_sphere_oos_detector.py",
+        "path": "src/legacy/gate/multi_sphere_oos_detector.py",
         "role": "Gate detector implementation used by the historical-best path.",
     },
     {
-        "path": "src/gate/intent_prototype_matcher.py",
+        "path": "src/legacy/gate/intent_prototype_matcher.py",
         "role": "Prototype similarity scorer used by the semantic gate.",
     },
     {
-        "path": "src/gate/llm_semantic_verifier.py",
+        "path": "src/legacy/gate/llm_semantic_verifier.py",
         "role": "Semantic reranking/verifier module.",
     },
     {
-        "path": "src/gate/multi_prototype_gate.py",
+        "path": "src/legacy/gate/multi_prototype_gate.py",
         "role": "Multi-prototype gate implementation.",
     },
     {
-        "path": "src/models/architecture.py",
+        "path": "src/legacy/models/architecture.py",
         "role": "Shared SmolLM router/expert architecture wrapper.",
     },
     {
-        "path": "src/router/router_model.py",
+        "path": "src/legacy/router/router_model.py",
         "role": "Router model wrapper used during verifier training and inference.",
     },
     {
@@ -347,13 +347,13 @@ def build_report() -> Dict[str, Any]:
         PROJECT_ROOT / "tools/analysis/prototype_path_utils.py",
         PROJECT_ROOT / "tools/analysis/component_path_utils.py",
         PROJECT_ROOT / "tools/eval/eval_system_pipeline_v19.py",
-        PROJECT_ROOT / "src/pipeline/system_pipeline.py",
-        PROJECT_ROOT / "src/gate/multi_sphere_oos_detector.py",
-        PROJECT_ROOT / "src/gate/intent_prototype_matcher.py",
-        PROJECT_ROOT / "src/gate/llm_semantic_verifier.py",
-        PROJECT_ROOT / "src/gate/multi_prototype_gate.py",
-        PROJECT_ROOT / "src/models/architecture.py",
-        PROJECT_ROOT / "src/router/router_model.py",
+        PROJECT_ROOT / "src/legacy/pipeline/system_pipeline.py",
+        PROJECT_ROOT / "src/legacy/gate/multi_sphere_oos_detector.py",
+        PROJECT_ROOT / "src/legacy/gate/intent_prototype_matcher.py",
+        PROJECT_ROOT / "src/legacy/gate/llm_semantic_verifier.py",
+        PROJECT_ROOT / "src/legacy/gate/multi_prototype_gate.py",
+        PROJECT_ROOT / "src/legacy/models/architecture.py",
+        PROJECT_ROOT / "src/legacy/router/router_model.py",
         PROJECT_ROOT / "archive/reorg_2026-04-13/repro/historical_best_clinc150_kir50_py/pipeline_blueprint.py",
         PROJECT_ROOT / "archive/reorg_2026-04-13/repro/historical_best_clinc150_kir50_py/repro_entry.py",
         PROJECT_ROOT / "archive/reorg_2026-04-13/repro/file_index.py",

@@ -28,7 +28,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(PROJECT_ROOT))
 
 from tools.eval.eval_system_pipeline_v19 import OOS_LABEL, _evaluate  # noqa: E402
-from src.runtime import WorkspacePaths  # noqa: E402
+from legacy.runtime import WorkspacePaths  # noqa: E402
 from tools.analysis.threshold_selection_v19 import (  # noqa: E402
     balanced_known_oos_score,
     select_main_table_constrained_threshold,
@@ -309,7 +309,7 @@ def main() -> None:
     val_records = _load_json(_resolve(args.gate_val))
     LOGGER.info("Loaded %d validation records", len(val_records))
 
-    from src.pipeline.system_pipeline import HiLSAMoEV19Pipeline, PipelinePaths  # noqa: E402
+    from legacy.pipeline.system_pipeline import HiLSAMoEV19Pipeline, PipelinePaths  # noqa: E402
 
     paths = PipelinePaths(
         model_path=_resolve(args.model_path),

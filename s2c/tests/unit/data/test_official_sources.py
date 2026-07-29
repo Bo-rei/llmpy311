@@ -6,11 +6,11 @@ import csv
 import json
 from pathlib import Path
 
-from s2c.data.canonicalize import build_canonical_dataset
-from s2c.data.official_import import import_official_dataset
-from s2c.data.registry import build_registry
-from s2c.data.views import build_views
-from s2c.runtime.paths import ProtocolV2Paths
+from protocol_v2.data.canonicalize import build_canonical_dataset
+from protocol_v2.data.official_import import import_official_dataset
+from protocol_v2.data.registry import build_registry
+from protocol_v2.data.views import build_views
+from protocol_v2.runtime.paths import ProtocolV2Paths
 
 from tests.fixtures.protocol_v2_helpers import make_paths
 
@@ -86,7 +86,7 @@ def test_official_clinc_keeps_raw_splits_and_native_oos(tmp_path: Path, monkeypa
     paths = _official_paths(tmp_path)
     checkout = tmp_path / "clinc"
     _write_clinc_checkout(checkout)
-    monkeypatch.setattr("s2c.data.official_import._git_commit", lambda _: "828f8093932c8fe6ca7936c3d2e52903b1c523de")
+    monkeypatch.setattr("protocol_v2.data.official_import._git_commit", lambda _: "828f8093932c8fe6ca7936c3d2e52903b1c523de")
 
     import_official_dataset(paths, "clinc150", checkout)
     manifest = build_canonical_dataset(paths, "clinc150")

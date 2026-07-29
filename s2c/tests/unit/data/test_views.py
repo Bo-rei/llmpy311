@@ -1,9 +1,9 @@
 from pathlib import Path
 
-from s2c.data import source_import
-from s2c.data.canonicalize import build_canonical_dataset
-from s2c.data.registry import build_registry
-from s2c.data.views import build_views
+from protocol_v2.data import source_import
+from protocol_v2.data.canonicalize import build_canonical_dataset
+from protocol_v2.data.registry import build_registry
+from protocol_v2.data.views import build_views
 
 from tests.fixtures.protocol_v2_helpers import make_paths, make_textoir_snapshot
 

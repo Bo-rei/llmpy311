@@ -6,8 +6,8 @@ import argparse
 import json
 from pathlib import Path
 
-from s2c.experiments.mechanism_verify import verify_e3
-from s2c.runtime.paths import ProtocolV2Paths
+from protocol_v2.experiments.mechanism_verify import verify_e3
+from protocol_v2.runtime.paths import ProtocolV2Paths
 
 
 def main() -> int:
@@ -32,7 +32,7 @@ def main() -> int:
         require_complete=args.require_complete,
     )
     if args.check_equivalence:
-        from s2c.experiments.mechanism_verify import verify_kmeans_e2_equivalence
+        from protocol_v2.experiments.mechanism_verify import verify_kmeans_e2_equivalence
 
         result["kmeans_e2_equivalence"] = verify_kmeans_e2_equivalence(ProtocolV2Paths.discover())
     print(

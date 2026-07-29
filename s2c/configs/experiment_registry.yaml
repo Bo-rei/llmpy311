@@ -199,7 +199,7 @@ experiments:
       status: complete
       entrypoints:
         - scripts/experiments/run_r1_contract_repair.py
-        - src/s2c/experiments/r1_contract_repair.py
+        - src/protocol_v2/experiments/r1_contract_repair.py
       protocol: r1_contract_repair_v1
       artifact_root: ../../runs/protocol_v2_textoir_v1/r1_contract_repair_v1
       manifest:
@@ -212,6 +212,53 @@ experiments:
       expected_unit_count: 30
       count_source: csv_rows
       count_summary: summaries/R1_CONTRACT_REPAIR_GATE.csv
+
+    multicenter_boundary_attribution:
+      id: gate_mechanism.multicenter_boundary_attribution
+      research_question: "StackOverflow 的 K=2 失败来自 covariance、选球规则还是半径契约？"
+      status: complete
+      entrypoints:
+        - scripts/experiments/run_boundary_attribution.py
+        - src/protocol_v2/experiments/boundary_attribution.py
+      protocol: protocol_v2_textoir_v1_multicenter_boundary_attribution
+      artifact_root: ../../runs/protocol_v2_textoir_v1/multicenter_boundary_attribution
+      manifest:
+        - BOUNDARY_ATTRIBUTION_PROVENANCE.json
+        - BOUNDARY_ATTRIBUTION_INTEGRITY.json
+      summary:
+        - summaries/BOUNDARY_ATTRIBUTION_RESULTS.csv
+        - summaries/BOUNDARY_ATTRIBUTION_COMPONENT_EFFECTS.csv
+        - summaries/BOUNDARY_ATTRIBUTION_K1_K2.csv
+        - BOUNDARY_ATTRIBUTION_CLOSEOUT.md
+      expected_unit_count: 60
+      count_source: csv_rows
+      count_summary: summaries/BOUNDARY_ATTRIBUTION_RESULTS.csv
+
+    minilm_training_stackoverflow_repair:
+      id: gate_mechanism.minilm_training_stackoverflow_repair
+      research_question: "Known-only MiniLM training can improve K=1 while reducing StackOverflow K=2 overacceptance?"
+      status: complete
+      entrypoints:
+        - scripts/experiments/audit_stackoverflow_k1_k2.py
+        - scripts/experiments/run_minilm_training_pilot.py
+        - scripts/experiments/summarize_minilm_training_pilot.py
+        - scripts/experiments/verify_minilm_training_pilot.py
+        - src/protocol_v2/experiments/minilm_training.py
+      protocol: minilm_training_and_stackoverflow_repair_v1
+      artifact_root: ../../runs/protocol_v2_textoir_v1/minilm_training_and_stackoverflow_repair_v1
+      manifest:
+        - R1_MINILM_STAGE_PROVENANCE.json
+        - summaries/MINILM_PILOT_INTEGRITY.json
+        - summaries/MINILM_PILOT_VERIFY.json
+        - stackoverflow_audit/STACKOVERFLOW_AUDIT_CONTRACT.json
+      summary:
+        - summaries/MINILM_PILOT_GATE.tsv
+        - summaries/MINILM_PILOT_SUMMARY.tsv
+        - summaries/MINILM_PILOT_K2_MINUS_K1.tsv
+        - summaries/MINILM_PILOT_CLOSEOUT.md
+      expected_unit_count: 180
+      count_source: csv_rows
+      count_summary: summaries/MINILM_PILOT_GATE.tsv
 
   external_validation:
     hard_negative_oos:

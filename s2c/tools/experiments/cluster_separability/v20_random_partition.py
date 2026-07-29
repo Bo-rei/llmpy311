@@ -24,7 +24,7 @@ import sys
 PROJECT_ROOT = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(PROJECT_ROOT))
 
-from src.gate.multi_sphere_oos_detector import MultiSphereOOSDetector
+from protocol_v2.gate.multi_sphere_oos_detector import MultiSphereOOSDetector
 from tools.experiments.cluster_separability.analysis import _json as _read_json, _load_cache
 from tools.experiments.cluster_separability.protocol import (
     compute_binary_oos_metrics,

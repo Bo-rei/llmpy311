@@ -16,7 +16,7 @@ import random
 from pathlib import Path
 from typing import Dict, List, Tuple
 
-from src.runtime import WorkspacePaths
+from legacy.runtime import WorkspacePaths
 
 PROJECT_ROOT = Path(__file__).resolve().parents[3]
 PATHS = WorkspacePaths.discover(PROJECT_ROOT)

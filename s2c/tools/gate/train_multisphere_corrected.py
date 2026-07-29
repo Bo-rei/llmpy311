@@ -23,8 +23,8 @@ import numpy as np
 from typing import Dict
 from sentence_transformers import SentenceTransformer
 
-from src.gate.multi_sphere_oos_detector import MultiSphereOOSDetector, DetectorMetrics
-from src.runtime import WorkspacePaths
+from protocol_v2.gate.multi_sphere_oos_detector import MultiSphereOOSDetector, DetectorMetrics
+from legacy.runtime import WorkspacePaths
 
 PATHS = WorkspacePaths.discover(Path(__file__).resolve().parents[2])
 

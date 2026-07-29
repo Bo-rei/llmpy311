@@ -26,7 +26,7 @@ from typing import Any, Dict, List, Optional, Sequence, Tuple
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(PROJECT_ROOT))
 
-from src.runtime import WorkspacePaths
+from legacy.runtime import WorkspacePaths
 
 PATHS = WorkspacePaths.discover(PROJECT_ROOT)
 
@@ -817,7 +817,7 @@ def _run_banking_wo_geometric_gate_expert_confidence(
     output_dir: Path,
     args: argparse.Namespace,
 ) -> Path:
-    from src.pipeline.system_pipeline import HiLSAMoEV19Pipeline, PipelinePaths
+    from legacy.pipeline.system_pipeline import HiLSAMoEV19Pipeline, PipelinePaths
 
     output_dir.mkdir(parents=True, exist_ok=True)
     config = anchor["config"]

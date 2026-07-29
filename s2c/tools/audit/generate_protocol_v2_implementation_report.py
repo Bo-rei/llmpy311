@@ -19,10 +19,10 @@ from typing import Any, Iterable
 
 import yaml
 
-from s2c.data.hashing import atomic_write_json, atomic_write_text, sha256_file
-from s2c.data.manifests import dataset_manifest_path, read_json, source_manifest_path
-from s2c.experiments.matrix import load_gate_matrix
-from s2c.runtime.paths import ProtocolV2Paths
+from protocol_v2.data.hashing import atomic_write_json, atomic_write_text, sha256_file
+from protocol_v2.data.manifests import dataset_manifest_path, read_json, source_manifest_path
+from protocol_v2.experiments.matrix import load_gate_matrix
+from protocol_v2.runtime.paths import ProtocolV2Paths
 
 
 AUDIT_RELATIVE = Path("docs/audits/protocol_v2_implementation")
@@ -356,7 +356,7 @@ def _requirement_rows(
             "requirement": "safe default formal dataset version",
             "status": "complete",
             "scope": "protocol_v2_textoir_v1; older versions require explicit S2C_DATASET_VERSION",
-            "evidence": "src/s2c/runtime/paths.py; test_protocol_v2_admission.py",
+            "evidence": "src/protocol_v2/runtime/paths.py; test_protocol_v2_admission.py",
         },
         {
             "requirement": "fixed TEXTOIR-compatible local source snapshot",

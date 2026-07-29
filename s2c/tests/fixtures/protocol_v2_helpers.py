@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from s2c.runtime.paths import ProtocolV2Paths
+from protocol_v2.runtime.paths import ProtocolV2Paths
 
 
 def make_paths(tmp_path: Path) -> ProtocolV2Paths:

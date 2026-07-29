@@ -32,7 +32,7 @@ if str(PROJECT_ROOT) not in sys.path:
     # 先注册项目根，否则 Python 只会把 tools/analysis 视为 import root。
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from src.runtime import WorkspacePaths
+from legacy.runtime import WorkspacePaths
 from tools.experiments.cluster_separability.protocol import gold_sample_kind
 
 PATHS = WorkspacePaths.discover(PROJECT_ROOT)

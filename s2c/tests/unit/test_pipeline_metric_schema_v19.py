@@ -11,8 +11,8 @@ from tools.eval.eval_system_pipeline_v19 import (
     _evaluate,
     _tune_id_rescue_threshold_from_scored_predictions,
 )
-from src.gate.multi_sphere_oos_detector import MultiSphereOOSDetector, SphereConfig
-from src.pipeline.system_pipeline import HiLSAMoEV19Pipeline, PipelinePaths
+from protocol_v2.gate.multi_sphere_oos_detector import MultiSphereOOSDetector, SphereConfig
+from legacy.pipeline.system_pipeline import HiLSAMoEV19Pipeline, PipelinePaths
 
 
 def test_evaluate_exposes_primary_pipeline_metrics():

@@ -17,7 +17,6 @@ import csv
 import hashlib
 import json
 import subprocess
-import sys
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Iterable
@@ -227,7 +226,7 @@ def _classify_scripts(registry: dict[str, Any]) -> dict[str, Any]:
     # 应被报告成“未引用”。
     declared.update(
         {
-            "src/cli.py",
+            "src/legacy/cli.py",
             "tools/analysis/audit_experiment_registry.py",
         }
     )

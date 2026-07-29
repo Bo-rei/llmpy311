@@ -32,13 +32,13 @@ HISTORICAL_BEST_CHAIN: List[str] = [
     "tools/analysis/prototype_path_utils.py",
     "tools/analysis/component_path_utils.py",
     "tools/eval/eval_system_pipeline_v19.py",
-    "src/pipeline/system_pipeline.py",
-    "src/gate/multi_sphere_oos_detector.py",
-    "src/gate/intent_prototype_matcher.py",
-    "src/gate/llm_semantic_verifier.py",
-    "src/gate/multi_prototype_gate.py",
-    "src/models/architecture.py",
-    "src/router/router_model.py",
+    "src/legacy/pipeline/system_pipeline.py",
+    "src/legacy/gate/multi_sphere_oos_detector.py",
+    "src/legacy/gate/intent_prototype_matcher.py",
+    "src/legacy/gate/llm_semantic_verifier.py",
+    "src/legacy/gate/multi_prototype_gate.py",
+    "src/legacy/models/architecture.py",
+    "src/legacy/router/router_model.py",
     "archive/reorg_2026-04-13/repro/historical_best_clinc150_kir50_py/pipeline_blueprint.py",
     "archive/reorg_2026-04-13/repro/historical_best_clinc150_kir50_py/repro_entry.py",
     "archive/reorg_2026-04-13/repro/file_index.py",
@@ -65,7 +65,7 @@ def _function_group(relpath: str) -> str:
         return "evaluation"
     if lower.startswith("tools/analysis/"):
         return "analysis_orchestration"
-    if lower.startswith("src/pipeline/"):
+    if lower.startswith("src/legacy/pipeline/"):
         return "pipeline_assembly"
     if lower.startswith("src/"):
         return "core_model_logic"

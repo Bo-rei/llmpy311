@@ -28,7 +28,7 @@ from transformers import AutoTokenizer
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(PROJECT_ROOT))
 
-from src.router import SmolLMRouter  # noqa: E402
+from legacy.router import SmolLMRouter  # noqa: E402
 from tools.eval.eval_system_pipeline_v19 import OOS_LABEL, _evaluate  # noqa: E402
 from tools.analysis.threshold_selection_v19 import select_main_table_constrained_threshold  # noqa: E402
 

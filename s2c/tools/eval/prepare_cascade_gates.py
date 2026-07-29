@@ -28,8 +28,8 @@ from sklearn.metrics import f1_score
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(PROJECT_ROOT))
 
-from src.gate.multi_sphere_oos_detector import MultiSphereOOSDetector  # noqa: E402
-from src.runtime import WorkspacePaths  # noqa: E402
+from protocol_v2.gate.multi_sphere_oos_detector import MultiSphereOOSDetector  # noqa: E402
+from legacy.runtime import WorkspacePaths  # noqa: E402
 from tools.experiments.cluster_separability.baselines import (  # noqa: E402
     C_CANDIDATES,
     _fixed_k1_guard,

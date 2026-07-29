@@ -42,6 +42,6 @@ s2c、TEXTOIR TSV、MOGB TSV、K+1-way、ADB TSV 和 DA-ADB TSV 都从同一 can
 运行前必须通过：
 
 ```bash
-python -m s2c.data.validate_protocol --require-views --require-exports
+python -m protocol_v2.data.validate_protocol --require-views --require-exports
 python tools/maintenance/check_data_tracking.py
 ```

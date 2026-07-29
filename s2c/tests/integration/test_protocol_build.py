@@ -1,11 +1,11 @@
 from pathlib import Path
 
-from s2c.data import source_import
-from s2c.data.canonicalize import build_canonical
-from s2c.data.export_protocol import export_protocol
-from s2c.data.registry import build_registries
-from s2c.data.validation import validate_protocol
-from s2c.data.views import build_all_views
+from protocol_v2.data import source_import
+from protocol_v2.data.canonicalize import build_canonical
+from protocol_v2.data.export_protocol import export_protocol
+from protocol_v2.data.registry import build_registries
+from protocol_v2.data.validation import validate_protocol
+from protocol_v2.data.views import build_all_views
 
 from tests.fixtures.protocol_v2_helpers import make_paths, make_textoir_snapshot
 

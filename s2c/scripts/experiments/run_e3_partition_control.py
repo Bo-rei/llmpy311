@@ -1,6 +1,6 @@
 """Run the independent E3-A partition-control experiment layer."""
 
-from s2c.experiments.mechanism_runner import main
+from protocol_v2.experiments.mechanism_runner import main
 
 
 if __name__ == "__main__":

@@ -8,12 +8,15 @@ s2c 是开放世界意图识别系统，运行链路固定为：
 文本 → MiniLM Gate（Known/OOS）→ Router（domain）→ Expert（intent）
 ```
 
-当前活动代码、配置、测试和文档都在 `s2c/`。当前正式实验协议是
+当前活动代码、配置、测试和文档都在本项目目录。当前正式实验协议是
 `protocol_v2_textoir_v1`；E2/E3 已冻结，旧 R1 pilot/full 已通过 contract audit 标记为 superseded，
-新的 `r1_contract_repair_v1` 已完成 StackOverflow/KIR50 的 12 个 checkpoint 和 30 个 Gate 单元。
+新的 `r1_contract_repair_v1` 已完成 StackOverflow/KIR50 的 12 个 checkpoint 和 30 个 Gate 单元；
+随后 60 单元多中心边界归因已收口并触发停止固定 KMeans 多中心救援；新的
+`minilm_training_and_stackoverflow_repair_v1` 又完成了 36 个 MiniLM checkpoint、180 个 Gate
+单元和 StackOverflow 逐样本 K=1/K=2 审计，确认表示训练不能稳定修复固定多中心过覆盖。
 E3 只比较分簇方式并分析 Known-only 稳定性/覆盖信号，不定义最终 adaptive-K；contract repair
 明确区分 classifier input、student/teacher geometry 和 validation-only OOS bucket。当前仍不允许
-自动运行 corrected R1_full、外部 baseline 或完整 Pipeline。
+自动运行 corrected R1_full、ADB、DA-ADB、MOGB 或完整 Pipeline；后续必须基于该 pilot 另行登记。
 
 ## 工作区职责
 
@@ -30,9 +33,10 @@ E3 只比较分簇方式并分析 Known-only 稳定性/覆盖信号，不定义�
 
 ## 源码边界
 
-- Router 的实现位于 `src/router/`，当前入口主要是 `src/router/router_model.py`。
-- Expert 的实现位于 `src/models/expert.py`，级联推理由 `src/pipeline/` 组织。
-- Gate 实现位于 `src/gate/` 和 `src/gate_minimal/`；后者保持严格基线语义。
+- 当前协议的 data、evaluation、experiments、Gate、runtime 和 tracking 位于
+  `src/protocol_v2/`，统一使用 `protocol_v2.*` import。
+- 历史 Router、Expert、Gate、pipeline 和严格 SVDD 基线位于 `src/legacy/`，统一使用
+  `legacy.*` import；它们只为历史 artifact 和兼容调用保留。
 - 训练/评价/导出入口位于 `tools/`；公开快照维护入口位于
   `tools/maintenance/export_public_results.py`。
 - `configs/experiment_registry.yaml` 登记原始实验的入口、manifest 和汇总文件；
@@ -41,9 +45,10 @@ E3 只比较分簇方式并分析 Known-only 稳定性/覆盖信号，不定义�
 ## 当前活动入口
 
 1. [README.md](../README.md)：项目入口。
-2. [DATASETS.md](DATASETS.md)：固定 TEXTOIR snapshot、local-only StackOverflow 边界与准入状态。
-3. [EXPERIMENTS.md](EXPERIMENTS.md)：结果层次和公开快照。
-4. [RUNBOOK.md](RUNBOOK.md)：审计、测试和导出命令。
+2. [CODE_LAYOUT.md](CODE_LAYOUT.md)：源码放置和 import 规范。
+3. [DATASETS.md](DATASETS.md)：固定 TEXTOIR snapshot、local-only StackOverflow 边界与准入状态。
+4. [EXPERIMENTS.md](EXPERIMENTS.md)：结果层次和公开快照。
+5. [RUNBOOK.md](RUNBOOK.md)：审计、测试和导出命令。
 
 历史说明只在 `docs/archive/`，不能覆盖当前事实。读取完整实验数字时，先看
 `../artifacts/s2c/runs/protocol_v2_textoir_v1/` 下的 manifest，再看汇总 CSV；读取 GitHub
@@ -55,3 +60,5 @@ E3 只比较分簇方式并分析 Known-only 稳定性/覆盖信号，不定义�
 入口是 `R1_CLOSEOUT.md`；R1 的 beta 选择只使用 Known train/calibration。
 旧 R1 的几何字段和 test-defined near-OOS 已被 contract audit 标记为无效/探索性；修复 pilot 的
 入口是 `../artifacts/s2c/runs/protocol_v2_textoir_v1/r1_contract_repair_v1/R1_CONTRACT_REPAIR_CLOSEOUT.md`。
+多中心边界归因入口是
+`../artifacts/s2c/runs/protocol_v2_textoir_v1/multicenter_boundary_attribution/BOUNDARY_ATTRIBUTION_CLOSEOUT.md`。

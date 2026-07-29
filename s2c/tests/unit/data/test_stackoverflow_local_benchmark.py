@@ -6,10 +6,10 @@ from pathlib import Path
 
 import pytest
 
-from s2c.data import source_import
-from s2c.data.canonicalize import build_canonical_dataset
-from s2c.data.manifests import read_json, source_manifest_path
-from s2c.data.validation import validate_canonical_dataset, validate_source_snapshot
+from protocol_v2.data import source_import
+from protocol_v2.data.canonicalize import build_canonical_dataset
+from protocol_v2.data.manifests import read_json, source_manifest_path
+from protocol_v2.data.validation import validate_canonical_dataset, validate_source_snapshot
 
 from tests.fixtures.protocol_v2_helpers import make_paths, make_textoir_snapshot
 

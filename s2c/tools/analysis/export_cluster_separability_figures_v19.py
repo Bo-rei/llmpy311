@@ -27,7 +27,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[2]
 if str(PROJECT_ROOT) not in os.sys.path:
     os.sys.path.insert(0, str(PROJECT_ROOT))
 
-from src.runtime import WorkspacePaths
+from legacy.runtime import WorkspacePaths
 
 PATHS = WorkspacePaths.discover(PROJECT_ROOT)
 DEFAULT_ROOT = PATHS.artifact_root / "outputs" / "experiments" / "cluster_separability_v19"

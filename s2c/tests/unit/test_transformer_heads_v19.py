@@ -25,9 +25,9 @@ class _FakeBase(nn.Module):
 
 
 def test_shared_encoder_preserves_head_and_base_state_dict_names(monkeypatch):
-    import src.models.transformer as transformer
-    from src.models.expert import SmolLMExpert
-    from src.router import SmolLMRouter
+    import legacy.models.transformer as transformer
+    from legacy.models.expert import SmolLMExpert
+    from legacy.router import SmolLMRouter
 
     monkeypatch.setattr(
         transformer.AutoModelForCausalLM,

@@ -88,3 +88,41 @@
   geometry statistics 标记 `invalid_metric_implementation`，旧 near-OOS 标记
   `exploratory_test_defined_bucket`。本 pilot 不授权 corrected R1_full。
 - 下一步：只做 contract-repair 结果的 claim 边界审阅；不自动运行 R1_full、外部 baseline 或完整 Pipeline。
+
+## D12：停止固定 KMeans 多中心救援（2026-07-28）
+
+- 范围：StackOverflow、KIR50、seed `{42,87,100}`，复用 Frozen 与 contract-repair pooled-head
+  checkpoint；60 个预注册轻量评分单元，没有 encoder 训练。
+- 归因：shared-intent diagonal covariance 相对 per-cluster covariance 明显降低 K=2 false
+  acceptance，是唯一一致改善组件；但三种表示均未满足 K=2 相对 K=1 的安全门。按半径归一化选球
+  与 Known-train q95 半径进一步扩大接受区域并恶化 OOS F1。
+- 决策：`stop_fixed_kmeans_multicenter_rescue`。StackOverflow 的多中心失败不再归因于单一
+  classifier contract，也不能通过本轮合理边界替换消除；不再新增损失、K、半径或 adaptive
+  selector 来救活该路线。
+- 下一步：转入统一协议的最小外部 Baseline pilot；完整 Pipeline 继续等待最终 Gate 候选冻结。
+
+## D13：MiniLM 训练不能救活 StackOverflow 固定多中心（2026-07-28）
+
+- 范围：新独立阶段 `minilm_training_and_stackoverflow_repair_v1`；StackOverflow Frozen K=1/K=2
+  逐样本与子簇审计，以及 3 个数据集、KIR=0.50、3 seeds、5 种表示、2 个 K 和 2 种距离的
+  `180/180` Gate pilot；训练 checkpoint `36/36`。
+- 审计：E2 cache 与 canonical view 的 sample ID、train/calibration/test 顺序和 embedding bytes
+  均通过校验；Frozen K=1/K=2 重新得到 E2 的 detector 指标，未发现评分、协方差、半径或缓存
+  对齐实现错误。StackOverflow K=2 新增 OOS false accept 由逐样本与子簇表直接记录。
+- 结果：Full CE 和 CE-Recon 在部分数据集改善 K=1，但 StackOverflow 的 K=2 OOS F1 相对 K=1
+  仍下降约 `0.58--0.60`；SupCon 的下降约 `0.27--0.30`；Frozen/head-only 的下降约
+  `0.11--0.14`，均超出预注册安全门，且 false acceptance 同步增加。
+- 决策：停止“通过表示训练救活固定后处理多中心”路线；保留最强 K=1 表示对照和 StackOverflow
+  作为 boundary-union failure 证据。不扩展 KIR/seed/K 网格，不运行 corrected R1_full、ADB、
+  DA-ADB、MOGB 或完整 Pipeline。
+- 限制：pilot 没有合法 validation OOS，因此没有把 near/medium/far 分桶纳入正式成功标准；
+  Gate-only 结果不能写成完整 Cascade 证据。
+
+## D14：MiniLM pilot closeout 汇总校正（2026-07-28）
+
+- 发现：初版 closeout 表格在按 distance 展示 K=2−K=1 时，取到了最后一个 seed，而不是三个
+  seed 的均值；原始逐单元 Gate 结果和 paired delta 文件不受影响。
+- 修复：只修正汇总器并重新生成 closeout，明确写入三 seed 均值；没有重跑训练、Gate、审计或
+  修改任何 checkpoint/embedding。
+- 结论：校正后的 Frozen/head-only、Full CE、SupCon、CE-Recon StackOverflow K=2 平均退化仍分别
+  约为 `-0.11--0.14`、`-0.58--0.60`、`-0.27--0.30`、`-0.58--0.60`，停止固定多中心救援的决策不变。

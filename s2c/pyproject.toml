@@ -13,22 +13,22 @@ dependencies = ["numpy>=1.24"]
 dev = ["pytest>=8", "ruff>=0.6"]
 
 [project.scripts]
-s2c-data-import = "s2c.data.import_textoir:main"
-s2c-data-build = "s2c.data.build_canonical:main"
-s2c-data-validate = "s2c.data.validate_protocol:main"
-s2c-experiment-plan = "s2c.experiments.plan:main"
+s2c-data-import = "protocol_v2.data.import_textoir:main"
+s2c-data-build = "protocol_v2.data.build_canonical:main"
+s2c-data-validate = "protocol_v2.data.validate_protocol:main"
+s2c-experiment-plan = "protocol_v2.experiments.plan:main"
 
 [tool.setuptools]
 package-dir = {"" = "src"}
 
 [tool.setuptools.packages.find]
 where = ["src"]
-include = ["s2c*", "src*"]
+include = ["protocol_v2*", "legacy*"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 addopts = "-ra"
-pythonpath = ["."]
+pythonpath = [".", "src"]
 markers = [
   "smoke: local protocol_v2 data/export smoke checks",
 ]

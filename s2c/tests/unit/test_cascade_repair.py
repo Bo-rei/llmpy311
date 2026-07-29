@@ -4,7 +4,7 @@ from tools.eval.eval_system_pipeline_v19 import (
     _cascade_error_decomposition,
     _cascade_error_stage,
 )
-from src.pipeline.system_pipeline import HiLSAMoEV19Pipeline
+from legacy.pipeline.system_pipeline import HiLSAMoEV19Pipeline
 
 
 def test_cascade_error_stage_distinguishes_gate_router_and_expert() -> None:

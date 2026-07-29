@@ -3,16 +3,17 @@
 from pathlib import Path
 
 import numpy as np
+import pytest
 
-from s2c.data import source_import
-from s2c.data.canonicalize import build_canonical_dataset
-from s2c.data.exporters._common import read_jsonl
-from s2c.data.hashing import atomic_write_json, atomic_write_jsonl, sha256_json
-from s2c.experiments.matrix import GateRunSpec
-from s2c.experiments import runner
-from s2c.experiments.runner import _config_payload, _run_paths
-from s2c.experiments.summarize import summarize
-from s2c.experiments.verify import verify
+from protocol_v2.data import source_import
+from protocol_v2.data.canonicalize import build_canonical_dataset
+from protocol_v2.data.exporters._common import read_jsonl
+from protocol_v2.data.hashing import atomic_write_json, atomic_write_jsonl, sha256_json
+from protocol_v2.experiments.matrix import GateRunSpec
+from protocol_v2.experiments import runner
+from protocol_v2.experiments.runner import _config_payload, _run_paths
+from protocol_v2.experiments.summarize import summarize
+from protocol_v2.experiments.verify import verify
 
 from tests.fixtures.protocol_v2_helpers import make_paths, make_textoir_snapshot
 
@@ -123,3 +124,23 @@ def test_canonical_embedding_cache_encodes_each_dataset_once(tmp_path: Path, mon
     assert second.metadata["cache_hit"] is True
     assert values.shape == (2, 2)
     assert metadata["canonical_base_embedding_sha256"] == first.metadata["embedding_sha256"]
+
+
+def test_split_cache_validation_rejects_tampered_or_reordered_values() -> None:
+    canonical = runner.CanonicalEmbeddings(
+        values=np.asarray([[1.0, 0.0], [0.0, 1.0], [2.0, 2.0]], dtype=np.float32),
+        index_by_sample_id={"a": 0, "b": 1, "c": 2},
+        metadata={},
+    )
+    rows = [{"sample_id": "b"}, {"sample_id": "a"}]
+    values = np.asarray([[0.0, 1.0], [1.0, 0.0]], dtype=np.float32)
+    metadata = {
+        "embedding_sha256": runner._embedding_sha256(values),
+        "sample_ids_sha256": runner._sample_ids_sha256(rows),
+    }
+    runner._validate_cached_split(values, metadata, rows, canonical)
+
+    with pytest.raises(ValueError, match="content hash"):
+        runner._validate_cached_split(values + 1.0, metadata, rows, canonical)
+    with pytest.raises(ValueError, match="sample-id hash"):
+        runner._validate_cached_split(values, metadata, list(reversed(rows)), canonical)

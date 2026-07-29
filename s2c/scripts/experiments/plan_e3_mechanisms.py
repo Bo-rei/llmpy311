@@ -6,7 +6,7 @@ import argparse
 import json
 from pathlib import Path
 
-from s2c.experiments.mechanism_runner import diagnostic_groups, partition_control_specs
+from protocol_v2.experiments.mechanism_runner import diagnostic_groups, partition_control_specs
 
 
 def main() -> int:

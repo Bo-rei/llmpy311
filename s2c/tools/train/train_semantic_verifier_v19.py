@@ -35,11 +35,11 @@ from transformers import AutoTokenizer, get_cosine_schedule_with_warmup
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(PROJECT_ROOT))
 
-from src.gate.intent_prototype_matcher import IntentPrototypeMatcher  # noqa: E402
-from src.gate.llm_semantic_verifier import LLMSemanticVerifier  # noqa: E402
-from src.gate.multi_sphere_oos_detector import MultiSphereOOSDetector  # noqa: E402
-from src.router.router_model import SmolLMRouter  # noqa: E402
-from src.runtime import WorkspacePaths  # noqa: E402
+from legacy.gate.intent_prototype_matcher import IntentPrototypeMatcher  # noqa: E402
+from legacy.gate.llm_semantic_verifier import LLMSemanticVerifier  # noqa: E402
+from protocol_v2.gate.multi_sphere_oos_detector import MultiSphereOOSDetector  # noqa: E402
+from legacy.router.router_model import SmolLMRouter  # noqa: E402
+from legacy.runtime import WorkspacePaths  # noqa: E402
 
 PATHS = WorkspacePaths.discover(PROJECT_ROOT)
 

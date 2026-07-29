@@ -1,6 +1,6 @@
 """Compatibility wrapper for the resumable protocol_v2 fixed-boundary Gate runner."""
 
-from s2c.experiments.runner import main
+from protocol_v2.experiments.runner import main
 
 
 if __name__ == "__main__":

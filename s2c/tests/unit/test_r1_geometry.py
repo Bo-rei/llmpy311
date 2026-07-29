@@ -6,14 +6,14 @@ import numpy as np
 import torch
 import math
 
-from s2c.experiments.geometry_preserving import (
+from protocol_v2.experiments.geometry_preserving import (
     effective_rank,
     freeze_module,
     pairwise_cosine_relation_loss,
     pairwise_relation_metrics,
     fixed_oos_buckets,
 )
-from s2c.experiments.r1_contract_repair import _representation_spec
+from protocol_v2.experiments.r1_contract_repair import _representation_spec
 
 
 def test_teacher_parameters_are_frozen() -> None:

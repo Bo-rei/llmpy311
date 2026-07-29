@@ -30,3 +30,22 @@ Cascade 已被新方法验证”。直接 baseline 和完整 Pipeline 仍待独�
 | near/medium/far 是否无 test leakage | 当前 Known-only calibration 没有 validation OOS；30 行均标记 `exploratory_unavailable_validation_oos`，未使用 test quantile | soften | near-OOS 不能进入正式成功标准；旧 test-defined bucket 仅作 exploratory |
 | Geometry loss 在 pooled-head 下是否修复 K=2 | pooled-head K=1 仅 `+0.0009`，K=2 仍严重退化 | soften | 仅声称 contract repair 澄清了机制，不声称修复多中心 |
 | 是否允许 corrected R1_full | pilot 仅 StackOverflow/KIR50/3 seeds，near-OOS formal contract 未满足 | pending | 不自动扩展；需另行批准并先解决 validation OOS 设计 |
+
+## 多中心边界归因更新
+
+| 论断 | 新证据 | 状态 | 建议 |
+| --- | --- | --- | --- |
+| StackOverflow K=2 失败主要是 per-cluster covariance 实现问题 | shared-intent covariance 能明显缓解，但 Frozen/CE-Recon/Geometry 均未通过安全门 | soften | 写成 covariance 失配放大退化，但不是充分解释 |
+| 使用 `min(d/r)` 选球比原始距离最近球更合理 | 三种表示的 false acceptance 均上升，OOS F1 下降 | remove | 不作为默认改进或论文方法 |
+| Known-only q95 半径能稳定校准多球 | q95 使 Known Recall 接近 1，同时 OOS false acceptance 接近饱和 | remove | 仅作为 boundary-union failure 诊断 |
+| 固定 KMeans 多中心可通过简单边界修补恢复 | 60/60 单元中没有候选通过预注册停止门 | remove | 将多中心限定为 Banking77 条件性模块和 StackOverflow 负面证据 |
+
+## MiniLM training and StackOverflow repair 更新
+
+| 论断 | 当前证据 | 状态 | 建议 |
+| --- | --- | --- | --- |
+| 训练 MiniLM 能同时改善 K=1 和固定 K=2 | `MINILM_PILOT_SUMMARY.tsv`：Full CE/CE-Recon 的部分 K=1 提升没有转化为 StackOverflow K=2；SupCon 也未通过安全门 | soften | 仅保留“训练目标影响单中心表示与多中心退化程度”的条件性结论 |
+| StackOverflow K=2 退化来自缓存或 detector 实现错误 | `STACKOVERFLOW_AUDIT_CONTRACT.json` 与逐样本表；E2 score 复现、sample ID/embedding hash 对齐 | remove | 将其写成固定后处理多中心的结构性 boundary-union failure |
+| Full CE/CE-Recon 是跨数据集统一最优表示 | 180 个 Gate 单元中各数据集、距离和 K 的优劣不一致；StackOverflow K=1 有改善但 K=2 恶化更大 | remove | 报告 dataset-conditional trade-off，不宣称统一最佳 |
+| MiniLM training pilot 已验证 near-OOS 改善 | 当前协议 calibration 为 Known-only，没有合法 validation OOS bucket；pilot 未把 test-defined bucket 纳入成功标准 | pending | 不能用本阶段结果宣称 near-OOS 已解决 |
+| 新 MiniLM 表示已经验证完整 Cascade 提升 | 本阶段只有 Gate-only，未运行 Router/Expert | pending | 完整系统结论必须另行取得固定下游证据 |

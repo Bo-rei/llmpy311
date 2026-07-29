@@ -6,9 +6,9 @@ from pathlib import Path
 
 import pytest
 
-from s2c.experiments.matrix import load_gate_matrix
-from s2c.experiments.runner import dry_run
-from s2c.runtime.paths import ProtocolV2Paths
+from protocol_v2.experiments.matrix import load_gate_matrix
+from protocol_v2.experiments.runner import dry_run
+from protocol_v2.runtime.paths import ProtocolV2Paths
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]

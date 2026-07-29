@@ -4,7 +4,7 @@ from types import SimpleNamespace
 
 import numpy as np
 
-from s2c.experiments.boundaries import apply_radius_estimator, known_conformal_threshold
+from protocol_v2.experiments.boundaries import apply_radius_estimator, known_conformal_threshold
 
 
 class _Detector:

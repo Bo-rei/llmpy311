@@ -40,7 +40,7 @@ from sklearn.metrics import (
 PROJECT_ROOT = Path(__file__).parents[2]
 sys.path.insert(0, str(PROJECT_ROOT))
 
-from src.runtime import WorkspacePaths
+from legacy.runtime import WorkspacePaths
 
 PATHS = WorkspacePaths.discover(PROJECT_ROOT)
 
@@ -1382,7 +1382,7 @@ def main() -> None:
         )
 
     if not args.skip_inference:
-        from src.pipeline.system_pipeline import HiLSAMoEV19Pipeline, PipelinePaths  # noqa: E402
+        from legacy.pipeline.system_pipeline import HiLSAMoEV19Pipeline, PipelinePaths  # noqa: E402
 
         prototype_overrides: Dict[str, int] = {}
         if args.prototype_overrides_path:

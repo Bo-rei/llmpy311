@@ -29,7 +29,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Sequence, Tuple
 
 from tools.analysis.historical_best_pipeline_v19 import HISTORICAL_BEST_PIPELINE
-from src.runtime import WorkspacePaths
+from legacy.runtime import WorkspacePaths
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 PATHS = WorkspacePaths.discover(PROJECT_ROOT)

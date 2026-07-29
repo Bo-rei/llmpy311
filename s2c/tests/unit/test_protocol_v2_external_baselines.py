@@ -7,12 +7,12 @@ from pathlib import Path
 
 import numpy as np
 
-from s2c.data import source_import
-from s2c.data.canonicalize import build_canonical_dataset
-from s2c.data.export_protocol import export_protocol
-from s2c.data.registry import build_registry
-from s2c.data.views import build_views
-from s2c.experiments.external_baselines import (
+from protocol_v2.data import source_import
+from protocol_v2.data.canonicalize import build_canonical_dataset
+from protocol_v2.data.export_protocol import export_protocol
+from protocol_v2.data.registry import build_registry
+from protocol_v2.data.views import build_views
+from protocol_v2.experiments.external_baselines import (
     ExternalBaselineSpec,
     dry_run,
     load_external_baseline_matrix,

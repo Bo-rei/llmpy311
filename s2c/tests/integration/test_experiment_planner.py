@@ -2,10 +2,10 @@
 
 from pathlib import Path
 
-from s2c.experiments import runner
-from s2c.experiments.matrix import filter_gate_specs, load_gate_matrix
-from s2c.experiments.registry import write_plan
-from s2c.runtime.paths import ProtocolV2Paths
+from protocol_v2.experiments import runner
+from protocol_v2.experiments.matrix import filter_gate_specs, load_gate_matrix
+from protocol_v2.experiments.registry import write_plan
+from protocol_v2.runtime.paths import ProtocolV2Paths
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]

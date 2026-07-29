@@ -10,6 +10,7 @@
 
 - `README.md`
 - `docs/PROJECT.md`
+- `docs/CODE_LAYOUT.md`
 - `docs/EXPERIMENTS.md`
 - `docs/RUNBOOK.md`
 - `docs/DEVELOPMENT_LOG.md`
@@ -24,17 +25,21 @@
 ## 源码位置
 
 ```text
-src/gate/             Gate/OOS 实现
-src/gate_minimal/     严格 SVDD 基线，不做工程化改写
-src/router/           唯一 Router 实现位置
-src/models/expert.py  Expert 实现
-src/pipeline/         完整级联推理
-src/runtime/          WorkspacePaths 和 artifact 约定
+src/protocol_v2/      当前活动协议（data/evaluation/experiments/gate/runtime/tracking）
+src/legacy/           v19/历史兼容实现，不作为当前协议默认依赖
+src/legacy/gate/      历史 Gate；活动多球 detector 位于 protocol_v2/gate
+src/legacy/router/    历史 Router
+src/legacy/models/    历史 Expert、SVDD 和 Transformer 封装
+src/legacy/pipeline/  历史完整级联推理
+src/legacy/runtime/   历史 WorkspacePaths 和 artifact 约定
 tools/                训练、评价、分析、兼容和维护入口
 configs/              运行配置、实验登记和公开导出白名单
 tests/                单元、协议和回归测试
 results/              GitHub 可提交的轻量 CSV/JSON 快照
 ```
+
+完整放置规则见 `docs/CODE_LAYOUT.md`。禁止重新创建 `src/s2c/`，也禁止从 `src`
+根目录导入；活动包使用 `protocol_v2.*`，历史包使用 `legacy.*`。
 
 `tools/maintenance/export_public_results.py` 只按
 `configs/public_results.yaml` 导出公开文件；不得复制 `../artifacts` 整个目录。
@@ -54,7 +59,8 @@ results/              GitHub 可提交的轻量 CSV/JSON 快照
 - 新计划若与 ledger 中 `do_not_repeat` 且已完成的 protocol/dataset/KIR/seed/representation/K/distance/
   partition/boundary 完全相同，必须拒绝为 `duplicate_completed_experiment`；只有带明确 rerun reason
   的显式覆盖才允许继续。
-- Router 只从 `src/router/` 导入；不要在 `src/models/` 重新导出 Router。
+- 当前协议只从 `protocol_v2.*` 导入；历史 Router 只从 `legacy.router` 导入，禁止在
+  `legacy.models` 重新导出 Router。
 - 训练循环不要添加会破坏 LoRA 梯度的 `torch.no_grad()`。
 - 不在初始化阶段调用 `torch.cuda.is_available()`；部分环境会触发原生运行时问题。
 - `configs/data/protocol_v2_admission.json` 是唯一数据准入开关。只有同时满足 dataset_version、

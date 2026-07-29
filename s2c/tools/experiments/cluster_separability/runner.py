@@ -32,8 +32,8 @@ import pandas as pd
 PROJECT_ROOT = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(PROJECT_ROOT))
 
-from src.gate.multi_sphere_oos_detector import MultiSphereOOSDetector, SphereConfig
-from src.runtime import WorkspacePaths
+from protocol_v2.gate.multi_sphere_oos_detector import MultiSphereOOSDetector, SphereConfig
+from legacy.runtime import WorkspacePaths
 from .protocol import (
     compute_binary_oos_metrics,
     compute_cluster_quality_metrics,

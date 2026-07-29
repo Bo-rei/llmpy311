@@ -31,7 +31,7 @@ from sklearn.metrics import adjusted_rand_score
 PROJECT_ROOT = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(PROJECT_ROOT))
 
-from src.runtime import WorkspacePaths
+from legacy.runtime import WorkspacePaths
 from .protocol import compute_binary_oos_metrics
 
 PATHS = WorkspacePaths.discover(PROJECT_ROOT)

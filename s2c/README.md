@@ -9,6 +9,7 @@ s2c 是一个开放世界意图识别系统：
 当前系统和研究代码统一位于本目录。工作区职责、证据边界、实验结果和运行命令分别见：
 
 - [PROJECT.md](docs/PROJECT.md)：项目布局、模块边界和证据来源。
+- [CODE_LAYOUT.md](docs/CODE_LAYOUT.md)：源码放置、active/legacy 边界和 import 规范。
 - [EXPERIMENTS.md](docs/EXPERIMENTS.md)：Gate-only、完整 Cascade 和公开结果索引。
 - [RUNBOOK.md](docs/RUNBOOK.md)：环境检查、审计、测试和结果导出命令。
 - [DATASETS.md](docs/DATASETS.md)：固定 TEXTOIR snapshot 与 dataset-level 准入状态。

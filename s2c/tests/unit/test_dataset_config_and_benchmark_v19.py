@@ -17,7 +17,7 @@ from tools.analysis.run_multi_dataset_benchmark_v19 import (
     _apply_benchmark_profile_defaults,
     _resolve_effective_eval_config,
 )
-from src.runtime import load_profile
+from legacy.runtime import load_profile
 
 
 def test_apply_benchmark_profile_defaults_keeps_explicit_semantic_overrides():

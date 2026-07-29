@@ -36,3 +36,32 @@ def test_changed_method_is_not_duplicate(tmp_path: Path) -> None:
     candidate = _ledger_row(representations="ce_recon_geometry")
     plan.write_text(json.dumps({"units": [candidate]}), encoding="utf-8")
     assert duplicate_plan_rows(plan, [_ledger_row()]) == []
+
+
+def test_active_stage_can_be_named_without_r1_prefix(tmp_path: Path, monkeypatch) -> None:
+    """The state checker must follow the ledger, not a historical R1 literal."""
+
+    from tools.maintenance import check_research_state
+
+    status = tmp_path / "RESEARCH_STATUS.md"
+    status.write_text(
+        "protocol_v2_textoir_v1\n## 当前唯一下一步\nmulticenter_boundary_attribution\n",
+        encoding="utf-8",
+    )
+    monkeypatch.setattr(check_research_state, "STATUS_PATH", status)
+    monkeypatch.setattr(
+        check_research_state,
+        "read_ledger",
+        lambda path=check_research_state.LEDGER_PATH: [
+            {
+                "experiment_id": "multicenter_boundary_attribution",
+                "status": "planned",
+                "repeat_policy": "active",
+            }
+        ],
+    )
+    monkeypatch.setattr(check_research_state, "FROZEN_REQUIRED", {})
+    monkeypatch.setattr(check_research_state, "R1_CLOSEOUT", tmp_path / "unused")
+    monkeypatch.setattr(check_research_state, "R1_FULL_CLOSEOUT", tmp_path / "unused")
+    monkeypatch.setattr(check_research_state, "R1_CONTRACT_REPAIR_CLOSEOUT", tmp_path / "unused")
+    assert check_research_state.check_state() == []

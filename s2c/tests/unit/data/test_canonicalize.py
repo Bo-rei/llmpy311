@@ -1,8 +1,8 @@
 from pathlib import Path
 
-from s2c.data import source_import
-from s2c.data.canonicalize import build_canonical_dataset
-from s2c.data.hashing import sha256_file
+from protocol_v2.data import source_import
+from protocol_v2.data.canonicalize import build_canonical_dataset
+from protocol_v2.data.hashing import sha256_file
 
 from tests.fixtures.protocol_v2_helpers import make_paths, make_textoir_snapshot
 

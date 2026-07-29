@@ -152,8 +152,9 @@ def check_state() -> list[str]:
     active = [row for row in ledger if row.get("repeat_policy") == "active" and row.get("status") in {"planned", "running"}]
     if len(active) > 1:
         errors.append("multiple_active_experiments")
-    if "R1_geometry_preserving_representation" not in status and active:
-        errors.append("active_ledger_not_reflected_in_status")
+    for row in active:
+        if row["experiment_id"] not in status:
+            errors.append(f"active_ledger_not_reflected_in_status:{row['experiment_id']}")
     return errors
 
 

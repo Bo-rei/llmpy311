@@ -491,3 +491,80 @@
   corrected R1_full 未获授权；不启动外部 baseline、ADB、DA-ADB、MOGB 或完整 Pipeline。
 - 风险与下一步：near-OOS 正式结论仍缺 validation OOS 契约；下一步只能是 contract-repair claim
   审阅和是否另行批准 corrected R1_full 的决策。
+
+## 2026-07-28：StackOverflow 多中心边界归因收口
+
+- Base commit：`bca13b51221a5c327fa0197229e783c42f57bba7`；活动协议为
+  `protocol_v2_textoir_v1`，阶段为 `multicenter_boundary_attribution`。
+- 目标：在不训练 encoder、不修改 legacy detector 和父实验 artifacts 的前提下，判断 K=2 崩溃
+  主要来自 per-cluster covariance、原始距离选球、半径归一化选球还是 Known-only 半径。
+- 修改：新增独立边界归因模块、CLI、60 单元固定配置与单元测试；研究状态检查器不再硬编码 R1
+  阶段名。没有修改 E2/E3/R1 的 run、checkpoint、canonical、registry、view 或 export。
+- 实验：StackOverflow/KIR50/seed `{42,87,100}`，Frozen、CE-Recon pooled-head、Geometry
+  pooled-head，K `{1,2}`；完成 `60/60`，失败/缺失/无效均为 `0`。6 个 adapted checkpoint 只做
+  一次确定性编码并冻结缓存，没有 encoder 训练。
+- 结果：shared-intent diagonal covariance 是唯一一致改善 K=2 的组件，但三种表示均未通过
+  预注册安全门。最佳缓解方向 Frozen shared covariance 的 K2−K1 OOS F1 仍为 `-0.0331`，
+  false acceptance 增加 `+0.0356`；CE-Recon/Geometry 分别为 `-0.3551/-0.3404`。归一化选球
+  与 q95 半径继续扩大 false acceptance。
+- 决策：`stop_fixed_kmeans_multicenter_rescue`。不再通过更多损失、K、半径或 selector 救活
+  StackOverflow 固定 KMeans 多中心；下一步仅准备统一协议的最小外部 Baseline pilot，完整
+  Pipeline 继续暂缓。
+- 产物：`../artifacts/s2c/runs/protocol_v2_textoir_v1/multicenter_boundary_attribution/`；
+  初始 scoring patch SHA256 为
+  `16ecffdea31faded6305b9a9d5d5d165ac3a59a008315fdc4c1158f1edcca0d7`，closeout 另记录分析源码
+  SHA256。
+- 验证：60 run manifests 完整且 run root 与 E2/E3/R1 隔离；`pytest tests/unit -q`
+  为 `237 passed`，integration/smoke 为 `8/3 passed`；Ruff、compileall、research-state、
+  data-tracking、development-log、registry、public-results SHA256 和 Git whitespace 检查均通过。
+
+## 2026-07-28：源码 namespace 与目录边界整理
+
+- Base commit：`bca13b51221a5c327fa0197229e783c42f57bba7`；本轮不运行训练、不修改
+  `../artifacts`、canonical、registry、views、exports 或历史结果，也不执行 Git commit/push。
+- 目标：移除令人混淆的 `src/s2c/` 嵌套包，建立唯一且可检查的 active/legacy 源码边界。
+- 当前活动包：`src/protocol_v2/`，使用 `protocol_v2.*` namespace；包含当前 data、evaluation、
+  experiments、active Gate、runtime 和 tracking。
+- 历史兼容包：`src/legacy/`，使用 `legacy.*` namespace；包含 v19 Gate、Router、Expert、pipeline、
+  严格 SVDD、旧 runtime 和兼容 CLI。旧多球 import 路径保留为转发 wrapper，实际实现只保留在
+  `src/protocol_v2/gate/multi_sphere_oos_detector.py`。
+- 规范：新增 `docs/CODE_LAYOUT.md`，同步 `AGENTS.md`、`PROJECT.md`、`STRUCTURE.md`、RUNBOOK、
+  reproducibility 和数据入口命令；`pyproject.toml` 的 package discovery/console entrypoint 已切换
+  到 `protocol_v2*` 与 `legacy*`。
+- 迁移：源码、测试和工具的 import 已统一；registry/entrypoint audit 已重新生成，配置不再引用
+  `src/s2c`、`src/gate` 等旧物理路径。artifact 目录名和历史 provenance 文档中的旧事实未改写。
+- 验证：布局/CLI 回归 `15 passed`；协议 runner、E3 partition、admission、research-state 回归
+  `14 passed`；完整 `pytest tests/unit -q` 为 `242 passed`，integration 为 `8 passed`，smoke 为
+  `3 passed`；compileall、Ruff、registry audit、data tracking、development-log check、import help、
+  active/legacy detector identity 和 `pip install -e . --no-deps` 均通过。
+- 状态：`find src -maxdepth 1` 现在只剩 `protocol_v2` 与 `legacy` 两个源码 namespace；无
+  `src/s2c`、无 `src/__init__.py`，工作树仍包含本轮未提交迁移和用户既有改动。
+- 下一步：由用户审阅 `docs/CODE_LAYOUT.md` 和迁移 diff 后决定是否提交；本轮不自动 commit/push。
+
+## 2026-07-28：MiniLM training and StackOverflow repair pilot
+
+- Base commit：`bca13b51221a5c327fa0197229e783c42f57bba7`；工作树含既有源码布局整理，
+  本阶段不执行 Git commit/push，不修改 E2/E3/R1 原始 artifacts。
+- 目标：在 `protocol_v2_textoir_v1` 下逐样本审计 StackOverflow Frozen K=1/K=2 路径，
+  并在完全相同的 Known train/calibration/test 和 Gate 契约中比较 Frozen、Head-only CE、
+  Full CE、SupCon、CE-Recon。
+- 新增源码：`src/protocol_v2/experiments/minilm_training.py`；薄入口位于
+  `scripts/experiments/audit_stackoverflow_k1_k2.py`、`run_minilm_training_pilot.py`、
+  `summarize_minilm_training_pilot.py`、`verify_minilm_training_pilot.py`；配置为
+  `configs/experiments/protocol_v2_textoir_v1/minilm_training_and_stackoverflow_repair.yaml`。
+- 数据与选择：CLINC150、Banking77、StackOverflow；KIR=0.50；seed `{42,87,100}`；
+  K `{1,2}`；Euclidean/diagonal-Mahalanobis；训练和 checkpoint 选择只读取 Known train 与
+  Known calibration，未使用 OOS 或 test。
+- 规模：36 个 trainable checkpoint、180/180 Gate cells；StackOverflow 逐样本和子簇审计写入
+  `../artifacts/s2c/runs/protocol_v2_textoir_v1/minilm_training_and_stackoverflow_repair_v1/`。
+- 审计结果：E2 cache/view 的 sample ID、embedding bytes、评分、协方差、半径契约通过；Frozen
+  K=1/K=2 指标复现 E2。新 OOS false-accept 样本与每个子簇的样本数、方差、半径和贡献已导出。
+- 方法结果：Full CE/CE-Recon 在部分数据集提升 K=1，但 StackOverflow K=2 仍大幅退化；SupCon
+  也未把 K=2 退化降至预注册安全门内。阶段决策为停止通过表示训练救活固定后处理多中心，
+  保留最强单中心对照和 StackOverflow boundary-union failure 证据。
+- 状态：`EXPERIMENT_LEDGER.csv` 已将未执行的旧 M1 planned row 标记 superseded，并登记本阶段
+  为 `do_not_repeat`；`RESEARCH_STATUS.md`、`DECISION_LOG.md`、`PAPER_CLAIM_AUDIT.md`、
+  `PROJECT.md`、`EXPERIMENTS.md` 已同步。未启动 R1_full、ADB、DA-ADB、MOGB 或完整 Pipeline。
+- 后处理校正：首次 closeout 生成时将每个 distance 的最后一个 seed 误标为“均值”；已仅修正
+  汇总器并重新生成 closeout，改为三 seed 的均值。180 个 Gate 结果、paired delta、checkpoint
+  和 StackOverflow 逐样本审计均未修改；校正后的 closeout 明确记录该事实。

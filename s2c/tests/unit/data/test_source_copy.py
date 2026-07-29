@@ -1,8 +1,8 @@
 from pathlib import Path
 
-from s2c.data import source_import
-from s2c.data.hashing import sha256_file
-from s2c.data.manifests import read_json, source_manifest_path
+from protocol_v2.data import source_import
+from protocol_v2.data.hashing import sha256_file
+from protocol_v2.data.manifests import read_json, source_manifest_path
 
 from tests.fixtures.protocol_v2_helpers import make_paths, make_textoir_snapshot
 

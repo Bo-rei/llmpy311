@@ -2,7 +2,7 @@
 
 import sys
 
-from s2c.experiments.runner import main
+from protocol_v2.experiments.runner import main
 
 
 if __name__ == "__main__":

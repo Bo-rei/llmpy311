@@ -1,6 +1,6 @@
 """Compatibility wrapper for the protocol_v2 deterministic experiment planner."""
 
-from s2c.experiments.plan import main
+from protocol_v2.experiments.plan import main
 
 
 if __name__ == "__main__":

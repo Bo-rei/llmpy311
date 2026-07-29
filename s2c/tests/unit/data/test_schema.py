@@ -1,4 +1,4 @@
-from s2c.data.schema import ALL_REGISTRY_SEEDS, DATASET_SPECS, FORMAL_KIRS, format_kir
+from protocol_v2.data.schema import ALL_REGISTRY_SEEDS, DATASET_SPECS, FORMAL_KIRS, format_kir
 
 
 def test_protocol_v2_dataset_and_registry_constants_are_fixed() -> None:

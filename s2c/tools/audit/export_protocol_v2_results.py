@@ -12,8 +12,8 @@ from pathlib import Path
 from statistics import mean, stdev
 from typing import Any, Iterable
 
-from s2c.data.hashing import atomic_write_text, sha256_file
-from s2c.runtime.paths import ProtocolV2Paths
+from protocol_v2.data.hashing import atomic_write_text, sha256_file
+from protocol_v2.runtime.paths import ProtocolV2Paths
 
 
 METRICS = (

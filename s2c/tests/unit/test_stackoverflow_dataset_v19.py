@@ -16,7 +16,7 @@ from scripts.data.active.rebuild_multi_dataset_v19 import (  # noqa: E402
     _select_stackoverflow_known_intents,
 )
 from tools.eval.eval_system_pipeline_v19 import _evaluate  # noqa: E402
-from src.runtime import load_profile  # noqa: E402
+from legacy.runtime import load_profile  # noqa: E402
 
 
 def _write_stackoverflow_split(root: Path, split_name: str, rows: list[dict[str, str]]) -> None:

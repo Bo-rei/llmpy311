@@ -1,0 +1,52 @@
+stage: multicenter_boundary_attribution
+protocol_version: protocol_v2_textoir_v1
+dataset: stackoverflow
+kir: 0.50
+seeds: [42, 87, 100]
+representations:
+  - frozen_minilm
+  - ce_recon_pooled_head
+  - geometry_ce_recon_pooled_head
+partition:
+  method: kmeans
+  seed: 42
+covariance_eps: 0.000001
+threshold: 1.0
+radius_lambda: 1.0
+quantile: 0.95
+model_path: ../assets/models/all-MiniLM-L6-v2
+batch_size: 64
+max_length: 256
+
+# 预注册的逐步归因路径。不是笛卡尔积，也不根据 test 结果改变后续配置：
+# A 先隔离 covariance；B 固定 shared-intent covariance 后隔离 score；
+# C 再改为 Known-train quantile radius；D 为最终路径补齐公平的 K=1 对照。
+phases:
+  A_covariance:
+    adapted_k1_current: true
+    k2_covariance_scopes: [euclidean, shared_intent_diag, per_cluster_diag]
+    score_rule: raw_distance_nearest
+    radius_rule: mean_std
+  B_score:
+    k: 2
+    covariance_scope: shared_intent_diag
+    score_rule: normalized_score_min
+    radius_rule: mean_std
+  C_radius:
+    k: 2
+    covariance_scope: shared_intent_diag
+    score_rule: normalized_score_min
+    radius_rule: quantile_95
+  D_final_k1:
+    k: 1
+    covariance_scope: shared_intent_diag
+    score_rule: normalized_score_min
+    radius_rule: quantile_95
+
+stop_gate:
+  maximum_mean_k2_oos_f1_loss: 0.02
+  maximum_single_seed_k2_oos_f1_loss: 0.05
+  maximum_mean_false_accept_increase: 0.02
+  maximum_single_seed_false_accept_increase: 0.05
+  maximum_mean_known_recall_loss: 0.02
+  maximum_single_seed_known_recall_loss: 0.03
