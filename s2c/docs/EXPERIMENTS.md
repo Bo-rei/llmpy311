@@ -17,6 +17,8 @@ Banking77 与 StackOverflow snapshot。StackOverflow 是 local-only benchmark，
 | R1 contract repair | pooled/normalized head、student/teacher geometry、validation-only buckets | complete: 12 checkpoints / 30 Gate units；0 failed；near-OOS exploratory only | `../artifacts/s2c/runs/protocol_v2_textoir_v1/r1_contract_repair_v1/R1_CONTRACT_REPAIR_CLOSEOUT.md` |
 | Multi-center boundary attribution | StackOverflow covariance、选球规则与 Known-only 半径归因 | complete: 60/60；停止固定 KMeans 多中心救援 | `../artifacts/s2c/runs/protocol_v2_textoir_v1/multicenter_boundary_attribution/BOUNDARY_ATTRIBUTION_CLOSEOUT.md` |
 | MiniLM training and StackOverflow repair | Frozen/head-only CE/full CE/SupCon/CE-Recon 与逐样本 K=1/K=2 审计 | complete: 36 checkpoints + 180/180 Gate；停止固定多中心救援 | `../artifacts/s2c/runs/protocol_v2_textoir_v1/minilm_training_and_stackoverflow_repair_v1/summaries/MINILM_PILOT_CLOSEOUT.md` |
+| MOGB baseline integration | 官方代码审计、270-cell fair matrix、540-cell OFAT、180-cell fixed-K mean-radius 对照 | official audited-not-reproduced；全部适配矩阵 zero-fail；动态粒球在同边界下未超过 fixed K1，主要差异来自 radius/representation contract | `docs/mogb_integration/`、`../artifacts/s2c/runs/protocol_v2_textoir_v1/mogb_{baseline,ablation,fixed_k_mean_ablation}_v1/` |
+| CLMSG / KNN controls | local-scale conformal 与 KNN `k={5,10,20,30}` 敏感性 | CLMSG confirmation complete；KNN 180/180；两条路线均低于 single centroid 并停止扩展 | `docs/clmsg/`、`../artifacts/s2c/runs/protocol_v2_textoir_v1/clmsg_v1/summary/` |
 | E4--E7 | boundary grid, external baselines, representation, Pipeline | not started | R1 closeout 后另行决定 |
 
 E1 和 E2 是 Gate-only 证据，不应与历史完整 Cascade 或 v19--v22 结果混合解释。E3 的 K=1 只读引用
@@ -73,3 +75,27 @@ q95 半径均增加 false acceptance。结论是停止继续修补 StackOverflow
 
 后续主表只使用带有该 protocol version、dataset manifest SHA、registry SHA、encoder revision 和 run
 manifest 的结果。详细命令见 `RUNBOOK.md`，结果字段约束见 `RESULTS_CONTRACT.md`。
+
+## MOGB baseline integration（独立阶段）
+
+MOGB 只作为外部直接基线接入，不是 s2c 的创新模块。上游 commit、依赖缺口和数据契约差异见
+`docs/mogb_integration/mogb_official_audit.md`。`mogb_minilm`、`mogb_partition_ours_boundary`
+和 `ours_partition_mogb_boundary` 是统一 `protocol_v2_textoir_v1` 下的组件/表示对照，不能写成
+官方论文复现。冻结 MiniLM OFAT closeout 已在
+`../artifacts/s2c/runs/protocol_v2_textoir_v1/mogb_ablation_v1/summary/MOGB_ABLATION_CLOSEOUT.md`
+完成，540/540、零失败；默认 MOGB 是 Euclidean+mean radius，最佳 partition-only 是
+`get_090`，而 Euclidean+mean_std 在 OOS F1 上最好，但 F1-All 与 Known Recall 仍明显低于
+single centroid。官方旧 BERT 路径仍是 audited-not-reproduced，不能把适配结果写成官方 MOGB 或
+SOTA。随后 fixed-K mean-radius 对照又完成 180/180：同一 Frozen MiniLM、Euclidean 与 mean
+radius 下，K1 相对 adaptive MOGB 的 45 格 W/T/L 为 `45/0/0`，平均 OOS F1 高 `0.0469`；
+K2/3/4 也分别高 `0.0251/0.0138/0.0143`。这说明动态划分本身不是公开 MOGB 性能的充分来源，
+不能再通过增加 frozen-representation partition 网格追赶论文数字。
+
+## CLMSG Version A--C（停止门阶段）
+
+该阶段复用相同 registry、Known train/calibration 和 frozen MiniLM cache，不训练 encoder、
+不使用任何 OOS 做 fit/calibration。StackOverflow 的三-seed CLMSG confirmation 已完成，
+未通过相对 single-centroid 的预注册继续门；普通 KNN 又完成 `k={5,10,20,30}` 的 180/180
+敏感性矩阵。整体 mean OOS F1 从 `k=5` 的 `0.6492` 随 k 增大降至 `k=30` 的 `0.5565`，
+合计配对结果为 2 win / 0 tie / 178 loss。因此停止 local-scale 与普通 KNN 扩展，不实现
+manifold、entropy 或 cross-conformal；这些是负面对照证据，不是新主方法。

@@ -126,3 +126,102 @@
   修改任何 checkpoint/embedding。
 - 结论：校正后的 Frozen/head-only、Full CE、SupCon、CE-Recon StackOverflow K=2 平均退化仍分别
   约为 `-0.11--0.14`、`-0.58--0.60`、`-0.27--0.30`、`-0.58--0.60`，停止固定多中心救援的决策不变。
+
+## D15：引入 MOGB 作为隔离的直接基线（2026-07-29）
+
+- 动机：固定 KMeans 多中心路线已经停止，但论文仍需要一个与多粒球/自适应边界直接相关的外部参照。
+- 约束：不把 MOGB 改造成 s2c 方法；不覆盖 E2/E3/R1/M1；所有公平模式共享
+  `protocol_v2_textoir_v1` registry、views、MiniLM cache 和评价器。
+- 实施：固定上游 commit `5b689e2a03de0d86ec41212825e5db8d7f0e5c02`，完成官方代码审计；新增独立
+  `protocol_v2.experiments.mogb` 粒球适配层、组件混合模式、单元测试和 StackOverflow smoke。
+- 结果：先完成 30/30 pilot，随后按登记计划完成 270/270 MiniLM fair cells（3 数据集、3 KIR、5
+  seeds、6 方法）。冻结 MiniLM 上官方式 mean-radius adaptive balls 的 StackOverflow 三 seed OOS F1 约为
+  `0.7317`，但 Known Recall 约 `0.2784`；`mogb_partition_ours_boundary` 的 OOS F1 约 `0.7977`，
+  但 Known Recall 约 `0.5179`。这些是组件/协议诊断，不是官方 MOGB 论文复现数字。
+- 决策：官方 BERT/TextOIR 复现仍标记 `audited_not_reproduced`，因为上游缺少 `utils`、依赖旧 BERT
+  栈且数据契约不同；270-cell 结果只作为统一 MiniLM 下的组件比较。不得把 MiniLM 适配版称为
+  官方 MOGB，也不得据此宣称 SOTA。
+
+## D16：CLMSG local-scale 假设在 seed13 停止（2026-07-30）
+
+- 范围：`protocol_v2_textoir_v1`、StackOverflow、KIR50、seed13；冻结 MiniLM cache，6,000
+  Known proper-train、1,000 Known calibration、6,000 test；完成 KNN、global/class/hybrid
+  local-scale 和四个固定 alpha 的 split conformal，共 26 个正式输出。
+- 结果：Single-centroid OOS F1 为 `0.6957`。预注册 primary class-conditional Version C
+  alpha=0.05 为 `0.3336`，最佳描述性 Version C（class, alpha=0.10）也只有 `0.4975`。
+  alpha=0.05 的 Known false rejection 接近目标，但 OOS false acceptance 仍约 `0.79--0.86`。
+- 机制：普通 KNN 的 AUROC/AUPR 为 `0.8786/0.8431`，local-scale 后降至约
+  `0.676--0.693/0.672--0.702`。support-point scale 的分母偏向稠密局部点；class conditioning
+  修复 nearest-label 路径但没有恢复 OOS 排序。共形变换只校准 operating point，不改变排序。
+- 决策：触发 `stop_after_seed13`。不运行 seeds42/87，不实现 manifold、entropy、
+  cross-conformal 或完整 CLMSG，不把该方法写为论文核心。旧 global-only development precheck
+  保留但不进入正式 26 单元统计。
+
+## D17：仅补充 CLMSG 预声明 seed 的确认性证据（2026-07-30）
+
+- 新授权：用户要求在不重复旧矩阵的前提下尽可能增加实验，因此只补 seed `{42,87}` 的固定
+  Version A--C 配置，共 52 个确认性输出。
+- 冻结项：`k=10`、四个 alpha、global/class/hybrid 支持模式、Frozen MiniLM、数据 split、
+  evaluator 与 seed13 完全一致；不得根据 seed13 test 结果改参数。
+- 边界：该授权不恢复 manifold、entropy、cross-conformal 或三数据集 full sweep。先判断失败是否
+  跨 seed 稳定，再注册普通 KNN coverage--OOS Pareto 这一独立问题。
+
+## D18：KNN k 敏感性收口（2026-07-31）
+
+- 结果：`k={5,10,20,30}` 的 180/180 全协议敏感性完成；`k=5` 的整体 mean OOS F1 为
+  `0.6492`，`k=10` 为 `0.6335`，`k=20` 为 `0.5957`，`k=30` 为 `0.5565`。整体相对同 split
+  Single-centroid 的 win/tie/loss 为 `2/0/178`。
+- 解释：`k=5` 只是四个 k 里相对最不差的配置，其 45 格 W/T/L 仍仅为 `2/0/43`；
+  因此 KNN 不是当前协议下的可推广主方法，只保留为非参数参照。
+- 决策：`knn_k_sensitivity_v1` 收口为完成态，不再追加新的 KNN k 网格；下一步只使用其 summary
+  和 closeout 进行论文/台账汇总。
+
+## D19：MOGB frozen-MiniLM 组件消融登记（2026-07-31）
+
+- 动机：用户要求在不重复旧矩阵的前提下尽可能补充实验；已有 270-cell MOGB fair matrix 仍把
+  adaptive partition 与两种边界适配绑在一起，尚未系统隔离 purity、minimum support、distance 和 radius。
+- 计划：围绕默认 `purity_get=1.0`、`purity_select=0.9`、`min_get=5`、`min_select=10` 做单因素变更，
+  加上缺失的 `euclidean+mean_std` 与 `mahalanobis_diag+mean` 两个边界组合。共 12 个非默认配置、
+  45 个固定 protocol cells/config，即 540 个新单元；默认 45-cell 结果只引用，不重复运行。
+- 边界：Frozen MiniLM、registry、cache、evaluator 和 test threshold 全部冻结；所有变体完整报告，
+  不使用 test OOS 选择 purity、minimum support、distance 或 radius；不宣称这是官方 BERT MOGB 复现。
+
+## D20：MOGB frozen-MiniLM 组件消融收口（2026-07-31）
+
+- 完整性：540/540 个新单元完成，0 missing/invalid/duplicate；复用默认 MOGB、Single-centroid 和
+  MOGB-partition/ours-boundary 各 45 个控制单元。所有配置均使用固定 registry/cache/evaluator，
+  生成 1,296 条配对显著性记录，未使用 test 选择配置。
+- 结果：`purity_get=0.90` 是最佳 partition-only 描述性设置，但相对 Single-centroid OOS F1 仍低
+  `0.0391`。`Euclidean + mean+std` 相对默认 mean-radius MOGB 提高 `0.0526`，总体 OOS F1 与
+  Single-centroid 近似相同；但 F1-All 与 Known Recall 分别低 `0.1048` 和 `0.2593`。
+- 机制：MOGB mean radius 的主要问题是过窄边界导致 Known false rejection；mean+std 能恢复部分
+  coverage，但不能恢复完整 Known 分类。diagonal Mahalanobis 未优于 Euclidean，增加极小粒球也
+  没有带来有效增益。
+- 决策：`mogb_ablation_v1_frozen_ofat` 标记 complete/do_not_repeat；停止邻近 purity、minimum-size、
+  distance/radius 扫描。下一步只审查官方 hierarchical representation-learning 单格链路，因为
+  当前证据表明 frozen partition 不是论文性能的充分来源。
+
+## D21：补齐同边界 fixed-K 与 adaptive MOGB 直接对照（2026-07-31）
+
+- 缺口：E2 的 fixed K 使用 s2c `mean+std` 边界，而 MOGB adaptive reference 使用 Euclidean
+  mean-radius；两者不能单独归因于 partition granularity。
+- 计划：固定 frozen MiniLM、Euclidean、mean radius、nearest-ball evaluator，完整报告
+  fixed K=1/2/3/4 与 adaptive MOGB。K=2 的 45 格读取既有
+  `ours_partition_mogb_boundary`，只新增 K=1/3/4 共 135 格。
+- 约束：同一 registry/cache/evaluator；不使用 test 选择 K；不重跑 E2/E3；不改官方 BERT
+  blocker 状态。完成 180 格合并与完整性审计后立即停止该阶段。
+
+## D22：动态粒球划分不能单独解释 MOGB 性能（2026-07-31）
+
+- 完整性：fixed K=1/3/4 新跑 135/135，K=2 从既有 fair matrix 逐格校验输入 hash 后复用
+  45/45；adaptive `mogb_minilm` reference 45/45；无 missing、invalid、duplicate 或 mixed input。
+- 结果：同一 Frozen MiniLM、Euclidean、mean-radius 与 nearest-ball 下，fixed K=1 的总体 OOS F1
+  `0.7808`，比 adaptive 高 `0.0469`，45 个配对格全部胜出；fixed K2/3/4 也分别高
+  `0.0251/0.0138/0.0143`。adaptive 的 Known Recall 仅 `0.3121`，而 K1 为 `0.5385`。
+- 数据集差异：CLINC150 的 15/15 protocol cells、StackOverflow 的 14/15 cells 由 K1 获得
+  fixed-K 最佳 OOS F1；Banking77 的最佳 K 分散在 K1/K2/K4，仍不存在统一多中心规则。
+- 决策：关闭 frozen-representation partition granularity 扩展，不再扫描 fixed K 或相邻 purity。
+  公开 MOGB 结果若显著更强，剩余可检验来源主要是 hierarchical representation learning 与其
+  训练/划分交替，而非动态粒球数量本身。
+- 唯一下一步：只做一个隔离、可停止的 modernized official-logic representation smoke；成功也不
+  自动等同官方论文复现，失败则形成精确 blocker。

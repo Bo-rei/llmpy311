@@ -5,15 +5,18 @@
 ## 当前状态
 
 - 活动协议：`protocol_v2_textoir_v1`
-- 当前阶段：`minilm_training_and_stackoverflow_repair_v1` 已收口；StackOverflow
-  逐样本 K=1/K=2 审计和 MiniLM Known-only pilot 均完成
-- Git：`main`，阶段基准 commit `bca13b51221a5c327fa0197229e783c42f57bba7`
-- Git dirty：`true`（包含源码布局整理、本阶段实现与状态记录；本阶段不自动 commit/push）
+- 当前阶段：`MOGB_OFFICIAL_SMOKE` in progress；fixed-K mean-radius 180/180 已收口，现只构建
+  不改 pinned 第三方源码的现代兼容层，先验证 StackOverflow/KIR50/seed0 的官方 BERT、CE、
+  epoch-end granular-ball loss 与 evaluation 链路，成功后才允许 Banking77 第二个 smoke
+- Git：`main`，阶段基准 commit `294d6f2`
+- Git dirty：`true`（本轮 MOGB 与 CLMSG 接入、文档、测试和第三方源码尚未提交）
 - 最近冻结代码快照：`BOUNDARY_ATTRIBUTION_CODE.patch`，SHA256
   `16ecffdea31faded6305b9a9d5d5d165ac3a59a008315fdc4c1158f1edcca0d7`；
   本阶段另冻结 `R1_MINILM_STAGE_PROVENANCE.json` 和对应 code patch，旧 R1/E2/E3 快照保持不变。
-- GitHub 状态：`origin/main` 已同步到 `bca13b5`；本轮新增改动尚未提交，任务不得自动 commit/push
-- 最近更新：2026-07-28
+  MOGB 消融由 `MOGB_ABLATION_EXECUTION_PROVENANCE.json` 绑定 runner/config/plan/source hash，
+  SHA256 `e7c6b961cab050921750901c770b145ae2be0ccb7e9b7f0780d73d7325baf61f`。
+- GitHub 状态：`origin/main` 尚未包含本轮 MOGB 接入；本轮不自动 commit/push
+- 最近更新：2026-07-31
 
 ## 已完成且禁止重复
 
@@ -29,6 +32,12 @@
 | R1 contract repair | complete 12 checkpoints + 30 Gate units；0 失败/无效；独立 provenance 已冻结 | `do_not_repeat`；不覆盖旧 R1 | `../artifacts/s2c/runs/protocol_v2_textoir_v1/r1_contract_repair_v1/R1_CONTRACT_REPAIR_CLOSEOUT.md` |
 | Multi-center boundary attribution | complete 60/60；0 失败；无 encoder 训练 | `do_not_repeat`；停止固定 KMeans 多中心救援 | `../artifacts/s2c/runs/protocol_v2_textoir_v1/multicenter_boundary_attribution/BOUNDARY_ATTRIBUTION_CLOSEOUT.md` |
 | MiniLM training and StackOverflow repair | complete 36 checkpoints + 180/180 Gate；0 失败；sample/sphere audit complete | `do_not_repeat`；停止通过表示训练救活固定多中心 | `../artifacts/s2c/runs/protocol_v2_textoir_v1/minilm_training_and_stackoverflow_repair_v1/summaries/MINILM_PILOT_CLOSEOUT.md` |
+| MOGB MiniLM fair matrix | complete 270/270；0 failed；6 methods、3 datasets、3 KIR、5 seeds | `do_not_repeat`；官方旧 BERT 复现另行审计 | `../artifacts/s2c/runs/protocol_v2_textoir_v1/mogb_baseline_v1/summary/all_runs.csv` |
+| CLMSG Version A--C | complete 78/78；seed13 pilot 加 seeds42/87 确认性扩展，三 seed 结论一致 | `do_not_repeat`；不实现 manifold/entropy | `../artifacts/s2c/runs/protocol_v2_textoir_v1/clmsg_v1/summary/CLMSG_M4_CONFIRMATION_CLOSEOUT.md` |
+| KNN fixed-k10 full protocol | complete 45/45；42 fresh + 3 exact reuse | `do_not_repeat`；只作 nonparametric baseline | `../artifacts/s2c/runs/protocol_v2_textoir_v1/clmsg_v1/summary/knn_pareto_v1/KNN_PARETO_CLOSEOUT.md` |
+| KNN k sensitivity | complete 180/180；`k={5,10,20,30}`；135 个新增 k 单元 + 45 个 k10 单元，其中 3 格从确认阶段精确复用 | `do_not_repeat`；禁止 test-selected k；停止继续扩普通 KNN | `../artifacts/s2c/runs/protocol_v2_textoir_v1/clmsg_v1/summary/knn_k_sensitivity_v1/KNN_K_SENSITIVITY_CLOSEOUT.md` |
+| MOGB frozen-MiniLM OFAT | complete 540/540；0 missing/invalid/duplicate；复用 135 个控制单元 | `do_not_repeat`；停止邻近 purity/support 网格 | `../artifacts/s2c/runs/protocol_v2_textoir_v1/mogb_ablation_v1/summary/MOGB_ABLATION_CLOSEOUT.md` |
+| MOGB fixed-K mean-radius | complete 180/180；135 新格 + 45 个 K=2 hash-validated reuse；45 adaptive reference | `do_not_repeat`；停止 frozen-partition granularity 扩展 | `../artifacts/s2c/runs/protocol_v2_textoir_v1/mogb_fixed_k_mean_ablation_v1/summary/MOGB_FIXED_K_MEAN_CLOSEOUT.md` |
 
 E2/E3 的 K、KIR、random partition、聚类稳定性和 tiny-cluster 矩阵不得再次运行。
 
@@ -58,6 +67,36 @@ E2/E3 的 K、KIR、random partition、聚类稳定性和 tiny-cluster 矩阵不
     的 K=1 有明显提升，但其 K=2 退化更大；SupCon 也未修复多球过覆盖。
 16. MiniLM pilot closeout 的 distance 汇总已完成后处理校正：表格现在使用 42/87/100 三个 seed
     的配对均值；原始 Gate run、paired delta 和逐样本审计未修改，校正不改变停止决策。
+17. CLMSG seed13 验证确认：普通 KNN 的排序指标有竞争力（AUROC `0.8786`、AUPR-OOS
+    `0.8431`），但 alpha=0.05 的 OOS F1 仅 `0.4520`；support-point local-scale 会把 AUPR
+    降至约 `0.67--0.70`，不能优于 Single-centroid OOS F1 `0.6957`。
+18. Global/class-conditional/hybrid split conformal 在 alpha=0.05 能把 Known false rejection
+    控制在约 `3.5%--5.1%`，但 false acceptance 仍为 `79%--86%`；共形校准控制 coverage，
+    不能修复 local-scale 已损失的 Known/OOS 排序。
+19. 因 Version C 的所有预注册支持模式均未通过 seed13 门槛，seeds42/87、local manifold、
+    label entropy、cross-conformal 与 CLMSG full sweep 均未启动；当前 CLMSG 不进入论文主方法。
+20. CLMSG 收口验证完整通过：26 个授权输出、156,000 条逐样本预测与 1,000 条 Known 校准分数
+    均可审计；完整 unit/integration/smoke 为 `258/8/3 passed`，无 split 泄漏或 test selection。
+21. CLMSG 的 seed42/87 确认性扩展保持同一失败方向：三 seed primary local-scale conformal 平均
+    OOS F1 为 `0.3604`，相对 Single-centroid 为 `-0.3924`，因此局部尺度路线正式停止。
+22. 普通 KNN 的 `k={5,10,20,30}` 敏感性已覆盖 180/180 格；整体 OOS F1 依次为
+    `0.6492/0.6335/0.5957/0.5565`。即使最好的描述性 `k=5`，相对 Single-centroid 仍为
+    `-0.1373`，45 格 W/T/L 为 `2/0/43`；不得据此 test-select k。
+23. MOGB frozen-MiniLM OFAT 已覆盖 540/540 新格。纯 partition 调整的最佳描述性配置
+    `purity_get=0.90` 仅比默认 MOGB 提高 OOS F1 `+0.0135`，仍比 Single-centroid 低 `0.0391`；
+    邻近 purity/minimum-support 网格不能弥补表示学习缺失。
+24. `Euclidean + mean+std` 是四种 distance-radius 组合中最强者，相对默认 MOGB OOS F1
+    提高 `+0.0526`，但相对 Single-centroid 的 F1-All 和 Known Recall 仍低 `0.1048/0.2593`。
+    因而只看 OOS F1 会掩盖严重 Known 覆盖代价。
+25. diagonal Mahalanobis 在 mean 与 mean+std 半径下都落后于 Euclidean；`min_select=5` 将平均
+    粒球数增至约 193.7 而无实质 OOS F1 收益，说明更多细粒度球本身不是有效改进。
+26. 在完全相同的 Frozen MiniLM、Euclidean 与 mean-radius 契约下，fixed K=1 的整体 OOS F1
+    为 `0.7808`，高于 adaptive MOGB 的 `0.7339`，45 个配对单元全部获胜；fixed K=2/3/4
+    也分别高 `0.0251/0.0138/0.0143`，说明动态粒球划分本身不是公开 MOGB 性能的充分来源。
+27. fixed K 随 K 增大总体退化：K=1/2/3/4 的 F1-All 为
+    `0.6616/0.6230/0.5922/0.5812`，Known Recall 为
+    `0.5385/0.4998/0.4671/0.4547`。Banking77 存在少量 K2/K4 单元胜出，但 CLINC150 的
+    15/15 与 StackOverflow 的 14/15 protocol cells 均由 K=1 获得最高 fixed-K OOS F1。
 
 ## 历史依据（不混入当前主表）
 
@@ -67,10 +106,10 @@ Pipeline 结果仍可作为研究依据，但它们来自旧实验族，必须�
 
 ## 当前唯一下一步
 
-冻结并审阅 `minilm_training_and_stackoverflow_repair_v1` 的单中心结果，选择论文中可保留的
-Frozen/训练表示对照；不扩展 KIR、seed 或 K=1..5，不运行 corrected R1_full、ADB、DA-ADB、MOGB
-或完整 Pipeline。StackOverflow 的固定后处理多中心路线已停止，后续任何新方法必须先登记新的
-研究问题和独立 artifact root。
+仅启动隔离的 official MOGB representation-learning 单格可运行性 smoke：不修改 pinned
+第三方源码，先用兼容层在 StackOverflow/KIR50/seed0 验证 BERT、CE、epoch-end granular-ball
+loss 与 nearest-ball evaluation 链路；失败必须形成精确 blocker，成功后也只能称 modernized
+official-logic smoke，不能立即扩全矩阵或宣称论文复现。
 
 ## 当前风险
 
@@ -85,3 +124,5 @@ Frozen/训练表示对照；不扩展 KIR、seed 或 K=1..5，不运行 correcte
   acceptance mode、cache sample-id hash 和实际 embedding hash。
 - 本阶段 Gate 指标只属于新的独立 artifact root；由于当前 protocol 没有合法 validation OOS，
   没有生成正式 near/medium/far 成功标准，任何近邻分桶只能另行登记为探索性分析。
+- MOGB 官方仓库 pinned at `5b689e2a03de0d86ec41212825e5db8d7f0e5c02`，缺少 `utils` 且使用旧
+  BERT/TextOIR 数据契约；当前 270-cell 结果是冻结 MiniLM 的公平适配矩阵，不是官方论文复现。

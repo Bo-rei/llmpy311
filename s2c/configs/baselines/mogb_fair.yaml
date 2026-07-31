@@ -1,0 +1,28 @@
+# MOGB baseline integration contract.  This file is descriptive; the smoke
+# runner receives the active protocol registry and never regenerates splits.
+protocol_version: protocol_v2_textoir_v1
+representation: frozen_minilm
+methods:
+  - single_centroid
+  - random_partition
+  - fixed_k2
+  - mogb_minilm
+  - mogb_partition_ours_boundary
+  - ours_partition_mogb_boundary
+distance: euclidean
+radius:
+  official_mogb: mean_euclidean
+  ours: mean_plus_lambda_std
+  lambda: 1.0
+official_assumptions:
+  purity_get_ball: 1.0
+  purity_select_ball: 0.9
+  min_ball_get_ball: 5
+  min_ball_select_ball: 10
+  split_seed: explicit
+data_contract:
+  source: protocol_v2_textoir_v1
+  train: known_only
+  calibration: known_only
+  test: heldout_and_native_oos
+  test_used_for_selection: false

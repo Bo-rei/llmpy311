@@ -1,0 +1,17 @@
+protocol_version: protocol_v2_textoir_v1
+representation: frozen_minilm
+output_variant: default
+distance: euclidean
+boundary: mean
+purity_train: 0.90
+purity_get_ball: 1.00
+purity_select_ball: 0.90
+min_ball_train: 10
+min_ball_get_ball: 5
+min_ball_select_ball: 10
+data_contract:
+  source: protocol_v2_textoir_v1
+  train: known_only
+  calibration: known_only
+  test: heldout_and_native_oos
+  test_used_for_selection: false

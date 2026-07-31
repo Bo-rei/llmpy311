@@ -1,0 +1,27 @@
+stage: clmsg_v1
+variant: support_modes_v1
+protocol_version: protocol_v2_textoir_v1
+dataset: stackoverflow
+kir: 0.50
+seeds: [13, 42, 87]
+representation: frozen_minilm
+encoder_name: all-MiniLM-L6-v2
+distance: cosine
+k_neighbors: 10
+k_scale: 10
+epsilon: 1.0e-8
+chunk_size: 256
+alphas: [0.01, 0.025, 0.05, 0.10]
+primary_alpha: 0.05
+calibration: global_split_conformal
+proper_train_source: train_known
+calibration_source: calibration_known
+methods:
+  - knn_only
+  - local_scale_knn
+  - local_scale_conformal
+support_modes:
+  - global_knn
+  - class_conditional_knn
+  - hybrid_knn
+hybrid_gammas: [0.25, 0.50, 0.75]

@@ -15,8 +15,15 @@ s2c 是开放世界意图识别系统，运行链路固定为：
 `minilm_training_and_stackoverflow_repair_v1` 又完成了 36 个 MiniLM checkpoint、180 个 Gate
 单元和 StackOverflow 逐样本 K=1/K=2 审计，确认表示训练不能稳定修复固定多中心过覆盖。
 E3 只比较分簇方式并分析 Known-only 稳定性/覆盖信号，不定义最终 adaptive-K；contract repair
-明确区分 classifier input、student/teacher geometry 和 validation-only OOS bucket。当前仍不允许
-自动运行 corrected R1_full、ADB、DA-ADB、MOGB 或完整 Pipeline；后续必须基于该 pilot 另行登记。
+明确区分 classifier input、student/teacher geometry 和 validation-only OOS bucket。MOGB 现已作为
+独立外部基线完成源码审计，并分别完成 270-cell MiniLM 公平矩阵与 540/540 frozen-MiniLM OFAT
+消融，以及同一 Euclidean+mean-radius 下 180/180 fixed-K 对照；动态粒球没有超过 fixed K1，
+后者的 default MOGB、`get_090` 与 Euclidean+mean_std 结论只应视为组件对照，官方
+BERT/TextOIR 复现仍 blocked。其结果不修改 E2/E3/R1/M1，也不能直接称为 SOTA。完整 Pipeline 仍需
+另行登记。
+随后 `clmsg_v1` 完成了 StackOverflow/KIR50 的三-seed confirmation，KNN 又完成
+`k={5,10,20,30}` 的 180/180 敏感性矩阵。两条路线均未超过 single centroid，已触发停止门；
+manifold、entropy 和 cross-conformal 未启动。
 
 ## 工作区职责
 
@@ -62,3 +69,10 @@ E3 只比较分簇方式并分析 Known-only 稳定性/覆盖信号，不定义�
 入口是 `../artifacts/s2c/runs/protocol_v2_textoir_v1/r1_contract_repair_v1/R1_CONTRACT_REPAIR_CLOSEOUT.md`。
 多中心边界归因入口是
 `../artifacts/s2c/runs/protocol_v2_textoir_v1/multicenter_boundary_attribution/BOUNDARY_ATTRIBUTION_CLOSEOUT.md`。
+MOGB 审计和适配入口是 `docs/mogb_integration/`，运行结果根包括
+`../artifacts/s2c/runs/protocol_v2_textoir_v1/mogb_baseline_v1/`（MiniLM 公平矩阵）与
+`../artifacts/s2c/runs/protocol_v2_textoir_v1/mogb_ablation_v1/`（frozen-MiniLM OFAT closeout）、
+`../artifacts/s2c/runs/protocol_v2_textoir_v1/mogb_fixed_k_mean_ablation_v1/`（fixed K1--4 与
+adaptive 的同边界对照）。
+CLMSG 审计与停止门报告位于 `docs/clmsg/`，机器可读 closeout 位于
+`../artifacts/s2c/runs/protocol_v2_textoir_v1/clmsg_v1/summary/`。

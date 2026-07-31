@@ -1,0 +1,23 @@
+stage: knn_pareto_v1
+variant: knn_pareto_k10_alpha05
+protocol_version: protocol_v2_textoir_v1
+dataset: stackoverflow
+kir: 0.50
+seeds: [13, 42, 87, 100, 123]
+representation: frozen_minilm
+encoder_name: all-MiniLM-L6-v2
+distance: cosine
+k_neighbors: 10
+k_scale: 10
+epsilon: 1.0e-8
+chunk_size: 256
+alphas: [0.05]
+primary_alpha: 0.05
+calibration: known_only_order_statistic
+proper_train_source: train_known
+calibration_source: calibration_known
+methods:
+  - knn_only
+support_modes:
+  - class_conditional_knn
+hybrid_gammas: []

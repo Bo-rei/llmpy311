@@ -239,3 +239,55 @@ files:
     category: external
     source: ../artifacts/s2c/outputs/experiments/external_validation/mogb_protocol_audit.json
     public: external/mogb_protocol_audit.json
+
+  # MOGB integration smoke: lightweight method/metric summary only.  The
+  # official BERT reproduction remains explicitly blocked by its legacy
+  # dependency/data contract and has no fabricated performance row.
+  - experiment_id: mogb_baseline_v1_fair_matrix
+    category: external
+    source: ../artifacts/s2c/runs/protocol_v2_textoir_v1/mogb_baseline_v1/summary/all_runs.csv
+    public: mogb/fair_matrix.csv
+  - experiment_id: mogb_baseline_v1_official_preflight
+    category: external
+    source: ../artifacts/s2c/runs/protocol_v2_textoir_v1/mogb_baseline_v1/official_preflight.json
+    public: mogb/official_preflight.json
+  - experiment_id: mogb_ablation_v1_frozen_ofat
+    category: external
+    source: ../artifacts/s2c/runs/protocol_v2_textoir_v1/mogb_ablation_v1/summary/overall_summary.csv
+    public: mogb/ablation_overall_summary.csv
+  - experiment_id: mogb_ablation_v1_frozen_ofat
+    category: external
+    source: ../artifacts/s2c/runs/protocol_v2_textoir_v1/mogb_ablation_v1/summary/dataset_kir_summary.csv
+    public: mogb/ablation_dataset_kir_summary.csv
+  - experiment_id: mogb_ablation_v1_frozen_ofat
+    category: external
+    source: ../artifacts/s2c/runs/protocol_v2_textoir_v1/mogb_ablation_v1/summary/boundary_component_summary.csv
+    public: mogb/ablation_boundary_component_summary.csv
+  - experiment_id: mogb_ablation_v1_frozen_ofat
+    category: external
+    source: ../artifacts/s2c/runs/protocol_v2_textoir_v1/mogb_ablation_v1/summary/paired_vs_reference.csv
+    public: mogb/ablation_paired_vs_reference.csv
+  - experiment_id: mogb_ablation_v1_frozen_ofat
+    category: external
+    source: ../artifacts/s2c/runs/protocol_v2_textoir_v1/mogb_ablation_v1/summary/paired_vs_single.csv
+    public: mogb/ablation_paired_vs_single.csv
+  - experiment_id: mogb_ablation_v1_frozen_ofat
+    category: external
+    source: ../artifacts/s2c/runs/protocol_v2_textoir_v1/mogb_ablation_v1/summary/MOGB_ABLATION_SUMMARY_MANIFEST.json
+    public: mogb/ablation_summary_manifest.json
+  - experiment_id: mogb_fixed_k_mean_ablation_v1
+    category: external
+    source: ../artifacts/s2c/runs/protocol_v2_textoir_v1/mogb_fixed_k_mean_ablation_v1/summary/overall_summary.csv
+    public: mogb/fixed_k_mean_overall_summary.csv
+  - experiment_id: mogb_fixed_k_mean_ablation_v1
+    category: external
+    source: ../artifacts/s2c/runs/protocol_v2_textoir_v1/mogb_fixed_k_mean_ablation_v1/summary/dataset_kir_summary.csv
+    public: mogb/fixed_k_mean_dataset_kir_summary.csv
+  - experiment_id: mogb_fixed_k_mean_ablation_v1
+    category: external
+    source: ../artifacts/s2c/runs/protocol_v2_textoir_v1/mogb_fixed_k_mean_ablation_v1/summary/paired_vs_adaptive.csv
+    public: mogb/fixed_k_mean_paired_vs_adaptive.csv
+  - experiment_id: mogb_fixed_k_mean_ablation_v1
+    category: external
+    source: ../artifacts/s2c/runs/protocol_v2_textoir_v1/mogb_fixed_k_mean_ablation_v1/summary/paired_vs_single.csv
+    public: mogb/fixed_k_mean_paired_vs_single.csv

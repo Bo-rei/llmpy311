@@ -49,3 +49,31 @@ Cascade 已被新方法验证”。直接 baseline 和完整 Pipeline 仍待独�
 | Full CE/CE-Recon 是跨数据集统一最优表示 | 180 个 Gate 单元中各数据集、距离和 K 的优劣不一致；StackOverflow K=1 有改善但 K=2 恶化更大 | remove | 报告 dataset-conditional trade-off，不宣称统一最佳 |
 | MiniLM training pilot 已验证 near-OOS 改善 | 当前协议 calibration 为 Known-only，没有合法 validation OOS bucket；pilot 未把 test-defined bucket 纳入成功标准 | pending | 不能用本阶段结果宣称 near-OOS 已解决 |
 | 新 MiniLM 表示已经验证完整 Cascade 提升 | 本阶段只有 Gate-only，未运行 Router/Expert | pending | 完整系统结论必须另行取得固定下游证据 |
+
+## CLMSG Version A--C 更新
+
+| 论断 | 当前证据 | 状态 | 建议 |
+| --- | --- | --- | --- |
+| 局部样本支持天然优于中心--半径 Gate | seed13 普通 KNN OOS F1 `0.4520`，Single-centroid `0.6957` | remove | 不将 KNN/local support 写成已验证改进 |
+| support-point local scale 改善 OOS 排序 | AUPR 从普通 KNN `0.8431` 降至约 `0.67--0.70` | remove | 将局部尺度偏向稠密点记录为失败机制 |
+| split conformal 同时解决 coverage 与 OOS separation | alpha=0.05 的 Known FR 接近目标，但 false acceptance 仍 `0.79--0.86` | soften | 只声称 aggregate Known coverage 校准有效，不声称提升 OOS 分离 |
+| CLMSG 值得替换当前论文 Gate | 所有预注册 Version C 模式均低于 Single-centroid，seed13 已触发停止门 | remove | 不启动 manifold/full sweep，不进入主方法 |
+
+## KNN k-sensitivity 更新
+
+| 论断 | 当前证据 | 状态 | 建议 |
+| --- | --- | --- | --- |
+| 普通 KNN 的失败只是 `k=10` 选得不好 | `knn_k_sensitivity_v1` 的 180 个单元显示 `k={5,10,20,30}` 在九个 dataset×KIR 组均未超过 Single-centroid | remove | 不再把 KNN 家族当作可通过调 k 修复的候选主方法 |
+| 更小的 k 可以恢复 StackOverflow 的 KNN OOS 表现 | StackOverflow 三个 KIR 组的最佳描述性 k 仍为 `10`，且均为 `0/0/5` 负于单中心 | remove | 将 StackOverflow 写成普通 KNN 也无法修复的结构性难例 |
+| KNN 适合作为下一阶段重点扩展方向 | `k=5` 仅在 CLINC150/Banking77 上略优于 `k=10`，仍稳定落后于 Single-centroid | remove | KNN 保留为协议对齐的 nonparametric baseline，不继续扩展 |
+
+## MOGB frozen-MiniLM 组件消融更新
+
+| 论断 | 当前证据 | 状态 | 建议 |
+| --- | --- | --- | --- |
+| 动态粒球划分本身足以带来 MOGB 级性能 | 540-cell OFAT 中最佳 partition-only `purity_get=0.90` 仍比 Single-centroid 低 3.91 OOS-F1 点 | remove | 明确区分 frozen partition adapter 与官方 hierarchical representation learning |
+| MOGB mean-radius 是当前 MiniLM 空间的合适默认边界 | 默认 mean-radius Known Recall 仅 0.3121；mean+std 提升 OOS F1 5.26 点并恢复部分 coverage | remove | 把 mean-radius 写成强拒绝、低 Known coverage 的直接基线，不作为 s2c 默认 |
+| MOGB 动态粒球在相同 Frozen MiniLM 边界下优于固定 K | 同一 Euclidean+mean-radius 下，fixed K1 在 45/45 配对格优于 adaptive，平均 OOS F1 高 4.69 点；K2/3/4 也整体更高 | remove | 将差距归因范围收紧到官方 hierarchical representation learning 尚未验证，而非动态粒球数量本身 |
+| 改善 OOS F1 等于改善开放意图分类 | Euclidean mean+std 总体 OOS F1 与单中心近似相同，但 F1-All/Known Recall 低 10.48/25.93 点 | remove | 主表必须同时报告 OOS F1、F1-All、F1-K 和 Known Recall |
+| diagonal Mahalanobis 更适合粒球边界 | mean 与 mean+std 两种半径下均落后于 Euclidean | remove | 当前 frozen MiniLM 粒球不再扩 diagonal covariance 网格 |
+| 增加更多小粒球会改善 OOS 拒识 | `min_select=5` 将平均球数增至约 193.7，但 OOS F1 无实质提升 | remove | 仅作为“粒度增加不等于开放风险降低”的机制证据 |

@@ -568,3 +568,179 @@
 - 后处理校正：首次 closeout 生成时将每个 distance 的最后一个 seed 误标为“均值”；已仅修正
   汇总器并重新生成 closeout，改为三 seed 的均值。180 个 Gate 结果、paired delta、checkpoint
   和 StackOverflow 逐样本审计均未修改；校正后的 closeout 明确记录该事实。
+# 2026-07-29 — MOGB baseline integration and StackOverflow smoke
+
+- Base commit: `294d6f2`；branch: `main`；本轮未 commit/push。
+- 目标：隔离引入 MOGB 作为直接多中心基线，统一读取当前 `protocol_v2_textoir_v1` 数据、registry、
+  frozen MiniLM cache 和评价器，不修改历史 E2/E3/R1/M1 artifacts。
+- 修改文件：`src/protocol_v2/experiments/mogb.py`、`scripts/experiments/run_mogb_fair.py`、
+  `scripts/experiments/reproduce_mogb_original.py`、`scripts/experiments/aggregate_mogb_results.py`、
+  `configs/baselines/mogb_fair.yaml`、MOGB 审计文档、粒球单元测试、研究台账。
+- 第三方来源：`third_party/mogb_official` pinned at
+  `5b689e2a03de0d86ec41212825e5db8d7f0e5c02`；未将其文件导入 active package。
+- 数据影响：无 canonical/registry/view/export 变更；StackOverflow 只使用现有本地 benchmark snapshot。
+- Artifact：`artifacts/s2c/runs/protocol_v2_textoir_v1/mogb_baseline_v1/`；包含官方 preflight、30 个
+  StackOverflow KIR=0.50 三 seed + 三数据集 seed42 pilot run、ball statistics、predictions 和轻量 summary。
+- 执行：`reproduce_mogb_original.py`；StackOverflow seed 42/87/100，6 methods/seed；
+  `aggregate_mogb_results.py`。
+- 测试：MOGB 粒球单元测试 `3 passed`；官方 preflight 明确 blocked；pilot `30/30` 完成。
+- 初步结果：MOGB official-style mean radius 在 frozen MiniLM 上明显牺牲 Known Recall；组件混合结果不能
+  被写成官方复现或 s2c SOTA。
+- 风险：上游仓库无 LICENSE、依赖旧 BERT/TextOIR 格式并缺 `utils`；当前没有官方论文数字复现。
+- 下一步：审阅 smoke provenance 与方法表，确认是否值得登记三数据集/三 KIR/五 seed 扩展；不启动完整矩阵。
+- 收口：补充 `run_mogb_sweep.py` 的确定性 dry-run/resume 入口，并记录正式协议的 seeds 为
+  `{13,42,87,100,123}`；用户原计划中的 seed 0/1/2 不存在于当前 protocol_v2_textoir_v1 views，
+  未重建数据或静默替换 split。全矩阵仅登记为 `planned_not_started`，不因有入口而自动启动。
+- 扩展：pilot 在 StackOverflow 三 seed 上保持低波动但显示稳定的 Known 覆盖损失，故按已登记
+  270-cell 计划启动 MiniLM 公平矩阵；已完成的 30 个重叠单元通过 `--resume` 复用，实际新增
+  240 个评分单元。官方 BERT/TextOIR 路径仍不启动。
+- 收口：270/270 完成、0 失败；聚合器验证每个 dataset×KIR×seed×method 恰有 5 个 seed。
+  270 个结果仍是冻结 MiniLM 的统一协议组件比较，不是官方 MOGB BERT 复现；官方路径继续
+  保持 `audited_not_reproduced`。
+
+## 2026-07-31：CLMSG Milestone 1--3 启动
+
+- Base commit：`294d6f2`；branch `main`；工作树已有未提交 MOGB 接入，本阶段不
+  commit/push，也不修改 E0--E3、R1、M1 或 MOGB artifacts。
+- 目标：用训练支持样本的局部尺度和 Known-only split conformal 替代中心--半径覆盖；先只实现
+  KNN-only、local-scale KNN 与 local-scale conformal，不提前加入 manifold 或 label entropy。
+- 数据：固定 `protocol_v2_textoir_v1`；现有 `train_known` 作为 proper-train，现有 Known-only
+  `calibration_known` 作为校准，`test_combined` 只用于冻结方法后的评价；不重新划分 Known intents。
+- 修改：新增 `src/protocol_v2/gate/clmsg.py`、薄 CLI `scripts/experiments/run_clmsg.py`、
+  `configs/gates/clmsg.yaml`、单元测试和 `docs/clmsg/CLMSG_PIPELINE_AUDIT.md`。
+- 计划：StackOverflow/KIR50/seed13 smoke；只有数值有效且 Version C 不被 Single centroid 明显
+  支配时才补 seeds42/87。当前计划共 18 个方法/alpha 输出单元，独立 artifact root 为
+  `../artifacts/s2c/runs/protocol_v2_textoir_v1/clmsg_v1/`。
+- 初始验证：CLMSG 单元测试 `8 passed`，Ruff、py_compile 和 seed13 dry-run 通过；正式 smoke
+  尚未启动。
+- 风险：local-scale exact search 计算量高于 centroid Gate；global conformal 只控制整体 Known
+  coverage，不保证每意图 coverage；Version C 未通过前不得实现后续复杂模块。
+
+## 2026-07-31：CLMSG Milestone 1--3 停止门收口
+
+- 完成：补齐附件要求的 global、class-conditional、hybrid `{0.25,0.50,0.75}` 支持模式；
+  `tests/unit/test_clmsg.py` 增至 10 个测试。正式 seed13 输出为 26/26，0 失败/无效。
+- 旧预检：最初 global-only 输出保留在 `clmsg_v1/stackoverflow/.../seed_13`，不覆盖、不纳入正式
+  计数；补齐模式后的正式结果位于 `clmsg_v1/support_modes_v1/stackoverflow/.../seed_13`。
+- 结果：primary class-conditional conformal alpha=0.05 的 OOS F1 `0.3336`、Known Recall
+  `0.9493`；Single-centroid 为 `0.6957/0.8820`。所有 Version C 固定 alpha/mode 均未超过
+  Single-centroid；最佳描述性行 OOS F1 `0.4975`。
+- 机制：共形 Known FR 接近 target alpha，但 local-scale 将普通 KNN AUPR `0.8431` 降至约
+  `0.67--0.70`，导致大量 OOS 被接受。该问题不是 NaN、cache 错位或 calibration 泄漏。
+- 决策：`stop_after_seed13`；不运行 seeds42/87，不实现 manifold/entropy/cross-conformal，
+  不启动三数据集 full sweep。报告见 `docs/clmsg/CLMSG_RESEARCH_REPORT.md`，artifact closeout 见
+  `../artifacts/s2c/runs/protocol_v2_textoir_v1/clmsg_v1/summary/`。
+- 验证：CLMSG verifier 通过（26 个授权输出、156,000 条预测、1,000 条校准分数、无 split
+  交叉或 test selection）；完整 unit/integration/smoke 分别为 `258/8/3 passed`；Ruff、
+  compileall、research-state、data-tracking、development-log、registry、public-results SHA256
+  和 `git diff --check` 均通过。
+- Git：本轮未 add/commit/push；GitHub 仍落后于包含 MOGB 与 CLMSG 的本地工作树。
+
+## 2026-07-30：CLMSG seed42/87 确认性扩展启动
+
+- 原因：用户明确要求按协议尽可能补充实验；为避免把单 seed 负结果误写成稳定结论，新增独立
+  `CLMSG_M4_CONFIRMATION` ledger 行，而不改写已冻结的 seed13 pilot。
+- 计划：StackOverflow、KIR50、seed `{42,87}`，每 seed 26 个固定输出，共 52 个；复用现有
+  MiniLM cache、Known-only calibration、配置和 evaluator，不训练模型、不修改数据。
+- 约束：不使用 test 选 alpha、k 或支持模式；不启动 manifold、entropy、cross-conformal 或 full
+  sweep；运行结束后独立汇总并将 ledger 从 `in_progress` 更新为最终状态。
+
+## 2026-07-30：普通 KNN 全协议确认矩阵启动
+
+- CLMSG 三 seed 收口：seed42/87 的 52 个固定输出完成，三 seed 共 78 个；primary Version C 的
+  平均 OOS F1 为 `0.3604`，相对同 seed Single-centroid 平均下降 `0.3924`，局部尺度路线停止。
+- 新问题：保留未做局部尺度归一化的普通 KNN，固定 `k=10`、Known calibration
+  `alpha=0.05`，覆盖 3 数据集、KIR `{0.25,0.50,0.75}`、5 seeds，共 45 个输出。
+- 工程：runner 现在严格遵守 config 的 `methods` 白名单；新增定向回归测试，保证 KNN-only
+  配置不会生成 local-scale/conformal 结果。新 variant 与 CLMSG 三 seed artifacts 隔离。
+- 边界：该矩阵是预声明 operating point 的公平基线，不用 test 选 k/alpha；完成前不启动
+  manifold、entropy 或完整 Pipeline。
+
+## 2026-07-30：KNN 邻居数敏感性启动
+
+- k=10 结果：45/45 完整，九个 dataset×KIR 组对同 split Single-centroid 均为 `0/0/5`
+  win/tie/loss；因此不能把单个 k=10 结果解释成 KNN 家族结论。
+- 扩展：固定其他合同，仅增加 `k={5,20,30}`，共 135 个新评分单元；与 k=10 合并后形成
+  `4 k × 3 datasets × 3 KIR × 5 seeds` 的 180-cell 敏感性。
+- 实现：runner 增加显式 `--k-neighbors`、`--primary-alpha` 和 `--variant` 覆盖；每个 resolved
+  config 都进入 run manifest/hash，variant 目录互相隔离。
+- 约束：完整报告全部 k，不通过 test OOS 选择默认 k；不启动 manifold/entropy/Pipeline。
+
+## 2026-07-31：KNN k 敏感性收口
+
+- 新增脚本：`scripts/experiments/summarize_knn_k_sensitivity.py`、`verify_knn_k_sensitivity.py`，
+  产出 `summary/knn_k_sensitivity_v1/` 下的 `all_runs.csv`、`k_overview.csv`、
+  `dataset_kir_summary.csv`、`paired_vs_single.csv`、`significance.csv`、`integrity.json`、
+  `KNN_K_SENSITIVITY_CLOSEOUT.md` 和 `KNN_K_SENSITIVITY_PROVENANCE.json`。
+- 验证：`completed_cells=180`、`new_k_cells=135`、`existing_k10_cells=45`、`reused_k10_cells=3`、`unique_cells=180`、
+  `missing=[]`、`invalid=[]`、`test_used_for_selection=false`。
+- 结论：`k=5` 的整体 mean OOS F1 为 `0.6492`，`k=10` 为 `0.6335`，`k=20` 为 `0.5957`，
+  `k=30` 为 `0.5565`；四个 k 均落后于同 split Single-centroid，最优也只是“最不差”而非可推广
+  主方法。
+
+## 2026-07-31：MOGB frozen-MiniLM 组件消融启动
+
+- Base commit：`294d6f2`；活动协议 `protocol_v2_textoir_v1`；不修改或覆盖已冻结的 270-cell
+  `mogb_baseline_v1`、E2/E3/R1/M1/CLMSG/KNN artifacts，也不执行 commit/push。
+- 目标：通过 OFAT 隔离粒球 purity、minimum support 与 boundary distance/radius 的贡献；不训练
+  BERT/MiniLM，不重新划分 Known intents，不使用 test 选参。
+- 计划：3 datasets × 3 KIR × 5 seeds × 12 非默认配置 = 540 个新评分单元；默认配置的 45 个
+  reference cells 直接读取 `mogb_baseline_v1/mogb_minilm`，不重复计算。
+- Artifact：`../artifacts/s2c/runs/protocol_v2_textoir_v1/mogb_ablation_v1/`；实现和 dry-run 通过后
+  冻结 config/plan hash，再把 ledger 状态改为 in_progress。
+- 冻结：config SHA256 `db644d47fd38923a1b51a519fc0a53e24fca1a2c01cd6b1340863e1b54bb287b`；
+  540-cell plan SHA256 `b97c4348cad00111c6cc8018383e200f76c1697ed819609d6c0bc56789f23dfd`。
+  Unit `4 passed`、Ruff、py_compile、StackOverflow/KIR50/seed42 cache dry-run 均通过；正式矩阵开始前
+  不再修改 config、runner 或 sweep plan。
+
+## 2026-07-31：MOGB frozen-MiniLM 组件消融收口
+
+- Base commit：`294d6f2`；活动协议 `protocol_v2_textoir_v1`；未修改 canonical、registry、view、
+  embedding 或已冻结的 MOGB 270-cell fair matrix。
+- 执行：完成 3 datasets × 3 KIR × 5 seeds × 12 OFAT variants，共 540/540 新单元；默认 MOGB、
+  Single-centroid、MOGB-partition/ours-boundary 各复用 45 个控制单元。
+- 工程修复：sweep 按 dataset×KIR×seed 只加载一次 immutable embedding；修正 variant 到独立
+  artifact directory 的映射。粒球最近 seed 计算改为数学等价的二维平方欧氏形式，真实单元的
+  predictions/balls/metrics 完全一致，峰值内存降至 355,296 KiB。
+- 并发事件：重复 runner 曾对同一目标触发 atomic rename 冲突；重复进程终止后用单一 `--resume`
+  收口，最终 540 个计划组合全部唯一、完整。三个隐藏 atomic temp directory 不进入正式统计。
+- 汇总：`all_runs.csv` 540 行，baseline 135 行，四组合 boundary component 180 行，配对效应
+  648+648 行，significance 1,296 行；verifier 返回 0 missing/invalid/duplicate。
+- 结果：最佳 partition-only `purity_get=0.90` 相对默认 MOGB `+0.0135` OOS F1，仍比单中心
+  `-0.0391`。`Euclidean+mean_std` 相对默认 MOGB `+0.0526`，但比单中心低 `0.1048` F1-All 和
+  `0.2593` Known Recall；更多粒球与 diagonal Mahalanobis 均未改善该权衡。
+- 决策：ledger 更新为 complete/do_not_repeat；不再扩 nearby purity/support/distance/radius。
+  唯一下一步是官方 hierarchical representation-learning 的单格可运行性与复现审计。
+- Artifact：`../artifacts/s2c/runs/protocol_v2_textoir_v1/mogb_ablation_v1/summary/`。
+- Git：未 add/commit/push；GitHub 仍落后于本地。
+
+## 2026-07-31：MOGB fixed-K mean-radius 对照启动
+
+- Base commit：`294d6f2`；活动协议 `protocol_v2_textoir_v1`；540-cell OFAT 与 270-cell fair
+  matrix 均保持只读。
+- 目标：隔离动态粒球数量本身的作用，在相同 frozen MiniLM、Euclidean distance、mean-radius
+  和 nearest-ball 推理下比较 adaptive MOGB 与 per-intent fixed K=1/2/3/4。
+- 计划：3 datasets × 3 KIR × 5 seeds × fixed K={1,3,4} = 135 个新单元；fixed K=2 的
+  45 个既有单元只读复用，合并分析共 180 格。
+- 约束：不 test-select K，不重新编码，不修改数据/registry/cache，不启动 official BERT 训练或
+ 完整 Pipeline，不 commit/push。
+
+## 2026-07-31：MOGB fixed-K mean-radius 对照收口
+
+- Base commit：`294d6f2`；协议、canonical、registry、Frozen MiniLM cache、270-cell fair matrix
+  与 540-cell OFAT 均保持只读。
+- 执行：完成 fixed K=1/3/4 的 135/135 新评分单元；K=2 的 45 格来自
+  `ours_partition_mogb_boundary`，真实 StackOverflow/KIR50/seed42 的 6,000 条逐样本预测零差异，
+  后续 45 格 reference 的 manifest 与输入 hash 均通过验证。
+- 审查修复：不改已有 run 数值，只将配置设为 K 列表的唯一来源、在 sweep 中强制验证 K2
+  reference，并把 summary 的 partition 统一为 `per_intent_kmeans`、保留 source partition。
+- 汇总：180/180 fixed-K、45/45 adaptive、45/45 single reference；0 missing/invalid/input mismatch；
+  固定 10,000 次 bootstrap，所有 K 完整报告，没有 test-selected K。
+- 结果：K1/K2/K3/K4 的总体 OOS F1 为 `0.7808/0.7590/0.7477/0.7482`；adaptive 为
+  `0.7339`。K1 相对 adaptive 的 45 格 W/T/L 为 `45/0/0`，但其 F1-All 仍低于 s2c
+  mean+std single-centroid，证明 boundary rule 仍是重要混杂因素。
+- Artifact：`../artifacts/s2c/runs/protocol_v2_textoir_v1/mogb_fixed_k_mean_ablation_v1/`；
+  closeout 为 `summary/MOGB_FIXED_K_MEAN_CLOSEOUT.md`。
+- 风险：本阶段只隔离 Frozen MiniLM 下的 partition granularity，不包含官方 BERT/nearest
+  sub-centroid 联合表示训练；不得据此写成官方 MOGB 失败或 SOTA 对比。
+- 下一步：隔离的 official-logic 单格训练 smoke；不自动扩完整矩阵，不 commit/push。

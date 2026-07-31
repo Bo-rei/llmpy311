@@ -15,7 +15,10 @@
 - `pipeline/` 包含完整 `Gate → Router → Expert` 的汇总和 provenance。
 - `representation/` 包含 Frozen、CE、SupCon、CE-Recon 和 MiniLM 语义分析。
 - `robustness/` 包含样本效率、边界形状和机制汇总。
-- `external/` 包含 hard-negative 结果和 MOGB 协议审计；MOGB 没有公平性能数字时不生成伪结果。
+- `external/` 包含 hard-negative 结果和 MOGB 协议审计；`mogb/` 包含统一
+  `protocol_v2_textoir_v1` 下的冻结 MiniLM 公平矩阵及 540 单元 OFAT 轻量汇总。它们不是
+  官方 BERT 复现；同目录还包含 180 单元 fixed-K mean-radius 对照的轻量汇总，官方路径仍不生成
+  伪性能数字。
 - 被来源裁决冻结的 candidate Gate 汇总保留在
   `../docs/archive/historical_repro_bundle/protocol_v2_candidate_results/`，不属于此目录，也不得与
   历史 v19–v22 或官方重建数字混合。官方 `protocol_v2_official_v1` 的已准入 E1 Gate-only 摘要位于

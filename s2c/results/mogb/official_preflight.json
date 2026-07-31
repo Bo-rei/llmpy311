@@ -1,0 +1,11 @@
+{
+  "data_contract": "legacy TextOIR-style files; not protocol_v2 registries",
+  "hardcoded_cuda": true,
+  "missing_utils_package": true,
+  "old_dependency_contract": "pytorch-pretrained-bert/PyTorch-1.7 pinned in requirements.txt",
+  "reason": "Do not emit an official reproduction number until the legacy source contract is made runnable in an isolated environment.",
+  "required_files_missing": [],
+  "source": "/home/bo/bo01/llmpy311/s2c/third_party/mogb_official",
+  "status": "blocked_legacy_contract",
+  "test_used_for_selection": false
+}

@@ -1,0 +1,38 @@
+official_script: third_party/mogb_official/MOGB.py
+compat_root: third_party/mogb_compat
+runtime_script: third_party/mogb_compat/mogb_runtime.py
+data_snapshot_root: data/sources/textoir/dffe2b1b848a069a6808f8089b4cb9bd16e2062b
+bert_model: ../assets/models/bert-base-uncased
+output_root: ../artifacts/s2c/external/mogb_official_modernized_smoke_v1
+
+default_dataset: stackoverflow
+dataset_aliases:
+  banking: banking77
+  banking77: banking77
+  stackoverflow: stackoverflow
+official_dataset_names:
+  banking77: banking
+  stackoverflow: stackoverflow
+
+defaults:
+  kir: 0.50
+  seed: 0
+  epochs: 1.0
+  labeled_ratio: 1.0
+  freeze_bert_parameters: true
+  save_results: true
+  train_batch_size: 128
+  eval_batch_size: 2048
+  wait_patient: 10
+  gpu_id: "0"
+  device: cuda
+
+metadata:
+  experiment_id: mogb_official_modernized_smoke_v1
+  protocol_version: mogb_official_logic_textoir_v1
+  representation: bert_legacy_modernized
+  partition: adaptive
+  boundary: official_mogb_mean_radius
+  distance: euclidean
+  runtime_repair: true
+  note: Separate smoke of pinned official logic under a no-source-edit runtime-repair compatibility layer with an artifact-local TEXTOIR snapshot; not a strict official reproduction and not a protocol_v2 fair baseline.
