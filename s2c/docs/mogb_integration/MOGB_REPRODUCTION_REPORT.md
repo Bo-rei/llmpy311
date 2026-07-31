@@ -117,6 +117,29 @@ The complete machine-readable evidence is under
 `s2c/results/mogb/fair_matrix.csv`; its SHA256 is recorded in
 `s2c/results/MANIFEST.csv`.
 
+## Modernized official-logic smoke (separate from fair results)
+
+The pinned upstream path was exercised through an isolated compatibility
+launcher without editing `third_party/mogb_official`. The launcher preserves
+the official BERT/CE, epoch-end granular-ball and nearest-ball evaluation
+sequence, while repairing modern-PyTorch stale computation graphs and the
+upstream `cuda:0` assumption. The source checkout, runtime patch, environment
+and attempt history are recorded in
+`../artifacts/s2c/external/mogb_official_modernized_smoke_v1/`.
+
+StackOverflow/KIR=0.50/seed=0 completed one engineering-smoke epoch and wrote
+the upstream-format result (`Known=9.4776`, `Open=67.3376`, `F1-score=14.7376`,
+`Accuracy=51.7`). These values are not converged and must not be compared with
+the paper table. Banking77/KIR=0.50/seed=0 was interrupted during the current
+environment's CPU execution after the device-aware ball path was reached; it
+has no metric output. The exact closeout is
+`../artifacts/s2c/external/mogb_official_modernized_smoke_v1/MOGB_OFFICIAL_MODERNIZED_CLOSEOUT.md`.
+
+Accordingly, the official mode remains `partial_blocked`, not
+`official_reproduced`. The 270-cell MiniLM-fair matrix, 540-cell OFAT matrix
+and 180-cell fixed-K mean-radius comparison remain the only quantitative
+component evidence used for current s2c claims.
+
 ## Interpretation rule
 
 Published MOGB numbers are a descriptive reference until the original sample

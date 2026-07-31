@@ -40,7 +40,13 @@ contribution.
 
 ## Reproduction status
 
-The original BERT/TextOIR run is **audited but not yet reproduced**.  A fair
+The untouched original BERT/TextOIR run remains **audited but not reproduced**:
+its first modern-PyTorch attempt fails on a stale computation graph after the
+epoch-level parameter update.  An isolated modernized runtime then completed
+one StackOverflow/KIR=0.50/seed=0 engineering smoke through training,
+granular-ball construction and evaluation, but the Banking77 smoke was
+interrupted during the current CPU execution and produced no metric.  The
+modernized one-epoch output is not a converged paper reproduction.  A fair
 MiniLM mode is runnable from cached protocol_v2 embeddings.  This distinction
 is required: a MOGB partition adapter on MiniLM is not the authors' full
 representation-learning method.
@@ -50,5 +56,9 @@ representation-learning method.
 The active adapter uses the official final-ball semantics (purity-driven
 recursive split, minimum selected-ball size, majority label, mean radius,
 nearest-ball open decision) but uses integer-indexed arrays and the fixed
-protocol_v2 registry.  It does not claim byte-for-byte equivalence with the
-legacy autograd implementation until an original-contract run is available.
+protocol_v2 registry.  The isolated modern runtime additionally detaches the
+epoch feature bank and recomputes the fixed-centroid subcenter loss in weighted
+batches; it keeps the upstream GBNR splitter unchanged and makes the device
+selection explicit.  These repairs are recorded in
+`../artifacts/s2c/external/mogb_official_modernized_smoke_v1/` and do not claim
+byte-for-byte equivalence with the legacy autograd implementation.

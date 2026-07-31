@@ -181,11 +181,37 @@ def _patched_calculate_granular_balls(self, args, data):
     return self.gb_centroids, self.gb_radii, self.gb_labels
 
 
+def _patched_cluster_forward(self, args, features, labels, select):
+    """Keep the upstream ball construction while honoring the active device.
+
+    ``cluster.py`` hard-codes ``cuda:0`` for the sample-index column.  That is
+    harmless on the author's single-GPU setup but prevents a CPU smoke (and
+    any non-zero CUDA device) from reaching the otherwise unchanged GBNR
+    implementation.  The tensor layout and GBNR call are intentionally kept
+    identical to the upstream method.
+    """
+
+    import cluster  # type: ignore
+
+    a_purity = args.purity_train if not select else args.purity_get_ball
+    original_target = labels
+    index1 = torch.arange(len(labels), device=self.device)
+    label_features = torch.cat((labels.reshape(-1, 1), features), dim=1)
+    out = torch.cat((index1.reshape(-1, 1), label_features), dim=1)
+    out = torch.cat((original_target.reshape(-1, 1), out), dim=1)
+    purity = torch.full((out.size(0), 1), float(a_purity), device=self.device)
+    out = torch.cat((purity, out), dim=1)
+    self.center, self.labels, self.radius = cluster.GBNR.apply(args, out.to(self.device), select)
+    return self.center, self.radius, self.labels
+
+
 def _apply_runtime_patch() -> None:
     import pretrain  # type: ignore
+    import cluster  # type: ignore
 
     pretrain.PretrainModelManager.train = _patched_train
     pretrain.PretrainModelManager.calculate_granular_balls = _patched_calculate_granular_balls
+    cluster.gbcluster.forward = _patched_cluster_forward
 
 
 def main(argv: list[str] | None = None) -> int:

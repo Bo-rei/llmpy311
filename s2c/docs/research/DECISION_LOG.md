@@ -225,3 +225,17 @@
   训练/划分交替，而非动态粒球数量本身。
 - 唯一下一步：只做一个隔离、可停止的 modernized official-logic representation smoke；成功也不
   自动等同官方论文复现，失败则形成精确 blocker。
+
+## D23：官方 MOGB smoke 的边界与停止判定（2026-07-31）
+
+- StackOverflow/KIR50/seed0 通过外部 modernized runtime 完成一次 one-epoch 工程 smoke，说明
+  pinned BERT CE、epoch-end feature bank、原始 GBNR 粒球和 nearest-ball evaluation 可以在不改
+  第三方 checkout 的情况下串通；输出只作执行链证据，不作论文性能。
+- 原始 legacy path 的 stale-graph/in-place 失败由 detached feature bank + batchwise fixed-centroid
+  loss 修复；Banking77 还暴露官方 `cuda:0` 硬编码，compat 层已改为 active device，但当前无可用
+  NVIDIA driver，CPU 尝试在长时间模型/特征执行阶段中断且没有指标。
+- 决策：官方模式标记 `partial_blocked`，不伪造 Banking77 数字，不把 StackOverflow one-epoch
+  数字写成官方复现，不扩展官方 BERT 全矩阵。已有 270-cell MiniLM-fair、540-cell OFAT 和
+  180-cell fixed-K 结果继续作为当前 MOGB 组件证据。
+- 下一步：完成 provenance/报告/回归审计；只有获得独立可重复 GPU/legacy 环境后，才重新登记
+  收敛官方复现。当前不改 s2c Gate、不启动完整 Pipeline。

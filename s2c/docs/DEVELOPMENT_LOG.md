@@ -744,3 +744,19 @@
 - 风险：本阶段只隔离 Frozen MiniLM 下的 partition granularity，不包含官方 BERT/nearest
   sub-centroid 联合表示训练；不得据此写成官方 MOGB 失败或 SOTA 对比。
 - 下一步：隔离的 official-logic 单格训练 smoke；不自动扩完整矩阵，不 commit/push。
+
+## 2026-07-31：MOGB official-logic modernized smoke 收口
+
+- Base commit：`09a956d`；活动协议 `mogb_official_logic_textoir_v1`；未修改 pinned
+  `third_party/mogb_official` checkout，也未覆盖既有 270/540/180 fair artifacts。
+- 实现：新增 device-aware 的运行时粒球适配、MPLCONFIGDIR 隔离、可记录 interrupted 状态以及
+  smoke-only train/eval batch-size 覆盖；官方 stale-graph 修复仍通过外部 two-pass runtime 完成。
+- StackOverflow/KIR50/seed0：1 epoch 工程 smoke 完整走通 BERT CE、epoch-end feature bank、GBNR
+  粒球、nearest-ball evaluation 和结果写入；输出位于
+  `../artifacts/s2c/external/mogb_official_modernized_smoke_v1/stackoverflow/kir_0.50/seed_0/`，
+  结果只作执行链证据，不进入论文主表。
+- Banking77/KIR50/seed0：设备修复后 CPU 尝试进入运行，但当前环境模型/特征 IO 耗时过长，未形成
+  可报告指标，最终以 `returncode=130` 收口；准确 blocker 保存在同一 run manifest 和 closeout。
+- 测试：MOGB compatibility/runtime unit `6 passed`；官方 checkout 未修改；未执行 commit/push。
+- 风险：one-epoch modernized smoke 不是严格官方复现，Banking77 未形成收敛结果；不能据此宣称
+  MOGB SOTA 或公平优越性。下一步只做文档/provenance/全仓回归收口，除非获得独立可复现 GPU/legacy 环境。

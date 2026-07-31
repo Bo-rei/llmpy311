@@ -144,6 +144,8 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--kir", type=float, help="Known intent ratio passed through as --known_cls_ratio.")
     parser.add_argument("--seed", type=int, help="Training seed.")
     parser.add_argument("--epochs", type=float, help="Epoch count for the official entrypoint.")
+    parser.add_argument("--train-batch-size", type=int, help="Optional smoke-only training batch-size override.")
+    parser.add_argument("--eval-batch-size", type=int, help="Optional smoke-only evaluation batch-size override.")
     parser.add_argument("--device", type=str, help="Execution device: cpu, cuda, or cuda:N.")
     parser.add_argument("--gpu-id", type=str, dest="gpu_id", help="Explicit GPU id override for the official entrypoint.")
     parser.add_argument("--resume", action="store_true", help="Reuse an existing completed run directory instead of refusing to continue.")
@@ -283,6 +285,8 @@ def main(argv: list[str] | None = None) -> int:
     kir = float(args.kir if args.kir is not None else defaults.get("kir", 0.5))
     seed = int(args.seed if args.seed is not None else defaults.get("seed", 0))
     epochs = float(args.epochs if args.epochs is not None else defaults.get("epochs", 1.0))
+    train_batch_size = int(args.train_batch_size if args.train_batch_size is not None else defaults.get("train_batch_size", 128))
+    eval_batch_size = int(args.eval_batch_size if args.eval_batch_size is not None else defaults.get("eval_batch_size", 2048))
     device_mode, effective_gpu_id = resolve_device(
         args.device,
         args.gpu_id,
@@ -351,8 +355,8 @@ def main(argv: list[str] | None = None) -> int:
         "labeled_ratio": float(defaults.get("labeled_ratio", 1.0)),
         "freeze_bert_parameters": bool(defaults.get("freeze_bert_parameters", True)),
         "save_results": bool(defaults.get("save_results", True)),
-        "train_batch_size": int(defaults.get("train_batch_size", 128)),
-        "eval_batch_size": int(defaults.get("eval_batch_size", 2048)),
+        "train_batch_size": train_batch_size,
+        "eval_batch_size": eval_batch_size,
         "wait_patient": int(defaults.get("wait_patient", 10)),
         "representation": metadata.get("representation"),
         "partition": metadata.get("partition"),
@@ -368,6 +372,8 @@ def main(argv: list[str] | None = None) -> int:
     command_argv = build_command(resolved_config, effective_gpu_id)
     launch_data_root.mkdir(parents=True, exist_ok=True)
     copy_report = copy_dataset_snapshot(dataset_source_dir, launch_dataset_dir)
+    matplotlib_cache = run_dir / "matplotlib_cache"
+    matplotlib_cache.mkdir(parents=True, exist_ok=True)
     py_path_entries = [str(compat_root), str(official_script.parent)]
     environment = {
         "cwd": str(S2C_ROOT),
@@ -378,6 +384,7 @@ def main(argv: list[str] | None = None) -> int:
         "device_mode": device_mode,
         "gpu_id": effective_gpu_id,
         "pythondontwritebytecode": "1",
+        "mplconfigdir": str(matplotlib_cache),
     }
     command_payload = {
         "argv": command_argv,
@@ -469,19 +476,30 @@ def main(argv: list[str] | None = None) -> int:
     launch_env["CUDA_VISIBLE_DEVICES"] = environment["cuda_visible_devices"]
     launch_env["PYTHONDONTWRITEBYTECODE"] = environment["pythondontwritebytecode"]
     launch_env["PYTHONUNBUFFERED"] = "1"
+    # The official code imports matplotlib during startup.  The workspace home
+    # is read-only in some runners, so keep its cache inside this isolated run
+    # directory instead of allowing an untracked global cache build to stall a
+    # smoke cell.
+    launch_env["MPLCONFIGDIR"] = environment["mplconfigdir"]
 
     started_at = now_iso()
     manifest.update({"status": "running", "started_at": started_at})
     atomic_write_json(manifest_path, manifest)
-    with stdout_log.open("w", encoding="utf-8") as stdout_handle, stderr_log.open("w", encoding="utf-8") as stderr_handle:
-        completed = subprocess.run(
-            command_argv,
-            cwd=S2C_ROOT,
-            env=launch_env,
-            stdout=stdout_handle,
-            stderr=stderr_handle,
-            check=False,
-        )
+    try:
+        with stdout_log.open("w", encoding="utf-8") as stdout_handle, stderr_log.open("w", encoding="utf-8") as stderr_handle:
+            completed = subprocess.run(
+                command_argv,
+                cwd=S2C_ROOT,
+                env=launch_env,
+                stdout=stdout_handle,
+                stderr=stderr_handle,
+                check=False,
+            )
+    except KeyboardInterrupt:
+        manifest.update({"status": "interrupted", "completed_at": now_iso(), "returncode": 130})
+        atomic_write_json(manifest_path, manifest)
+        print(json.dumps({"status": manifest["status"], "run_dir": str(run_dir), "manifest": str(manifest_path), "returncode": 130}))
+        return 130
     manifest.update(
         {
             "status": "complete" if completed.returncode == 0 else "failed",

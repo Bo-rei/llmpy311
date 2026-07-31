@@ -5,10 +5,11 @@
 ## 当前状态
 
 - 活动协议：`protocol_v2_textoir_v1`
-- 当前阶段：`MOGB_OFFICIAL_SMOKE` in progress；fixed-K mean-radius 180/180 已收口，现只构建
-  不改 pinned 第三方源码的现代兼容层，先验证 StackOverflow/KIR50/seed0 的官方 BERT、CE、
-  epoch-end granular-ball loss 与 evaluation 链路，成功后才允许 Banking77 第二个 smoke
-- Git：`main`，阶段基准 commit `294d6f2`
+- 当前阶段：`MOGB_OFFICIAL_SMOKE` partial_blocked；fixed-K mean-radius 180/180 已收口。
+  StackOverflow/KIR50/seed0 的现代兼容官方逻辑 smoke 已完成 1 个工程单元；Banking77
+  的 CPU 尝试在模型/粒球链路完成前被中断，未产生可报告指标。该阶段不构成严格官方复现，
+  也不授权扩展官方 BERT 全矩阵。
+- Git：`main`，当前基准 commit `09a956d`；本阶段在该 commit 上有未提交的兼容层修复
 - Git dirty：`true`（本轮 MOGB 与 CLMSG 接入、文档、测试和第三方源码尚未提交）
 - 最近冻结代码快照：`BOUNDARY_ATTRIBUTION_CODE.patch`，SHA256
   `16ecffdea31faded6305b9a9d5d5d165ac3a59a008315fdc4c1158f1edcca0d7`；
@@ -38,6 +39,7 @@
 | KNN k sensitivity | complete 180/180；`k={5,10,20,30}`；135 个新增 k 单元 + 45 个 k10 单元，其中 3 格从确认阶段精确复用 | `do_not_repeat`；禁止 test-selected k；停止继续扩普通 KNN | `../artifacts/s2c/runs/protocol_v2_textoir_v1/clmsg_v1/summary/knn_k_sensitivity_v1/KNN_K_SENSITIVITY_CLOSEOUT.md` |
 | MOGB frozen-MiniLM OFAT | complete 540/540；0 missing/invalid/duplicate；复用 135 个控制单元 | `do_not_repeat`；停止邻近 purity/support 网格 | `../artifacts/s2c/runs/protocol_v2_textoir_v1/mogb_ablation_v1/summary/MOGB_ABLATION_CLOSEOUT.md` |
 | MOGB fixed-K mean-radius | complete 180/180；135 新格 + 45 个 K=2 hash-validated reuse；45 adaptive reference | `do_not_repeat`；停止 frozen-partition granularity 扩展 | `../artifacts/s2c/runs/protocol_v2_textoir_v1/mogb_fixed_k_mean_ablation_v1/summary/MOGB_FIXED_K_MEAN_CLOSEOUT.md` |
+| MOGB official-logic smoke | partial_blocked；StackOverflow 1/1 工程单元完成，Banking77 未形成完整单元；无可比较收敛结果 | `do_not_repeat`；只保留 blocker 记录，不写入主表 | `../artifacts/s2c/external/mogb_official_modernized_smoke_v1/MOGB_OFFICIAL_MODERNIZED_PROVENANCE.json` |
 
 E2/E3 的 K、KIR、random partition、聚类稳定性和 tiny-cluster 矩阵不得再次运行。
 
@@ -106,10 +108,9 @@ Pipeline 结果仍可作为研究依据，但它们来自旧实验族，必须�
 
 ## 当前唯一下一步
 
-仅启动隔离的 official MOGB representation-learning 单格可运行性 smoke：不修改 pinned
-第三方源码，先用兼容层在 StackOverflow/KIR50/seed0 验证 BERT、CE、epoch-end granular-ball
-loss 与 nearest-ball evaluation 链路；失败必须形成精确 blocker，成功后也只能称 modernized
-official-logic smoke，不能立即扩全矩阵或宣称论文复现。
+收口 MOGB 证据：保留已完成的 MiniLM-fair/OFAT/fixed-K 矩阵和 StackOverflow
+modernized official-logic smoke，记录 Banking77 的运行阻塞，完成 provenance、报告和回归验证。
+当前环境不再自动扩展官方 BERT 全矩阵；任何后续收敛复现必须在独立、可重复的 GPU/legacy 环境中另行登记。
 
 ## 当前风险
 
