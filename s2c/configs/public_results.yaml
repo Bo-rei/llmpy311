@@ -291,3 +291,11 @@ files:
     category: external
     source: ../artifacts/s2c/runs/protocol_v2_textoir_v1/mogb_fixed_k_mean_ablation_v1/summary/paired_vs_single.csv
     public: mogb/fixed_k_mean_paired_vs_single.csv
+
+  # Current cross-baseline closeout.  This is a lightweight status table: rows
+  # marked not_run or blocked are deliberate audit outcomes, not fabricated
+  # metrics, and must remain separate from historical/full-pipeline tables.
+  - experiment_id: final_baseline_summary
+    category: external
+    source: results/final_baselines/summary.csv
+    public: final_baselines/summary.csv

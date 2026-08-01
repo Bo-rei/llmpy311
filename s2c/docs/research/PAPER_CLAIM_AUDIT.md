@@ -77,3 +77,13 @@ Cascade 已被新方法验证”。直接 baseline 和完整 Pipeline 仍待独�
 | 改善 OOS F1 等于改善开放意图分类 | Euclidean mean+std 总体 OOS F1 与单中心近似相同，但 F1-All/Known Recall 低 10.48/25.93 点 | remove | 主表必须同时报告 OOS F1、F1-All、F1-K 和 Known Recall |
 | diagonal Mahalanobis 更适合粒球边界 | mean 与 mean+std 两种半径下均落后于 Euclidean | remove | 当前 frozen MiniLM 粒球不再扩 diagonal covariance 网格 |
 | 增加更多小粒球会改善 OOS 拒识 | `min_select=5` 将平均球数增至约 193.7，但 OOS F1 无实质提升 | remove | 仅作为“粒度增加不等于开放风险降低”的机制证据 |
+
+## MOGB 官方兼容层、BRAK 与 DCLOOS 更新
+
+| 论断 | 当前证据 | 状态 | 建议 |
+| --- | --- | --- | --- |
+| 已严格复现 MOGB 论文结果 | 10 个官方逻辑兼容单元（StackOverflow/Banking77 各 5 seed）完成，但使用 modernized runtime、本地快照，且官方旧依赖/数据契约不完整 | soften | 写成“official-logic compatibility evidence”；严格论文复现仍 pending，不与论文数字直接比较 |
+| 官方 MOGB 兼容结果可作为统一协议 SOTA 主表 | 官方 BERT/旧数据契约与 MiniLM-fair、protocol_v2 split 不同 | remove | 将官方格式 F1-All/Accuracy 单列为外部参考；主表使用同协议方法 |
+| BRAK 已证明自适应 K 能稳定优于固定 K | 30 个 StackOverflow Known intent 全选 K=1；K>1 Known-only risk 上升 | remove | BRAK 只作为保守安全负控制，不扩展、不宣称新方法 |
+| DCLOOS 已完成公平结果 | 官方与实际 source 均缺失 `squad_placeh.tsv` 外部 open-domain negative corpus，未生成指标 | pending | 记录 blocker；补齐语料和许可证后另行登记，禁止用 protocol OOS 替代 |
+| 当前基线覆盖足以宣称统一 SOTA | ADB/DA-ADB 未运行，DCLOOS blocked；MOGB 官方非严格、MiniLM-fair 结果不普遍领先 | remove | 只报告已完成、同协议、可审计的结果与阻断项，不做 SOTA 声明 |

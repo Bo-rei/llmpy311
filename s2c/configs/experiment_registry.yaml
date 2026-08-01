@@ -293,3 +293,52 @@ experiments:
         - mogb_official_reproduction.json
       expected_unit_count: 0
       count_source: none
+
+    mogb_official_converged:
+      id: external_validation.mogb_official_converged
+      research_question: "官方 MOGB 逻辑在隔离兼容层下能否形成可审计的收敛单元？"
+      status: complete_non_strict_reproduction
+      entrypoints:
+        - scripts/experiments/run_mogb_official_modernized_smoke.py
+      protocol: mogb_official_logic_textoir_v1
+      artifact_root: ../artifacts/s2c/external/mogb_official_converged_v1
+      manifest:
+        - "*/kir_0.50/seed_*/manifest.json"
+      summary:
+        - docs/mogb_integration/MOGB_OFFICIAL_CLOSEOUT.md
+      expected_unit_count: 10
+      count_source: manifest_status
+
+    brak:
+      id: external_validation.brak
+      research_question: "Known-only 边界风险能否在 StackOverflow 上安全选择多中心数？"
+      status: complete
+      entrypoints:
+        - scripts/experiments/run_brak_pilot.py
+        - src/protocol_v2/experiments/brak.py
+      protocol: protocol_v2_textoir_v1
+      artifact_root: ../artifacts/s2c/runs/protocol_v2_textoir_v1/brak_v1
+      manifest:
+        - BRAK_PROVENANCE.json
+        - BRAK_INTEGRITY.json
+      summary:
+        - summaries/BRAK_PILOT_SUMMARY.tsv
+        - summaries/BRAK_CANDIDATE_DIAGNOSTICS.tsv
+        - docs/brak/BRAK_RESEARCH_REPORT.md
+      expected_unit_count: 21
+      count_source: summary_rows
+
+    dcloos:
+      id: external_validation.dcloos
+      research_question: "DCLOOS 的官方和统一协议是否具备可审计的额外 OOS 监督输入？"
+      status: blocked
+      entrypoints:
+        - scripts/experiments/run_dcloos_preflight.py
+      protocol: protocol_v2_textoir_v1
+      artifact_root: ../artifacts/s2c/external/dcloos_v1
+      manifest:
+        - DCLOOS_PREFLIGHT.json
+      summary:
+        - docs/dcloos/DCLOOS_REPRODUCTION_REPORT.md
+      expected_unit_count: 0
+      count_source: none

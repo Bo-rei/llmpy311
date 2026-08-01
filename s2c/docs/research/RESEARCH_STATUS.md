@@ -5,19 +5,18 @@
 ## 当前状态
 
 - 活动协议：`protocol_v2_textoir_v1`
-- 当前阶段：`MOGB_OFFICIAL_SMOKE` partial_blocked；fixed-K mean-radius 180/180 已收口。
-  StackOverflow/KIR50/seed0 的现代兼容官方逻辑 smoke 已完成 1 个工程单元；Banking77
-  的 CPU 尝试在模型/粒球链路完成前被中断，未产生可报告指标。该阶段不构成严格官方复现，
-  也不授权扩展官方 BERT 全矩阵。
-- Git：`main`，当前基准 commit `09a956d`；本阶段在该 commit 上有未提交的兼容层修复
-- Git dirty：`true`（本轮 MOGB 与 CLMSG 接入、文档、测试和第三方源码尚未提交）
+- 当前阶段：`MOGB_OFFICIAL_CONVERGED`、`BRAK_PILOT` 已完成；`DCLOOS_PREFLIGHT` 已完成但因缺失
+  官方 open-domain negative corpus 阻断。fixed-K mean-radius 180/180、MOGB fair/OFAT 和 BRAK
+  均保持独立 artifact root，不覆盖旧实验。
+- Git：`main`，当前基准 commit `2ff028e`；本阶段新增代码、配置、报告和第三方审计目录尚未提交
+- Git dirty：`true`
 - 最近冻结代码快照：`BOUNDARY_ATTRIBUTION_CODE.patch`，SHA256
   `16ecffdea31faded6305b9a9d5d5d165ac3a59a008315fdc4c1158f1edcca0d7`；
   本阶段另冻结 `R1_MINILM_STAGE_PROVENANCE.json` 和对应 code patch，旧 R1/E2/E3 快照保持不变。
   MOGB 消融由 `MOGB_ABLATION_EXECUTION_PROVENANCE.json` 绑定 runner/config/plan/source hash，
   SHA256 `e7c6b961cab050921750901c770b145ae2be0ccb7e9b7f0780d73d7325baf61f`。
-- GitHub 状态：`origin/main` 尚未包含本轮 MOGB 接入；本轮不自动 commit/push
-- 最近更新：2026-07-31
+- GitHub 状态：`origin/main` 尚未包含本轮官方 MOGB、BRAK、DCLOOS 审计和汇总表；本轮不自动 commit/push
+- 最近更新：2026-08-01
 
 ## 已完成且禁止重复
 
@@ -40,6 +39,9 @@
 | MOGB frozen-MiniLM OFAT | complete 540/540；0 missing/invalid/duplicate；复用 135 个控制单元 | `do_not_repeat`；停止邻近 purity/support 网格 | `../artifacts/s2c/runs/protocol_v2_textoir_v1/mogb_ablation_v1/summary/MOGB_ABLATION_CLOSEOUT.md` |
 | MOGB fixed-K mean-radius | complete 180/180；135 新格 + 45 个 K=2 hash-validated reuse；45 adaptive reference | `do_not_repeat`；停止 frozen-partition granularity 扩展 | `../artifacts/s2c/runs/protocol_v2_textoir_v1/mogb_fixed_k_mean_ablation_v1/summary/MOGB_FIXED_K_MEAN_CLOSEOUT.md` |
 | MOGB official-logic smoke | partial_blocked；StackOverflow 1/1 工程单元完成，Banking77 未形成完整单元；无可比较收敛结果 | `do_not_repeat`；只保留 blocker 记录，不写入主表 | `../artifacts/s2c/external/mogb_official_modernized_smoke_v1/MOGB_OFFICIAL_MODERNIZED_PROVENANCE.json` |
+| MOGB official-logic converged | complete 10/10；StackOverflow 与 Banking77 各 5 个 seed；兼容层下收敛，不是严格官方复现 | `do_not_repeat`；不与 MiniLM fair 结果混合 | `../artifacts/s2c/external/mogb_official_converged_v1/` |
+| BRAK pilot | complete 21/21 summary cells；3 seeds；30 个 intent 全部选择 K=1；0 失败 | `do_not_repeat`；未通过扩展门，不启动三数据集扩展 | `../artifacts/s2c/runs/protocol_v2_textoir_v1/brak_v1/` |
+| DCLOOS official/unified preflight | blocked；源码可编译，但缺失 `squad_placeh.tsv` 和明确 negative corpus，未生成指标 | `do_not_repeat`；不得用 protocol OOS 替代额外监督 | `../artifacts/s2c/external/dcloos_v1/DCLOOS_PREFLIGHT.json` |
 
 E2/E3 的 K、KIR、random partition、聚类稳定性和 tiny-cluster 矩阵不得再次运行。
 
@@ -99,6 +101,14 @@ E2/E3 的 K、KIR、random partition、聚类稳定性和 tiny-cluster 矩阵不
     `0.6616/0.6230/0.5922/0.5812`，Known Recall 为
     `0.5385/0.4998/0.4671/0.4547`。Banking77 存在少量 K2/K4 单元胜出，但 CLINC150 的
     15/15 与 StackOverflow 的 14/15 protocol cells 均由 K=1 获得最高 fixed-K OOS F1。
+28. 官方 MOGB 兼容层已完成 StackOverflow 与 Banking77 各 5 个 seed 的 10/10 收敛单元；
+    官方格式 F1-All 均值分别为 `40.7243` 与 `19.2843`，但该结果使用现代化兼容层和本地快照，
+    不是严格论文复现，也不能与 MiniLM-fair 主表直接混合。
+29. BRAK 在 StackOverflow/KIR50/42,87,100 的 30 个 Known intent 选择中全部保留 K=1；
+    K>1 的 Known-only union-risk、交叉意图泄漏和 bootstrap 不稳定性均上升，未通过预注册扩展门。
+    因此 BRAK 当前是安全的 Known-only 负控制，不是已验证的新 adaptive-K 方法。
+30. DCLOOS 源码可编译，但官方所需 `squad_placeh.tsv` 外部 open-domain negative corpus 缺失；
+    official/unified 均未启动，状态为 `blocked_missing_official_open_domain_oos`，没有伪造指标。
 
 ## 历史依据（不混入当前主表）
 
@@ -108,9 +118,11 @@ Pipeline 结果仍可作为研究依据，但它们来自旧实验族，必须�
 
 ## 当前唯一下一步
 
-收口 MOGB 证据：保留已完成的 MiniLM-fair/OFAT/fixed-K 矩阵和 StackOverflow
-modernized official-logic smoke，记录 Banking77 的运行阻塞，完成 provenance、报告和回归验证。
-当前环境不再自动扩展官方 BERT 全矩阵；任何后续收敛复现必须在独立、可重复的 GPU/legacy 环境中另行登记。
+完成本轮外部基线收口审计：验证 MOGB 官方兼容层、BRAK Known-only 选择和 DCLOOS blocker 的
+provenance/报告/台账/回归测试一致性，然后把 `results/final_baselines/summary.csv` 作为当前
+基线汇总。不得继续扩大 BRAK、自适应 K、MOGB 官方 BERT 矩阵或用 protocol OOS 替代 DCLOOS
+缺失的外部负样本；若要推进论文主结果，下一阶段应先在统一指标中比较现有 MOGB-fair 组件与
+Single/FK controls，再决定是否申请独立可复现环境完成严格官方复现。
 
 ## 当前风险
 

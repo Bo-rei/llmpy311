@@ -239,3 +239,35 @@
   180-cell fixed-K 结果继续作为当前 MOGB 组件证据。
 - 下一步：完成 provenance/报告/回归审计；只有获得独立可重复 GPU/legacy 环境后，才重新登记
   收敛官方复现。当前不改 s2c Gate、不启动完整 Pipeline。
+
+## D24：官方 MOGB 兼容层收敛但不升级为严格复现（2026-08-01）
+
+- 证据：`mogb_official_converged_v1` 在 StackOverflow 与 Banking77 的 5 个正式 seed 共
+  10/10 单元完成；官方格式 F1-All 均值分别为 40.7243 与 19.2843。
+- 边界：运行使用 pinned 官方源码、现代化兼容层、本地 BERT 和本地固定快照；旧版缺失
+  `utils`、数据契约和原论文 Known 类抽样细节仍未完全恢复。
+- 决策：标记为 `complete_non_strict_reproduction`，只作为官方逻辑执行证据；不得称为
+  byte-identical/paper reproduction，不与 MiniLM-fair 或历史论文数字混合。
+
+## D25：BRAK pilot 只作为 Known-only 安全负控制（2026-08-01）
+
+- 证据：StackOverflow/KIR50/seeds 42,87,100 的 30 个意图候选均选择 K=1；K>1 的
+  calibration union-risk、交叉意图泄漏和 bootstrap instability 均上升，BRAK 与 fixed K1
+  的测试结果一致。
+- 决策：`brak_v1` complete/do_not_repeat，但不启动三数据集扩展，不宣称已提出可泛化的
+  adaptive-K 方法；oracle test-best-K 仅保留为分析上限。
+
+## D26：DCLOOS 缺少外部负样本时保持阻断（2026-08-01）
+
+- 证据：官方 checkout 与实际 source checkout 均已固定且源码可编译，但 `squad_placeh.tsv`
+  等官方 open-domain negative corpus 文件缺失；官方流程同时依赖 pseudo OOS、external open-domain
+  OOS 和端到端训练。
+- 决策：`dcloos_official_unified_v1` 标记 blocked；不得用 protocol test OOS 替代外部语料，
+  不生成指标。只有补齐来源、许可证和固定语料后，才能另行登记 smoke。
+
+## D27：本轮外部基线阶段收口（2026-08-01）
+
+- MOGB MiniLM-fair/OFAT/fixed-K、官方兼容层、BRAK 和 DCLOOS preflight 均已独立登记并写入
+  `results/final_baselines/summary.csv`；旧 E0--E3/R1/MiniLM 结果保持不可覆盖。
+- 唯一下一步：完成状态/日志/注册表/测试的最终一致性审计；不再扩大 MOGB 官方矩阵、BRAK 或
+  fixed-K 搜索。论文主表使用同协议 MiniLM-fair 组件，官方兼容结果单列，DCLOOS 明确 blocker。

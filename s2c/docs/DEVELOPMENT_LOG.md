@@ -760,3 +760,28 @@
 - 测试：MOGB compatibility/runtime unit `6 passed`；官方 checkout 未修改；未执行 commit/push。
 - 风险：one-epoch modernized smoke 不是严格官方复现，Banking77 未形成收敛结果；不能据此宣称
   MOGB SOTA 或公平优越性。下一步只做文档/provenance/全仓回归收口，除非获得独立可复现 GPU/legacy 环境。
+
+## 2026-08-01 — MOGB 官方逻辑收敛、BRAK pilot 与 DCLOOS preflight
+
+- Base commit: `2ff028e` (`main`)，父仓库未自动 commit/push；MOGB checkout 保持 pinned
+  `5b689e2a03de0d86ec41212825e5db8d7f0e5c02` 且未修改。
+- 目标：在不重复 E0--E3/R1/MiniLM/MOGB fair/OFAT/fixed-K 的前提下，完成官方 MOGB 兼容层
+  收敛尝试、Known-only BRAK pilot，并审计 DCLOOS 官方/统一入口的必要数据。
+- 代码与配置：新增 `src/protocol_v2/experiments/brak.py`、`scripts/experiments/run_brak_pilot.py`、
+  `scripts/experiments/run_dcloos_preflight.py`、官方收敛配置与最终汇总脚本；第三方源码分置于
+  `third_party/dcloos_official/` 和 `third_party/dcloos_source/`，未覆盖上游文件。
+- MOGB：StackOverflow 与 Banking77 各 5 seed，共 10/10 GPU 单元完成；结果写入
+  `../artifacts/s2c/external/mogb_official_converged_v1/`，官方格式 F1-All 均值为 40.7243/19.2843。
+  这是 modernized compatibility evidence，不是严格论文复现，未与 MiniLM-fair 主表混合。
+- BRAK：StackOverflow/KIR50/seeds 42,87,100 计划 21 个 summary cells 全部完成，30 个 Known intent
+  均选择 K=1；K>1 的 calibration risk 上升，未通过 expansion gate。输出位于
+  `../artifacts/s2c/runs/protocol_v2_textoir_v1/brak_v1/`，不启动全量扩展。
+- DCLOOS：preflight 返回预期 blocker；source 编译通过但缺失 `squad_placeh.tsv` 等官方
+  open-domain negative corpus，未训练、未生成伪指标。报告位于 `docs/dcloos/` 和对应 external artifact。
+- 记录：更新 `EXPERIMENT_LEDGER.csv`、`configs/experiment_registry.yaml`、`RESEARCH_STATUS.md`、
+  `DECISION_LOG.md`、`PAPER_CLAIM_AUDIT.md`；生成 `results/final_baselines/summary.csv`（27 行，
+  含同协议 fair 组件、BRAK 控制、官方兼容结果以及 ADB/DA-ADB/DCLOOS 的明确 not-run/blocked 状态）。
+- 测试/验证：BRAK unit `3 passed`；官方 10/10 returncode=0；DCLOOS preflight 以预期 blocker 退出；
+  下一步仅做全仓回归、manifest/hash/台账一致性检查，不自动 commit/push。
+- 风险：官方结果不能写成 SOTA 或严格论文复现；BRAK 是负控制而非新方法；DCLOOS 需要外部语料和
+  许可证后才能启动。任何后续基线必须新建 ledger 行并遵守 `do_not_repeat`。

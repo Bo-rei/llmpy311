@@ -1,0 +1,28 @@
+dataset,kir,method,scope,training_regime,supervision,oos_f1,oos_precision,oos_recall,known_macro_f1,known_recall,f1_all,accuracy,status,source
+banking77,0.50,Fixed K=2,protocol_v2_fair_mean_over_5_seeds,frozen-embedding,Known-only,0.754616,NA,NA,0.761824,0.825526,0.761639,0.747922,complete,results/mogb/fair_matrix.csv
+banking77,0.50,MOGB-MiniLM,protocol_v2_fair_mean_over_5_seeds,frozen-embedding,Known-only,0.749937,NA,NA,0.479063,0.334079,0.486008,0.665130,complete,results/mogb/fair_matrix.csv
+banking77,0.50,MOGB partition + s2c boundary,protocol_v2_fair_mean_over_5_seeds,frozen-embedding,Known-only,0.793975,NA,NA,0.644258,0.521842,0.648097,0.743831,complete,results/mogb/fair_matrix.csv
+banking77,0.50,s2c partition + MOGB boundary,protocol_v2_fair_mean_over_5_seeds,frozen-embedding,Known-only,0.788595,NA,NA,0.653312,0.532500,0.656781,0.736104,complete,results/mogb/fair_matrix.csv
+banking77,0.50,Random partition,protocol_v2_fair_mean_over_5_seeds,frozen-embedding,Known-only,0.716221,NA,NA,0.748016,0.859605,0.747201,0.720519,complete,results/mogb/fair_matrix.csv
+banking77,0.50,Single centroid,protocol_v2_fair_mean_over_5_seeds,frozen-embedding,Known-only,0.724280,NA,NA,0.745688,0.850132,0.745139,0.723896,complete,results/mogb/fair_matrix.csv
+clinc150,0.50,Fixed K=2,protocol_v2_fair_mean_over_5_seeds,frozen-embedding,Known-only,0.892006,NA,NA,0.799729,0.751378,0.800943,0.856561,complete,results/mogb/fair_matrix.csv
+clinc150,0.50,MOGB-MiniLM,protocol_v2_fair_mean_over_5_seeds,frozen-embedding,Known-only,0.813195,NA,NA,0.444689,0.315733,0.449538,0.723789,complete,results/mogb/fair_matrix.csv
+clinc150,0.50,MOGB partition + s2c boundary,protocol_v2_fair_mean_over_5_seeds,frozen-embedding,Known-only,0.855554,NA,NA,0.643187,0.533422,0.645982,0.798526,complete,results/mogb/fair_matrix.csv
+clinc150,0.50,s2c partition + MOGB boundary,protocol_v2_fair_mean_over_5_seeds,frozen-embedding,Known-only,0.833232,NA,NA,0.560505,0.422400,0.564093,0.759158,complete,results/mogb/fair_matrix.csv
+clinc150,0.50,Random partition,protocol_v2_fair_mean_over_5_seeds,frozen-embedding,Known-only,0.890691,NA,NA,0.806398,0.794756,0.807507,0.855544,complete,results/mogb/fair_matrix.csv
+clinc150,0.50,Single centroid,protocol_v2_fair_mean_over_5_seeds,frozen-embedding,Known-only,0.889433,NA,NA,0.801537,0.787556,0.802693,0.853158,complete,results/mogb/fair_matrix.csv
+stackoverflow,0.50,Fixed K=2,protocol_v2_fair_mean_over_5_seeds,frozen-embedding,Known-only,0.635295,NA,NA,0.736818,0.868867,0.727588,0.669267,complete,results/mogb/fair_matrix.csv
+stackoverflow,0.50,MOGB-MiniLM,protocol_v2_fair_mean_over_5_seeds,frozen-embedding,Known-only,0.729199,NA,NA,0.403358,0.270933,0.432980,0.630567,complete,results/mogb/fair_matrix.csv
+stackoverflow,0.50,MOGB partition + s2c boundary,protocol_v2_fair_mean_over_5_seeds,frozen-embedding,Known-only,0.792471,NA,NA,0.617539,0.503867,0.633442,0.740733,complete,results/mogb/fair_matrix.csv
+stackoverflow,0.50,s2c partition + MOGB boundary,protocol_v2_fair_mean_over_5_seeds,frozen-embedding,Known-only,0.733522,NA,NA,0.626104,0.544933,0.635870,0.683533,complete,results/mogb/fair_matrix.csv
+stackoverflow,0.50,Random partition,protocol_v2_fair_mean_over_5_seeds,frozen-embedding,Known-only,0.758800,NA,NA,0.801965,0.876400,0.798041,0.761000,complete,results/mogb/fair_matrix.csv
+stackoverflow,0.50,Single centroid,protocol_v2_fair_mean_over_5_seeds,frozen-embedding,Known-only,0.765496,NA,NA,0.803227,0.871467,0.799796,0.765767,complete,results/mogb/fair_matrix.csv
+stackoverflow,0.50,Single centroid (BRAK control),brak_pilot_mean_over_3_seeds,frozen-embedding,Known-only,0.813410,0.827561,0.800778,0.799727,0.833333,0.800971,0.789000,complete,artifacts/.../brak_v1/summaries/BRAK_PILOT_SUMMARY.tsv
+stackoverflow,0.50,Fixed K=2 (BRAK control),brak_pilot_mean_over_3_seeds,frozen-embedding,Known-only,0.706198,0.831416,0.614444,0.744841,0.875556,0.741328,0.703667,complete,artifacts/.../brak_v1/summaries/BRAK_PILOT_SUMMARY.tsv
+stackoverflow,0.50,BRAK,brak_pilot_mean_over_3_seeds,frozen-embedding,Known-only,0.813410,0.827561,0.800778,0.799727,0.833333,0.800971,0.789000,complete,artifacts/.../brak_v1/summaries/BRAK_PILOT_SUMMARY.tsv
+stackoverflow,0.50,MOGB-official (compatibility),official_logic_compatibility_mean_over_5_seeds,end-to-end-BERT,Known-only plus official protocol,NA,NA,NA,0.375916,NA,0.407243,0.614880,complete_non_strict_reproduction,artifacts/external/mogb_official_converged_v1/*/results/results.csv
+banking77,0.50,MOGB-official (compatibility),official_logic_compatibility_mean_over_5_seeds,end-to-end-BERT,Known-only plus official protocol,NA,NA,NA,0.179685,NA,0.192843,0.554880,complete_non_strict_reproduction,artifacts/external/mogb_official_converged_v1/*/results/results.csv
+all_requested,0.50,ADB,requested_final_baseline_slot,end-to-end,Known-only,NA,NA,NA,NA,NA,NA,NA,not_run,not_registered_in_current_protocol
+all_requested,0.50,DA-ADB,requested_final_baseline_slot,end-to-end,Known-only,NA,NA,NA,NA,NA,NA,NA,not_run,not_registered_in_current_protocol
+all_requested,0.50,DCLOOS-official,requested_final_baseline_slot,end-to-end,pseudo-OOS plus external open-domain OOS,NA,NA,NA,NA,NA,NA,NA,blocked,docs/dcloos/DCLOOS_REPRODUCTION_REPORT.md
+all_requested,0.50,DCLOOS-unified,requested_final_baseline_slot,end-to-end,pseudo-OOS plus external open-domain OOS,NA,NA,NA,NA,NA,NA,NA,blocked,docs/dcloos/DCLOOS_REPRODUCTION_REPORT.md

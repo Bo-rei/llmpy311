@@ -1,0 +1,29 @@
+name: brak_v1_pilot
+protocol_version: protocol_v2_textoir_v1
+datasets:
+  - stackoverflow
+kirs:
+  - 0.50
+seeds:
+  - 42
+  - 87
+  - 100
+candidate_k:
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5
+distance: mahalanobis_diag
+radius_method: mean_std
+radius_lambda: 1.0
+selection:
+  alpha: 1.0
+  beta: 1.0
+  gamma: 0.25
+  eta: 0.01
+  delta: 0.02
+  min_improvement: 0.01
+  bootstrap_repeats: 5
+  source: proper_train_and_known_calibration_only
+test_used_for_selection: false

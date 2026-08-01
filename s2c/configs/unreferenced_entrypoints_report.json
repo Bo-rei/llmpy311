@@ -1,7 +1,7 @@
 {
   "action": "report_only",
   "count": 198,
-  "generated_at": "2026-07-31T02:41:14.295002+00:00",
+  "generated_at": "2026-08-01T03:02:12.279700+00:00",
   "paths": [
     "scripts/data/active/audit_v19_2_data.py",
     "scripts/data/active/build_known_intents_ratio_splits_v19.py",
@@ -16,6 +16,7 @@
     "scripts/data/import_textoir.py",
     "scripts/data/validate_protocol.py",
     "scripts/experiments/aggregate_mogb_results.py",
+    "scripts/experiments/build_final_baseline_summary.py",
     "scripts/experiments/plan_e3_mechanisms.py",
     "scripts/experiments/plan_grid.py",
     "scripts/experiments/plan_r1_full.py",
@@ -32,7 +33,6 @@
     "scripts/experiments/run_mogb_fair.py",
     "scripts/experiments/run_mogb_fixed_k_mean_ablation.py",
     "scripts/experiments/run_mogb_fixed_k_mean_ablation_sweep.py",
-    "scripts/experiments/run_mogb_official_modernized_smoke.py",
     "scripts/experiments/run_mogb_sweep.py",
     "scripts/experiments/run_r1_geometry_preserving.py",
     "scripts/experiments/summarize_clmsg.py",
