@@ -785,3 +785,83 @@
   下一步仅做全仓回归、manifest/hash/台账一致性检查，不自动 commit/push。
 - 风险：官方结果不能写成 SOTA 或严格论文复现；BRAK 是负控制而非新方法；DCLOOS 需要外部语料和
   许可证后才能启动。任何后续基线必须新建 ledger 行并遵守 `do_not_repeat`。
+## 2026-08-01 — 重新纳入 DCLOOS 端到端基线
+
+- 原因：前一版外部基线计划错误地把重点缩成 MOGB、BRAK 和 ADB/DA-ADB，遗漏审稿人点名的
+  DCLOOS fully end-to-end 方法。
+- 当前状态：`blocked_missing_external_negative_data`。官方代码仍保留，源码可编译；缺失
+  `squad_placeh.tsv` 外部 open-domain negative corpus，因此不伪造指标，也不使用 protocol test OOS 替代。
+- 计划边界：MOGB 官方完整收敛、MOGB 表示上的 BRAK 和 DCLOOS 数据审计分别记录；语料可得时区分
+  `DCLOOS-official` 与 `DCLOOS-adapted`，ADB/DA-ADB 只作为边界基线，不替代 DCLOOS。
+
+## 2026-08-01 — MOGB 严格单格、BRAK 表示迁移与基线边界最终收口
+
+- Base commit：`a51f97494afdcfca30dd3d94b54a6acdad8a41cc`；父仓库保持 dirty，未执行 add/commit/push；
+  TEXTOIR 工作树仍干净，MOGB pinned checkout 未修改。
+- MOGB 严格单格：新增 `configs/baselines/mogb_exact_reproduction_v1.yaml` 和
+  `scripts/experiments/run_mogb_exact_reproduction.py`；StackOverflow 20,000 行、KIR50、seed0、
+  BERT-base、官方 ball/nearest-ball/early-stop 流程的 `official_fixed` 与 `unified_zero` 共 2/2
+  完成。两者 checkpoint SHA 相同，Acc/F1-All/F1-U/F1-K 为 `75.1667/68.3502/79.9676/67.1884`，
+  相对论文参考不复现；完整证据在 `../artifacts/s2c/external/mogb_exact_reproduction_v1/`。
+- BRAK 表示迁移：新增 `scripts/experiments/run_brak_mogb_representations.py`，复用同一 MOGB
+  checkpoint 和 split，在 Frozen MiniLM、initial BERT、trained BERT 上完成 18/18 固定 K/BRAK
+  汇总；trained BERT 仅 2/10 intent 选 K2，绝对指标仍低，停止扩大该路线。
+- ADB/DA-ADB：新增 `docs/mogb_integration/ADB_DAADB_AUDIT.md`；隔离 preflight 两项均在训练前
+  因当前 Transformers 缺失顶层 `AdamW` 导入而阻塞，没有生成性能数字。
+- DCLOOS：保持 `blocked_missing_external_negative_data`；官方所需 `squad_placeh.tsv` 不存在，
+  不使用 protocol test OOS 替代，不把 ADB/DA-ADB 当作端到端替代。
+- 汇总与记录：更新 `MOGB_REPRODUCTION_REPORT.md`、`results/final_baselines/summary.csv`、
+  `EXPERIMENT_LEDGER.csv`、`RESEARCH_STATUS.md`、`DECISION_LOG.md`；新增严格 MOGB、BRAK 表示
+  迁移和 DCLOOS re-audit 行，旧 E0--E3/R1/MiniLM/MOGB fair artifacts 未覆盖。
+- 测试/验证：严格 MOGB 两模式已完成并通过 manifest/hash 审计；ADB/DA-ADB preflight 结果按预期
+  阻塞；待本条记录完成后运行定向 compile、Ruff、registry/data/research-state/development-log
+  检查和 `git diff --check`。下一步只保留 DCLOOS 语料/许可证获取和未来隔离环境登记。
+
+## 2026-08-01 — 外部基线最终验证与公开结果同步
+
+- 变更：修正 `configs/experiment_registry.yaml` 中外部基线相对 artifact 根路径、manifest
+  清单和计数来源；登记严格 MOGB 与 BRAK-on-MOGB 表示结果；保留 DCLOOS
+  `blocked_missing_external_negative_data` 状态。
+- 公开结果：将严格 MOGB/BRAK 的轻量 CSV/JSON 纳入 `configs/public_results.yaml` 白名单；未导出
+  checkpoint、模型、原始文本或日志。`export_public_results.py --dry-run/--execute/--verify`
+  均通过，79 个文件、1,797,774 bytes。
+- 验证：实验注册表 `--check-only` 通过（19 entries）；研究状态、数据跟踪、开发日志、diff
+  检查通过；unit `284 passed, 3 warnings`，integration `8 passed`，smoke `3 passed`。
+- 结论：严格 MOGB 仍为 `not_reproduced_strict`，BRAK 表示迁移仍为负控制，ADB/DA-ADB 没有
+  性能数字，DCLOOS 仍是必须保留但缺少外部负样本的端到端基线；不启动新矩阵。
+- Git：父仓库仍 dirty，未执行 add/commit/push；第三方源码和完整 artifacts 保持本地审计边界。
+- 交付补充：新增 `docs/mogb_integration/MOGB_EXACT_REPRODUCTION_REPORT.md`，逐项回答数据契约、
+  收敛、论文差距、兼容性诊断、BRAK、扩展门和 DCLOOS/ADB/DA-ADB 边界；不修改任何已有 run。
+
+## 2026-08-01 — 外部基线单格最终收口
+
+- Base commit：`a51f97494afdcfca30dd3d94b54a6acdad8a41cc`；父仓库保持 dirty，未执行
+  `git add/commit/push`；TEXTOIR 工作树仍干净。
+- 目标：补齐 MOGB Banking77/KIR=.75/seed=0 严格单格，保留 DCLOOS 端到端基线，完成
+  ADB/DA-ADB 隔离兼容单格，不扩大矩阵。
+- MOGB：Banking77 13,083 行、77 标签、KIR=.75/seed=0 完成 1/1；Acc `57.0779`、
+  F1-All `59.1627`、F1-U `53.1049`、F1-K `59.2671`，相对论文参考仍为
+  `not_reproduced_strict`。
+- DCLOOS：官方 Drive `squad.tsv`（SHA256
+  `f6bf61866c86d3b11565826c3ca1faa00e31f196e0ad9bfd000ec45575fd426e`）复制为上游要求的
+  `squad_placeh.tsv`，训练约三小时后按声明上限停止；artifact 标记 `timeout_incomplete`，
+  无 final metrics，中间 `predictions.npz` 不进入汇总。
+- ADB/DA-ADB：在 `textoir-py39` + torch-native AdamW overlay + isolated BERT pytorch 权重副本
+  下完成 StackOverflow/KIR=.50/seed=0，各 1/1；ADB `Acc/F1-All/F1-open=88.53/87.6272/89.4712`，
+  DA-ADB `90.07/89.2256/90.8978`。均标注 modernized compatibility，不称 strict reproduction。
+- 代码/记录：新增 DCLOOS 中断 provenance、更新 ADB/DA-ADB 审计、研究状态/决策日志/ledger、
+  registry 与 `results/final_baselines/summary.csv`；不修改既有 E0--E3/R1/MiniLM/MOGB artifacts。
+- 风险与下一步：DCLOOS 仍缺最终可报告指标，且 ADB/DA-ADB 是单 seed 兼容参考；完成回归和
+  公开结果 SHA 校验后冻结本轮，不启动 MOGB/BRAK/adaptive-K 大矩阵或完整 Pipeline。
+
+## 2026-08-01 — DCLOOS reduced-budget recovery
+
+- Base commit：`a51f97494afdcfca30dd3d94b54a6acdad8a41cc`；未执行 add/commit/push。
+- 目标：在不扩大 DCLOOS 矩阵的前提下，验证已定位的官方外部 SQuAD 负样本能否完成一个可审计的端到端单格。
+- 执行：`dcloos_official_oos_kir75_seed888_reduced_v2`，KIR `.75`、seed `888`、`max_epochs=100`、`patient=10`。
+- 数据影响：使用同一 `squad.tsv` SHA256 `f6bf61866c86d3b11565826c3ca1faa00e31f196e0ad9bfd000ec45575fd426e`；原始 corpus 仍只在本地 artifact。
+- 结果：上游 test evaluation 输出 5,700 条预测；raw JSON 因 overlay 缺失 `json` import 失败，恢复指标为 Accuracy `88.6842`、F1-All `90.2629`、F1-U `87.0527`、F1-K `90.2916`、OOS F1 `87.0527`。
+- 记录：保留原 `failed` run manifest，新增 `recovery_manifest.json` 和 `recovery_metrics.json`；该结果是 reduced compatibility evidence，不是严格论文复现。
+- 代码：补充 overlay 的 `json` import 和无 test-local 变量时的最终测试兜底；第三方 checkout 未改动。
+- 测试：待本轮 registry、summary、public export、unit/integration/smoke 和 lint 回归完成后冻结。
+- 风险与下一步：不再扩大 DCLOOS；继续保持 MOGB/BRAK/adaptive-K/完整 Pipeline 停止，先完成本轮验证。

@@ -1,0 +1,43 @@
+{
+  "official_fixed": {
+    "best_dev_accuracy": 91.84,
+    "best_epoch": 44,
+    "checkpoint_sha256": "ad686a638fdc29376cfa10101975739f5332fc9ff66d5003ab1106af3b263da3",
+    "dataset": "banking77",
+    "epochs_completed": 54,
+    "kir": 0.75,
+    "metrics": {
+      "Accuracy": 57.0779,
+      "F1-All": 59.1627,
+      "F1-K": 59.2671,
+      "F1-U": 53.1049,
+      "Known Recall": 43.7069,
+      "Known->OOS": 1298,
+      "OOS Precision": 36.4349,
+      "OOS Recall": 97.8947,
+      "OOS->Known": 16
+    },
+    "mode": "official_fixed",
+    "numeric_compatibility": {
+      "ball_count_difference": 0,
+      "ce_loss_difference": 0.0,
+      "centroid_difference": 0.0,
+      "gradient_norm_difference": 0.0,
+      "note": "The compatibility runtime changes graph lifetime/device placement, not the fixed-centroid formula; synthetic formula comparison is exact up to floating point.",
+      "status": "pass",
+      "subcentroid_loss_difference": 0.0
+    },
+    "official_dataset": "banking",
+    "run_dir": "/home/bo/bo01/llmpy311/artifacts/s2c/external/mogb_exact_reproduction_banking_v1/audit/official_fixed",
+    "seed_contract": {
+      "class_split_seed": 0,
+      "dataloader_seed": 0,
+      "granular_ball_seed": 0,
+      "model_seed": 0,
+      "note": "MOGB.py seeds 100 before Data; Data.set_seed(args.seed=0) resets all effective sources.",
+      "official_pre_data_seed": 100
+    },
+    "snapshot_hash": "bda54e734c999f80cf528dfa28a5606f71db14348da04773c46c84c24db59ff8",
+    "status": "complete"
+  }
+}

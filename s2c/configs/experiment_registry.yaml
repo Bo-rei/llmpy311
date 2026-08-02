@@ -301,13 +301,75 @@ experiments:
       entrypoints:
         - scripts/experiments/run_mogb_official_modernized_smoke.py
       protocol: mogb_official_logic_textoir_v1
-      artifact_root: ../artifacts/s2c/external/mogb_official_converged_v1
+      artifact_root: ../../external/mogb_official_converged_v1
       manifest:
-        - "*/kir_0.50/seed_*/manifest.json"
+        - banking77/kir_0.50/seed_13/manifest.json
+        - banking77/kir_0.50/seed_42/manifest.json
+        - banking77/kir_0.50/seed_87/manifest.json
+        - banking77/kir_0.50/seed_100/manifest.json
+        - banking77/kir_0.50/seed_123/manifest.json
+        - stackoverflow/kir_0.50/seed_13/manifest.json
+        - stackoverflow/kir_0.50/seed_42/manifest.json
+        - stackoverflow/kir_0.50/seed_87/manifest.json
+        - stackoverflow/kir_0.50/seed_100/manifest.json
+        - stackoverflow/kir_0.50/seed_123/manifest.json
       summary:
-        - docs/mogb_integration/MOGB_OFFICIAL_CLOSEOUT.md
+        - banking77/kir_0.50/seed_42/results/results.csv
+        - stackoverflow/kir_0.50/seed_42/results/results.csv
       expected_unit_count: 10
-      count_source: manifest_status
+      count_source: none
+
+    mogb_exact_reproduction_v1:
+      id: external_validation.mogb_exact_reproduction_v1
+      research_question: "固定 StackOverflow 快照下，官方 MOGB BERT 训练链能否严格复现论文指标？"
+      status: not_reproduced_strict
+      entrypoints:
+        - scripts/experiments/run_mogb_exact_reproduction.py
+      protocol: mogb_official_exact_stackoverflow_v1
+      artifact_root: ../../external/mogb_exact_reproduction_v1
+      manifest:
+        - audit/MOGB_EXACT_PROVENANCE.json
+        - audit/split_manifest.json
+        - audit/official_fixed/mode_manifest.json
+        - audit/unified_zero/mode_manifest.json
+      summary:
+        - audit/official_fixed/mode_manifest.json
+        - audit/unified_zero/mode_manifest.json
+      expected_unit_count: 2
+      count_source: none
+
+    mogb_exact_reproduction_banking_v1:
+      id: external_validation.mogb_exact_reproduction_banking_v1
+      research_question: "固定 Banking77 快照下，官方 MOGB BERT 训练链能否在 KIR=.75 单格完成并接近论文量级？"
+      status: complete_not_reproduced
+      entrypoints:
+        - scripts/experiments/run_mogb_exact_reproduction.py
+      protocol: mogb_official_exact_banking_kir75_v1
+      artifact_root: ../../external/mogb_exact_reproduction_banking_v1
+      manifest:
+        - audit/MOGB_EXACT_PROVENANCE.json
+        - audit/split_manifest.json
+        - audit/official_fixed/mode_manifest.json
+      summary:
+        - audit/official_fixed/mode_manifest.json
+        - audit/MOGB_EXACT_PROVENANCE.json
+      expected_unit_count: 1
+      count_source: none
+
+    brak_mogb_representation_v1:
+      id: external_validation.brak_mogb_representation_v1
+      research_question: "Known-only BRAK 在 MOGB 初始和训练后 BERT 表示上是否选择出可靠的多中心结构？"
+      status: complete
+      entrypoints:
+        - scripts/experiments/run_brak_mogb_representations.py
+      protocol: protocol_v2_textoir_v1
+      artifact_root: ../../external/mogb_exact_reproduction_v1
+      manifest:
+        - brak_mogb_representation/BRAK_MOGB_PROVENANCE.json
+      summary:
+        - brak_mogb_representation/BRAK_MOGB_PROVENANCE.json
+      expected_unit_count: 18
+      count_source: none
 
     brak:
       id: external_validation.brak
@@ -317,28 +379,93 @@ experiments:
         - scripts/experiments/run_brak_pilot.py
         - src/protocol_v2/experiments/brak.py
       protocol: protocol_v2_textoir_v1
-      artifact_root: ../artifacts/s2c/runs/protocol_v2_textoir_v1/brak_v1
+      artifact_root: ../../runs/protocol_v2_textoir_v1/brak_v1
       manifest:
         - BRAK_PROVENANCE.json
         - BRAK_INTEGRITY.json
       summary:
         - summaries/BRAK_PILOT_SUMMARY.tsv
         - summaries/BRAK_CANDIDATE_DIAGNOSTICS.tsv
-        - docs/brak/BRAK_RESEARCH_REPORT.md
       expected_unit_count: 21
-      count_source: summary_rows
+      count_source: csv_rows
+      count_summary: summaries/BRAK_PILOT_SUMMARY.tsv
 
     dcloos:
       id: external_validation.dcloos
       research_question: "DCLOOS 的官方和统一协议是否具备可审计的额外 OOS 监督输入？"
-      status: blocked
+      status: blocked_missing_external_negative_data
       entrypoints:
         - scripts/experiments/run_dcloos_preflight.py
       protocol: protocol_v2_textoir_v1
-      artifact_root: ../artifacts/s2c/external/dcloos_v1
+      artifact_root: ../../external/dcloos_v1
       manifest:
         - DCLOOS_PREFLIGHT.json
       summary:
-        - docs/dcloos/DCLOOS_REPRODUCTION_REPORT.md
+        - DCLOOS_PREFLIGHT.json
       expected_unit_count: 0
       count_source: none
+
+    dcloos_official_oos_kir75_seed888_v1:
+      id: external_validation.dcloos_official_oos_kir75_seed888_v1
+      research_question: "DCLOOS 的官方外部 SQuAD 负样本单格能否在声明时限内完成端到端训练？"
+      status: timeout_incomplete
+      entrypoints:
+        - scripts/experiments/run_dcloos_official.py
+      protocol: dcloos_official_oos_kir75_seed888_v1
+      artifact_root: ../../external/dcloos_official_single_cell_v1
+      manifest:
+        - run_manifest.json
+        - source_snapshot/squad.tsv
+      summary: []
+      expected_unit_count: 1
+      count_source: none
+
+    dcloos_official_oos_kir75_seed888_reduced_v2:
+      id: external_validation.dcloos_official_oos_kir75_seed888_reduced_v2
+      research_question: "受限预算 DCLOOS 单格是否能从官方外部负样本训练中产生可审计预测？"
+      status: complete_recovered_intermediate_prediction
+      entrypoints:
+        - scripts/experiments/run_dcloos_official.py
+      protocol: dcloos_official_oos_kir75_seed888_reduced_v2
+      artifact_root: ../../external/dcloos_official_oos_kir75_seed888_reduced_v2
+      manifest:
+        - run_manifest.json
+        - recovery_manifest.json
+        - recovery_metrics.json
+        - source_snapshot/squad.tsv
+      summary:
+        - recovery_metrics.json
+      expected_unit_count: 1
+      count_source: none
+
+    adb_compat_stackoverflow_kir50_seed0_v2:
+      id: external_validation.adb_compat_stackoverflow_kir50_seed0_v2
+      research_question: "现代隔离兼容层下 ADB 的 StackOverflow KIR50 单格表现如何？"
+      status: complete_compatibility_artifact
+      entrypoints:
+        - tools/compat/textoir/run_external_textoir.py
+      protocol: textoir_compat_stackoverflow_kir50_seed0_v2
+      artifact_root: ../../external/adb_compat_single_cell_v2
+      manifest:
+        - stackoverflow/ADB/kir50/seed0/run_manifest.json
+      summary:
+        - stackoverflow/ADB/kir50/seed0/results/results.csv
+      expected_unit_count: 1
+      count_source: csv_rows
+      count_summary: stackoverflow/ADB/kir50/seed0/results/results.csv
+
+    da_adb_compat_stackoverflow_kir50_seed0_v3:
+      id: external_validation.da_adb_compat_stackoverflow_kir50_seed0_v3
+      research_question: "现代隔离兼容层下 DA-ADB 的 StackOverflow KIR50 单格表现如何？"
+      status: complete_compatibility_artifact
+      entrypoints:
+        - tools/compat/textoir/run_external_textoir.py
+      protocol: textoir_compat_stackoverflow_kir50_seed0_v3
+      artifact_root: ../../external/da_adb_compat_single_cell_v3
+      manifest:
+        - stackoverflow/DA-ADB/kir50/seed0/run_manifest.json
+      summary:
+        - stackoverflow/DA-ADB/kir50/seed0/results/results.csv
+      expected_unit_count: 1
+      count_source: csv_rows
+      count_summary: stackoverflow/DA-ADB/kir50/seed0/results/results.csv

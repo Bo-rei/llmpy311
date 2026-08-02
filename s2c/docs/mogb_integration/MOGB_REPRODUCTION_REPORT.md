@@ -1,17 +1,120 @@
-# MOGB integration and frozen-MiniLM component closeout
+# MOGB integration, strict reproduction, and fair component closeout
 
 ## Scope
 
-This stage closes the protocol-aligned frozen-MiniLM MOGB OFAT sweep. It does
-not alter the s2c Gate, MiniLM training objectives, E2/E3 artifacts, or the
-Gate--Router--Expert pipeline. The registered sweep completed 540/540 cells
-with zero failures across three datasets, three KIR values, five seeds and
-twelve one-factor-at-a-time partition/boundary variants.
+This report combines three explicitly separated evidence families. First, it
+records the strict StackOverflow single-cell execution of the pinned MOGB
+training/evaluation path. Second, it closes the protocol-aligned frozen-MiniLM
+component matrices. Third, it records BRAK applied to the initial and trained
+MOGB BERT representations. None of these changes the s2c Gate, E2/E3/R1
+artifacts, or the Gate--Router--Expert pipeline.
+
+The strict run is a reproduction attempt, not an automatic SOTA claim. The
+official MOGB paper reports `Acc=88.67`, `F1-All=87.49`, `F1-U=89.71`, and
+`F1-K=87.27` for its StackOverflow KIR=50% setting. The local exact-contract
+run uses the pinned source, local BERT, the audited 20,000-row snapshot, and
+the registered seed diagnostics; it is reported separately from the fair
+MiniLM matrix because the metric and data contracts differ.
+
+## Strict single-cell MOGB reproduction
+
+### Contract
+
+* Run id: `mogb_exact_reproduction_v1`.
+* Dataset: StackOverflow; 20 labels x 1,000 rows; source train/dev/test
+  counts 12,000/2,000/6,000.
+* Known split: KIR=0.50, seed=0; ten Known and ten held-out intents are
+  recorded in `audit/known_intents.json`.
+* Backbone: local `bert-base-uncased`; max sequence length 45; batch sizes
+  128/64; learning rates `2e-5` and `1e-4`; max epochs 100; patience 10.
+* Granular-ball parameters: train purity .90, get-ball purity 1.00,
+  select-ball purity .90, minimum sizes 10/5/10, step 5.
+* Both seed contracts were run: `official_fixed` preserves the upstream
+  pre-Data seed 100 before Data resets seed 0; `unified_zero` sets every
+  recorded source to zero. They produced the same checkpoint and metrics.
+
+The source snapshot hash is
+`b8410dbc8677d4c57a578d68343b9b8ae9dda54fee9ee8eba3f0a142acd9b397` and the
+selected checkpoint hash is
+`e43553d9d52a75277726a5d8256b9cca93df43dc1048cd694b9e8e26679137f0`.
+The complete provenance is
+`../artifacts/s2c/external/mogb_exact_reproduction_v1/audit/MOGB_EXACT_PROVENANCE.json`.
+
+### Result and paper gap
+
+| Seed contract | Acc | F1-All | F1-U | F1-K | Best dev Acc | Epochs | Status |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | --- |
+| official_fixed | 75.1667 | 68.3502 | 79.9676 | 67.1884 | 91.6 | 38 | not_reproduced |
+| unified_zero | 75.1667 | 68.3502 | 79.9676 | 67.1884 | 91.6 | 38 | not_reproduced |
+| paper reference | 88.6700 | 87.4900 | 89.7100 | 87.2700 | -- | -- | published reference |
+
+The strict gaps are respectively -13.5033, -19.1398, -9.7424 and -20.0816
+percentage points for Acc, F1-All, F1-U and F1-K. The result is therefore
+`not_reproduced`, not `approximate` or `SOTA`.
+
+The two seed contracts being byte-identical rules out the simple seed-order
+explanation. The run still has a large Known-recall loss (51.5333%) and its
+selected final balls include many tiny 10--32 sample balls, so the report
+keeps model/data-contract, ball-selection and evaluation-contract differences
+as diagnostic hypotheses rather than silently tuning them after seeing test
+metrics. No additional official-BERT sweep is authorized in this stage.
+
+### Compatibility boundary
+
+The pinned checkout is preserved under `third_party/mogb_official` and was not
+edited. The isolated runner repairs modern PyTorch graph lifetime and device
+handling while preserving the official CE, epoch-end feature extraction,
+GBNR split, nearest sub-centroid loss, mean-radius balls and nearest-ball
+evaluation sequence. Its numeric compatibility test is a fixed-centroid
+formula check, not a proof of byte-for-byte equivalence of every autograd
+operation. This limitation is recorded explicitly in the mode manifests.
+
+## BRAK on MOGB representations
+
+The separate `brak_mogb_representation_v1` run evaluates fixed K=1..5 and the
+Known-only BRAK selector on the same StackOverflow KIR=.50/seed=0 split. It
+does not use test OOS for selection and does not change the MOGB checkpoint.
+
+| Representation | BRAK OOS F1 | BRAK F1-All | BRAK F1-K | Accuracy | Selected K |
+| --- | ---: | ---: | ---: | ---: | --- |
+| Frozen MiniLM | 0.8450 | 0.8213 | 0.8189 | 0.8208 | all 10 intents K=1 |
+| MOGB initial BERT | 0.2460 | 0.0663 | 0.0483 | 0.1170 | all 10 intents K=1 |
+| MOGB trained BERT | 0.0000 | 0.0228 | 0.0251 | 0.0282 | 8 K=1, 2 K=2 |
+
+On the trained MOGB representation, fixed K=2--5 improve the raw OOS F1
+slightly from a collapsed K=1 baseline, but all absolute scores remain poor
+and BRAK's Known-only selector stays conservative. This is a negative control
+and representation-transfer diagnostic, not evidence for a new adaptive-K
+method. The full 18-row summary and provenance are under
+`results/mogb_exact_reproduction/brak_mogb_representation/` and
+`../artifacts/s2c/external/mogb_exact_reproduction_v1/brak_mogb_representation/`.
+
+## Strict Banking77 follow-up
+
+To distinguish a StackOverflow-specific contract issue from a general failure
+of the modernized official path, one additional single cell was run with the
+official example setting `banking`, KIR=.75, seed=0. It uses the local
+13,083-row Banking77 snapshot and the same pinned BERT/compatibility runtime;
+it is not merged into the protocol_v2 MiniLM tables.
+
+| Dataset | KIR | Acc | F1-All | F1-U | F1-K | Known Recall | Status |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | --- |
+| StackOverflow | .50 | 75.1667 | 68.3502 | 79.9676 | 67.1884 | 51.5333 | not reproduced |
+| Banking77 | .75 | 57.0779 | 59.1627 | 53.1049 | 59.2671 | 43.7069 | not reproduced |
+
+The Banking cell completed 54 epochs and selected its checkpoint by dev
+accuracy. Its descriptive gaps to the paper's Banking reference are
+`-23.5021/-22.3573/-27.9351/-22.2629` pp for Acc/F1-All/F1-U/F1-K, but the
+paper reference is not an exact same-KIR comparison. The two cells therefore
+support the conservative statement
+`official_code_not_reproduced_under_available_contract`; they do not justify
+a larger official-BERT sweep.
 
 ## Modes
 
-* `mogb_official_reproduction`: currently blocked at the legacy dependency and
-  data-contract preflight; no fabricated number is emitted.
+* `mogb_official_reproduction`: the strict StackOverflow single-cell attempt
+  completed under an isolated compatibility layer but is classified
+  `not_reproduced` against the published reference table.
 * `mogb_minilm`: default MOGB partitioning with Euclidean distance and mean
   radius; this is the frozen-MiniLM reference, not the official BERT model.
 * `get_090`: best partition-only setting; purity threshold `0.90` on the
@@ -117,28 +220,19 @@ The complete machine-readable evidence is under
 `s2c/results/mogb/fair_matrix.csv`; its SHA256 is recorded in
 `s2c/results/MANIFEST.csv`.
 
-## Modernized official-logic smoke (separate from fair results)
+## Historical non-strict compatibility aggregate
 
-The pinned upstream path was exercised through an isolated compatibility
-launcher without editing `third_party/mogb_official`. The launcher preserves
-the official BERT/CE, epoch-end granular-ball and nearest-ball evaluation
-sequence, while repairing modern-PyTorch stale computation graphs and the
-upstream `cuda:0` assumption. The source checkout, runtime patch, environment
-and attempt history are recorded in
-`../artifacts/s2c/external/mogb_official_modernized_smoke_v1/`.
+Before the strict single-cell run, an isolated modernized compatibility
+aggregate completed five seeds for StackOverflow and Banking77. Its official
+format F1-All means were 40.7243 and 19.2843, respectively. Those values are
+retained under `../artifacts/s2c/external/mogb_official_converged_v1/` as
+non-strict compatibility evidence. They use a different local data/split
+contract and are not combined with the strict single-cell result or the
+frozen-MiniLM table.
 
-StackOverflow/KIR=0.50/seed=0 completed one engineering-smoke epoch and wrote
-the upstream-format result (`Known=9.4776`, `Open=67.3376`, `F1-score=14.7376`,
-`Accuracy=51.7`). These values are not converged and must not be compared with
-the paper table. Banking77/KIR=0.50/seed=0 was interrupted during the current
-environment's CPU execution after the device-aware ball path was reached; it
-has no metric output. The exact closeout is
-`../artifacts/s2c/external/mogb_official_modernized_smoke_v1/MOGB_OFFICIAL_MODERNIZED_CLOSEOUT.md`.
-
-Accordingly, the official mode remains `partial_blocked`, not
-`official_reproduced`. The 270-cell MiniLM-fair matrix, 540-cell OFAT matrix
-and 180-cell fixed-K mean-radius comparison remain the only quantitative
-component evidence used for current s2c claims.
+The earlier one-epoch engineering smoke remains archived under
+`../artifacts/s2c/external/mogb_official_modernized_smoke_v1/`; its output was
+never treated as a converged metric.
 
 ## Interpretation rule
 
@@ -149,11 +243,26 @@ be labeled an official MOGB reproduction or an s2c SOTA claim.
 
 ## Stop/continue decision
 
-The registered 540-cell frozen-MiniLM OFAT matrix and 180-cell fixed-K
-mean-radius comparison are complete. They are sufficient for the component
-conclusions above, but they do not authorize a new adaptive-K
-method, a full Pipeline claim, or a claim that the adapter is official MOGB.
-The official BERT reproduction remains `audited_not_reproduced` because the
-pinned source is not runnable under the current legacy contract. Any future
-official reproduction must use an isolated modernized copy and a separately
-audited original data/split contract.
+The strict single-cell MOGB attempt, the 540-cell frozen-MiniLM OFAT matrix,
+the 180-cell fixed-K mean-radius comparison and the BRAK representation
+diagnostic are complete. They are sufficient to separate three claims:
+
+1. fixed/adaptive partition behavior under Frozen MiniLM;
+2. the result of the pinned official training path under a modern compatibility
+   layer; and
+3. whether Known-only BRAK can safely select extra centers on the resulting
+   representations.
+
+They do not authorize a new adaptive-K method, a full Pipeline claim, or a
+claim that the local strict run reproduces the published MOGB numbers. ADB and
+DA-ADB now each have one completed modernized compatibility cell on
+StackOverflow/KIR=.50/seed=0 (`F1-open=89.4712` and `90.8978`); these are
+independent boundary references, not strict protocol_v2 or multi-seed SOTA
+results. DCLOOS's official README identifies an external SQuAD-derived
+`squad.tsv`; the isolated runner records the byte-identical
+`squad.tsv` -> `squad_placeh.tsv` loader-name assumption. The default-budget
+cell exceeded the three-hour ceiling; a separately registered reduced-budget
+cell reached upstream test evaluation and recovered metrics from 5,700
+prediction rows after a JSON-serialization defect. That recovery is
+compatibility evidence only, not a strict default or paper reproduction. It
+must not be replaced by ADB/DA-ADB or by protocol test OOS.

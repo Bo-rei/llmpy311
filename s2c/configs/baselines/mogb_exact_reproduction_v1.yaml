@@ -1,0 +1,35 @@
+experiment_id: mogb_exact_reproduction_v1
+protocol_version: mogb_official_exact_stackoverflow_v1
+dataset: stackoverflow
+kir: 0.50
+seed: 0
+backbone: bert-base-uncased
+
+# The upstream run.sh requests this flag.  Keep it explicit so the exact
+# reproduction contract cannot silently become full fine-tuning.
+freeze_bert_parameters: true
+max_seq_length: 45
+lr: 0.00002
+lr2: 0.0001
+train_batch_size: 128
+eval_batch_size: 64
+max_epochs: 100
+patience: 10
+purity_train: 0.90
+purity_get_ball: 1.00
+purity_select_ball: 0.90
+min_ball_train: 10
+min_ball_get_ball: 5
+min_ball_select_ball: 10
+step: 5
+
+official_source: third_party/mogb_official
+compat_source: third_party/mogb_compat
+data_snapshot: data/sources/textoir/dffe2b1b848a069a6808f8089b4cb9bd16e2062b/stackoverflow
+bert_model: ../assets/models/bert-base-uncased
+artifact_root: ../artifacts/s2c/external/mogb_exact_reproduction_v1
+result_root: results/mogb_exact_reproduction
+
+seed_modes:
+  - official_fixed
+  - unified_zero

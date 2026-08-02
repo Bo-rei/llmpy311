@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import json
 import statistics
 from collections import defaultdict
 from pathlib import Path
@@ -129,29 +130,230 @@ def build(paths: ProtocolV2Paths, output: Path) -> list[dict[str, str]]:
             }
         )
 
-    for method, status, supervision, source in (
-        ("ADB", "not_run", "Known-only", "not_registered_in_current_protocol"),
-        ("DA-ADB", "not_run", "Known-only", "not_registered_in_current_protocol"),
-        ("DCLOOS-official", "blocked", "pseudo-OOS plus external open-domain OOS", "docs/dcloos/DCLOOS_REPRODUCTION_REPORT.md"),
-        ("DCLOOS-unified", "blocked", "pseudo-OOS plus external open-domain OOS", "docs/dcloos/DCLOOS_REPRODUCTION_REPORT.md"),
-    ):
+    # Strict single-cell MOGB reproduction is intentionally kept separate from
+    # the five-seed modernized compatibility aggregate above.  The official
+    # format reports F1-U rather than the protocol_v2 binary OOS evaluator, so
+    # leave oos_f1 empty instead of silently mixing metric contracts.
+    strict_metrics_path = paths.results_root / "mogb_exact_reproduction" / "final_metrics.json"
+    if strict_metrics_path.is_file():
+        strict_metrics_payload = json.loads(strict_metrics_path.read_text(encoding="utf-8"))
+        strict_metrics = strict_metrics_payload["official_fixed"]["metrics"]
         rows.append(
             {
-                "dataset": "all_requested",
+                "dataset": "stackoverflow",
                 "kir": "0.50",
-                "method": method,
-                "scope": "requested_final_baseline_slot",
-                "training_regime": "end-to-end",
-                "supervision": supervision,
+                "method": "MOGB-official (strict single-cell)",
+                "scope": "official_stackoverflow_kir50_seed0",
+                "training_regime": "end-to-end-BERT",
+                "supervision": "Known-only plus official protocol",
                 "oos_f1": "NA",
                 "oos_precision": "NA",
                 "oos_recall": "NA",
-                "known_macro_f1": "NA",
-                "known_recall": "NA",
-                "f1_all": "NA",
-                "accuracy": "NA",
-                "status": status,
-                "source": source,
+                "known_macro_f1": f"{float(strict_metrics['F1-K']) / 100:.6f}",
+                "known_recall": f"{float(strict_metrics['Known Recall']) / 100:.6f}",
+                "f1_all": f"{float(strict_metrics['F1-All']) / 100:.6f}",
+                "accuracy": f"{float(strict_metrics['Accuracy']) / 100:.6f}",
+                "status": "not_reproduced_strict",
+                "source": "results/mogb_exact_reproduction/final_metrics.json",
+            }
+        )
+
+    strict_banking_path = paths.results_root / "mogb_exact_reproduction_banking" / "final_metrics.json"
+    if strict_banking_path.is_file():
+        strict_banking_payload = json.loads(strict_banking_path.read_text(encoding="utf-8"))
+        strict_banking = strict_banking_payload["official_fixed"]["metrics"]
+        rows.append(
+            {
+                "dataset": "banking77",
+                "kir": "0.75",
+                "method": "MOGB-official (strict single-cell)",
+                "scope": "official_banking_kir75_seed0",
+                "training_regime": "end-to-end-BERT",
+                "supervision": "Known-only plus official protocol",
+                "oos_f1": "NA",
+                "oos_precision": "NA",
+                "oos_recall": "NA",
+                "known_macro_f1": f"{float(strict_banking['F1-K']) / 100:.6f}",
+                "known_recall": f"{float(strict_banking['Known Recall']) / 100:.6f}",
+                "f1_all": f"{float(strict_banking['F1-All']) / 100:.6f}",
+                "accuracy": f"{float(strict_banking['Accuracy']) / 100:.6f}",
+                "status": "not_reproduced_strict",
+                "source": "results/mogb_exact_reproduction_banking/final_metrics.json",
+            }
+        )
+
+    # BRAK on the two MOGB BERT representation snapshots is a separate
+    # representation-transfer diagnostic.  It must not be collapsed into the
+    # frozen-MiniLM BRAK pilot row above or presented as an official MOGB run.
+    brak_mogb_path = (
+        paths.results_root
+        / "mogb_exact_reproduction"
+        / "brak_mogb_representation"
+        / "brak_summary.csv"
+    )
+    if brak_mogb_path.is_file():
+        brak_mogb_rows = list(csv.DictReader(brak_mogb_path.open(encoding="utf-8")))
+        representation_names = {
+            "mogb_initial_bert": "BRAK (MOGB initial BERT)",
+            "mogb_trained_hierarchical_bert": "BRAK (MOGB trained BERT)",
+        }
+        for representation, display_name in representation_names.items():
+            grouped = [
+                row
+                for row in brak_mogb_rows
+                if row["representation"] == representation and row["method"] == "brak"
+            ]
+            if not grouped:
+                continue
+            row = grouped[0]
+            rows.append(
+                {
+                    "dataset": "stackoverflow",
+                    "kir": "0.50",
+                    "method": display_name,
+                    "scope": "mogb_representation_stackoverflow_kir50_seed0",
+                    "training_regime": "Known-only BRAK on BERT representation",
+                    "supervision": "Known-only",
+                    "oos_f1": row.get("oos_f1", "NA"),
+                    "oos_precision": row.get("oos_precision", "NA"),
+                    "oos_recall": row.get("oos_recall", "NA"),
+                    "known_macro_f1": row.get("f1_k", "NA"),
+                    "known_recall": row.get("id_recall", "NA"),
+                    "f1_all": row.get("f1_all", "NA"),
+                    "accuracy": row.get("accuracy", "NA"),
+                    "status": "complete_negative_control",
+                    "source": "results/mogb_exact_reproduction/brak_mogb_representation/brak_summary.csv",
+                }
+            )
+
+    # A historical ADB KIR=.50/seed0 run already exists under the frozen v19
+    # official-run root.  It is not silently promoted to protocol_v2: retain
+    # the exact source path and label it as a compatibility artifact.  The
+    # fallback blocked row is emitted only when no complete result is found.
+    historical_external = paths.artifacts_root / "outputs" / "experiments" / "cluster_separability_v19" / "textoir_protocol" / "official_runs"
+    completed_external: dict[str, tuple[Path, str, str, str]] = {}
+    for method in ("ADB", "DA-ADB"):
+        candidates = sorted(
+            historical_external.glob(f"stackoverflow/{method}/kir50/seed0/attempts/*/results/results.csv")
+        )
+        if candidates:
+            completed_external[method] = (candidates[-1], "stackoverflow", "0.50", "historical_textoir_compatibility_single_cell")
+    current_external = {
+        "ADB": paths.artifacts_root / "external" / "adb_compat_single_cell_v2" / "stackoverflow" / "ADB" / "kir50" / "seed0" / "results" / "results.csv",
+        "DA-ADB": paths.artifacts_root / "external" / "da_adb_compat_single_cell_v3" / "stackoverflow" / "DA-ADB" / "kir50" / "seed0" / "results" / "results.csv",
+    }
+    for method, candidate in current_external.items():
+        if candidate.is_file():
+            completed_external[method] = (candidate, "stackoverflow", "0.50", "modernized_textoir_compatibility_single_cell")
+    for method, status, supervision, source in (
+        (
+            "ADB",
+            "blocked_runtime_dependency",
+            "Known-only",
+            "docs/mogb_integration/ADB_DAADB_AUDIT.md",
+        ),
+        (
+            "DA-ADB",
+            "blocked_runtime_dependency",
+            "Known-only",
+            "docs/mogb_integration/ADB_DAADB_AUDIT.md",
+        ),
+        ("DCLOOS-official", "blocked_missing_external_negative_data", "pseudo-OOS plus external open-domain OOS", "docs/dcloos/DCLOOS_REPRODUCTION_REPORT.md"),
+        ("DCLOOS-unified", "blocked_missing_external_negative_data", "pseudo-OOS plus external open-domain OOS", "docs/dcloos/DCLOOS_REPRODUCTION_REPORT.md"),
+    ):
+        if method in completed_external:
+            result_path, dataset, kir, scope = completed_external[method]
+            external_row = next(csv.DictReader(result_path.open(encoding="utf-8")))
+            rows.append(
+                {
+                    "dataset": dataset,
+                    "kir": kir,
+                    "method": method,
+                    "scope": scope,
+                    "training_regime": "end-to-end-BERT",
+                    "supervision": "Known-only",
+                    "oos_f1": f"{float(external_row['F1-open']) / 100:.6f}",
+                    "oos_precision": "NA",
+                    "oos_recall": "NA",
+                    "known_macro_f1": f"{float(external_row['F1-known']) / 100:.6f}",
+                    "known_recall": "NA",
+                    "f1_all": f"{float(external_row['F1']) / 100:.6f}",
+                    "accuracy": f"{float(external_row['Acc']) / 100:.6f}",
+                    "status": "complete_compatibility_artifact",
+                    "source": str(result_path.relative_to(paths.project_root.parent)),
+                }
+            )
+        elif method.startswith("DCLOOS"):
+            dcloos_manifest = paths.artifacts_root / "external" / "dcloos_official_single_cell_v1" / "run_manifest.json"
+            rows.append(
+                {
+                    "dataset": "oos",
+                    "kir": "0.75",
+                    "method": method,
+                    "scope": "official_external_negative_single_cell",
+                    "training_regime": "end-to-end-BERT",
+                    "supervision": supervision,
+                    "oos_f1": "NA",
+                    "oos_precision": "NA",
+                    "oos_recall": "NA",
+                    "known_macro_f1": "NA",
+                    "known_recall": "NA",
+                    "f1_all": "NA",
+                    "accuracy": "NA",
+                    "status": "timeout_incomplete",
+                    "source": str(dcloos_manifest.relative_to(paths.project_root.parent)) if dcloos_manifest.is_file() else source,
+                }
+            )
+        else:
+            rows.append(
+                {
+                    "dataset": "all_requested",
+                    "kir": "0.50",
+                    "method": method,
+                    "scope": "requested_final_baseline_slot",
+                    "training_regime": "end-to-end",
+                    "supervision": supervision,
+                    "oos_f1": "NA",
+                    "oos_precision": "NA",
+                    "oos_recall": "NA",
+                    "known_macro_f1": "NA",
+                    "known_recall": "NA",
+                    "f1_all": "NA",
+                    "accuracy": "NA",
+                    "status": status,
+                    "source": source,
+                }
+            )
+
+    # A reduced-budget DCLOOS run reached a valid upstream test evaluation but
+    # failed only while serializing its final JSON metrics.  Keep its recovered
+    # prediction-derived result explicit and separate from the strict/default
+    # timeout row above; it is not a paper-table reproduction.
+    dcloos_recovery_path = (
+        paths.artifacts_root
+        / "external"
+        / "dcloos_official_oos_kir75_seed888_reduced_v2"
+        / "recovery_metrics.json"
+    )
+    if dcloos_recovery_path.is_file():
+        recovered = json.loads(dcloos_recovery_path.read_text(encoding="utf-8"))
+        rows.append(
+            {
+                "dataset": "oos",
+                "kir": "0.75",
+                "method": "DCLOOS-official (reduced-budget recovered)",
+                "scope": "official_external_negative_single_cell_recovered",
+                "training_regime": "end-to-end-BERT",
+                "supervision": "Known-only plus synthetic and external OOS",
+                "oos_f1": f"{float(recovered['oos_f1']) / 100:.6f}",
+                "oos_precision": f"{float(recovered['oos_precision']) / 100:.6f}",
+                "oos_recall": f"{float(recovered['oos_recall']) / 100:.6f}",
+                "known_macro_f1": f"{float(recovered['f1_k']) / 100:.6f}",
+                "known_recall": f"{float(recovered['known_recall']) / 100:.6f}",
+                "f1_all": f"{float(recovered['f1_all']) / 100:.6f}",
+                "accuracy": f"{float(recovered['accuracy']) / 100:.6f}",
+                "status": "complete_recovered_intermediate_prediction",
+                "source": "artifacts/s2c/external/dcloos_official_oos_kir75_seed888_reduced_v2/recovery_metrics.json",
             }
         )
     _write(output, rows)

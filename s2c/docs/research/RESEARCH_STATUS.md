@@ -5,17 +5,22 @@
 ## 当前状态
 
 - 活动协议：`protocol_v2_textoir_v1`
-- 当前阶段：`MOGB_OFFICIAL_CONVERGED`、`BRAK_PILOT` 已完成；`DCLOOS_PREFLIGHT` 已完成但因缺失
-  官方 open-domain negative corpus 阻断。fixed-K mean-radius 180/180、MOGB fair/OFAT 和 BRAK
-  均保持独立 artifact root，不覆盖旧实验。
-- Git：`main`，当前基准 commit `2ff028e`；本阶段新增代码、配置、报告和第三方审计目录尚未提交
+- 当前阶段：`MOGB_EXACT_REPRODUCTION`、`BRAK_MOGB_REPRESENTATION` 已完成；
+  StackOverflow/KIR=.50 和 Banking77/KIR=.75 的 MOGB 严格单格均为
+  `not_reproduced_strict`；ADB 与 DA-ADB 已各完成一个现代化兼容单格；
+  DCLOOS 已定位官方 Drive 语料但单格在三小时上限超时，状态为
+  `timeout_incomplete`；另有一个使用同一官方外部语料的 reduced-budget 单格已从完整上游
+  test prediction 恢复指标，标记为 `complete_recovered_intermediate_prediction`，不等同严格默认复现。
+  DCLOOS 是必须保留的端到端基线，不以 ADB/DA-ADB 替代。
+  所有 MOGB/BRAK 结果均保持独立 artifact root，不覆盖旧实验。
+- Git：`main`，当前基准 commit `a51f97494afdcfca30dd3d94b54a6acdad8a41cc`；本阶段新增代码、配置、报告和第三方审计目录尚未提交
 - Git dirty：`true`
 - 最近冻结代码快照：`BOUNDARY_ATTRIBUTION_CODE.patch`，SHA256
   `16ecffdea31faded6305b9a9d5d5d165ac3a59a008315fdc4c1158f1edcca0d7`；
   本阶段另冻结 `R1_MINILM_STAGE_PROVENANCE.json` 和对应 code patch，旧 R1/E2/E3 快照保持不变。
   MOGB 消融由 `MOGB_ABLATION_EXECUTION_PROVENANCE.json` 绑定 runner/config/plan/source hash，
   SHA256 `e7c6b961cab050921750901c770b145ae2be0ccb7e9b7f0780d73d7325baf61f`。
-- GitHub 状态：`origin/main` 尚未包含本轮官方 MOGB、BRAK、DCLOOS 审计和汇总表；本轮不自动 commit/push
+- GitHub 状态：`origin/main`=`2ff028e`，尚未包含本轮严格 MOGB、BRAK 表示对照、ADB/DA-ADB 审计、DCLOOS 修正和汇总表；本轮不自动 commit/push
 - 最近更新：2026-08-01
 
 ## 已完成且禁止重复
@@ -41,7 +46,11 @@
 | MOGB official-logic smoke | partial_blocked；StackOverflow 1/1 工程单元完成，Banking77 未形成完整单元；无可比较收敛结果 | `do_not_repeat`；只保留 blocker 记录，不写入主表 | `../artifacts/s2c/external/mogb_official_modernized_smoke_v1/MOGB_OFFICIAL_MODERNIZED_PROVENANCE.json` |
 | MOGB official-logic converged | complete 10/10；StackOverflow 与 Banking77 各 5 个 seed；兼容层下收敛，不是严格官方复现 | `do_not_repeat`；不与 MiniLM fair 结果混合 | `../artifacts/s2c/external/mogb_official_converged_v1/` |
 | BRAK pilot | complete 21/21 summary cells；3 seeds；30 个 intent 全部选择 K=1；0 失败 | `do_not_repeat`；未通过扩展门，不启动三数据集扩展 | `../artifacts/s2c/runs/protocol_v2_textoir_v1/brak_v1/` |
-| DCLOOS official/unified preflight | blocked；源码可编译，但缺失 `squad_placeh.tsv` 和明确 negative corpus，未生成指标 | `do_not_repeat`；不得用 protocol OOS 替代额外监督 | `../artifacts/s2c/external/dcloos_v1/DCLOOS_PREFLIGHT.json` |
+| MOGB strict single-cell | complete 2/2 seed-contract modes；0 失败；StackOverflow KIR50 seed0 | `do_not_repeat`；结果为 `not_reproduced_strict`，不与论文数字混合 | `../artifacts/s2c/external/mogb_exact_reproduction_v1/` |
+| BRAK on MOGB representations | complete 18/18 summary cells；Frozen/initial BERT 保持 K1；trained BERT 仅 2/10 意图选 K2 | `do_not_repeat`；停止表示迁移扩展，保留 Known-only 负控制 | `../artifacts/s2c/external/mogb_exact_reproduction_v1/brak_mogb_representation/` |
+| ADB / DA-ADB runnability audit | complete 2/2 modernized compatibility cells；0 失败 | `do_not_repeat`；单 seed 外部边界参考，不是 strict protocol_v2 | `docs/mogb_integration/ADB_DAADB_AUDIT.md` |
+| DCLOOS official/unified preflight | official Drive `squad.tsv` 已定位并字节一致映射；单格训练超时，未生成最终指标 | `do_not_repeat`；中间预测排除；不得用 protocol OOS 替代额外监督 | `../artifacts/s2c/external/dcloos_official_single_cell_v1/run_manifest.json` |
+| DCLOOS reduced-budget recovery | 1/1；5,700 条上游 test prediction；raw JSON 序列化失败后从完整预测恢复指标 | `do_not_repeat`；仅作端到端兼容性证据，不称严格论文复现 | `../artifacts/s2c/external/dcloos_official_oos_kir75_seed888_reduced_v2/recovery_manifest.json` |
 
 E2/E3 的 K、KIR、random partition、聚类稳定性和 tiny-cluster 矩阵不得再次运行。
 
@@ -107,8 +116,21 @@ E2/E3 的 K、KIR、random partition、聚类稳定性和 tiny-cluster 矩阵不
 29. BRAK 在 StackOverflow/KIR50/42,87,100 的 30 个 Known intent 选择中全部保留 K=1；
     K>1 的 Known-only union-risk、交叉意图泄漏和 bootstrap 不稳定性均上升，未通过预注册扩展门。
     因此 BRAK 当前是安全的 Known-only 负控制，不是已验证的新 adaptive-K 方法。
-30. DCLOOS 源码可编译，但官方所需 `squad_placeh.tsv` 外部 open-domain negative corpus 缺失；
-    official/unified 均未启动，状态为 `blocked_missing_official_open_domain_oos`，没有伪造指标。
+30. DCLOOS 源码可编译；官方 Drive `squad.tsv` 已找到并按字节一致方式映射为
+    `squad_placeh.tsv`；默认预算单格为 `timeout_incomplete`。另一个 reduced-budget 单格完成
+    上游 test evaluation，因 JSON import 缺失导致 raw 序列化失败，已从完整 prediction 文件恢复并
+    单独标记 `complete_recovered_intermediate_prediction`，不作为严格论文复现。
+31. 严格 MOGB StackOverflow 单格的 `official_fixed` 与 `unified_zero` seed 契约均完成且
+    byte-identical：Acc `75.1667`、F1-All `68.3502`、F1-U `79.9676`、F1-K `67.1884`；相对
+    论文参考值分别差 `-13.5033/-19.1398/-9.7424/-20.0816` 个百分点，因此判定
+    `not_reproduced_strict`，不是 SOTA 证据。
+32. BRAK 在 MOGB initial BERT 与 trained BERT 表示上的 StackOverflow/KIR50/seed0 对照已完成；
+    initial BERT 仍全选 K=1，trained BERT 只在 linq 与 apache 选择 K=2，但整体绝对指标很低，
+    不授权扩大表示迁移或 adaptive-K。
+33. ADB/DA-ADB 仍保留为独立边界基线；在 `textoir-py39`、torch-native AdamW
+    兼容层和本地 BERT 权重转换副本下，StackOverflow/KIR=.50/seed=0 分别完成
+    ADB `F1-open=89.4712`、DA-ADB `F1-open=90.8978`，均标记为现代化兼容证据，
+    不能称为 strict protocol_v2 或多 seed SOTA 结果。
 
 ## 历史依据（不混入当前主表）
 
@@ -118,11 +140,8 @@ Pipeline 结果仍可作为研究依据，但它们来自旧实验族，必须�
 
 ## 当前唯一下一步
 
-完成本轮外部基线收口审计：验证 MOGB 官方兼容层、BRAK Known-only 选择和 DCLOOS blocker 的
-provenance/报告/台账/回归测试一致性，然后把 `results/final_baselines/summary.csv` 作为当前
-基线汇总。不得继续扩大 BRAK、自适应 K、MOGB 官方 BERT 矩阵或用 protocol OOS 替代 DCLOOS
-缺失的外部负样本；若要推进论文主结果，下一阶段应先在统一指标中比较现有 MOGB-fair 组件与
-Single/FK controls，再决定是否申请独立可复现环境完成严格官方复现。
+完成本轮外部基线文档、registry、ledger 和轻量汇总的验证并冻结；保留 DCLOOS 默认超时与
+reduced recovery 的状态隔离，不继续扩大 MOGB/BRAK/adaptive-K、DCLOOS 或完整 Pipeline。
 
 ## 当前风险
 

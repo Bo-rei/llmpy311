@@ -1,0 +1,27 @@
+{
+  "frozen_minilm": {
+    "calibration_embedding_sha256": "82e956a5429de106099e3771b1ac8f5c2edd41506a87a2ecbc24339d0f6a6880",
+    "model_path": "/home/bo/bo01/llmpy311/assets/models/all-MiniLM-L6-v2",
+    "source": "local_all-MiniLM-L6-v2",
+    "test_embedding_sha256": "a3e5f421eefd4ead61b4cb24b4eb10bc5f1c09b141e61ee825977cefd62ce9ae",
+    "train_embedding_sha256": "f4bebbc09b895f475c8734a49f28099b2390a4c64310310b1428b3595cfedf74"
+  },
+  "mogb_initial_bert": {
+    "calibration_embedding_sha256": "5a3c0eb8b7831e9f7091daac75b787a946549c8602ed7ee341c0c711d9225b64",
+    "checkpoint": null,
+    "checkpoint_sha256": null,
+    "model_device": "cuda",
+    "source": "mogb_initial_bert",
+    "test_embedding_sha256": "166414045bdb6880e31cd32f4aa0ca9713285b021d0e589b10cae3440d494ec9",
+    "train_embedding_sha256": "57d768fab508e5882626ad7793c13eca613079eb806c0089666f1b2e3f3f9890"
+  },
+  "mogb_trained_hierarchical_bert": {
+    "calibration_embedding_sha256": "ed2d70068348a9209a781db7000d0c150348f584ae2c34fd484c13f9baaccc56",
+    "checkpoint": "/home/bo/bo01/llmpy311/artifacts/s2c/external/mogb_exact_reproduction_v1/audit/official_fixed/checkpoints/best_checkpoint.pt",
+    "checkpoint_sha256": "e43553d9d52a75277726a5d8256b9cca93df43dc1048cd694b9e8e26679137f0",
+    "model_device": "cuda",
+    "source": "mogb_trained_hierarchical_bert",
+    "test_embedding_sha256": "894608753ae91248e6f42f7fb0183c8fa4b954dc2cffbf98db3c8863cf347f3b",
+    "train_embedding_sha256": "eb45dc838214a69b97f06363b75b317116161673d36956f8ea2d3e4e6d9f0f6a"
+  }
+}

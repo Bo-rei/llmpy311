@@ -83,7 +83,10 @@ Cascade 已被新方法验证”。直接 baseline 和完整 Pipeline 仍待独�
 | 论断 | 当前证据 | 状态 | 建议 |
 | --- | --- | --- | --- |
 | 已严格复现 MOGB 论文结果 | 10 个官方逻辑兼容单元（StackOverflow/Banking77 各 5 seed）完成，但使用 modernized runtime、本地快照，且官方旧依赖/数据契约不完整 | soften | 写成“official-logic compatibility evidence”；严格论文复现仍 pending，不与论文数字直接比较 |
+| 严格 MOGB 单格已达到论文参考结果 | StackOverflow/KIR50/seed0 的两种 seed 契约都完成，但 Acc/F1-All/F1-U/F1-K 为 `75.1667/68.3502/79.9676/67.1884`，分别低于参考 `13.5033/19.1398/9.7424/20.0816` 个百分点 | remove | 明确写为 `not_reproduced_strict` 的负复现证据，不写成 SOTA |
 | 官方 MOGB 兼容结果可作为统一协议 SOTA 主表 | 官方 BERT/旧数据契约与 MiniLM-fair、protocol_v2 split 不同 | remove | 将官方格式 F1-All/Accuracy 单列为外部参考；主表使用同协议方法 |
 | BRAK 已证明自适应 K 能稳定优于固定 K | 30 个 StackOverflow Known intent 全选 K=1；K>1 Known-only risk 上升 | remove | BRAK 只作为保守安全负控制，不扩展、不宣称新方法 |
-| DCLOOS 已完成公平结果 | 官方与实际 source 均缺失 `squad_placeh.tsv` 外部 open-domain negative corpus，未生成指标 | pending | 记录 blocker；补齐语料和许可证后另行登记，禁止用 protocol OOS 替代 |
+| BRAK 在 MOGB 训练表示上恢复了多中心 | initial BERT 全选 K=1；trained BERT 仅 2/10 intent 选 K=2，且绝对 F1-All 约 `0.0228` | remove | 只报告为表示迁移负控制，不授权新的 adaptive-K 研究 |
+| ADB/DA-ADB 已有当前协议性能结果 | 新隔离兼容单格已完成：ADB F1-open `89.4712`，DA-ADB `90.8978`；均为单 seed、modernized TEXTOIR，不是 strict protocol_v2 | soften | 可作为外部边界参考；不得扩写成统一多 seed 或 SOTA 结论，也不能替代 DCLOOS |
+| DCLOOS 已完成公平结果 | 默认预算单格为 timeout；另有 reduced-budget 单格完成上游 test evaluation 并从 5,700 条预测恢复指标，但不是严格默认/论文复现 | soften | 保留端到端基线；将 recovery 单独列为兼容性证据，不与 Known-only 方法或论文表格混列 |
 | 当前基线覆盖足以宣称统一 SOTA | ADB/DA-ADB 未运行，DCLOOS blocked；MOGB 官方非严格、MiniLM-fair 结果不普遍领先 | remove | 只报告已完成、同协议、可审计的结果与阻断项，不做 SOTA 声明 |

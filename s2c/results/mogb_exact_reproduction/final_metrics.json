@@ -1,0 +1,78 @@
+{
+  "official_fixed": {
+    "best_dev_accuracy": 91.6,
+    "best_epoch": 28,
+    "checkpoint_sha256": "e43553d9d52a75277726a5d8256b9cca93df43dc1048cd694b9e8e26679137f0",
+    "epochs_completed": 38,
+    "metrics": {
+      "Accuracy": 75.1667,
+      "F1-All": 68.3502,
+      "F1-K": 67.1884,
+      "F1-U": 79.9676,
+      "Known Recall": 51.5333,
+      "Known->OOS": 1449,
+      "OOS Precision": 67.1652,
+      "OOS Recall": 98.8,
+      "OOS->Known": 36
+    },
+    "mode": "official_fixed",
+    "numeric_compatibility": {
+      "ball_count_difference": 0,
+      "ce_loss_difference": 0.0,
+      "centroid_difference": 0.0,
+      "gradient_norm_difference": 0.0,
+      "note": "The compatibility runtime changes graph lifetime/device placement, not the fixed-centroid formula; synthetic formula comparison is exact up to floating point.",
+      "status": "pass",
+      "subcentroid_loss_difference": 0.0
+    },
+    "run_dir": "/home/bo/bo01/llmpy311/artifacts/s2c/external/mogb_exact_reproduction_v1/audit/official_fixed",
+    "seed_contract": {
+      "class_split_seed": 0,
+      "dataloader_seed": 0,
+      "granular_ball_seed": 0,
+      "model_seed": 0,
+      "note": "MOGB.py seeds 100 before Data; Data.set_seed(args.seed=0) resets all effective sources.",
+      "official_pre_data_seed": 100
+    },
+    "snapshot_hash": "b8410dbc8677d4c57a578d68343b9b8ae9dda54fee9ee8eba3f0a142acd9b397",
+    "status": "complete"
+  },
+  "unified_zero": {
+    "best_dev_accuracy": 91.6,
+    "best_epoch": 28,
+    "checkpoint_sha256": "e43553d9d52a75277726a5d8256b9cca93df43dc1048cd694b9e8e26679137f0",
+    "epochs_completed": 38,
+    "metrics": {
+      "Accuracy": 75.1667,
+      "F1-All": 68.3502,
+      "F1-K": 67.1884,
+      "F1-U": 79.9676,
+      "Known Recall": 51.5333,
+      "Known->OOS": 1449,
+      "OOS Precision": 67.1652,
+      "OOS Recall": 98.8,
+      "OOS->Known": 36
+    },
+    "mode": "unified_zero",
+    "numeric_compatibility": {
+      "ball_count_difference": 0,
+      "ce_loss_difference": 0.0,
+      "centroid_difference": 0.0,
+      "gradient_norm_difference": 0.0,
+      "note": "The compatibility runtime changes graph lifetime/device placement, not the fixed-centroid formula; synthetic formula comparison is exact up to floating point.",
+      "status": "pass",
+      "subcentroid_loss_difference": 0.0
+    },
+    "run_dir": "/home/bo/bo01/llmpy311/artifacts/s2c/external/mogb_exact_reproduction_v1/audit/unified_zero",
+    "seed_contract": {
+      "class_split_seed": 0,
+      "dataloader_seed": 0,
+      "granular_ball_seed": 0,
+      "model_seed": 0,
+      "note": "All sources explicitly set to seed=0 before and during Data construction.",
+      "official_pre_data_seed": 0
+    },
+    "snapshot_hash": "b8410dbc8677d4c57a578d68343b9b8ae9dda54fee9ee8eba3f0a142acd9b397",
+    "status": "complete"
+  }
+}

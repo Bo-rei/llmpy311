@@ -1,0 +1,5 @@
+mode,metric,observed,paper_reference,gap_pp,classification
+official_fixed,Accuracy,57.0779,80.58,-23.5021,not_reproduced
+official_fixed,F1-All,59.1627,81.52,-22.357299999999995,not_reproduced
+official_fixed,F1-U,53.1049,81.04,-27.935100000000006,not_reproduced
+official_fixed,F1-K,59.2671,81.53,-22.262900000000002,not_reproduced

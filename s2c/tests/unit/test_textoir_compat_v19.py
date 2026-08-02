@@ -113,6 +113,7 @@ def test_runtime_overlay_patches_only_selected_config_and_preserves_clean_clone(
     assert status_before == status_after == ""
     assert provenance["changed_files"] == [
         "backbones/__init__.py",
+        "backbones/base.py",
         "configs/MSP.py",
         "dataloaders/__init__.py",
         "methods/__init__.py",
@@ -120,10 +121,11 @@ def test_runtime_overlay_patches_only_selected_config_and_preserves_clean_clone(
     assert provenance["config_changed_files"] == ["configs/MSP.py"]
     assert provenance["compatibility_changed_files"] == [
         "backbones/__init__.py",
+        "backbones/base.py",
         "dataloaders/__init__.py",
         "methods/__init__.py",
     ]
-    assert len(provenance["compatibility_patches"]) == 3
+    assert len(provenance["compatibility_patches"]) == 4
     assert provenance["source_config_sha256"] == source_hash_before
     assert provenance["overlay_config_sha256"] != source_hash_before
     assert provenance["source_tree_sha256"] != provenance["overlay_tree_sha256"]

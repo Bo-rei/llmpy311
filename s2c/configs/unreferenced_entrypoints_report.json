@@ -1,7 +1,7 @@
 {
   "action": "report_only",
-  "count": 198,
-  "generated_at": "2026-08-01T03:02:12.279700+00:00",
+  "count": 197,
+  "generated_at": "2026-08-01T14:38:16.065497+00:00",
   "paths": [
     "scripts/data/active/audit_v19_2_data.py",
     "scripts/data/active/build_known_intents_ratio_splits_v19.py",
@@ -174,7 +174,6 @@
     "tools/compat/textoir/audit_textoir_protocol.py",
     "tools/compat/textoir/import_textoir_results.py",
     "tools/compat/textoir/normalize_textoir_splits.py",
-    "tools/compat/textoir/run_external_textoir.py",
     "tools/compat/textoir/run_textoir_matrix.py",
     "tools/eval/eval_flat_smolm_v19.py",
     "tools/eval/eval_minilm_cascade_v19.py",

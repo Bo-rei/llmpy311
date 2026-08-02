@@ -1,0 +1,89 @@
+[
+  {
+    "fixed_k_oos_f1": {
+      "1": 0.8450287592440427,
+      "2": 0.7904126869706254,
+      "3": 0.7527757216876387,
+      "4": 0.7426333457665051,
+      "5": 0.7385938668661182
+    },
+    "representation": "frozen_minilm",
+    "selected_k_counts": {
+      "1": 10,
+      "2": 0,
+      "3": 0,
+      "4": 0,
+      "5": 0
+    },
+    "selected_k_values": {
+      "apache": 1,
+      "bash": 1,
+      "drupal": 1,
+      "haskell": 1,
+      "linq": 1,
+      "matlab": 1,
+      "qt": 1,
+      "svn": 1,
+      "visual-studio": 1,
+      "wordpress": 1
+    }
+  },
+  {
+    "fixed_k_oos_f1": {
+      "1": 0.24599483204134368,
+      "2": 0.19867914144193727,
+      "3": 0.1631368059530624,
+      "4": 0.14494447691408532,
+      "5": 0.1542906674371569
+    },
+    "representation": "mogb_initial_bert",
+    "selected_k_counts": {
+      "1": 10,
+      "2": 0,
+      "3": 0,
+      "4": 0,
+      "5": 0
+    },
+    "selected_k_values": {
+      "apache": 1,
+      "bash": 1,
+      "drupal": 1,
+      "haskell": 1,
+      "linq": 1,
+      "matlab": 1,
+      "qt": 1,
+      "svn": 1,
+      "visual-studio": 1,
+      "wordpress": 1
+    }
+  },
+  {
+    "fixed_k_oos_f1": {
+      "1": 0.0,
+      "2": 0.021681997371879105,
+      "3": 0.12318167749922625,
+      "4": 0.15426662617673853,
+      "5": 0.27285513361462727
+    },
+    "representation": "mogb_trained_hierarchical_bert",
+    "selected_k_counts": {
+      "1": 8,
+      "2": 2,
+      "3": 0,
+      "4": 0,
+      "5": 0
+    },
+    "selected_k_values": {
+      "apache": 2,
+      "bash": 1,
+      "drupal": 1,
+      "haskell": 1,
+      "linq": 2,
+      "matlab": 1,
+      "qt": 1,
+      "svn": 1,
+      "visual-studio": 1,
+      "wordpress": 1
+    }
+  }
+]

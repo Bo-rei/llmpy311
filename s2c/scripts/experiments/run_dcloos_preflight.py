@@ -76,7 +76,10 @@ def run_preflight(paths: ProtocolV2Paths, output_root: Path) -> dict[str, Any]:
         if result.returncode:
             compile_failures.append(f"{target}: {result.stderr.strip()}")
     missing_negative = [check["relative_path"] for check in local_negative_checks if not check["exists"]]
-    status = "blocked_missing_official_open_domain_oos"
+    # Keep the state name at the experiment-contract level.  The missing
+    # corpus is an external-negative-data blocker; it is not a claim that the
+    # end-to-end method was removed from the baseline plan.
+    status = "blocked_missing_external_negative_data"
     payload: dict[str, Any] = {
         "experiment_id": "dcloos_official_unified_v1",
         "status": status,
@@ -125,4 +128,3 @@ def main(argv: list[str] | None = None) -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
-

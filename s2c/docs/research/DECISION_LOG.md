@@ -271,3 +271,53 @@
   `results/final_baselines/summary.csv`；旧 E0--E3/R1/MiniLM 结果保持不可覆盖。
 - 唯一下一步：完成状态/日志/注册表/测试的最终一致性审计；不再扩大 MOGB 官方矩阵、BRAK 或
   fixed-K 搜索。论文主表使用同协议 MiniLM-fair 组件，官方兼容结果单列，DCLOOS 明确 blocker。
+
+## D28：保留 DCLOOS 端到端基线（2026-08-01）
+
+- 纠正：DCLOOS（Zhan et al., 2021）是审稿人点名的 fully end-to-end 基线，不能由 ADB/DA-ADB
+  替代，也不能从主比较计划中删除。
+- 当前状态统一命名为 `blocked_missing_external_negative_data`：官方流程需要伪 OOS 与外部
+  open-domain negative corpus（`squad_placeh.tsv`），本地没有该固定语料，因此尚未生成 DCLOOS 指标。
+- 决策：MOGB strict single-cell、MOGB 表示上的 BRAK 与 DCLOOS 外部负样本审计并行推进；若补齐
+  官方语料和许可证，登记 `DCLOOS-official`；若只能使用有明确来源的数据替代，单独登记
+  `DCLOOS-adapted`，不得与 official 结果混称。
+
+## D29：严格 MOGB、BRAK 表示对照与端到端基线边界收口（2026-08-01）
+
+- 严格 MOGB：StackOverflow/KIR50/seed0 的 `official_fixed` 与 `unified_zero` 两个 seed
+  契约均完成，结果完全一致但相对论文 Acc/F1-All/F1-U/F1-K 分别低
+  `13.5033/19.1398/9.7424/20.0816` 个百分点；判定为 `not_reproduced_strict`，不写成
+  SOTA，也不再扩大官方 BERT 矩阵。
+- BRAK 表示迁移：在 Frozen MiniLM、MOGB initial BERT、MOGB trained BERT 三种表示上完成
+  18 个固定 K/BRAK 汇总单元；trained BERT 只在 2/10 意图选 K=2，绝对指标仍很差。停止
+  该表示迁移扩展，BRAK 只作为 Known-only 负控制。
+- 端到端基线：DCLOOS 明确保留为审稿人要求的独立 fully end-to-end 方法；缺少
+  `squad_placeh.tsv` 外部 open-domain negative corpus 时状态固定为
+  `blocked_missing_external_negative_data`，不得用 protocol test OOS 替代，不得用 ADB/DA-ADB
+  代替 DCLOOS。
+- ADB/DA-ADB：仅完成可运行性审计；当前环境 `transformers.AdamW` 导入失败，未生成指标。若
+  后续修复环境，必须新建 ledger 行、固定同一 registry、并与 DCLOOS 单独报告。
+- 唯一下一步：保持当前基线汇总和 provenance 冻结，优先获取/确认 DCLOOS 外部负样本及许可证；
+  在此之前不启动新的 MOGB、BRAK、adaptive-K 或完整 Pipeline 实验。
+
+## D30：外部基线单格收口（2026-08-01）
+
+- MOGB：StackOverflow/KIR50 与 Banking77/KIR75 的严格单格均已完成，但相对各自论文参考
+  明显偏低，统一标记 `not_reproduced_strict`，不扩展官方 BERT 矩阵。
+- DCLOOS：官方 Drive 的 `squad.tsv` 已定位并字节一致映射为上游要求的
+  `squad_placeh.tsv`；官方 BERT 单格运行约三小时仍未形成最终 metrics，按预设上限停止，
+  状态为 `timeout_incomplete`，中间 predictions 明确排除。
+- ADB/DA-ADB：在 `textoir-py39`、torch-native AdamW overlay 和本地 safetensors 转换副本下，
+  StackOverflow/KIR=.50/seed=0 均完成；F1-open 分别为 89.4712 和 90.8978。两者是现代化
+  兼容边界参考，不是 strict protocol_v2 或多 seed SOTA 结果，也不能代替 DCLOOS。
+- 唯一下一步：完成 registry、ledger、summary、公开轻量结果和回归检查后冻结本轮外部基线；
+  不启动 MOGB/BRAK/adaptive-K 大矩阵或完整 Pipeline。
+
+## D31：DCLOOS 受限预算结果单独登记（2026-08-01）
+
+- reduced-budget DCLOOS 使用已定位的官方 Drive SQuAD 负样本、固定本地 BERT、KIR=.75、seed=888
+  完成了上游 test evaluation；训练产生 5,700 条预测。
+- 由于复制的上游 `main.py` 缺失 `json` import，最终 raw metrics 序列化失败；指标由完整预测文件独立重算，
+  并以 `complete_recovered_intermediate_prediction` 登记，原 `failed` manifest 不覆盖。
+- 结果 Accuracy 88.6842、F1-All 90.2629、F1-U/OOS F1 87.0527、F1-K 90.2916；这不是严格默认预算或论文表格复现。
+- 决策：保留作为端到端兼容性证据；不把它与 Known-only Gate 方法混列，不扩展 DCLOOS 矩阵，先完成状态与公开汇总校验。

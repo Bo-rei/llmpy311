@@ -271,6 +271,90 @@ files:
     category: external
     source: ../artifacts/s2c/runs/protocol_v2_textoir_v1/mogb_ablation_v1/summary/paired_vs_single.csv
     public: mogb/ablation_paired_vs_single.csv
+
+  # Strict MOGB single-cell reproduction and BRAK-on-MOGB representation
+  # diagnostics.  These are lightweight summaries only; checkpoints remain
+  # under ../artifacts and are never exported.
+  - experiment_id: mogb_exact_reproduction_v1
+    category: external
+    source: results/mogb_exact_reproduction/ball_statistics.csv
+    public: mogb_exact_reproduction/ball_statistics.csv
+  - experiment_id: mogb_exact_reproduction_v1
+    category: external
+    source: results/mogb_exact_reproduction/dataset_audit.json
+    public: mogb_exact_reproduction/dataset_audit.json
+  - experiment_id: mogb_exact_reproduction_v1
+    category: external
+    source: results/mogb_exact_reproduction/final_metrics.json
+    public: mogb_exact_reproduction/final_metrics.json
+  - experiment_id: mogb_exact_reproduction_v1
+    category: external
+    source: results/mogb_exact_reproduction/known_intents.json
+    public: mogb_exact_reproduction/known_intents.json
+  - experiment_id: mogb_exact_reproduction_v1
+    category: external
+    source: results/mogb_exact_reproduction/reproduction_gap.csv
+    public: mogb_exact_reproduction/reproduction_gap.csv
+  - experiment_id: mogb_exact_reproduction_v1
+    category: external
+    source: results/mogb_exact_reproduction/sample_hashes.json
+    public: mogb_exact_reproduction/sample_hashes.json
+  - experiment_id: mogb_exact_reproduction_v1
+    category: external
+    source: results/mogb_exact_reproduction/split_manifest.json
+    public: mogb_exact_reproduction/split_manifest.json
+  - experiment_id: mogb_exact_reproduction_v1
+    category: external
+    source: results/mogb_exact_reproduction/training_history.csv
+    public: mogb_exact_reproduction/training_history.csv
+  - experiment_id: mogb_exact_reproduction_banking_v1
+    category: external
+    source: results/mogb_exact_reproduction_banking/ball_statistics.csv
+    public: mogb_exact_reproduction_banking/ball_statistics.csv
+  - experiment_id: mogb_exact_reproduction_banking_v1
+    category: external
+    source: results/mogb_exact_reproduction_banking/dataset_audit.json
+    public: mogb_exact_reproduction_banking/dataset_audit.json
+  - experiment_id: mogb_exact_reproduction_banking_v1
+    category: external
+    source: results/mogb_exact_reproduction_banking/final_metrics.json
+    public: mogb_exact_reproduction_banking/final_metrics.json
+  - experiment_id: mogb_exact_reproduction_banking_v1
+    category: external
+    source: results/mogb_exact_reproduction_banking/known_intents.json
+    public: mogb_exact_reproduction_banking/known_intents.json
+  - experiment_id: mogb_exact_reproduction_banking_v1
+    category: external
+    source: results/mogb_exact_reproduction_banking/reproduction_gap.csv
+    public: mogb_exact_reproduction_banking/reproduction_gap.csv
+  - experiment_id: mogb_exact_reproduction_banking_v1
+    category: external
+    source: results/mogb_exact_reproduction_banking/sample_hashes.json
+    public: mogb_exact_reproduction_banking/sample_hashes.json
+  - experiment_id: mogb_exact_reproduction_banking_v1
+    category: external
+    source: results/mogb_exact_reproduction_banking/split_manifest.json
+    public: mogb_exact_reproduction_banking/split_manifest.json
+  - experiment_id: mogb_exact_reproduction_banking_v1
+    category: external
+    source: results/mogb_exact_reproduction_banking/training_history.csv
+    public: mogb_exact_reproduction_banking/training_history.csv
+  - experiment_id: brak_mogb_representation_v1
+    category: external
+    source: results/mogb_exact_reproduction/brak_mogb_representation/brak_selection_diagnostics.csv
+    public: mogb_exact_reproduction/brak_mogb_representation/brak_selection_diagnostics.csv
+  - experiment_id: brak_mogb_representation_v1
+    category: external
+    source: results/mogb_exact_reproduction/brak_mogb_representation/brak_summary.csv
+    public: mogb_exact_reproduction/brak_mogb_representation/brak_summary.csv
+  - experiment_id: brak_mogb_representation_v1
+    category: external
+    source: results/mogb_exact_reproduction/brak_mogb_representation/representation_metadata.json
+    public: mogb_exact_reproduction/brak_mogb_representation/representation_metadata.json
+  - experiment_id: brak_mogb_representation_v1
+    category: external
+    source: results/mogb_exact_reproduction/brak_mogb_representation/selected_k_distribution.json
+    public: mogb_exact_reproduction/brak_mogb_representation/selected_k_distribution.json
   - experiment_id: mogb_ablation_v1_frozen_ofat
     category: external
     source: ../artifacts/s2c/runs/protocol_v2_textoir_v1/mogb_ablation_v1/summary/MOGB_ABLATION_SUMMARY_MANIFEST.json

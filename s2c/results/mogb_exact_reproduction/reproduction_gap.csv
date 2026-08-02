@@ -1,0 +1,9 @@
+mode,metric,observed,paper_reference,gap_pp,classification
+official_fixed,Accuracy,75.1667,88.67,-13.503299999999996,not_reproduced
+official_fixed,F1-All,68.3502,87.49,-19.139799999999994,not_reproduced
+official_fixed,F1-U,79.9676,89.71,-9.74239999999999,not_reproduced
+official_fixed,F1-K,67.1884,87.27,-20.081599999999995,not_reproduced
+unified_zero,Accuracy,75.1667,88.67,-13.503299999999996,not_reproduced
+unified_zero,F1-All,68.3502,87.49,-19.139799999999994,not_reproduced
+unified_zero,F1-U,79.9676,89.71,-9.74239999999999,not_reproduced
+unified_zero,F1-K,67.1884,87.27,-20.081599999999995,not_reproduced

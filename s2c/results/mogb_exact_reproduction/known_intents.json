@@ -1,0 +1,44 @@
+{
+  "known_intents": [
+    "visual-studio",
+    "apache",
+    "wordpress",
+    "linq",
+    "matlab",
+    "svn",
+    "haskell",
+    "qt",
+    "drupal",
+    "bash"
+  ],
+  "modes": {
+    "official_fixed": {
+      "class_split_seed": 0,
+      "dataloader_seed": 0,
+      "granular_ball_seed": 0,
+      "model_seed": 0,
+      "note": "MOGB.py seeds 100 before Data; Data.set_seed(args.seed=0) resets all effective sources.",
+      "official_pre_data_seed": 100
+    },
+    "unified_zero": {
+      "class_split_seed": 0,
+      "dataloader_seed": 0,
+      "granular_ball_seed": 0,
+      "model_seed": 0,
+      "note": "All sources explicitly set to seed=0 before and during Data construction.",
+      "official_pre_data_seed": 0
+    }
+  },
+  "unknown_intents": [
+    "ajax",
+    "cocoa",
+    "excel",
+    "hibernate",
+    "magento",
+    "oracle",
+    "osx",
+    "scala",
+    "sharepoint",
+    "spring"
+  ]
+}

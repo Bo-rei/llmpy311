@@ -181,7 +181,7 @@ import sys
 detection_root, method = sys.argv[1:3]
 os.chdir(detection_root)
 sys.path.insert(0, detection_root)
-from transformers import AdamW
+from torch.optim import AdamW
 from backbones import backbones_map
 from methods import method_map
 if method not in method_map:
@@ -196,7 +196,7 @@ print(json.dumps({
     "method": method,
     "registered": method in method_map,
     "backbones": sorted(backbones_map),
-    "transformers_adamw_import": AdamW.__name__,
+    "torch_adamw_import": AdamW.__name__,
     "openmax_libmr": openmax_libmr,
 }, sort_keys=True))
 """
@@ -344,6 +344,36 @@ def prepare_runtime_overlay(
             }
         )
 
+    # Transformers 5 removed its legacy AdamW export.  TextOIR's BERT manager
+    # passes the old ``correct_bias`` keyword, so the overlay provides a small
+    # torch-native adapter.  The upstream checkout is never edited; the
+    # compatibility limitation is recorded in the run manifest.
+    base_relative = Path("backbones/base.py")
+    base_source = source_root / base_relative
+    base_overlay = overlay_root / base_relative
+    base_text = base_overlay.read_text(encoding="utf-8")
+    old_adamw_import = "from transformers import AdamW, get_linear_schedule_with_warmup, BertTokenizer"
+    new_adamw_import = (
+        "from torch.optim import AdamW as _TorchAdamW\n"
+        "from transformers import get_linear_schedule_with_warmup, BertTokenizer\n\n"
+        "class AdamW(_TorchAdamW):\n"
+        "    def __init__(self, params, *args, correct_bias=True, **kwargs):\n"
+        "        super().__init__(params, *args, **kwargs)\n"
+    )
+    if base_text.count(old_adamw_import) != 1:
+        raise ValueError(f"Expected one legacy AdamW import in {base_source}")
+    base_text = base_text.replace(old_adamw_import, new_adamw_import)
+    base_overlay.write_text(base_text, encoding="utf-8")
+    compatibility_patches.append(
+        {
+            "file": base_relative.as_posix(),
+            "reason": "adapt removed Transformers AdamW export to torch.optim.AdamW",
+            "source_sha256": sha256_file(base_source),
+            "overlay_sha256": sha256_file(base_overlay),
+            "correct_bias": "accepted for API compatibility; torch optimizer semantics apply",
+        }
+    )
+
     # 当前 upstream main 只把 ``bert_con`` 注册到 dataloader map，导致 README
     # 中 MSP/DOC/ADB 等官方命令全部在 DataManager 初始化时 KeyError。所有 BERT
     # backbone 原本就共用同一个 BERT_Loader；overlay 仅恢复这层缺失的路由表。
@@ -444,7 +474,7 @@ def prepare_runtime_overlay(
     )
     compatibility_files = sorted(
         [path.as_posix() for path in compatibility_specs]
-        + [dataloader_relative.as_posix()]
+        + [dataloader_relative.as_posix(), base_relative.as_posix()]
         + method_compatibility_files
     )
     expected_changed_files = sorted([relative_config.as_posix(), *compatibility_files])
