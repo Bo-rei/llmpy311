@@ -82,6 +82,5 @@ seed 13 is numerically valid and Version C is not clearly dominated.
 - `scripts/experiments/run_clmsg.py`
 - `configs/gates/clmsg.yaml`
 - `tests/unit/test_clmsg.py`
-- `docs/clmsg/CLMSG_PIPELINE_AUDIT.md`
-- `docs/clmsg/CLMSG_RESEARCH_REPORT.md` (filled after the smoke decision)
-
+- `docs/archive/failed_adaptive_k/clmsg/CLMSG_PIPELINE_AUDIT.md`
+- `docs/archive/failed_adaptive_k/clmsg/CLMSG_RESEARCH_REPORT.md` (filled after the smoke decision)

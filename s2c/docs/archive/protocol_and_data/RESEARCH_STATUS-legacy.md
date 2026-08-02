@@ -48,7 +48,7 @@
 | BRAK pilot | complete 21/21 summary cells；3 seeds；30 个 intent 全部选择 K=1；0 失败 | `do_not_repeat`；未通过扩展门，不启动三数据集扩展 | `../artifacts/s2c/runs/protocol_v2_textoir_v1/brak_v1/` |
 | MOGB strict single-cell | complete 2/2 seed-contract modes；0 失败；StackOverflow KIR50 seed0 | `do_not_repeat`；结果为 `not_reproduced_strict`，不与论文数字混合 | `../artifacts/s2c/external/mogb_exact_reproduction_v1/` |
 | BRAK on MOGB representations | complete 18/18 summary cells；Frozen/initial BERT 保持 K1；trained BERT 仅 2/10 意图选 K2 | `do_not_repeat`；停止表示迁移扩展，保留 Known-only 负控制 | `../artifacts/s2c/external/mogb_exact_reproduction_v1/brak_mogb_representation/` |
-| ADB / DA-ADB runnability audit | complete 2/2 modernized compatibility cells；0 失败 | `do_not_repeat`；单 seed 外部边界参考，不是 strict protocol_v2 | `docs/mogb_integration/ADB_DAADB_AUDIT.md` |
+| ADB / DA-ADB runnability audit | complete 2/2 modernized compatibility cells；0 失败 | `do_not_repeat`；单 seed 外部边界参考，不是 strict protocol_v2 | `docs/archive/mogb_reproduction/mogb_integration/ADB_DAADB_AUDIT.md` |
 | DCLOOS official/unified preflight | official Drive `squad.tsv` 已定位并字节一致映射；单格训练超时，未生成最终指标 | `do_not_repeat`；中间预测排除；不得用 protocol OOS 替代额外监督 | `../artifacts/s2c/external/dcloos_official_single_cell_v1/run_manifest.json` |
 | DCLOOS reduced-budget recovery | 1/1；5,700 条上游 test prediction；raw JSON 序列化失败后从完整预测恢复指标 | `do_not_repeat`；仅作端到端兼容性证据，不称严格论文复现 | `../artifacts/s2c/external/dcloos_official_oos_kir75_seed888_reduced_v2/recovery_manifest.json` |
 

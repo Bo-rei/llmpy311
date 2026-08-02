@@ -1,0 +1,8 @@
+{
+  "run_root": "/home/bo/bo01/llmpy311/artifacts/s2c/runs/protocol_v2_textoir_v1/e2_gate_core_dense",
+  "run_count": 1650,
+  "dataset_level_rows": 66,
+  "intent_level_rows": 13580,
+  "seed_stability_rows": 330,
+  "note": "All best-K fields are test-set oracle sensitivity summaries and must not select a formal method."
+}

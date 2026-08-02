@@ -3,7 +3,7 @@
 更新时间：2026-07-20  
 项目路径：`/home/bo/bo01/llmpy311/s2c`
 
-> **快照说明**：本文保留原有 Gate-only 研究进展的历史细节，但不再是当前运行契约。当前应先读仓库内的 [`docs/PROJECT.md`](../../PROJECT.md) 和 [`docs/EXPERIMENTS.md`](../../EXPERIMENTS.md)。截至本次更新，完整 KIR50 Cascade 已完成 36/36 个单元；结果以 `cascade_full/gpu_kir50/evaluations/matrix_manifest.json` 和同级汇总 CSV 为准。
+> **快照说明**：本文保留原有 Gate-only 研究进展的历史细节，但不再是当前运行契约。当前应先读仓库内的 [`docs/CURRENT_STATUS.md`](../../CURRENT_STATUS.md) 和 [`docs/EXPERIMENTS.md`](../../EXPERIMENTS.md)。截至本次更新，完整 KIR50 Cascade 已完成 36/36 个单元；结果以 `cascade_full/gpu_kir50/evaluations/matrix_manifest.json` 和同级汇总 CSV 为准。
 
 > 本文中 v20 的 `blocked_missing_inputs` 是当时的历史预检状态，不覆盖后续修复后的完整 Cascade 结果；当前事实以 `s2c/results/` 和对应 artifact manifest 为准。
 

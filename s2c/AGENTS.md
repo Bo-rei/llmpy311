@@ -9,15 +9,13 @@
 当前文档入口只有：
 
 - `README.md`
-- `docs/PROJECT.md`
-- `docs/CODE_LAYOUT.md`
+- `docs/METHOD.md`
+- `docs/CURRENT_STATUS.md`（唯一研究状态入口）
 - `docs/EXPERIMENTS.md`
-- `docs/RUNBOOK.md`
-- `docs/DEVELOPMENT_LOG.md`
-- `docs/research/RESEARCH_STATUS.md`（唯一研究状态入口）
-- `docs/research/EXPERIMENT_LEDGER.csv`（追加式实验总账）
-- `docs/research/DECISION_LOG.md`
-- `docs/research/PAPER_CLAIM_AUDIT.md`
+- `docs/REPRODUCIBILITY.md`
+- `docs/EXPERIMENT_LEDGER.csv`（追加式实验总账）
+
+历史开发日志、决策日志和 claim audit 位于 `docs/archive/`，不作为当前事实入口。
 
 `docs/archive/` 仅保存历史资料，不是当前事实来源。不要重新建立平行文档索引或版本号
 文档树。
@@ -38,7 +36,7 @@ tests/                单元、协议和回归测试
 results/              GitHub 可提交的轻量 CSV/JSON 快照
 ```
 
-完整放置规则见 `docs/CODE_LAYOUT.md`。禁止重新创建 `src/s2c/`，也禁止从 `src`
+完整放置规则见 `docs/METHOD.md`。禁止重新创建 `src/s2c/`，也禁止从 `src`
 根目录导入；活动包使用 `protocol_v2.*`，历史包使用 `legacy.*`。
 
 `tools/maintenance/export_public_results.py` 只按
@@ -47,14 +45,14 @@ results/              GitHub 可提交的轻量 CSV/JSON 快照
 ## 维护规则
 
 - 所有 Codex 或其他智能体的实质性修改都必须同步追加
-  `docs/DEVELOPMENT_LOG.md`；纯只读且不产生文件的任务可以例外。日志必须记录
+  `docs/archive/protocol_and_data/DEVELOPMENT_LOG.md`；纯只读且不产生文件的任务可以例外。日志必须记录
   base commit、修改文件、数据影响、artifact 影响、测试、风险和下一步。
 - 不运行训练来完成工作区整理，不修改或重命名 `../artifacts` 原始实验目录。
 - 不把 Gate-only 的 Frozen/CE/SupCon 结果写成完整 Pipeline 结果。
 - 不提交模型、checkpoint、embedding、Parquet、逐样本 scores 或运行日志。
 - 新实验入口使用功能命名；历史 `_v19/_v20/_v21` 文件保留为兼容入口，不再扩展同类版本号。
 - 涉及实验、指标、数据协议或论文论断的任务，开始前必须读取
-  `docs/research/RESEARCH_STATUS.md`、`EXPERIMENT_LEDGER.csv` 和 `DECISION_LOG.md`，结束前运行
+  `docs/CURRENT_STATUS.md`、`EXPERIMENT_LEDGER.csv` 和 `docs/archive/protocol_and_data/DECISION_LOG.md`，结束前运行
   `python tools/maintenance/check_research_state.py` 并追加状态台账、开发日志和阶段 closeout。
 - 新计划若与 ledger 中 `do_not_repeat` 且已完成的 protocol/dataset/KIR/seed/representation/K/distance/
   partition/boundary 完全相同，必须拒绝为 `duplicate_completed_experiment`；只有带明确 rerun reason

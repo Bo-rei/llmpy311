@@ -51,11 +51,11 @@ manifold、entropy 和 cross-conformal 未启动。
 
 ## 当前活动入口
 
-1. [README.md](../README.md)：项目入口。
-2. [CODE_LAYOUT.md](CODE_LAYOUT.md)：源码放置和 import 规范。
-3. [DATASETS.md](DATASETS.md)：固定 TEXTOIR snapshot、local-only StackOverflow 边界与准入状态。
-4. [EXPERIMENTS.md](EXPERIMENTS.md)：结果层次和公开快照。
-5. [RUNBOOK.md](RUNBOOK.md)：审计、测试和导出命令。
+1. [README.md](../../../README.md)：项目入口。
+2. [METHOD.md](../../METHOD.md)：当前方法、源码边界和 adaptive-K 原型。
+3. [CURRENT_STATUS.md](../../CURRENT_STATUS.md)：唯一当前状态入口。
+4. [EXPERIMENTS.md](../../EXPERIMENTS.md)：结果层次和公开快照。
+5. [REPRODUCIBILITY.md](../../REPRODUCIBILITY.md)：审计、测试和复现命令。
 
 历史说明只在 `docs/archive/`，不能覆盖当前事实。读取完整实验数字时，先看
 `../artifacts/s2c/runs/protocol_v2_textoir_v1/` 下的 manifest，再看汇总 CSV；读取 GitHub
@@ -69,10 +69,10 @@ manifold、entropy 和 cross-conformal 未启动。
 入口是 `../artifacts/s2c/runs/protocol_v2_textoir_v1/r1_contract_repair_v1/R1_CONTRACT_REPAIR_CLOSEOUT.md`。
 多中心边界归因入口是
 `../artifacts/s2c/runs/protocol_v2_textoir_v1/multicenter_boundary_attribution/BOUNDARY_ATTRIBUTION_CLOSEOUT.md`。
-MOGB 审计和适配入口是 `docs/mogb_integration/`，运行结果根包括
+MOGB 审计和适配入口是 `docs/archive/mogb_reproduction/mogb_integration/`，运行结果根包括
 `../artifacts/s2c/runs/protocol_v2_textoir_v1/mogb_baseline_v1/`（MiniLM 公平矩阵）与
 `../artifacts/s2c/runs/protocol_v2_textoir_v1/mogb_ablation_v1/`（frozen-MiniLM OFAT closeout）、
 `../artifacts/s2c/runs/protocol_v2_textoir_v1/mogb_fixed_k_mean_ablation_v1/`（fixed K1--4 与
 adaptive 的同边界对照）。
-CLMSG 审计与停止门报告位于 `docs/clmsg/`，机器可读 closeout 位于
+CLMSG 审计与停止门报告位于 `docs/archive/failed_adaptive_k/clmsg/`，机器可读 closeout 位于
 `../artifacts/s2c/runs/protocol_v2_textoir_v1/clmsg_v1/summary/`。

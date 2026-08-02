@@ -15,7 +15,7 @@ scripts/experiments/run_mogb_exact_reproduction.py
 scripts/experiments/run_brak_mogb_representations.py
                                              BRAK representation-transfer runner
 configs/baselines/mogb_exact_reproduction_v1.yaml
-docs/mogb_integration/                       audits and closeouts
+docs/archive/mogb_reproduction/mogb_integration/ audits and closeouts
 results/mogb/                                 existing lightweight fair exports
 results/mogb_exact_reproduction/              strict/BRAK lightweight exports
 ../artifacts/s2c/external/                   checkpoints and full manifests
@@ -58,8 +58,8 @@ the published reference. Their metrics are never silently combined.
 * `scripts/experiments/run_mogb_exact_reproduction.py`;
 * `scripts/experiments/run_brak_mogb_representations.py`;
 * `scripts/experiments/build_final_baseline_summary.py`;
-* `docs/mogb_integration/MOGB_REPRODUCTION_REPORT.md`;
-* `docs/mogb_integration/ADB_DAADB_AUDIT.md`;
+* `docs/archive/mogb_reproduction/mogb_integration/MOGB_REPRODUCTION_REPORT.md`;
+* `docs/archive/mogb_reproduction/mogb_integration/ADB_DAADB_AUDIT.md`;
 * research status, ledger, decision log, development log and final baseline
   summary.
 

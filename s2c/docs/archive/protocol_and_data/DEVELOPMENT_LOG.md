@@ -865,3 +865,46 @@
 - 代码：补充 overlay 的 `json` import 和无 test-local 变量时的最终测试兜底；第三方 checkout 未改动。
 - 测试：待本轮 registry、summary、public export、unit/integration/smoke 和 lint 回归完成后冻结。
 - 风险与下一步：不再扩大 DCLOOS；继续保持 MOGB/BRAK/adaptive-K/完整 Pipeline 停止，先完成本轮验证。
+# 2026-08-02 — workspace consolidation and adaptive-K feasibility audit
+
+- Base commit: `7c9008d7e85c637334139783a91a80841725d628`.
+- Scope: moved obsolete active-document entrances into `docs/archive/`; added the
+  four active docs (`METHOD.md`, `CURRENT_STATUS.md`, `EXPERIMENTS.md`,
+  `REPRODUCIBILITY.md`); updated research-state and registry paths.
+- Data impact: none. `../artifacts/s2c/` was read-only and no training or old
+  `do_not_repeat` matrix was started.
+- New diagnostics: read-only fixed-K audit under
+  `results/diagnostics/adaptive_k/`; MOGB four-combination preflight under
+  `results/diagnostics/mogb_diff/`.
+- New code: `tools/analysis/audit_adaptive_k.py`,
+  `tools/analysis/diagnose_mogb_diff.py`, and the implementation-only
+  `src/protocol_v2/experiments/adaptive_split_merge.py` with dry-run entry and
+  unit tests.
+- Risk: intent-level adaptive-K rows are test-sensitivity diagnostics, not a
+  validation selector; MOGB A/C remain blocked because original accompanying
+  data are unavailable.
+- Next: run the validation suite, review the two diagnostic summaries, and
+  register a pilot only if Known-only evidence justifies it.
+
+## 2026-08-02 — consolidation closeout verification
+
+- Base commit: `7c9008d7e85c637334139783a91a80841725d628`; working tree remains dirty and no commit/push was performed.
+- Evidence refreshed: all 1,650 immutable E2 run directories were re-audited into
+  `results/diagnostics/adaptive_k/`; the MOGB four-group diagnosis remains
+  `public_code_not_reproduced_under_available_materials` because original accompanying data is absent
+  and the pinned source stops at the missing `utils` import.
+- New code scope: only the Known-only split–merge prototype, its dry-run entry point, tests, and read-only
+  diagnostics; no model training, embedding generation, or writes under `../artifacts`.
+- Verification: `pytest tests/unit -q` (289 passed), `pytest tests/integration -q` (8 passed), compileall,
+  Ruff, experiment registry audit, data-tracking check, development-log check, research-state check,
+  and `git diff --check` all passed.
+- Decision: keep fixed-K/MOGB historical results frozen; do not promote test-oracle adaptive-K rows to a
+  selection rule. Any future pilot must first include lambda sensitivity and an explicit Known/OOS leakage audit.
+
+## 2026-08-02 — Correction: adaptive-K intent metric naming
+
+- The read-only audit now names the intent-level class-F1 delta
+  `delta_intent_class_f1_vs_k1`; the global `delta_f1_all_vs_k1` remains dataset-level only.
+- Dataset rows additionally report the number of intent×KIR×distance groups with any K>1 test-oracle
+  winner on at least 3/5 seeds. This is descriptive sensitivity evidence, not a validation selector.
+- No model, embedding, registry, view, export, or original artifact was changed.

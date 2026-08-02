@@ -1,0 +1,563 @@
+{
+  "classification": "public_code_not_reproduced_under_available_materials",
+  "fixed_cell": "StackOverflow/KIR=0.50/seed=0",
+  "original_source_commit": "5b689e2a03de0d86ec41212825e5db8d7f0e5c02",
+  "original_data_found": false,
+  "pinned_code_earliest_static_failure": "MOGB.py:3 import utils -> pinned checkout has no utils package",
+  "observed_group": "D_modern_code_textoir_data",
+  "observed_group_note": "D is an existing strict artifact, not a new run; its paper gap remains not_reproduced_strict.",
+  "groups": {
+    "A_original_code_original_data": {
+      "status": "blocked_preflight",
+      "data_source": "original_accompanying_data",
+      "code_source": "pinned_original_code",
+      "data_tree_sha256": null,
+      "file_sha256": {},
+      "label_order": [],
+      "label_order_sha256": null,
+      "known_intents": [],
+      "known_intents_sha256": null,
+      "sample_ids_sha256": null,
+      "sample_id_status": "unavailable",
+      "token_ids_status": "unavailable",
+      "initial_bert_embeddings_status": "unavailable",
+      "epoch_ce_loss": [],
+      "epoch_subcentroid_loss": [],
+      "ball_count": null,
+      "per_intent_ball_count": null,
+      "ball_sizes": null,
+      "ball_radii": null,
+      "best_checkpoint_sha256": null,
+      "test_predictions_status": "unavailable",
+      "first_failure": "original accompanying MOGB data directory not found; earliest runnable comparison is unavailable",
+      "notes": "Combination A was not launched; no upstream material was substituted."
+    },
+    "B_original_code_textoir_data": {
+      "status": "blocked_preflight",
+      "data_source": "current_textoir_snapshot",
+      "code_source": "pinned_original_code",
+      "data_tree_sha256": "b8410dbc8677d4c57a578d68343b9b8ae9dda54fee9ee8eba3f0a142acd9b397",
+      "file_sha256": {
+        "dev.tsv": "5d254ef1e451ca1800002e9c8b6bcd5934346830f74a52f661c76d26ae84ede5",
+        "test.tsv": "cb32a79f7aa316c67742d3df534a45775961446eda09627081baa06099095a74",
+        "train.tsv": "b3e51761676a93b71bd4572c6f5789693a885d2ea001601c014fdf3f3d85800b"
+      },
+      "label_order": [
+        "ajax",
+        "apache",
+        "bash",
+        "cocoa",
+        "drupal",
+        "excel",
+        "haskell",
+        "hibernate",
+        "linq",
+        "magento",
+        "matlab",
+        "oracle",
+        "osx",
+        "qt",
+        "scala",
+        "sharepoint",
+        "spring",
+        "svn",
+        "visual-studio",
+        "wordpress"
+      ],
+      "label_order_sha256": "9fcc6f95b6c66ace3a70a9a268a3ce3622bc3262cba61390d74a1629719c393c",
+      "known_intents": [
+        "visual-studio",
+        "apache",
+        "wordpress",
+        "linq",
+        "matlab",
+        "svn",
+        "haskell",
+        "qt",
+        "drupal",
+        "bash"
+      ],
+      "known_intents_sha256": "da7edb8ffba94ba1c6b1de330a7cf50ff6bf7a2a348e595bd3dae708da3318c4",
+      "sample_ids_sha256": "9dce4127c0ee63d1da262ceff0e2e86bbd9deed5f4286ed45ac12d6c135a5c47",
+      "sample_id_status": "row_record_hashes_only; raw sample IDs not retained in strict artifact",
+      "token_ids_status": "unavailable",
+      "initial_bert_embeddings_status": "unavailable",
+      "epoch_ce_loss": [],
+      "epoch_subcentroid_loss": [],
+      "ball_count": null,
+      "per_intent_ball_count": null,
+      "ball_sizes": null,
+      "ball_radii": null,
+      "best_checkpoint_sha256": null,
+      "test_predictions_status": "unavailable",
+      "first_failure": "MOGB.py:3 import utils -> pinned checkout has no utils package",
+      "notes": "Combination B was not launched; no upstream material was substituted."
+    },
+    "C_modern_code_original_data": {
+      "status": "blocked_preflight",
+      "data_source": "original_accompanying_data",
+      "code_source": "modern_compatibility_runner",
+      "data_tree_sha256": null,
+      "file_sha256": {},
+      "label_order": [],
+      "label_order_sha256": null,
+      "known_intents": [],
+      "known_intents_sha256": null,
+      "sample_ids_sha256": null,
+      "sample_id_status": "unavailable",
+      "token_ids_status": "unavailable",
+      "initial_bert_embeddings_status": "unavailable",
+      "epoch_ce_loss": [],
+      "epoch_subcentroid_loss": [],
+      "ball_count": null,
+      "per_intent_ball_count": null,
+      "ball_sizes": null,
+      "ball_radii": null,
+      "best_checkpoint_sha256": null,
+      "test_predictions_status": "unavailable",
+      "first_failure": "original accompanying MOGB data directory not found; compatibility runner was not given a substitute",
+      "notes": "Combination C was not launched; no upstream material was substituted."
+    },
+    "D_modern_code_textoir_data": {
+      "status": "observed_existing_artifact",
+      "data_source": "current_textoir_snapshot",
+      "code_source": "modern_compatibility_runner",
+      "data_tree_sha256": "b8410dbc8677d4c57a578d68343b9b8ae9dda54fee9ee8eba3f0a142acd9b397",
+      "file_sha256": {
+        "dev.tsv": "5d254ef1e451ca1800002e9c8b6bcd5934346830f74a52f661c76d26ae84ede5",
+        "test.tsv": "cb32a79f7aa316c67742d3df534a45775961446eda09627081baa06099095a74",
+        "train.tsv": "b3e51761676a93b71bd4572c6f5789693a885d2ea001601c014fdf3f3d85800b"
+      },
+      "label_order": [
+        "ajax",
+        "apache",
+        "bash",
+        "cocoa",
+        "drupal",
+        "excel",
+        "haskell",
+        "hibernate",
+        "linq",
+        "magento",
+        "matlab",
+        "oracle",
+        "osx",
+        "qt",
+        "scala",
+        "sharepoint",
+        "spring",
+        "svn",
+        "visual-studio",
+        "wordpress"
+      ],
+      "label_order_sha256": "9fcc6f95b6c66ace3a70a9a268a3ce3622bc3262cba61390d74a1629719c393c",
+      "known_intents": [
+        "visual-studio",
+        "apache",
+        "wordpress",
+        "linq",
+        "matlab",
+        "svn",
+        "haskell",
+        "qt",
+        "drupal",
+        "bash"
+      ],
+      "known_intents_sha256": "da7edb8ffba94ba1c6b1de330a7cf50ff6bf7a2a348e595bd3dae708da3318c4",
+      "sample_ids_sha256": "9dce4127c0ee63d1da262ceff0e2e86bbd9deed5f4286ed45ac12d6c135a5c47",
+      "sample_id_status": "row_record_hashes_only; raw sample IDs not retained in strict artifact",
+      "token_ids_status": "not_retained",
+      "initial_bert_embeddings_status": "not_retained",
+      "epoch_ce_loss": [
+        {
+          "epoch": 1,
+          "value": 2.306987321123164
+        },
+        {
+          "epoch": 2,
+          "value": 2.2971997768320938
+        },
+        {
+          "epoch": 3,
+          "value": 2.2745881537173656
+        },
+        {
+          "epoch": 4,
+          "value": 2.228768211729983
+        },
+        {
+          "epoch": 5,
+          "value": 2.1052165158251497
+        },
+        {
+          "epoch": 6,
+          "value": 1.788272890638798
+        },
+        {
+          "epoch": 7,
+          "value": 1.263339322932223
+        },
+        {
+          "epoch": 8,
+          "value": 0.7702818310007136
+        },
+        {
+          "epoch": 9,
+          "value": 0.512138897434194
+        },
+        {
+          "epoch": 10,
+          "value": 0.41765931058437267
+        },
+        {
+          "epoch": 11,
+          "value": 0.3661739911804808
+        },
+        {
+          "epoch": 12,
+          "value": 0.33435481437977327
+        },
+        {
+          "epoch": 13,
+          "value": 0.3169677729936356
+        },
+        {
+          "epoch": 14,
+          "value": 0.29601142222576954
+        },
+        {
+          "epoch": 15,
+          "value": 0.28070661647522704
+        },
+        {
+          "epoch": 16,
+          "value": 0.26653270740458307
+        },
+        {
+          "epoch": 17,
+          "value": 0.2556402881411796
+        },
+        {
+          "epoch": 18,
+          "value": 0.24388549984135527
+        },
+        {
+          "epoch": 19,
+          "value": 0.23251027344389164
+        },
+        {
+          "epoch": 20,
+          "value": 0.22099400739720526
+        },
+        {
+          "epoch": 21,
+          "value": 0.21615571100661096
+        },
+        {
+          "epoch": 22,
+          "value": 0.2037030352239913
+        },
+        {
+          "epoch": 23,
+          "value": 0.20156637864544036
+        },
+        {
+          "epoch": 24,
+          "value": 0.18943808425931222
+        },
+        {
+          "epoch": 25,
+          "value": 0.18365494019173562
+        },
+        {
+          "epoch": 26,
+          "value": 0.17905025770689578
+        },
+        {
+          "epoch": 27,
+          "value": 0.17130320424095113
+        },
+        {
+          "epoch": 28,
+          "value": 0.16737010726269255
+        },
+        {
+          "epoch": 29,
+          "value": 0.16283973908804833
+        },
+        {
+          "epoch": 30,
+          "value": 0.1595389058298253
+        },
+        {
+          "epoch": 31,
+          "value": 0.1487408862944613
+        },
+        {
+          "epoch": 32,
+          "value": 0.14289929051982594
+        },
+        {
+          "epoch": 33,
+          "value": 0.14358579430808413
+        },
+        {
+          "epoch": 34,
+          "value": 0.1358702301662019
+        },
+        {
+          "epoch": 35,
+          "value": 0.12728573809912863
+        },
+        {
+          "epoch": 36,
+          "value": 0.12770444741274448
+        },
+        {
+          "epoch": 37,
+          "value": 0.1286522535250542
+        },
+        {
+          "epoch": 38,
+          "value": 0.11987089825437423
+        }
+      ],
+      "epoch_subcentroid_loss": [
+        {
+          "epoch": 1,
+          "value": 2.29681134223938
+        },
+        {
+          "epoch": 2,
+          "value": 2.296407461166382
+        },
+        {
+          "epoch": 3,
+          "value": 2.296241283416748
+        },
+        {
+          "epoch": 4,
+          "value": 2.294206142425537
+        },
+        {
+          "epoch": 5,
+          "value": 2.290822982788086
+        },
+        {
+          "epoch": 6,
+          "value": 2.284491777420044
+        },
+        {
+          "epoch": 7,
+          "value": 2.2773327827453613
+        },
+        {
+          "epoch": 8,
+          "value": 2.2708206176757812
+        },
+        {
+          "epoch": 9,
+          "value": 2.268751621246338
+        },
+        {
+          "epoch": 10,
+          "value": 2.267019033432007
+        },
+        {
+          "epoch": 11,
+          "value": 2.266068696975708
+        },
+        {
+          "epoch": 12,
+          "value": 2.265691041946411
+        },
+        {
+          "epoch": 13,
+          "value": 2.262979030609131
+        },
+        {
+          "epoch": 14,
+          "value": 2.26488995552063
+        },
+        {
+          "epoch": 15,
+          "value": 2.26405668258667
+        },
+        {
+          "epoch": 16,
+          "value": 2.2623212337493896
+        },
+        {
+          "epoch": 17,
+          "value": 2.2618091106414795
+        },
+        {
+          "epoch": 18,
+          "value": 2.2620837688446045
+        },
+        {
+          "epoch": 19,
+          "value": 2.261425733566284
+        },
+        {
+          "epoch": 20,
+          "value": 2.262350082397461
+        },
+        {
+          "epoch": 21,
+          "value": 2.261823892593384
+        },
+        {
+          "epoch": 22,
+          "value": 2.2584362030029297
+        },
+        {
+          "epoch": 23,
+          "value": 2.2620656490325928
+        },
+        {
+          "epoch": 24,
+          "value": 2.261151075363159
+        },
+        {
+          "epoch": 25,
+          "value": 2.259849786758423
+        },
+        {
+          "epoch": 26,
+          "value": 2.2602062225341797
+        },
+        {
+          "epoch": 27,
+          "value": 2.2605178356170654
+        },
+        {
+          "epoch": 28,
+          "value": 2.2592971324920654
+        },
+        {
+          "epoch": 29,
+          "value": 2.260824680328369
+        },
+        {
+          "epoch": 30,
+          "value": 2.260908365249634
+        },
+        {
+          "epoch": 31,
+          "value": 2.2575137615203857
+        },
+        {
+          "epoch": 32,
+          "value": 2.252812385559082
+        },
+        {
+          "epoch": 33,
+          "value": 2.259934186935425
+        },
+        {
+          "epoch": 34,
+          "value": 2.2515454292297363
+        },
+        {
+          "epoch": 35,
+          "value": 2.259941339492798
+        },
+        {
+          "epoch": 36,
+          "value": 2.2596027851104736
+        },
+        {
+          "epoch": 37,
+          "value": 2.257795810699463
+        },
+        {
+          "epoch": 38,
+          "value": 2.258608341217041
+        }
+      ],
+      "ball_count": 28,
+      "per_intent_ball_count": {
+        "0": 3,
+        "1": 3,
+        "2": 6,
+        "3": 2,
+        "4": 2,
+        "5": 4,
+        "6": 4,
+        "7": 1,
+        "8": 1,
+        "9": 2
+      },
+      "ball_sizes": [
+        398,
+        521,
+        544,
+        519,
+        449,
+        406,
+        403,
+        11,
+        32,
+        18,
+        27,
+        517,
+        11,
+        252,
+        29,
+        11,
+        26,
+        11,
+        51,
+        183,
+        10,
+        15,
+        431,
+        15,
+        22,
+        37,
+        10,
+        12
+      ],
+      "ball_radii": [
+        2.2417101860046387,
+        1.7365286350250244,
+        2.466075897216797,
+        2.4238905906677246,
+        2.5959155559539795,
+        2.381686210632324,
+        2.462751865386963,
+        3.6574227809906006,
+        2.8191335201263428,
+        2.1381678581237793,
+        2.436459541320801,
+        1.9321963787078857,
+        3.1658315658569336,
+        2.2671847343444824,
+        3.4598424434661865,
+        4.055078506469727,
+        2.368513584136963,
+        2.160452127456665,
+        2.6304547786712646,
+        2.260561943054199,
+        3.2898941040039062,
+        2.07576847076416,
+        1.9045261144638062,
+        2.8962326049804688,
+        3.5590803623199463,
+        2.0756020545959473,
+        2.276309013366699,
+        2.4437901973724365
+      ],
+      "best_checkpoint_sha256": "e43553d9d52a75277726a5d8256b9cca93df43dc1048cd694b9e8e26679137f0",
+      "test_predictions_status": "not_retained; final metrics and ball manifest retained",
+      "first_failure": null,
+      "notes": "No training was launched by this diagnostic; values come from the frozen strict single-cell artifact."
+    }
+  },
+  "reasoning": [
+    "The original accompanying dataset/sample draw is not available locally, so A and C cannot be executed without violating the no-substitution contract.",
+    "The pinned checkout fails before training because MOGB.py imports a missing utils package; B is not a valid original-code run on current data.",
+    "The existing modern/current strict artifact proves the compatibility path can converge, but it cannot isolate data versus implementation without A/C."
+  ]
+}

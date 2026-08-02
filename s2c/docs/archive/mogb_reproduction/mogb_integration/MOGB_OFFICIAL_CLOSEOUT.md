@@ -65,7 +65,7 @@ paper's own protocol or be explicitly labeled descriptive and non-comparable.
 
 Evidence:
 
-* source audit: `docs/mogb_integration/mogb_official_audit.md`;
-* pipeline audit: `docs/mogb_integration/current_pipeline_audit.md`;
+* source audit: `docs/archive/mogb_reproduction/mogb_integration/mogb_official_audit.md`;
+* pipeline audit: `docs/archive/mogb_reproduction/mogb_integration/current_pipeline_audit.md`;
 * per-run manifests: `../artifacts/s2c/external/mogb_official_converged_v1/`;
-* MiniLM-fair closeout: `docs/mogb_integration/MOGB_REPRODUCTION_REPORT.md`.
+* MiniLM-fair closeout: `docs/archive/mogb_reproduction/mogb_integration/MOGB_REPRODUCTION_REPORT.md`.
