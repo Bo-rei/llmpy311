@@ -250,16 +250,16 @@ def build(paths: ProtocolV2Paths, output: Path) -> list[dict[str, str]]:
             "ADB",
             "blocked_runtime_dependency",
             "Known-only",
-            "docs/mogb_integration/ADB_DAADB_AUDIT.md",
+            "docs/archive/mogb_reproduction/mogb_integration/ADB_DAADB_AUDIT.md",
         ),
         (
             "DA-ADB",
             "blocked_runtime_dependency",
             "Known-only",
-            "docs/mogb_integration/ADB_DAADB_AUDIT.md",
+            "docs/archive/mogb_reproduction/mogb_integration/ADB_DAADB_AUDIT.md",
         ),
-        ("DCLOOS-official", "blocked_missing_external_negative_data", "pseudo-OOS plus external open-domain OOS", "docs/dcloos/DCLOOS_REPRODUCTION_REPORT.md"),
-        ("DCLOOS-unified", "blocked_missing_external_negative_data", "pseudo-OOS plus external open-domain OOS", "docs/dcloos/DCLOOS_REPRODUCTION_REPORT.md"),
+        ("DCLOOS-official", "blocked_missing_external_negative_data", "pseudo-OOS plus external open-domain OOS", "docs/archive/external_baselines/dcloos/DCLOOS_REPRODUCTION_REPORT.md"),
+        ("DCLOOS-unified", "blocked_missing_external_negative_data", "pseudo-OOS plus external open-domain OOS", "docs/archive/external_baselines/dcloos/DCLOOS_REPRODUCTION_REPORT.md"),
     ):
         if method in completed_external:
             result_path, dataset, kir, scope = completed_external[method]

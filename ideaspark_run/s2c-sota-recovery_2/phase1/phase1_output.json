@@ -1,0 +1,144 @@
+{
+  "intake": {
+    "domain": "open-set intent detection with known-only boundary calibration",
+    "venue": "ML/NLP empirical methods paper",
+    "time": "current revision cycle",
+    "data": ["CLINC150", "Banking77", "StackOverflow"],
+    "compute": "existing frozen-MiniLM caches and bounded CPU/GPU pilot budget",
+    "expertise": "open-set recognition, sentence representations, reproducible evaluation",
+    "preference": "both",
+    "baseline": "fixed single/multi-centroid MiniLM Gate, MOGB, ADB, DA-ADB, DCLOOS",
+    "limitation": "current fixed multi-centroid Gate can improve one dataset while expanding the union of accepted regions and causing false acceptance on another; current calibration evidence does not support a legal universal K or lambda selector",
+    "contribution_type": "method",
+    "_inferred_fields": ["venue", "time", "compute", "expertise", "preference", "baseline", "limitation", "contribution_type"]
+  },
+  "bottleneck_statement": "The current line of work can fit class centers and per-center radii, but it has no protocol-level quantity that measures the incremental open-space risk created when several accepted regions are unioned: a configuration can preserve or improve Known coverage while accepting a disproportionate amount of unknown space, and the failure is dataset-dependent rather than exposed by center stability alone. This is visible in arxiv:2607.07974v1, whose multi-cluster MiniLM claim does not establish stability or protection against boundary-union false acceptance, and is consistent with arxiv:2602.21252v1, which treats context-conditioned boundaries as necessary because a static boundary can mismatch the operating condition but does not supply a known-only selector for semantic OOS risk. The missing quantity is a legally estimable, test-independent estimate of the extra rejection risk of a multi-region gate, not another unvalidated K or lambda sweep.",
+  "closest_adjacent": [
+    {
+      "paper_id": "arxiv:2607.07974v1",
+      "is_anchor": true,
+      "summary_and_residue": "The paper replaces a single MiniLM boundary with fixed multi-cluster boundaries for OOS intent detection and reports gains across three datasets. Its abstract does not establish a test-independent estimate of the incremental open-space risk of the union of local regions, and the anchor full text remained unfetchable after top-up [residue is abstract-level: anchor fulltext unfetchable]."
+    },
+    {
+      "paper_id": "arxiv:2602.21252v1",
+      "is_anchor": false,
+      "summary_and_residue": "INTACT conditions an anomaly boundary on declared intent and policy context in a different security domain. It does not close the semantic OOS problem of selecting whether an additional local region is safe when no validation unknown-intent labels are available."
+    },
+    {
+      "paper_id": "arxiv:2603.04538v1",
+      "is_anchor": false,
+      "summary_and_residue": "InverseNet isolates operator mismatch and calibration confounds in cross-modal benchmark comparisons. It diagnoses mismatch but does not produce a per-intent, known-only risk estimate for the acceptance union of semantic intent boundaries."
+    }
+  ],
+  "what_phase_0_did_not_address": [
+    "No retrieved leaf estimates, with a held-out and test-independent protocol, how much additional unknown-space acceptance is caused by adding a second or later region to a known intent.",
+    "No retrieved leaf tests whether the shared assumption that per-region distance/radius scores are sufficient for open-set acceptance remains valid when the final decision is an arbitrary union of regions.",
+    "No retrieved leaf gives a legal selection rule that can retain K=1 for unsafe intents and allow extra regions only when Known coverage and open-space risk are jointly acceptable across datasets."
+  ],
+  "method_lineage": {
+    "line": "known-only open-set intent recognition from class representation to multi-region boundary acceptance",
+    "nodes": [
+      {
+        "node_id": "n0",
+        "method": "closed-set intent classification",
+        "move": "root formulation predicts one of the observed intent classes",
+        "parent": null,
+        "provenance": "parametric",
+        "age_band": ">16y",
+        "confidence": "high",
+        "residual_problem": "unknown intents are forced into a known class",
+        "is_frontier_leaf": false,
+        "is_collateral": false
+      },
+      {
+        "node_id": "n1",
+        "method": "one-class or class-conditional distance boundary",
+        "move": "adds an acceptance region around known representations and rejects points outside it",
+        "parent": "n0",
+        "provenance": "parametric",
+        "age_band": "8-16y",
+        "confidence": "high",
+        "residual_problem": "one region may not describe heterogeneous known intent geometry and threshold choice can trade false rejection against false acceptance",
+        "is_frontier_leaf": false,
+        "is_collateral": false
+      },
+      {
+        "node_id": "n2",
+        "method": "adaptive boundary and representation learning",
+        "move": "learns a more flexible representation or boundary from known data instead of a fixed distance geometry",
+        "parent": "n1",
+        "provenance": "parametric",
+        "age_band": "4-8y",
+        "confidence": "medium",
+        "residual_problem": "flexibility can improve coverage but does not by itself quantify the open-space risk of multiple accepted regions",
+        "is_frontier_leaf": false,
+        "is_collateral": false
+      },
+      {
+        "node_id": "n3",
+        "method": "multi-cluster MiniLM boundary learning",
+        "move": "replaces one region with multiple local regions in a lightweight sentence-embedding space",
+        "parent": "n2",
+        "provenance": "retrieved:arxiv:2607.07974v1",
+        "age_band": "0-2y",
+        "confidence": "high",
+        "residual_problem": "the union can over-accept unknown space and no legal selector is established for when extra regions are safe",
+        "is_frontier_leaf": true,
+        "is_collateral": false
+      },
+      {
+        "node_id": "n4",
+        "method": "context-conditioned boundary",
+        "move": "conditions the boundary on intent or policy context rather than using one static rule",
+        "parent": null,
+        "provenance": "retrieved:arxiv:2602.21252v1",
+        "age_band": "0-2y",
+        "confidence": "high",
+        "residual_problem": "the cross-domain result does not specify known-only semantic OOS risk control for multi-region unions",
+        "is_frontier_leaf": true,
+        "is_collateral": true
+      },
+      {
+        "node_id": "n5",
+        "method": "calibration-confound diagnosis",
+        "move": "holds hidden operator and evaluation factors fixed to expose mismatch",
+        "parent": null,
+        "provenance": "retrieved:arxiv:2603.04538v1",
+        "age_band": "0-2y",
+        "confidence": "high",
+        "residual_problem": "the diagnostic does not yield an operating selector for multi-region open-set risk",
+        "is_frontier_leaf": true,
+        "is_collateral": true
+      }
+    ],
+    "notes": "Retrieved nodes are citable; parametric ancestry is awareness-only. The current paper is the anchor frontier leaf. Collateral nodes are not gap sites."
+  },
+  "domain_pattern_distribution": {
+    "n_total": 10,
+    "n_on_topic": 9,
+    "patterns": [
+      {"pattern_id":"assumption_audit_and_pivot","count":4,"share":0.44,"saturation_band":"mid_frequency"},
+      {"pattern_id":"architectural_operator_substitution","count":2,"share":0.22,"saturation_band":"mid_frequency"},
+      {"pattern_id":"generative_process_redesign","count":0,"share":0.0,"saturation_band":"untested"},
+      {"pattern_id":"controlled_diagnostic_design","count":4,"share":0.44,"saturation_band":"mid_frequency"},
+      {"pattern_id":"unify_into_shared_representation","count":0,"share":0.0,"saturation_band":"untested"},
+      {"pattern_id":"reframe_as_solvable_object","count":1,"share":0.11,"saturation_band":"mid_frequency"},
+      {"pattern_id":"self_supervised_signal_engineering","count":1,"share":0.11,"saturation_band":"mid_frequency"},
+      {"pattern_id":"structural_prior_encoding","count":2,"share":0.22,"saturation_band":"mid_frequency"},
+      {"pattern_id":"algebraic_equivalence_unification","count":0,"share":0.0,"saturation_band":"untested"},
+      {"pattern_id":"heterogeneous_decomposition","count":3,"share":0.33,"saturation_band":"mid_frequency"},
+      {"pattern_id":"decompose_and_delegate","count":1,"share":0.11,"saturation_band":"mid_frequency"},
+      {"pattern_id":"relax_discrete_search_to_continuous","count":0,"share":0.0,"saturation_band":"untested"},
+      {"pattern_id":"adapt_via_conditioning","count":4,"share":0.44,"saturation_band":"mid_frequency"},
+      {"pattern_id":"characterize_limit_then_surpass","count":0,"share":0.0,"saturation_band":"untested"},
+      {"pattern_id":"targeted_self_supervised_objective","count":3,"share":0.33,"saturation_band":"mid_frequency"}
+    ],
+    "saturation_threshold_saturated": 0.5,
+    "saturation_threshold_untested_count": 1,
+    "notes": "Assumption auditing, controlled diagnostics, and conditioning are the most frequent families, but no single family is saturated; their shared residue is the lack of a legal semantic open-space risk selector."
+  },
+  "fulltext_degraded": false,
+  "state": "proceed",
+  "ood_reasons": [],
+  "remedial_steps": []
+}

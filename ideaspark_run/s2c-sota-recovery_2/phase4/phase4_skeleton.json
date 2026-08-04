@@ -1,0 +1,578 @@
+{
+  "title": "Union-Risk Calibrated Subcenter Gates for Known-Only Open Intent Detection",
+  "title_zh": "<TODO[title_zh]: Chinese translation; keep proper nouns and method acronyms in English>",
+  "method_name": "<TODO[method_name]: short handle for the proposed method, e.g. 'Persistent Baseline GRPO (PB-GRPO)'>",
+  "hook": "Across the frozen-MiniLM E2/E3 grid, stable KMeans partitions did not predict OOS benefit: Banking77 could gain from extra centers while StackOverflow collapsed through false acceptance. The candidate predicts that a known-only estimate of incremental union acceptance risk can identify this regime before test OOS is seen.",
+  "abstract_draft": "<TODO[abstract_draft]: 150-250 words. Order: problem → bottleneck (cite ≥ 1 Phase 0 paper) → contribution (one sentence) → falsification prediction → expected outcome.>",
+  "motivation": {
+    "problem_framing": "<TODO[motivation.problem_framing]: 2-3 paragraphs framing the user's problem. Reference the bottleneck_statement from Phase 1 and the closest_adjacent papers. NOT a category label.>",
+    "why_now": "<TODO[motivation.why_now]: one paragraph on what makes this gap timely. Cite the most recent Phase 0 papers (within last 4-12 months) that get close but stop short.>",
+    "why_prior_stopped": [
+      {
+        "paper_id": "arxiv:2607.07974v1",
+        "venue_year": "arXiv 2026-07",
+        "what_they_did": "<TODO[motivation.why_prior_stopped[0].what_they_did]: one sentence>",
+        "what_they_did_not_do": "<TODO[motivation.why_prior_stopped[0].what_they_did_not_do]: one sentence — the specific limit being lifted by the candidate>",
+        "structural_reason_they_stopped": "<TODO[motivation.why_prior_stopped[0].structural_reason_they_stopped]: one sentence — missing tool / missing assumption-relaxation / missing mechanism / missing measurement>"
+      },
+      {
+        "paper_id": "arxiv:2602.21252v1",
+        "venue_year": "arXiv 2026-02",
+        "what_they_did": "<TODO[motivation.why_prior_stopped[1].what_they_did]: one sentence>",
+        "what_they_did_not_do": "<TODO[motivation.why_prior_stopped[1].what_they_did_not_do]: one sentence — the specific limit being lifted by the candidate>",
+        "structural_reason_they_stopped": "<TODO[motivation.why_prior_stopped[1].structural_reason_they_stopped]: one sentence — missing tool / missing assumption-relaxation / missing mechanism / missing measurement>"
+      },
+      {
+        "paper_id": "arxiv:2603.04538v1",
+        "venue_year": "arXiv 2026-03",
+        "what_they_did": "<TODO[motivation.why_prior_stopped[2].what_they_did]: one sentence>",
+        "what_they_did_not_do": "<TODO[motivation.why_prior_stopped[2].what_they_did_not_do]: one sentence — the specific limit being lifted by the candidate>",
+        "structural_reason_they_stopped": "<TODO[motivation.why_prior_stopped[2].structural_reason_they_stopped]: one sentence — missing tool / missing assumption-relaxation / missing mechanism / missing measurement>"
+      }
+    ],
+    "what_changes_when_gap_closes": "<TODO[motivation.what_changes_when_gap_closes]: 2-3 sentences naming downstream consequences. NOT \"better numbers\" — name the specific capability or theoretical statement that becomes available>"
+  },
+  "core_claim": "<TODO[core_claim]: one sentence; should mirror the candidate's hook stripped to its load-bearing assertion>",
+  "sub_claims": "<TODO[sub_claims]: list of {id, statement, supports_which_aspect}; 2-4 entries>",
+  "key_equations": "<TODO[key_equations]: optional 3-6 equations; each {id, linked_step_id, latex, description, description_zh}. Emit [] (literal empty list) for a pure-prose candidate.>",
+  "method_flow": {
+    "high_level_pipeline": "<TODO[method_flow.high_level_pipeline]: 3-5 sentences narrating the method end-to-end as a story: input → key transformation → output>",
+    "steps": "<TODO[method_flow.steps]: derive from candidate.core_mechanism_steps; emit a list where each entry is {step_id, title, what_changes, why_this_step, linked_component, linked_falsification, input, output}. Each step_id MUST be S1, S2, ... in reading order. linked_component ∈ {theory, engineering, both}; linked_falsification ∈ {metric_specification, mechanism_distinguisher, both}.>",
+    "design_reasoning_echo": "<TODO[method_flow.design_reasoning_echo]: one paragraph echoing or condensing candidate.core_mechanism_reasoning>"
+  },
+  "plain_motivation_en": "<TODO[plain_motivation_en]: plain-language English rendering of motivation for a reader outside this subfield. Simplify LANGUAGE only — never drop the load-bearing mechanism. Spell out every abbreviation on first use.>",
+  "plain_motivation_zh": "<TODO[plain_motivation_zh]: Chinese 普通版 counterpart. Same content; keep identifiers/symbols/acronyms in English.>",
+  "plain_method_steps_en": "<TODO[plain_method_steps_en]: list of {step_id, what_to_do, why_this_makes_sense}; SAME step_ids and SAME order as method_flow.steps.>",
+  "plain_method_steps_zh": "<TODO[plain_method_steps_zh]: Chinese 普通版 counterpart; English for identifiers/symbols/acronyms.>",
+  "plain_method_modules_en": "<TODO[plain_method_modules_en]: group the CONTRIBUTION steps into named modules; list of {module_id, purpose_oneline, step_ids}.>",
+  "plain_method_modules_zh": "<TODO[plain_method_modules_zh]: Chinese 普通版 counterpart.>",
+  "falsification_prediction": "Run a bounded pilot on CLINC150, Banking77, and StackOverflow at KIR=0.50 with seeds 13, 42, and 87 using the frozen MiniLM cache; compare K=1, fixed K=2, current BRAK, and the proposed selector, with all selection computed from train_known and rotated calibration intents. If the method works, the primary downstream changes are higher or unchanged F1-All and Known Recall together with lower StackOverflow FAR and a non-positive K=2 loss, while the load-bearing variable ΔU_{y,K} is lower for selected multi-center intents than for rejected ones. The negative control randomizes the held-out-intent episode assignments before computing ΔU; if the mechanism is real, this intervention should erase the candidate's OOS/coverage advantage and return performance toward fixed-K or K=1, not merely change ΔU itself. A positive control is the descriptive oracle-test-K ranking, which may show available headroom but is prohibited from selecting a final configuration.",
+  "compute_budget": "0.2 GPU-day or less plus CPU evaluation; $0 API",
+  "almost_prior_paper_id": "arxiv:2607.07974v1",
+  "almost_prior_venue_year": "arXiv 2026-07",
+  "what_step_was_missed": "The paper would have needed to construct and validate a leave-one-known-intent rotation that measures the marginal acceptance contribution of each added local region before selecting its boundary configuration; its reported multi-cluster result does not contain this risk decomposition.",
+  "feasibility_validation": {
+    "compute": {
+      "verdict": "feasible",
+      "rationale": "GPU line ≈ 0.2 vs 150 GPU-day (0%) → feasible; API line ≈ $0 vs $10000 (0%) → feasible. Overall (worse line) → feasible."
+    },
+    "data": {
+      "verdict": "<TODO[feasibility_validation.data.verdict]: feasible | tight | infeasible>",
+      "rationale": "<TODO[feasibility_validation.data.rationale]: one sentence: required data sources accessible; if any closed/private, name a public substitute>"
+    },
+    "theoretical": {
+      "verdict": "<TODO[feasibility_validation.theoretical.verdict]: feasible | tight | infeasible | n/a (only when the candidate has no theoretical contribution)>",
+      "rationale": "<TODO[feasibility_validation.theoretical.rationale]: one sentence; if tight, name the missing prerequisite>"
+    },
+    "engineering": {
+      "verdict": "<TODO[feasibility_validation.engineering.verdict]: feasible | tight | infeasible | n/a (only when the candidate has no engineering contribution)>",
+      "rationale": "<TODO[feasibility_validation.engineering.rationale]: one sentence; if tight, name the binding implementation cost>"
+    },
+    "falsification": {
+      "verdict": "<TODO[feasibility_validation.falsification.verdict]: feasible | tight | infeasible>",
+      "rationale": "<TODO[feasibility_validation.falsification.rationale]: one sentence: the falsification_prediction experiment is concrete enough to run with available tooling>"
+    },
+    "overall": "<TODO[feasibility_validation.overall]: feasible | tight | infeasible>"
+  },
+  "differentiation_from_lit": [
+    {
+      "paper_id": "arxiv:2607.07974v1",
+      "venue_year": "arXiv 2026-07",
+      "delta": "The paper constructs fixed multi-cluster MiniLM boundaries but does not construct a rotated-known-intent estimator or confidence-bounded quantity for the incremental unknown-space acceptance caused by adding regions."
+    },
+    {
+      "paper_id": "arxiv:2602.21252v1",
+      "venue_year": "arXiv 2026-02",
+      "delta": "INTACT conditions a boundary on context in another security domain, whereas this candidate measures the downstream union-risk increment of a semantic intent gate and uses it to enforce a pre-registered Known-only feasibility rule."
+    },
+    {
+      "paper_id": "arxiv:2603.04538v1",
+      "venue_year": "arXiv 2026-03",
+      "delta": "InverseNet diagnoses benchmark/operator mismatch but does not construct a per-intent acceptance-union risk object whose intervention changes an open-intent detector's final OOS decision."
+    }
+  ],
+  "reviewer_concerns_and_responses": [
+    {
+      "attack": "Paper-pointed threat: arxiv:2604.27914v1 (collision_hits). Geometry-Calibrated Conformal Abstention is a nearby calibration-family threat because it calibrates geometry-based abstention rather than relying on raw confidence. It does not, from the retrieved collision record, establish a target-specific marginal acceptance event for adding local regions, but a reviewer could reasonably treat the proposed Wilson feasibility rule as a specialized conformal/abstention wrapper unless the candidate measures that marginal event directly and includes a calibrated-abstention comparator.",
+      "severity": "non_blocking",
+      "response": "<TODO[reviewer_concerns_and_responses[0].response]: 2-3 sentences: explain where in the candidate (which field) the defense is anchored; reference the Phase 3.2 verdict_rationale when relevant>",
+      "fields_changed_to_address": [
+        "core_mechanism",
+        "core_mechanism_steps"
+      ]
+    },
+    {
+      "attack": "Un-retrieved mechanism family flagged by the audit (parametric knowledge, not in the retrieved pool): selective classification and conformal risk control; query phrases: class-conditional risk control, leave-class-out abstention calibration — novelty vs this family is UNVERIFIED; run a targeted scoop-check on that vocabulary before investing.",
+      "severity": "non_blocking",
+      "response": "<TODO[reviewer_concerns_and_responses[1].response]: 1-2 sentences: state what a scoop-check on the named family must establish for the candidate's delta to survive (do NOT claim the check already passed)>",
+      "fields_changed_to_address": [
+        "core_mechanism",
+        "core_mechanism_steps"
+      ]
+    },
+    {
+      "attack": "Gap-closure reject-check borderline on gap 1 (C00 (Reframe as a Solvable Object)): Proposing a new attribution definition without an axiomatic or causal argument for why it should count as ground-truth collapses the moment a reviewer asks why this is the real importance.",
+      "severity": "non_blocking",
+      "response": "<TODO[reviewer_concerns_and_responses[2].response]: 2-3 sentences: anchor the defense in a specific candidate field>",
+      "fields_changed_to_address": [
+        "core_mechanism",
+        "core_mechanism_steps"
+      ]
+    },
+    {
+      "attack": "Gap-closure reject-check borderline on gap 2 (C01 (Audit and Pivot an Assumption)): Relocating to a locus already exploited by published work — normalization statistics, activation-similarity losses, semantic concept triggers — collapses the novelty boundary unless the difference is ",
+      "severity": "non_blocking",
+      "response": "<TODO[reviewer_concerns_and_responses[3].response]: 2-3 sentences: anchor the defense in a specific candidate field>",
+      "fields_changed_to_address": [
+        "core_mechanism",
+        "core_mechanism_steps"
+      ]
+    }
+  ],
+  "domain_landscape": {
+    "n_papers": 9,
+    "pattern_distribution": [
+      {
+        "pattern_id": "assumption_audit_and_pivot",
+        "count": 4,
+        "share": 0.44,
+        "saturation_band": "mid_frequency"
+      },
+      {
+        "pattern_id": "architectural_operator_substitution",
+        "count": 2,
+        "share": 0.22,
+        "saturation_band": "mid_frequency"
+      },
+      {
+        "pattern_id": "generative_process_redesign",
+        "count": 0,
+        "share": 0.0,
+        "saturation_band": "untested"
+      },
+      {
+        "pattern_id": "controlled_diagnostic_design",
+        "count": 4,
+        "share": 0.44,
+        "saturation_band": "mid_frequency"
+      },
+      {
+        "pattern_id": "unify_into_shared_representation",
+        "count": 0,
+        "share": 0.0,
+        "saturation_band": "untested"
+      },
+      {
+        "pattern_id": "reframe_as_solvable_object",
+        "count": 1,
+        "share": 0.11,
+        "saturation_band": "mid_frequency"
+      },
+      {
+        "pattern_id": "self_supervised_signal_engineering",
+        "count": 1,
+        "share": 0.11,
+        "saturation_band": "mid_frequency"
+      },
+      {
+        "pattern_id": "structural_prior_encoding",
+        "count": 2,
+        "share": 0.22,
+        "saturation_band": "mid_frequency"
+      },
+      {
+        "pattern_id": "algebraic_equivalence_unification",
+        "count": 0,
+        "share": 0.0,
+        "saturation_band": "untested"
+      },
+      {
+        "pattern_id": "heterogeneous_decomposition",
+        "count": 3,
+        "share": 0.33,
+        "saturation_band": "mid_frequency"
+      },
+      {
+        "pattern_id": "decompose_and_delegate",
+        "count": 1,
+        "share": 0.11,
+        "saturation_band": "mid_frequency"
+      },
+      {
+        "pattern_id": "relax_discrete_search_to_continuous",
+        "count": 0,
+        "share": 0.0,
+        "saturation_band": "untested"
+      },
+      {
+        "pattern_id": "adapt_via_conditioning",
+        "count": 4,
+        "share": 0.44,
+        "saturation_band": "mid_frequency"
+      },
+      {
+        "pattern_id": "characterize_limit_then_surpass",
+        "count": 0,
+        "share": 0.0,
+        "saturation_band": "untested"
+      },
+      {
+        "pattern_id": "targeted_self_supervised_objective",
+        "count": 3,
+        "share": 0.33,
+        "saturation_band": "mid_frequency"
+      }
+    ],
+    "candidate_uses": [
+      {
+        "pattern_id": "reframe_as_solvable_object",
+        "role": "closes Gap 1",
+        "sub_pattern_id": "C00 (Reframe as a Solvable Object)",
+        "saturation_in_domain": "mid_frequency"
+      },
+      {
+        "pattern_id": "assumption_audit_and_pivot",
+        "role": "closes Gap 2",
+        "sub_pattern_id": "C01 (Audit and Pivot an Assumption)",
+        "saturation_in_domain": "mid_frequency"
+      },
+      {
+        "pattern_id": "reframe_as_solvable_object",
+        "role": "closes Gap 3",
+        "sub_pattern_id": "C00 (Reframe as a Solvable Object)",
+        "saturation_in_domain": "mid_frequency"
+      }
+    ],
+    "position_note": "<TODO[domain_landscape.position_note]: one sentence describing how the candidate's chosen patterns sit relative to the area's pattern usage; descriptive, not prescriptive>"
+  },
+  "literature_breakdown": {
+    "summary": {
+      "n_phase0_total": 10,
+      "n_phase0_on_topic": 9,
+      "n_phase0_outside_taxonomy": 1,
+      "n_phase3_collision": 44
+    },
+    "phase0_by_pattern": [
+      {
+        "pattern_id": "adapt_via_conditioning",
+        "pattern_name": "Adapt by Conditioning, Not Retraining",
+        "papers": [
+          {
+            "paper_id": "arxiv:2602.21252v1",
+            "title": "INTACT: Intent-Aware Representation Learning for Cryptographic Traffic Violation Detection",
+            "venue_year": "arXiv 2026-02",
+            "bottleneck_targeted": "Static anomaly boundaries that ignore declared intent and policy context"
+          }
+        ]
+      },
+      {
+        "pattern_id": "assumption_audit_and_pivot",
+        "pattern_name": "Audit and Pivot an Assumption",
+        "papers": [
+          {
+            "paper_id": "arxiv:2607.07974v1",
+            "title": "A Multi-cluster Boundary Learning Method for Out-of-Scope Intent Detection via MiniLM Embedding",
+            "venue_year": "arXiv 2026-07",
+            "bottleneck_targeted": "Fixed single-boundary and large-backbone assumptions in OOS intent detection"
+          },
+          {
+            "paper_id": "arxiv:2605.22580v1",
+            "title": "Practical Countermeasure Against Attacks Exploiting Detection Efficiency Mismatch in Quantum Key Distribution",
+            "venue_year": "arXiv 2026-03",
+            "bottleneck_targeted": "A detector-assumption mismatch that creates an exploitable failure mode"
+          },
+          {
+            "paper_id": "arxiv:2604.28022v2",
+            "title": "Are DeepFakes Realistic Enough? Exploring Semantic Mismatch as a Novel Challenge",
+            "venue_year": "arXiv 2026-04",
+            "bottleneck_targeted": "Evaluation blindness to semantic mismatch in multimodal detection"
+          },
+          {
+            "paper_id": "arxiv:2602.08776v1",
+            "title": "Mind the Gap: Learning Implicit Impedance in Visuomotor Policies via Intent-Execution Mismatch",
+            "venue_year": "arXiv 2026-02",
+            "bottleneck_targeted": "Treating execution mismatch as noise rather than signal"
+          }
+        ]
+      },
+      {
+        "pattern_id": "controlled_diagnostic_design",
+        "pattern_name": "Design a Confound-Isolating Diagnostic",
+        "papers": [
+          {
+            "paper_id": "arxiv:2603.04538v1",
+            "title": "InverseNet: Benchmarking Operator Mismatch and Calibration Across Compressive Imaging Modalities",
+            "venue_year": "arXiv 2026-03",
+            "bottleneck_targeted": "Hidden operator mismatch and calibration failure in benchmark comparisons"
+          }
+        ]
+      },
+      {
+        "pattern_id": "heterogeneous_decomposition",
+        "pattern_name": "Decompose for Differentiated Treatment",
+        "papers": [
+          {
+            "paper_id": "arxiv:2603.29953v1",
+            "title": "Structured Intent as a Protocol-Like Communication Layer: Cross-Model Robustness, Framework Comparison, and the Weak-Model Compensation Effect",
+            "venue_year": "arXiv 2026-03",
+            "bottleneck_targeted": "Unstructured intent representations and confounded framework comparisons"
+          }
+        ]
+      },
+      {
+        "pattern_id": "reframe_as_solvable_object",
+        "pattern_name": "Reframe as a Solvable Object",
+        "papers": [
+          {
+            "paper_id": "arxiv:2603.00522v1",
+            "title": "SIAgent: Spatial Interaction Agent via LLM-powered Eye-Hand Motion Intent Understanding in VR",
+            "venue_year": "arXiv 2026-02",
+            "bottleneck_targeted": "Rigid operation-to-intent mappings and weak execution robustness"
+          }
+        ]
+      },
+      {
+        "pattern_id": "self_supervised_signal_engineering",
+        "pattern_name": "Manufacture the Supervisory Signal",
+        "papers": [
+          {
+            "paper_id": "arxiv:2603.14525v1",
+            "title": "MALicious INTent Dataset and Inoculating LLMs for Enhanced Disinformation Detection",
+            "venue_year": "arXiv 2026-03",
+            "bottleneck_targeted": "Missing intent-aware supervision and robustness evaluation for disinformation detection"
+          }
+        ]
+      }
+    ],
+    "phase0_outside_taxonomy": [
+      {
+        "paper_id": "arxiv:2603.14970v2",
+        "title": "Stable infinity-categories for representation theorists",
+        "venue_year": "arXiv 2026-03",
+        "bottleneck_targeted": "Not an intent/OOS detection bottleneck"
+      }
+    ],
+    "phase3_collision": [
+      {
+        "paper_id": "arxiv:2606.29654v1",
+        "title": "Budgeted Act-or-Defer Multi-Agent LLM Deliberation with Local Reliability Bounds",
+        "venue_year": "arXiv 2026"
+      },
+      {
+        "paper_id": "arxiv:2604.11245v1",
+        "title": "Knowledge on a Budget",
+        "venue_year": "arXiv 2026"
+      },
+      {
+        "paper_id": "arxiv:2607.26287v1",
+        "title": "Studying Competing Events with Federated Cumulative Incidence Curves",
+        "venue_year": "arXiv 2026"
+      },
+      {
+        "paper_id": "arxiv:2511.21975v1",
+        "title": "The Risk-Adjusted Intelligence Dividend: A Quantitative Framework for Measuring AI Return on Investment Integrating ISO 42001 and Regulatory Exposure",
+        "venue_year": "arXiv 2025"
+      },
+      {
+        "paper_id": "arxiv:2604.09529v1",
+        "title": "VL-Calibration: Decoupled Confidence Calibration for Large Vision-Language Models Reasoning",
+        "venue_year": "arXiv 2026"
+      },
+      {
+        "paper_id": "arxiv:2603.04538v1",
+        "title": "InverseNet: Benchmarking Operator Mismatch and Calibration Across Compressive Imaging Modalities",
+        "venue_year": "arXiv 2026"
+      },
+      {
+        "paper_id": "arxiv:2512.20468v2",
+        "title": "Calibration Method of Spacecraft-Inertial Sensor Center-of-Mass Offset for the Taiji Gravitational Wave Detection Mission under Science Mode",
+        "venue_year": "arXiv 2025"
+      },
+      {
+        "paper_id": "arxiv:2605.30626v1",
+        "title": "Advancing Heliophysics and Space Weather Modeling through Open Science",
+        "venue_year": "arXiv 2026"
+      },
+      {
+        "paper_id": "arxiv:2602.03972v3",
+        "title": "Fixed Budget is No Harder Than Fixed Confidence in Best-Arm Identification up to Logarithmic Factors",
+        "venue_year": "arXiv 2026"
+      },
+      {
+        "paper_id": "arxiv:2512.18016v1",
+        "title": "Equivalent bounded confidence processes",
+        "venue_year": "arXiv 2025"
+      },
+      {
+        "paper_id": "arxiv:2604.16716v1",
+        "title": "Climate Risk Stress Testing in California: A Geospatial Framework for Banking and Climate-Exposed Sectors",
+        "venue_year": "arXiv 2026"
+      },
+      {
+        "paper_id": "arxiv:2607.17381v1",
+        "title": "Determining Insolvency Regions in Banks: A Stochastic Dynamic Approach Integrating Liquidity and Credit Risk",
+        "venue_year": "arXiv 2026"
+      },
+      {
+        "paper_id": "arxiv:2512.18641v3",
+        "title": "The Choice of Line Lengths in Multiline Thru-Reflect-Line Calibration",
+        "venue_year": "arXiv 2025"
+      },
+      {
+        "paper_id": "arxiv:2510.19126v1",
+        "title": "An Efficient Calibration Framework for Volatility Derivatives under Rough Volatility with Jumps",
+        "venue_year": "arXiv 2025"
+      },
+      {
+        "paper_id": "arxiv:2606.19719v2",
+        "title": "Closing the Calibration Gap in Semantic Caching",
+        "venue_year": "arXiv 2026"
+      },
+      {
+        "paper_id": "arxiv:2604.27149v1",
+        "title": "ConformaDecompose: Explaining Uncertainty via Calibration Localization",
+        "venue_year": "arXiv 2026"
+      },
+      {
+        "paper_id": "arxiv:2606.13295v2",
+        "title": "Simultaneous Latent Budget Trees for Stratified Classification",
+        "venue_year": "arXiv 2026"
+      },
+      {
+        "paper_id": "arxiv:2607.00728v2",
+        "title": "When to Repair a Graph ANN Index: A Matched-Budget Negative Result, and the Interpolated-Baseline Trap That Hid It",
+        "venue_year": "arXiv 2026"
+      },
+      {
+        "paper_id": "arxiv:2603.11391v2",
+        "title": "BEACON: Budget-Aware Entity Matching Across Domains (Extended Technical Report)",
+        "venue_year": "arXiv 2026"
+      },
+      {
+        "paper_id": "arxiv:2607.10379v1",
+        "title": "Towards Automated Confidence Bound Provers and Searchers",
+        "venue_year": "arXiv 2026"
+      },
+      {
+        "paper_id": "arxiv:2601.01008v1",
+        "title": "An Explainable Agentic AI Framework for Uncertainty-Aware and Abstention-Enabled Acute Ischemic Stroke Imaging Decisions",
+        "venue_year": "arXiv 2026"
+      },
+      {
+        "paper_id": "arxiv:2605.14074v1",
+        "title": "Fair and Calibrated Toxicity Detection with Robust Training and Abstention",
+        "venue_year": "arXiv 2026"
+      },
+      {
+        "paper_id": "arxiv:2505.23437v2",
+        "title": "Bounded-Abstention Pairwise Learning to Rank",
+        "venue_year": "arXiv 2025"
+      },
+      {
+        "paper_id": "arxiv:2601.00138v2",
+        "title": "Explicit Abstention Knobs for Predictable Reliability in Video Question Answering",
+        "venue_year": "arXiv 2025"
+      },
+      {
+        "paper_id": "arxiv:2604.27914v1",
+        "title": "Geometry-Calibrated Conformal Abstention for Language Models",
+        "venue_year": "arXiv 2026"
+      },
+      {
+        "paper_id": "arxiv:2604.13254v1",
+        "title": "Calibrated Abstention for Reliable TCR--pMHC Binding Prediction under Epitope Shift",
+        "venue_year": "arXiv 2026"
+      },
+      {
+        "paper_id": "arxiv:2411.02988v2",
+        "title": "Confidence Calibration of Classifiers with Many Classes",
+        "venue_year": "arXiv 2024"
+      },
+      {
+        "paper_id": "arxiv:2209.09163v3",
+        "title": "Validation of the Reference Impedance in Multiline Calibration with Stepped Impedance Standards",
+        "venue_year": "arXiv 2022"
+      },
+      {
+        "paper_id": "arxiv:2603.27187v1",
+        "title": "Omni-Modal Dissonance Benchmark: Systematically Breaking Modality Consensus to Probe Robustness and Calibrated Abstention",
+        "venue_year": "arXiv 2026"
+      },
+      {
+        "paper_id": "arxiv:2301.09126v2",
+        "title": "Propagation of Linear Uncertainties through Multiline Thru-Reflect-Line Calibration",
+        "venue_year": "arXiv 2023"
+      },
+      {
+        "paper_id": "arxiv:2502.09054v2",
+        "title": "Cost-Saving LLM Cascades with Early Abstention",
+        "venue_year": "arXiv 2025"
+      },
+      {
+        "paper_id": "arxiv:2605.25850v1",
+        "title": "TIAR: Trajectory-Informed Advantage Reweighting for LLM Abstention Learning",
+        "venue_year": "arXiv 2026"
+      },
+      {
+        "paper_id": "arxiv:2501.19047v5",
+        "title": "Understanding Model Calibration -- A gentle introduction and visual exploration of calibration and the expected calibration error (ECE)",
+        "venue_year": "arXiv 2025"
+      },
+      {
+        "paper_id": "arxiv:2509.18426v2",
+        "title": "Automatic Model Extraction of the Match Standard in Symmetric--Reciprocal--Match Calibration",
+        "venue_year": "arXiv 2025"
+      },
+      {
+        "paper_id": "arxiv:2604.17073v1",
+        "title": "Abstain-R1: Calibrated Abstention and Post-Refusal Clarification via Verifiable RL",
+        "venue_year": "arXiv 2026"
+      },
+      {
+        "paper_id": "arxiv:2303.10559v3",
+        "title": "Deep Learning for Camera Calibration and Beyond: A Survey",
+        "venue_year": "arXiv 2023"
+      },
+      {
+        "paper_id": "arxiv:2305.03597v2",
+        "title": "A Thru-free Multiline Calibration",
+        "venue_year": "arXiv 2023"
+      },
+      {
+        "paper_id": "arxiv:2411.13343v1",
+        "title": "Fact-Level Confidence Calibration and Self-Correction",
+        "venue_year": "arXiv 2024"
+      },
+      {
+        "paper_id": "arxiv:2306.04590v2",
+        "title": "Proximity-Informed Calibration for Deep Neural Networks",
+        "venue_year": "arXiv 2023"
+      },
+      {
+        "paper_id": "arxiv:2307.02035v1",
+        "title": "Ranking with Abstention",
+        "venue_year": "arXiv 2023"
+      },
+      {
+        "paper_id": "arxiv:2309.02886v2",
+        "title": "Symmetric-Reciprocal-Match Method for Vector Network Analyzer Calibration",
+        "venue_year": "arXiv 2023"
+      },
+      {
+        "paper_id": "arxiv:2401.10400v3",
+        "title": "Auto-Calibration and Biconvex Compressive Sensing with Applications to Parallel MRI",
+        "venue_year": "arXiv 2024"
+      },
+      {
+        "paper_id": "arxiv:2302.02622v1",
+        "title": "Uncertainty Calibration and its Application to Object Detection",
+        "venue_year": "arXiv 2023"
+      },
+      {
+        "paper_id": "arxiv:2404.13990v1",
+        "title": "QCore: Data-Efficient, On-Device Continual Calibration for Quantized Models -- Extended Version",
+        "venue_year": "arXiv 2024"
+      }
+    ]
+  }
+}

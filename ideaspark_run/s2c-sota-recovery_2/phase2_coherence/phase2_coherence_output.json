@@ -1,0 +1,291 @@
+{
+  "trace_report": {
+    "formalized_procedure": [
+      {
+        "step": "S1",
+        "consumes": [
+          "dataset manifest",
+          "frozen MiniLM embedding z(x)",
+          "train_known/calibration/test splits",
+          "candidate K set {1,2,3,4,5}",
+          "protocol constants epsilon_cov and rho_risk"
+        ],
+        "produces": [
+          "eligibility set of intents with non-empty calibration data",
+          "frozen protocol contract"
+        ],
+        "note": "Require at least two known intents in the dataset and at least one calibration sample for every rotated held-out intent; otherwise the rotation episode is ineligible rather than silently scored."
+      },
+      {
+        "step": "S2",
+        "consumes": [
+          "train_known embeddings for each remaining intent j",
+          "candidate K"
+        ],
+        "produces": [
+          "baseline K=1 centers/radii {c_j,1, r_j,1}",
+          "target-specific K>1 centers/radii {c_y,k, r_y,k} for each current target intent y"
+        ],
+        "note": "All non-target intents stay at K=1 during attribution; only the current target intent y is expanded to candidate K."
+      },
+      {
+        "step": "S3",
+        "consumes": [
+          "held-out intent h calibration samples x",
+          "baseline K=1 scores q_j,1(x)",
+          "target y K>1 scores q_y,k(x)"
+        ],
+        "produces": [
+          "A_y,1(x)",
+          "A_y,K(x)",
+          "increment indicator I_y,K,h(x)"
+        ],
+        "note": "Define A_y,K(x)=1[min(min_{j!=y} q_{j,1}(x), min_{k<=K} q_{y,k}(x)) <= 1] and I_y,K,h(x)=1[A_y,K(x)=1 and A_y,1(x)=0]. This fixes the attribution bug in the original global A_K(x) definition."
+      },
+      {
+        "step": "S4",
+        "consumes": [
+          "all eligible rotated episodes h",
+          "increment indicators I_y,K,h(x)",
+          "y calibration samples"
+        ],
+        "produces": [
+          "DeltaU_y,K",
+          "Wilson95_UCB_y,K",
+          "Known coverage G_y,K",
+          "newly accepted pseudo-OOS count n_new(y,K)"
+        ],
+        "note": "DeltaU_y,K is the probability of newly accepted pseudo-OOS samples attributable to expanding only intent y, so a Wilson upper bound is now well-defined on a binomial event."
+      },
+      {
+        "step": "S5",
+        "consumes": [
+          "DeltaU_y,K",
+          "Wilson95_UCB_y,K",
+          "G_y,K",
+          "G_y,1",
+          "epsilon_cov",
+          "rho_risk"
+        ],
+        "produces": [
+          "selected K_y per intent",
+          "reason code"
+        ],
+        "note": "Select the largest feasible K with G_y,K >= G_y,1 - epsilon_cov and Wilson95_UCB_y,K <= rho_risk; otherwise set K_y=1."
+      },
+      {
+        "step": "S6",
+        "consumes": [
+          "selected per-intent K_y",
+          "unchanged detector scoring rule",
+          "test_known",
+          "held-out OOS",
+          "native OOS"
+        ],
+        "produces": [
+          "final metrics: F1-All, F1-K, OOS F1, AUROC, AUPR-OOS, Known Recall, FAR, FRR"
+        ],
+        "note": "The final gate remains the existing min distance/radius decision; only the per-intent region count is changed by the selector."
+      },
+      {
+        "step": "S7",
+        "consumes": [
+          "rotated episodes",
+          "selected K_y"
+        ],
+        "produces": [
+          "ablation result under shuffled episode assignments"
+        ],
+        "note": "Shuffle held-out-intent episode assignments before recomputing DeltaU and rerun the same frozen selector to test whether the union-risk estimator is load-bearing."
+      }
+    ],
+    "dry_run": {
+      "instance": "Minimal rotated episode with remaining intents A and B, held-out pseudo-OOS intent C, candidate K=2, threshold 1.0. Sample x1 from C has q_A,1=1.3, q_A,2=1.4, q_B,1=1.2, q_B,2=0.8. Sample x2 from C has q_A,1=1.4, q_A,2=0.7, q_B,1=1.5, q_B,2=1.6. Eight additional held-out samples are all rejected under both K=1 and K=2 variants.",
+      "computed_quantities": [
+        {
+          "quantity": "Original written global increment on x1 and x2",
+          "value": "A_K(x1)-A_1(x1)=1, A_K(x2)-A_1(x2)=1",
+          "arithmetic": "Original text uses A_K(x)=1[min_{y,k} q_{y,k}(x)<=1]. For x1, min(1.3,1.4,1.2,0.8)=0.8 so A_K(x1)=1, while min(1.3,1.2)=1.2 so A_1(x1)=0. For x2, min(1.4,0.7,1.5,1.6)=0.7 so A_K(x2)=1, while min(1.4,1.5)=1.4 so A_1(x2)=0."
+        },
+        {
+          "quantity": "Attribution anomaly in the original per-intent DeltaU_y,K",
+          "value": "sum_y new_accepts_y = 4 from only 2 newly accepted samples",
+          "arithmetic": "Because the original DeltaU_y,K reuses the same global A_K-A_1 for every target y, both y=A and y=B would count x1 and x2 as increments: 2 counts for A plus 2 counts for B = 4, but the container has only 2 newly accepted held-out samples total."
+        },
+        {
+          "quantity": "Patched target-specific increments",
+          "value": "I_A,2(x1)=0, I_A,2(x2)=1; I_B,2(x1)=1, I_B,2(x2)=0",
+          "arithmetic": "For target A, A_A,2(x1)=1[min(1.2, min(1.3,1.4))<=1]=0 and A_A,1(x1)=0, so I_A,2(x1)=0; A_A,2(x2)=1[min(1.5, min(1.4,0.7))<=1]=1 and A_A,1(x2)=0, so I_A,2(x2)=1. For target B, A_B,2(x1)=1[min(1.3, min(1.2,0.8))<=1]=1 with A_B,1(x1)=0, so I_B,2(x1)=1; A_B,2(x2)=1[min(1.4, min(1.5,1.6))<=1]=0, so I_B,2(x2)=0. The per-intent increments now sum to 2, matching the 2 newly accepted samples."
+        },
+        {
+          "quantity": "Patched risk estimate and confidence bound for target A over 10 held-out samples",
+          "value": "DeltaU_A,2 = 0.2, Wilson95_UCB_A,2 approx 0.510",
+          "arithmetic": "With 2 newly accepted samples out of 10, p_hat=2/10=0.2. Wilson upper bound = ((0.2 + 1.96^2/(2*10)) + 1.96*sqrt(0.2*0.8/10 + 1.96^2/(4*10^2))) / (1 + 1.96^2/10) = (0.392 + 0.313) / 1.384 approx 0.510. This is computable only after DeltaU is written as a binomial increment event rather than an unconstrained difference of two acceptance rates."
+        }
+      ],
+      "anomalies": [
+        "Original text double-counts the same newly accepted pseudo-OOS sample across multiple intents, so DeltaU_y,K is not one-to-one with the per-intent K selector.",
+        "Original text assigns a Wilson upper bound to DeltaU_y,K even though the written quantity is a difference of two acceptance probabilities under a global gate, not a binomial increment event."
+      ]
+    },
+    "degenerate_probes": [
+      {
+        "probe": "Single-known-intent dataset after rotating one intent out",
+        "behavior": "No remaining Known universe exists, so q_{j,1} and A_y,K cannot be formed.",
+        "finding": "Handled by the repaired eligibility precondition in S1: the method requires at least two known intents and skips ineligible episodes instead of emitting a meaningless risk estimate."
+      },
+      {
+        "probe": "Held-out intent h with zero calibration samples",
+        "behavior": "DeltaU_y,K would be a 0/0 estimate and the Wilson bound undefined.",
+        "finding": "Handled by the repaired eligibility precondition in S1: only non-empty rotated episodes are scored."
+      },
+      {
+        "probe": "All held-out samples tie exactly at threshold q=1",
+        "behavior": "Every tied sample is accepted because the rule is <= 1 under both A_y,1 and A_y,K.",
+        "finding": null
+      },
+      {
+        "probe": "Candidate K=1",
+        "behavior": "A_y,K equals A_y,1 for every sample, so I_y,K,h(x)=0 identically and DeltaU_y,1=0.",
+        "finding": null
+      }
+    ],
+    "claim_step_map": [
+      {
+        "claim": "The method gives a known-only estimate of the extra union acceptance risk caused by adding regions.",
+        "established_by": "S3-S4"
+      },
+      {
+        "claim": "The risk estimate is attributable to one target intent at a time rather than to an undifferentiated global union.",
+        "established_by": "S2-S3"
+      },
+      {
+        "claim": "Per-intent K selection is legal and falls back to K=1 when safety constraints fail.",
+        "established_by": "S5"
+      },
+      {
+        "claim": "Selection is test-independent and the final evaluation remains downstream of a frozen selector.",
+        "established_by": "S1, S6"
+      },
+      {
+        "claim": "The DeltaU estimator is load-bearing rather than decorative.",
+        "established_by": "S7"
+      }
+    ]
+  },
+  "verdict": "patched",
+  "unrepaired": [],
+  "applied_revisions": [
+    {
+      "scope": "coherence",
+      "op": "replace",
+      "field": "core_mechanism",
+      "value": "Let z(x) be the frozen all-MiniLM-L6-v2 embedding, and for each known intent y and candidate K let centers and radii be fitted only from train_known with the existing detector contract. Write q_{j,1}(x)=d(z(x),c_{j,1})/r_{j,1} for every non-target intent j at baseline K=1, and q_{y,k}(x)=d(z(x),c_{y,k})/r_{y,k} for the current target intent y under candidate K. To measure the extra acceptance caused by expanding only intent y, define the target-specific gate A_{y,K}(x)=1[min(min_{j!=y} q_{j,1}(x), min_{k<=K} q_{y,k}(x))<=1] and the baseline A_{y,1}(x)=1[min(min_{j!=y} q_{j,1}(x), q_{y,1}(x))<=1]. For every held-out known intent h, construct a leave-one-intent-out episode by excluding h from the Known universe, fitting the same baseline K=1 configuration on the remaining intents, fitting K>1 variants only for the current target y, and treating h's calibration samples as construction-defined pseudo-OOS; episodes with fewer than two remaining known intents or zero held-out calibration samples are ineligible and skipped by protocol. Define the incremental union-risk indicator I_{y,K,h}(x)=1[A_{y,K}(x)=1 and A_{y,1}(x)=0] and DeltaU_{y,K}=P_h(I_{y,K,h}(x)=1|x in h), estimated over all eligible rotated h episodes with a fixed 95% Wilson upper confidence bound UCB_{y,K}. Define Known coverage G_{y,K} on y's own calibration samples and accept K only when G_{y,K}>=G_{y,1}-epsilon_cov and UCB_{y,K}<=rho_risk, where epsilon_cov and rho_risk are pre-registered protocol constants; choose the largest feasible K, otherwise fall back to K=1. The final Gate still uses the existing min distance/radius score, but the selected per-intent configuration is now determined by a known-only estimate of the newly added union acceptance risk rather than test-oracle OOS F1. The sequential pipeline is: fit baseline and target-specific candidate balls, rotate held-out intent episodes, estimate DeltaU from newly accepted pseudo-OOS samples, apply the feasibility rule, then freeze the selected configuration for one final test evaluation. The contribution is the computable per-intent union-risk object and its causal ablation, not a new embedding, distance, radius, or MOGB-style representation learner.",
+      "outcome": "applied",
+      "delta_summary": "Repairs T1 and T2: the original global A_K made DeltaU_y,K non-attributable and made the Wilson bound undefined on the written quantity."
+    },
+    {
+      "scope": "coherence",
+      "op": "replace",
+      "field": "core_mechanism_steps",
+      "value": "1. Freeze the protocol, MiniLM revision, canonical manifests, registry hashes, detector distance, radius rule, candidate K set, and pre-registered constants epsilon_cov and rho_risk; require at least two known intents and non-empty held-out calibration episodes for eligibility.\n2. For each dataset, KIR, seed, and target intent y, fit the existing K=1 per-intent centers and radii from train_known only, then fit candidate K>1 variants only for y while keeping every other intent at K=1.\n3. Rotate each known intent h out of the Known universe; score its calibration samples against the remaining intents under both A_{y,1} and A_{y,K} while preserving the same sample IDs and evaluator.\n4. For every target intent y and K, compute the newly accepted indicator I_{y,K,h}(x), DeltaU_{y,K}, its Wilson upper bound, own-intent Known coverage G_{y,K}, and the diagnostic count of newly accepted held-out-intent samples.\n5. Apply the fixed feasibility rule and select the largest feasible K per intent, recording a reason code for K=1 fallback or acceptance of K>1.\n6. Freeze this selector and run one final test pass on the unchanged test_known, held-out OOS, and native OOS pools; emit F1-All, F1-K, OOS F1, AUROC, AUPR-OOS, Known Recall, FAR, and FRR.\n7. Ablate only the load-bearing DeltaU estimator by shuffling the held-out-intent episode assignments while preserving counts; rerun the same frozen selector and require the downstream OOS/coverage advantage to disappear or materially weaken.\n8. Compare against Single-centroid, fixed K=2, fixed K=4, current BRAK, and oracle-test-K only as a descriptive upper bound, never as a selection source.",
+      "outcome": "applied",
+      "delta_summary": "Repairs T1 and T3: the rewritten steps make the selector executable, define target ownership for each statistic, and add the missing episode-eligibility precondition."
+    },
+    {
+      "scope": "coherence",
+      "op": "replace",
+      "field": "core_mechanism_reasoning",
+      "value": "All three gaps still share one object—the incremental acceptance risk introduced by expanding a single intent's union region—so they remain one sequential calibration paper rather than multiple ideas. The repair does not redesign the contribution; it localizes the risk object to one target intent at a time and writes it as a newly accepted pseudo-OOS event, which is exactly what the feasibility rule and Wilson upper bound need in order to be computable.",
+      "outcome": "applied",
+      "delta_summary": "Repairs T4 narrative alignment by making the claimed risk object match the executable construction used by the selector."
+    },
+    {
+      "scope": "coherence",
+      "op": "replace",
+      "field": "gap_closure[0].how_closed",
+      "value": "Closed by defining incremental union acceptance as the target-specific probability of newly accepted pseudo-OOS samples when only intent y expands from K=1 to K>1, estimated from rotated held-out-known-intent episodes.",
+      "outcome": "applied",
+      "delta_summary": "Repairs T4: the first gap now names the exact constructed quantity rather than an unattributed global difference."
+    },
+    {
+      "scope": "coherence",
+      "op": "replace",
+      "field": "gap_closure[1].how_closed",
+      "value": "Closed by pivoting the acceptance locus from an individual distance/radius score to the target-specific union acceptance profile and validating the pivot with matched leave-one-intent-out episodes whose pseudo-OOS identity is construction-defined.",
+      "outcome": "applied",
+      "delta_summary": "Repairs T4: the second gap now points to the step that actually establishes the union-profile pivot."
+    },
+    {
+      "scope": "coherence",
+      "op": "replace",
+      "field": "gap_closure[2].how_closed",
+      "value": "Closed by treating per-intent K selection as a pre-registered feasibility problem over target-specific Known coverage and a confidence upper bound on newly added union risk, with an explicit K=1 fallback.",
+      "outcome": "applied",
+      "delta_summary": "Repairs T4: the third gap now matches the repaired per-intent feasibility rule instead of relying on the broken global DeltaU definition."
+    }
+  ],
+  "final_candidate": {
+    "title": "Union-Risk Calibrated Subcenter Gates for Known-Only Open Intent Detection",
+    "hook": "Across the frozen-MiniLM E2/E3 grid, stable KMeans partitions did not predict OOS benefit: Banking77 could gain from extra centers while StackOverflow collapsed through false acceptance. The candidate predicts that a known-only estimate of incremental union acceptance risk can identify this regime before test OOS is seen.",
+    "hook_shape_rationale": "This uses the surprising-empirical-reveal shape: the load-bearing prediction is that the sign of K>1's OOS effect is forecast by an explicitly measured union-risk increment, not by ARI or cluster count, and the existing dataset split supplies a sharp cross-dataset regime contrast. A structural-reframe hook was viable but rejected because simply restating the union assumption would not itself establish a method-level gain.",
+    "gap_closure": [
+      {
+        "gap": "No retrieved leaf estimates, with a held-out and test-independent protocol, how much additional unknown-space acceptance is caused by adding a second or later region to a known intent.",
+        "main_pattern": "reframe_as_solvable_object",
+        "sub_pattern": "C00 (Reframe as a Solvable Object)",
+        "companion_pattern": null,
+        "how_closed": "Closed by defining incremental union acceptance as the target-specific probability of newly accepted pseudo-OOS samples when only intent y expands from K=1 to K>1, estimated from rotated held-out-known-intent episodes."
+      },
+      {
+        "gap": "No retrieved leaf tests whether the shared assumption that per-region distance/radius scores are sufficient for open-set acceptance remains valid when the final decision is an arbitrary union of regions.",
+        "main_pattern": "assumption_audit_and_pivot",
+        "sub_pattern": "C01 (Audit and Pivot an Assumption)",
+        "companion_pattern": "controlled_diagnostic_design",
+        "how_closed": "Closed by pivoting the acceptance locus from an individual distance/radius score to the target-specific union acceptance profile and validating the pivot with matched leave-one-intent-out episodes whose pseudo-OOS identity is construction-defined."
+      },
+      {
+        "gap": "No retrieved leaf gives a legal selection rule that can retain K=1 for unsafe intents and allow extra regions only when Known coverage and open-space risk are jointly acceptable across datasets.",
+        "main_pattern": "reframe_as_solvable_object",
+        "sub_pattern": "C00 (Reframe as a Solvable Object)",
+        "companion_pattern": null,
+        "how_closed": "Closed by treating per-intent K selection as a pre-registered feasibility problem over target-specific Known coverage and a confidence upper bound on newly added union risk, with an explicit K=1 fallback."
+      }
+    ],
+    "core_mechanism": "Let z(x) be the frozen all-MiniLM-L6-v2 embedding, and for each known intent y and candidate K let centers and radii be fitted only from train_known with the existing detector contract. Write q_{j,1}(x)=d(z(x),c_{j,1})/r_{j,1} for every non-target intent j at baseline K=1, and q_{y,k}(x)=d(z(x),c_{y,k})/r_{y,k} for the current target intent y under candidate K. To measure the extra acceptance caused by expanding only intent y, define the target-specific gate A_{y,K}(x)=1[min(min_{j!=y} q_{j,1}(x), min_{k<=K} q_{y,k}(x))<=1] and the baseline A_{y,1}(x)=1[min(min_{j!=y} q_{j,1}(x), q_{y,1}(x))<=1]. For every held-out known intent h, construct a leave-one-intent-out episode by excluding h from the Known universe, fitting the same baseline K=1 configuration on the remaining intents, fitting K>1 variants only for the current target y, and treating h's calibration samples as construction-defined pseudo-OOS; episodes with fewer than two remaining known intents or zero held-out calibration samples are ineligible and skipped by protocol. Define the incremental union-risk indicator I_{y,K,h}(x)=1[A_{y,K}(x)=1 and A_{y,1}(x)=0] and DeltaU_{y,K}=P_h(I_{y,K,h}(x)=1|x in h), estimated over all eligible rotated h episodes with a fixed 95% Wilson upper confidence bound UCB_{y,K}. Define Known coverage G_{y,K} on y's own calibration samples and accept K only when G_{y,K}>=G_{y,1}-epsilon_cov and UCB_{y,K}<=rho_risk, where epsilon_cov and rho_risk are pre-registered protocol constants; choose the largest feasible K, otherwise fall back to K=1. The final Gate still uses the existing min distance/radius score, but the selected per-intent configuration is now determined by a known-only estimate of the newly added union acceptance risk rather than test-oracle OOS F1. The sequential pipeline is: fit baseline and target-specific candidate balls, rotate held-out intent episodes, estimate DeltaU from newly accepted pseudo-OOS samples, apply the feasibility rule, then freeze the selected configuration for one final test evaluation. The contribution is the computable per-intent union-risk object and its causal ablation, not a new embedding, distance, radius, or MOGB-style representation learner.",
+    "core_mechanism_reasoning": "All three gaps still share one object—the incremental acceptance risk introduced by expanding a single intent's union region—so they remain one sequential calibration paper rather than multiple ideas. The repair does not redesign the contribution; it localizes the risk object to one target intent at a time and writes it as a newly accepted pseudo-OOS event, which is exactly what the feasibility rule and Wilson upper bound need in order to be computable.",
+    "core_mechanism_steps": "1. Freeze the protocol, MiniLM revision, canonical manifests, registry hashes, detector distance, radius rule, candidate K set, and pre-registered constants epsilon_cov and rho_risk; require at least two known intents and non-empty held-out calibration episodes for eligibility.\n2. For each dataset, KIR, seed, and target intent y, fit the existing K=1 per-intent centers and radii from train_known only, then fit candidate K>1 variants only for y while keeping every other intent at K=1.\n3. Rotate each known intent h out of the Known universe; score its calibration samples against the remaining intents under both A_{y,1} and A_{y,K} while preserving the same sample IDs and evaluator.\n4. For every target intent y and K, compute the newly accepted indicator I_{y,K,h}(x), DeltaU_{y,K}, its Wilson upper bound, own-intent Known coverage G_{y,K}, and the diagnostic count of newly accepted held-out-intent samples.\n5. Apply the fixed feasibility rule and select the largest feasible K per intent, recording a reason code for K=1 fallback or acceptance of K>1.\n6. Freeze this selector and run one final test pass on the unchanged test_known, held-out OOS, and native OOS pools; emit F1-All, F1-K, OOS F1, AUROC, AUPR-OOS, Known Recall, FAR, and FRR.\n7. Ablate only the load-bearing DeltaU estimator by shuffling the held-out-intent episode assignments while preserving counts; rerun the same frozen selector and require the downstream OOS/coverage advantage to disappear or materially weaken.\n8. Compare against Single-centroid, fixed K=2, fixed K=4, current BRAK, and oracle-test-K only as a descriptive upper bound, never as a selection source.",
+    "falsification_prediction": "Run a bounded pilot on CLINC150, Banking77, and StackOverflow at KIR=0.50 with seeds 13, 42, and 87 using the frozen MiniLM cache; compare K=1, fixed K=2, current BRAK, and the proposed selector, with all selection computed from train_known and rotated calibration intents. If the method works, the primary downstream changes are higher or unchanged F1-All and Known Recall together with lower StackOverflow FAR and a non-positive K=2 loss, while the load-bearing variable ΔU_{y,K} is lower for selected multi-center intents than for rejected ones. The negative control randomizes the held-out-intent episode assignments before computing ΔU; if the mechanism is real, this intervention should erase the candidate's OOS/coverage advantage and return performance toward fixed-K or K=1, not merely change ΔU itself. A positive control is the descriptive oracle-test-K ranking, which may show available headroom but is prohibited from selecting a final configuration.",
+    "compute_budget": "0.2 GPU-day or less plus CPU evaluation; $0 API",
+    "differentiation_from_lit": [
+      {
+        "paper_id": "arxiv:2607.07974v1",
+        "delta": "The paper constructs fixed multi-cluster MiniLM boundaries but does not construct a rotated-known-intent estimator or confidence-bounded quantity for the incremental unknown-space acceptance caused by adding regions."
+      },
+      {
+        "paper_id": "arxiv:2602.21252v1",
+        "delta": "INTACT conditions a boundary on context in another security domain, whereas this candidate measures the downstream union-risk increment of a semantic intent gate and uses it to enforce a pre-registered Known-only feasibility rule."
+      },
+      {
+        "paper_id": "arxiv:2603.04538v1",
+        "delta": "InverseNet diagnoses benchmark/operator mismatch but does not construct a per-intent acceptance-union risk object whose intervention changes an open-intent detector's final OOS decision."
+      }
+    ],
+    "almost_prior_paper_id": "arxiv:2607.07974v1",
+    "what_step_was_missed": "The paper would have needed to construct and validate a leave-one-known-intent rotation that measures the marginal acceptance contribution of each added local region before selecting its boundary configuration; its reported multi-cluster result does not contain this risk decomposition.",
+    "signature_terms": [
+      "incremental union acceptance risk",
+      "rotated known-intent calibration",
+      "per-intent subcenter feasibility",
+      "confidence-bounded open-space budget",
+      "StackOverflow false acceptance"
+    ],
+    "alias_terms": [
+      "selective classification risk control",
+      "class-conditional abstention calibration",
+      "mixture acceptance budget",
+      "leave-class-out novelty validation"
+    ]
+  },
+  "falsification_rewritten": false
+}

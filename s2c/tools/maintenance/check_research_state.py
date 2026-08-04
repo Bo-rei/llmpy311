@@ -17,11 +17,10 @@ from typing import Any, Mapping
 
 
 ROOT = Path(__file__).resolve().parents[2]
-RESEARCH_ROOT = ROOT / "docs" / "research"
-STATUS_PATH = RESEARCH_ROOT / "RESEARCH_STATUS.md"
-LEDGER_PATH = RESEARCH_ROOT / "EXPERIMENT_LEDGER.csv"
-DECISION_PATH = RESEARCH_ROOT / "DECISION_LOG.md"
-CLAIM_PATH = RESEARCH_ROOT / "PAPER_CLAIM_AUDIT.md"
+STATUS_PATH = ROOT / "docs" / "CURRENT_STATUS.md"
+LEDGER_PATH = ROOT / "docs" / "EXPERIMENT_LEDGER.csv"
+DECISION_PATH = ROOT / "docs" / "archive" / "protocol_and_data" / "DECISION_LOG.md"
+CLAIM_PATH = ROOT / "docs" / "archive" / "external_baselines" / "PAPER_CLAIM_AUDIT.md"
 
 FROZEN_REQUIRED = {
     "e2_gate_core_dense": (

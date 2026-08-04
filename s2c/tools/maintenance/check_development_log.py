@@ -7,7 +7,7 @@ import sys
 from pathlib import Path
 
 
-LOG_PATH = "docs/DEVELOPMENT_LOG.md"
+LOG_PATH = "docs/archive/protocol_and_data/DEVELOPMENT_LOG.md"
 IGNORED_PARTS = {"__pycache__", ".pytest_cache", ".mypy_cache", ".ruff_cache"}
 IGNORED_SUFFIXES = {".pyc", ".pyo", ".log"}
 
@@ -63,7 +63,7 @@ def main() -> int:
         print("development log check: no substantive s2c changes")
         return 0
     if LOG_PATH not in paths:
-        print("development log check failed: substantive changes require docs/DEVELOPMENT_LOG.md", file=sys.stderr)
+        print("development log check failed: substantive changes require docs/archive/protocol_and_data/DEVELOPMENT_LOG.md", file=sys.stderr)
         for path in substantive:
             print(f"  - {path}", file=sys.stderr)
         return 1

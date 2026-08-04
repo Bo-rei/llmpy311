@@ -1,0 +1,36 @@
+{
+  "selected_gaps": [
+    {
+      "gap": "No retrieved leaf estimates, with a held-out and test-independent protocol, how much additional unknown-space acceptance is caused by adding a second or later region to a known intent.",
+      "chosen_pattern_id": "reframe_as_solvable_object",
+      "anchor_alternates": ["assumption_audit_and_pivot"],
+      "companion_pattern": null,
+      "companion_rationale": "",
+      "selection_rationale": "This is the load-bearing method gap because the current failure is an unmeasured quantity, and the paper needs a runnable construction rather than another descriptive sweep. Reframing the unknown-space increment as a computable risk object makes a solver and a falsification criterion available without naming a particular thresholding recipe in the diagnosis."
+    },
+    {
+      "gap": "No retrieved leaf tests whether the shared assumption that per-region distance/radius scores are sufficient for open-set acceptance remains valid when the final decision is an arbitrary union of regions.",
+      "chosen_pattern_id": "assumption_audit_and_pivot",
+      "anchor_alternates": [],
+      "companion_pattern": "controlled_diagnostic_design",
+      "companion_rationale": "The audit identifies the shared scalar-score sufficiency assumption, while controlled matched leave-one-intent-out episodes provide the empirical separation needed for a method contribution.",
+      "selection_rationale": "This sibling uses the same union-risk object as the anchor and therefore forms one shared-audit paper rather than a second diagnostic paper. The assumption pivot moves the acceptance locus from individual distances to the acceptance profile of the union, and the companion supplies an independent known-only probe of that profile."
+    },
+    {
+      "gap": "No retrieved leaf gives a legal selection rule that can retain K=1 for unsafe intents and allow extra regions only when Known coverage and open-space risk are jointly acceptable across datasets.",
+      "chosen_pattern_id": "reframe_as_solvable_object",
+      "anchor_alternates": [],
+      "companion_pattern": null,
+      "companion_rationale": "",
+      "selection_rationale": "This sibling is the downstream decision leg of the same risk object: it consumes the calibrated union-risk estimate produced by the anchor rather than introducing a second method. Reframing per-intent selection as a constrained feasibility problem closes the legal-selection gap while retaining K=1 as an explicit safe fallback."
+    }
+  ],
+  "coherence_thread_type": "sequential_pipeline",
+  "deliverable_coverage": "method — anchor gap → reframe_as_solvable_object yields the runnable union-risk calibrated gate; the audit sibling's controlled_diagnostic_design companion supplies the empirical separation.",
+  "pattern_saturation": {
+    "reframe_as_solvable_object": {"share": 0.11, "saturation_band": "mid_frequency", "selection_note": ""},
+    "assumption_audit_and_pivot": {"share": 0.44, "saturation_band": "mid_frequency", "selection_note": ""},
+    "controlled_diagnostic_design": {"share": 0.44, "saturation_band": "mid_frequency", "selection_note": ""}
+  },
+  "deferred_gaps": []
+}

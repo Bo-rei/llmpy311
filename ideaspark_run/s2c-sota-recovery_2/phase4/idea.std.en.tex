@@ -1,0 +1,82 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[margin=1.55cm]{geometry}
+\usepackage{xcolor}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{enumitem}
+\usepackage{fontspec}
+\usepackage[CJKmath=true]{xeCJK}
+% CJK main font is resolved at COMPILE time on the actual machine, not baked in at
+% generation time, so a .tex generated on one OS still renders on another (the older
+% Python-side probe hardcoded one OS's font name into the file and broke when moved).
+% Walk a cross-platform priority list and use the first font that exists; AutoFakeBold
+% + AutoFakeSlant give bold/italic CJK even on faces that ship no bold/italic cut.
+\newcommand{\setCJKto}[1]{\setCJKmainfont{#1}[AutoFakeBold=true,AutoFakeSlant=0.2]}
+\IfFontExistsTF{Noto Sans CJK SC}{\setCJKto{Noto Sans CJK SC}}{%        % Linux (fonts-noto-cjk); cross-platform if installed
+ \IfFontExistsTF{Source Han Sans SC}{\setCJKto{Source Han Sans SC}}{%   % Adobe 思源黑体; cross-platform
+  \IfFontExistsTF{PingFang SC}{\setCJKto{PingFang SC}}{%               % macOS 10.11+
+   \IfFontExistsTF{Hiragino Sans GB}{\setCJKto{Hiragino Sans GB}}{%    % older macOS
+    \IfFontExistsTF{Microsoft YaHei}{\setCJKto{Microsoft YaHei}}{%     % Windows
+     \IfFontExistsTF{WenQuanYi Micro Hei}{\setCJKto{WenQuanYi Micro Hei}}{% % older Linux
+      \setCJKto{Songti SC}}}}}}}                                       % macOS bottom fallback
+\definecolor{cblue}{HTML}{4C72B0}
+\setlength{\parskip}{3pt}\setlength{\parindent}{0pt}
+\setlist[enumerate]{topsep=2pt,itemsep=2pt,parsep=1pt,partopsep=0pt}
+\setlist[itemize]{topsep=2pt,itemsep=2pt,parsep=1pt,partopsep=0pt}
+% Let prose-embedded inline math break across lines and absorb small overflows, so simple
+% formulas inserted mid-sentence stop running past the right margin.
+\tolerance=1200
+\emergencystretch=2.5em
+\relpenalty=20
+\binoppenalty=40
+\hfuzz=1pt
+\begin{document}
+
+\section*{Union-Risk Calibrated Subcenter Gates for Known-Only Open Intent Detection}
+\textbf{Method.} Union-Risk Calibrated Subcenter Gate (URCSG)
+\section*{Motivation}
+Adding several local regions can help a known intent, but it can also make the detector accept more unknown examples. Instead of choosing the number of regions from test performance, URCSG hides one known intent at a time and asks how many extra held-out examples become accepted when only one intent is expanded. It keeps an expansion only when known coverage is preserved and the upper confidence bound on this added acceptance risk stays below a fixed limit.
+\section*{Method}
+\subsection*{M1}
+\emph{Contract and detector fitting}
+\begin{enumerate}[leftmargin=*,start=1]
+  \item Write one manifest with the protocol and data hashes, detector settings, candidate center counts, risk constants, and seeds. Check every sample ID against the declared training or calibration split and stop before fitting if a center count or episode is invalid.
+\par\emph{Why:} The selection must be reproducible and test-independent.
+  \item Use the existing embedding cache. Keep every non-target intent at one center, and fit the candidate extra centers only for the target intent. Save centers, radii, sample counts, and a check that all scores are finite.
+\noindent\emph{Existing normalized distance/radius score.}
+\par\noindent{\small\ttfamily [eq~1, raw LaTeX, not typeset] q\_\{y,k\}(x)=d(z(x),c\_\{y,k\})/r\_\{y,k\}}
+\par\emph{Why:} This isolates the effect of adding regions to that intent.
+\end{enumerate}
+\subsection*{M2}
+\emph{Rotated known-only risk measurement}
+\begin{enumerate}[leftmargin=*,start=3]
+  \item Take one calibration intent out at a time. Treat its rows as pseudo-unknown only because the split construction says they are held out, and use the remaining intents for the detector. Record and exclude empty or too-small episodes.
+\noindent\emph{Target-specific newly accepted pseudo-OOS event.}
+\par\noindent{\small\ttfamily [eq~2, raw LaTeX, not typeset] I\_\{y,K,h\}(x)=\textbackslash\{\}mathbf\{1\}[A\_\{y,K\}(x)=1\textbackslash\{\}land A\_\{y,1\}(x)=0]}
+\par\emph{Why:} The held-out identity is known by construction without using real test OOS.
+  \item For every held-out row, compare the one-center detector with the target-expanded detector. Count only rows newly accepted by the expansion, average those indicators across eligible episodes, and compute an upper confidence bound plus the target intent's own calibration coverage.
+\noindent\emph{Marginal union-risk estimate over eligible held-out intents.}
+\par\noindent{\small\ttfamily [eq~3, raw LaTeX, not typeset] \textbackslash\{\}Delta U\_\{y,K\}=P\_h(I\_\{y,K,h\}(x)=1\textbackslash\{\}mid x\textbackslash\{\}in h)}
+\par\emph{Why:} The quantity directly measures union overcoverage.
+\end{enumerate}
+\subsection*{M3}
+\emph{Feasibility selection and comparator}
+\begin{enumerate}[leftmargin=*,start=5]
+  \item Apply two fixed checks: preserve nearly the same target-intent coverage and keep the added-acceptance risk below the fixed limit. Keep the largest center count that passes;\allowbreak{} otherwise record a K=1 fallback and why it happened.
+\noindent\emph{Pre-registered feasibility constraints.}
+\par\noindent{\small\ttfamily [eq~4, raw LaTeX, not typeset] G\_\{y,K\}\textbackslash\{\}ge G\_\{y,1\}-\textbackslash\{\}epsilon\_\{cov\}\textbackslash\{\};\textbackslash\{\}land\textbackslash\{\};UCB\_\{y,K\}\textbackslash\{\}le\textbackslash\{\}rho\_\{risk\}}
+\par\emph{Why:} Unsafe intents retain the safe single-center fallback.
+  \item Run one ordinary global geometry-based abstention baseline with the same data and calibration rules. Report it separately so readers can see whether the target-specific risk object adds value;\allowbreak{} do not let this baseline choose any intent's center count.
+\par\emph{Why:} A gain must not be explained by generic calibration alone.
+\end{enumerate}
+\subsection*{M4}
+\emph{Frozen evaluation and mechanism ablation}
+\begin{enumerate}[leftmargin=*,start=7]
+  \item After selection is locked, evaluate once on all declared test pools and save the full metric table and selected center count for every intent. No test result may modify the manifest or selector.
+\par\emph{Why:} Test data only measures the final method.
+  \item Keep every number of rows and every model calculation the same, but randomly swap which held-out intent an episode is assigned to. Re-run the selector and check that the OOS/coverage advantage disappears if the identity-specific risk signal was causal.
+\par\emph{Why:} The proposed mechanism should disappear when its risk signal is destroyed.
+  \item Put all methods in one same-split table and include both OOS and Known metrics. Label oracle-test-K as analysis only, and compare methods by matching dataset, split, seed, and representation.
+\par\emph{Why:} The claim is about mechanism-specific improvement, not a leaderboard maximum.
+\end{enumerate}
+\end{document}

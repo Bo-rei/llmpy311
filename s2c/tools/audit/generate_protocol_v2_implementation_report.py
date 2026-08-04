@@ -651,7 +651,7 @@ current state rather than inferring completion from configuration files.
             ),
             "provenance_scope": (
                 "This manifest records the generated audit and known run evidence; "
-                "detailed changes remain append-only in docs/DEVELOPMENT_LOG.md."
+                "detailed changes remain append-only in docs/archive/protocol_and_data/DEVELOPMENT_LOG.md."
             ),
             "inputs": {
                 # Keep the audit scoped to materialized evidence.  Importing

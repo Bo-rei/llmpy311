@@ -288,7 +288,7 @@ def _update_closeout(closeout_path: Path, freeze_path: Path, registry_path: Path
             "registry": _relative(registry_path),
             "registry_audit_status": status,
             "freeze_manifest": _relative(freeze_path),
-            "active_docs": ["README.md", "docs/PROJECT.md", "docs/EXPERIMENTS.md", "docs/RUNBOOK.md"],
+            "active_docs": ["README.md", "docs/METHOD.md", "docs/CURRENT_STATUS.md", "docs/EXPERIMENTS.md", "docs/REPRODUCIBILITY.md"],
             "cascade_status": "full_kir50_three_seed_four_gate_complete",
             "cascade_scope": "three_datasets/kir50_seed13_42_87/four_gate_variants",
             "mogb_status": "audited_not_reproduced",

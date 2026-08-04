@@ -1,0 +1,82 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[margin=1.55cm]{geometry}
+\usepackage{xcolor}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{enumitem}
+\usepackage{fontspec}
+\usepackage[CJKmath=true]{xeCJK}
+% CJK main font is resolved at COMPILE time on the actual machine, not baked in at
+% generation time, so a .tex generated on one OS still renders on another (the older
+% Python-side probe hardcoded one OS's font name into the file and broke when moved).
+% Walk a cross-platform priority list and use the first font that exists; AutoFakeBold
+% + AutoFakeSlant give bold/italic CJK even on faces that ship no bold/italic cut.
+\newcommand{\setCJKto}[1]{\setCJKmainfont{#1}[AutoFakeBold=true,AutoFakeSlant=0.2]}
+\IfFontExistsTF{Noto Sans CJK SC}{\setCJKto{Noto Sans CJK SC}}{%        % Linux (fonts-noto-cjk); cross-platform if installed
+ \IfFontExistsTF{Source Han Sans SC}{\setCJKto{Source Han Sans SC}}{%   % Adobe 思源黑体; cross-platform
+  \IfFontExistsTF{PingFang SC}{\setCJKto{PingFang SC}}{%               % macOS 10.11+
+   \IfFontExistsTF{Hiragino Sans GB}{\setCJKto{Hiragino Sans GB}}{%    % older macOS
+    \IfFontExistsTF{Microsoft YaHei}{\setCJKto{Microsoft YaHei}}{%     % Windows
+     \IfFontExistsTF{WenQuanYi Micro Hei}{\setCJKto{WenQuanYi Micro Hei}}{% % older Linux
+      \setCJKto{Songti SC}}}}}}}                                       % macOS bottom fallback
+\definecolor{cblue}{HTML}{4C72B0}
+\setlength{\parskip}{3pt}\setlength{\parindent}{0pt}
+\setlist[enumerate]{topsep=2pt,itemsep=2pt,parsep=1pt,partopsep=0pt}
+\setlist[itemize]{topsep=2pt,itemsep=2pt,parsep=1pt,partopsep=0pt}
+% Let prose-embedded inline math break across lines and absorb small overflows, so simple
+% formulas inserted mid-sentence stop running past the right margin.
+\tolerance=1200
+\emergencystretch=2.5em
+\relpenalty=20
+\binoppenalty=40
+\hfuzz=1pt
+\begin{document}
+
+\section*{已知数据驱动的多子中心并集风险校准门}
+\textbf{方法名称：} Union-Risk Calibrated Subcenter Gate (URCSG)
+\section*{研究动机}
+增加多个局部区域有时能覆盖已知意图，但也可能让更多未知样本被错误接受。URCSG 不用测试集性能选择中心数，而是轮流隐藏一个已知意图，测量只扩展某个目标意图后新增接受的样本数量；只有在已知覆盖基本不下降且风险上界低于固定限制时，才保留额外中心，否则回退到 K=1。
+\section*{方法}
+\subsection*{M1}
+\emph{协议与检测器拟合}
+\begin{enumerate}[leftmargin=*,start=1]
+  \item 写入包含 \(protocol_{version}\)、数据哈希、检测器设置、候选中心数、风险常数和随机种子的唯一 manifest。拟合前核对每个 sample ID 是否属于声明的训练或校准 split；中心数小于1或轮换 episode 无效时立即停止。
+\par\emph{为什么：} 保证选择过程可复现且不接触测试 OOS。
+  \item 复用现有 embedding cache。所有非目标意图保持一个中心，只为目标意图拟合额外中心；保存中心、半径、样本数，并检查得分是否有限。
+\noindent\emph{沿用现有距离与半径归一化得分。}
+\par\noindent{\small\ttfamily [eq~1, raw LaTeX, not typeset] q\_\{y,k\}(x)=d(z(x),c\_\{y,k\})/r\_\{y,k\}}
+\par\emph{为什么：} 隔离增加该意图区域的影响。
+\end{enumerate}
+\subsection*{M2}
+\emph{轮换已知意图风险测量}
+\begin{enumerate}[leftmargin=*,start=3]
+  \item 每次从校准集中留出一个意图。只有因为 split 构造规定它被留出，才把这些行当作伪未知；检测器使用其余意图。记录并排除为空或剩余意图不足的 episode。
+\noindent\emph{目标意图扩展后新增接受的伪 OOS 事件。}
+\par\noindent{\small\ttfamily [eq~2, raw LaTeX, not typeset] I\_\{y,K,h\}(x)=\textbackslash\{\}mathbf\{1\}[A\_\{y,K\}(x)=1\textbackslash\{\}land A\_\{y,1\}(x)=0]}
+\par\emph{为什么：} 用构造身份获得未知代理，不使用真实测试 OOS。
+  \item 对每个留出样本同时运行单中心和目标扩展检测器。只统计“扩展后新接受、基线未接受”的样本，跨有效 episode 求比例和置信上界，并单独统计目标意图自身的校准覆盖率。
+\noindent\emph{在轮换留出意图上估计边界并集的增量风险。}
+\par\noindent{\small\ttfamily [eq~3, raw LaTeX, not typeset] \textbackslash\{\}Delta U\_\{y,K\}=P\_h(I\_\{y,K,h\}(x)=1\textbackslash\{\}mid x\textbackslash\{\}in h)}
+\par\emph{为什么：} 直接度量多个接受区域的并集过覆盖。
+\end{enumerate}
+\subsection*{M3}
+\emph{可行性选择与基线比较}
+\begin{enumerate}[leftmargin=*,start=5]
+  \item 执行两个固定检查：目标意图覆盖率不能明显低于单中心，新增接受风险上界不能超过固定限制。保留通过检查的最大中心数；否则记录 K=1 回退及其原因。
+\noindent\emph{预注册的已知覆盖和风险上界约束。}
+\par\noindent{\small\ttfamily [eq~4, raw LaTeX, not typeset] G\_\{y,K\}\textbackslash\{\}ge G\_\{y,1\}-\textbackslash\{\}epsilon\_\{cov\}\textbackslash\{\};\textbackslash\{\}land\textbackslash\{\};UCB\_\{y,K\}\textbackslash\{\}le\textbackslash\{\}rho\_\{risk\}}
+\par\emph{为什么：} 不安全意图可以回退到单中心。
+  \item 使用相同数据和校准规则运行一个全局几何拒识基线。单独报告其阈值和指标，用于判断目标特定风险对象是否有额外价值；不能让它选择任何意图的中心数。
+\par\emph{为什么：} 排除只是普通校准带来的收益。
+\end{enumerate}
+\subsection*{M4}
+\emph{冻结评估与机制消融}
+\begin{enumerate}[leftmargin=*,start=7]
+  \item 锁定选择结果后，只在声明的测试池上评估一次，并保存全部指标和每个意图的中心数。任何测试结果都不能改动 manifest 或选择器。
+\par\emph{为什么：} 测试集只用于最终测量。
+  \item 保持行数、嵌入、检测器和评估器完全不变，只随机打乱 episode 对应的留出意图身份。重新选择并检查：如果身份特定的风险信号确实起作用，OOS 与覆盖优势应消失。
+\par\emph{为什么：} 破坏风险信号后机制效果应消失。
+  \item 将所有方法放入同一张同 split 表，既报告 OOS 指标也报告 Known 指标。把 oracle-test-K 标为仅分析用途，并按数据集、split、seed 和表示严格配对。
+\par\emph{为什么：} 验证提升来自机制而非偶然最优数字。
+\end{enumerate}
+\end{document}

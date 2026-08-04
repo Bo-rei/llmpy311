@@ -10,7 +10,7 @@
 | --- | --- | --- |
 | 1 | [`README.md`](../../../README.md) | 项目是什么、代码/数据/结果分别在哪里 |
 | 2 | [`项目阅读指南.md`](项目阅读指南.md) | 一条样本如何经过 Gate、Router、Expert，以及如何打开一个结果单元 |
-| 3 | [`PROJECT.md`](../../PROJECT.md) | 当前 `main` 工作树的路径、协议、证据优先级和边界 |
+| 3 | [`PROJECT.md`](../protocol_and_data/PROJECT.md) | 当前 `main` 工作树的路径、协议、证据优先级和边界 |
 | 4 | [`07-当前状态与里程碑.md`](07-当前状态与里程碑.md) | 已完成什么、结论能外推到哪里、仍缺什么 |
 | 5 | [`EXPERIMENTS.md`](../../EXPERIMENTS.md) | Gate-only 与完整 Cascade 的结果目录、指标和读取顺序 |
 | 6 | [`10-工具入口索引.md`](10-工具入口索引.md) | 要运行命令时从哪个入口开始 |

@@ -1,0 +1,567 @@
+[
+ {
+  "title": "Improving Open Intent Detection via Triplet-Contrastive Learning and Adaptive Boundary",
+  "title_norm": "improving open intent detection via triplet contrastive learning and adaptive bo",
+  "abstract": "Open intent detection is a critical task within dialogue systems, aiming to effectively classify known intents while also identifying unknown intents that have not been encountered in the training data. Learning discriminative representations and precise decision boundary are two key challenges in open intent detection. To address these challenges, this paper proposes a Triplet-Contrastive representation learning strategy and an Adaptive Boundary (TCAB) method. Traditional methods often confine the features of known intents to compact regions, assuming that open intents exist outside these regions. Nevertheless, open intents can be dispersed within the known intents. To tackle this issue, this paper introduces a triplet-contrastive representation learning method to acquire discriminative semantic features and distinguish between similar open intents and known intents. Additionally, to achieve more precise decision boundaries, an adaptive boundary method takes into account both in-class and out-of-class instances for calibrating boundary radius. Comprehensive experiments demonstrate that our approach yields substantial improvements over a range of baseline methods on three benchmark datasets. Our code is available at https://github.com/cgh-code777/TCAB.",
+  "tldr": "",
+  "year": 2024,
+  "venue": "IEEE transactions on consumer electronics",
+  "publication_types": [
+   "JournalArticle"
+  ],
+  "authors": [
+   "Guanhua Chen",
+   "Qiqi Xu",
+   "Choujun Zhan",
+   "Fu Lee Wang",
+   "Kai Liu",
+   "Hai Liu"
+  ],
+  "citations": 14,
+  "source": "semanticscholar",
+  "source_id": "b956578c4ff2773f5cf3b7620eaa7e7350c1664f",
+  "paper_id": "semanticscholar:b956578c4ff2773f5cf3b7620eaa7e7350c1664f",
+  "doi": "10.1109/TCE.2024.3363896",
+  "arxiv_id": "",
+  "dblp_key": "journals/tce/ChenXZWLLH24",
+  "paper_url": "https://www.semanticscholar.org/paper/b956578c4ff2773f5cf3b7620eaa7e7350c1664f",
+  "published_iso": "2024-02-01",
+  "year_month": "2024-02"
+ },
+ {
+  "title": "An open intent detection model optimized for datasets based on the Bert large model",
+  "title_norm": "an open intent detection model optimized for datasets based on the bert large mo",
+  "abstract": "Within current task-oriented dialogue systems, the focus of intent detection predominantly centers on closed domains. Nevertheless, in real-world usage scenarios, a substantial proportion of interactions fall into the open-domain category. User intentions frequently transcend predefined boundaries, giving rise to a multitude of out-of-domain intents, which pose a formidable challenge to existing models, ultimately leading to diminished recognition rates and accuracy. The demand for open intent detection models is increasing in today's society to address this issue effectively. This paper proposes a method to optimize datasets, thereby enhancing the training accuracy of open intent detection models. Specifically, this paper employs the Adaptive Decision Boundary Learning algorithm, which is currently popular in open intent detection. Leveraging this algorithm, this paper suggests using the K-means clustering algorithm to refine the intent labels within the dataset. This process helps identify and remove outliers in the dataset, making the distinction between known domain and open-domain intent labels more precise. Experimental results on two datasets, banking77 and stackoverflow, demonstrate the effectiveness of our approach in significantly improving model accuracy.",
+  "tldr": "A method to optimize datasets, thereby enhancing the training accuracy of open intent detection models and using the Adaptive Decision Boundary Learning algorithm to refine the intent labels within the dataset is proposed.",
+  "year": 2024,
+  "venue": "Applied and Computational Engineering",
+  "publication_types": [
+   "JournalArticle"
+  ],
+  "authors": [
+   "Yichen Dong",
+   "Zhen Wang",
+   "Tianjun Wu"
+  ],
+  "citations": 2,
+  "source": "semanticscholar",
+  "source_id": "ca93c35255c1f2d718ec69e201567b9126ccc03c",
+  "paper_id": "semanticscholar:ca93c35255c1f2d718ec69e201567b9126ccc03c",
+  "doi": "10.54254/2755-2721/47/20241381",
+  "arxiv_id": "",
+  "dblp_key": "",
+  "paper_url": "https://ace.ewapublishing.org/media/312fc17246834a80ba77cfcb0da0005c.marked.pdf",
+  "published_iso": "2024-03-15",
+  "year_month": "2024-03"
+ },
+ {
+  "title": "Multi-path feature fusion and constrained boundary optimization for open intent detection",
+  "title_norm": "multi path feature fusion and constrained boundary optimization for open intent ",
+  "abstract": "",
+  "tldr": "A framework of multi-path feature fusion and constrained boundary optimization for open intent detection (FFBO-OID) is proposed, which shows substantial performance improvements and stability across varying proportions of known categories on three benchmark datasets, outperforming other state-of-the-art methods.",
+  "year": 2025,
+  "venue": "Journal of Supercomputing",
+  "publication_types": [
+   "JournalArticle"
+  ],
+  "authors": [
+   "Jinjie Huang",
+   "Wenhe Li"
+  ],
+  "citations": 0,
+  "source": "semanticscholar",
+  "source_id": "052956e206a854ecc09d0518302996e3b28dc1b8",
+  "paper_id": "semanticscholar:052956e206a854ecc09d0518302996e3b28dc1b8",
+  "doi": "10.1007/s11227-025-07499-x",
+  "arxiv_id": "",
+  "dblp_key": "journals/tjs/HuangL25",
+  "paper_url": "https://www.semanticscholar.org/paper/052956e206a854ecc09d0518302996e3b28dc1b8",
+  "published_iso": "2025-06-01",
+  "year_month": "2025-06"
+ },
+ {
+  "title": "Multi-Granularity Open Intent Classification via Adaptive Granular-Ball Decision Boundary",
+  "title_norm": "multi granularity open intent classification via adaptive granular ball decision",
+  "abstract": "Open intent classification is critical for the development of dialogue systems, aiming to accurately classify known intents into their corresponding classes while identifying unknown intents. Prior boundary-based methods assumed known intents fit within compact spherical regions, focusing on coarse-grained representation and precise spherical decision boundaries. However, these assumptions are often violated in practical scenarios, making it difficult to distinguish known intent classes from unknowns using a single spherical boundary. To tackle these issues, we propose a Multi-granularity Open intent classification method via adaptive Granular-Ball decision boundary (MOGB). Our MOGB method consists of two modules: representation learning and decision boundary acquiring. To effectively represent the intent distribution, we design a hierarchical representation learning method. This involves iteratively alternating between adaptive granular-ball clustering and nearest sub-centroid classification to capture fine-grained semantic structures within known intent classes. Furthermore, multi-granularity decision boundaries are constructed for open intent classification by employing granular-balls with varying centroids and radii. Extensive experiments conducted on three public datasets demonstrate the effectiveness of our proposed method.",
+  "tldr": "This work proposes a Multi-granularity Open intent classification method via adaptive Granular-Ball decision boundary (MOGB), which involves iteratively alternating between adaptive granular-ball clustering and nearest sub-centroid classification to capture fine-grained semantic structures within known intent classes.",
+  "year": 2024,
+  "venue": "AAAI Conference on Artificial Intelligence",
+  "publication_types": [
+   "JournalArticle",
+   "Conference"
+  ],
+  "authors": [
+   "Yanhua Li",
+   "Xiaocao Ouyang",
+   "Chaofan Pan",
+   "Jie Zhang",
+   "Sen Zhao",
+   "Shuyin Xia"
+  ],
+  "citations": 10,
+  "source": "semanticscholar",
+  "source_id": "e7ee9c0da2619f7d352acf487061ba4c4736fdaa",
+  "paper_id": "semanticscholar:e7ee9c0da2619f7d352acf487061ba4c4736fdaa",
+  "doi": "10.48550/arXiv.2412.13542",
+  "arxiv_id": "2412.13542",
+  "dblp_key": "conf/aaai/LiOPZZXYWL25",
+  "paper_url": "https://www.semanticscholar.org/paper/e7ee9c0da2619f7d352acf487061ba4c4736fdaa",
+  "published_iso": "2024-12-18",
+  "year_month": "2024-12"
+ },
+ {
+  "title": "Depth-Enhanced Tumor Detection Framework for Breast Histopathology Images by Integrating Adaptive Multi-Scale Fusion, Semantic Depth Calibration, and Boundary-Guided Detection",
+  "title_norm": "depth enhanced tumor detection framework for breast histopathology images by int",
+  "abstract": "Multiple modalities offer the advantage of providing complementary visual information that enhances overall understanding. This capability is particularly valuable in the domain of autonomous tumor detection. However, the challenge of occlusions in autonomous tumor perception—especially in cases of tumor-to-tumor occlusion—hinders the effective utilization of occlusion-related features. As a result, these limitations lead to a decline in the accuracy of object detection. We propose a novel framework for tumor detection in histopathological images by integrating multi-scale RGB features and depth-enhanced semantic information. The method comprises three primary modules: the Adaptive Multi-Scale Fusion Module (AMSF), Semantic Depth Integration and Calibration Module (SDICM), and Depth-Guided Tumor Detection Module (DG-TDM). AMSF combines RGB histopathology image channels, binary masks, and multi-scale convolution outputs using attention mechanisms to generate a fused feature map that captures occlusion information and boundary relevance. SDICM constructs dense depth maps by fusing RGB, semantic, and sparse depth data through bidirectional feature aggregation, enhancing spatial continuity and edge clarity. DG-TDM refines tumor boundary detection by combining depth and RGB features using spatial and channel-wise attention mechanisms, which highlight boundary differences and reduce redundancy from background noise. The proposed loss function optimizes RGB-depth feature alignment, balancing contributions from each modality for robust tumor detection. This approach addresses challenges such as overlapping boundaries, occlusions, and poor contrast in histopathology images, enabling precise localization of tumor regions. Experimental results demonstrate that the proposed framework significantly improves detection accuracy by 98% and boundary delineation compared to existing methods. This robust and efficient methodology provides a promising solution for advancing tumor detection in medical imaging.",
+  "tldr": "This work proposes a novel framework for tumor detection in histopathological images by integrating multi-scale RGB features and depth-enhanced semantic information, and demonstrates that the proposed framework significantly improves detection accuracy by 98% and boundary delineation compared to existing methods.",
+  "year": 2025,
+  "venue": "IEEE Access",
+  "publication_types": [
+   "JournalArticle"
+  ],
+  "authors": [
+   "A. R. Singh",
+   "Suganya Athisayamani",
+   "H. S",
+   "F. Karim",
+   "J. Varela-Aldás",
+   "S. Mostafa"
+  ],
+  "citations": 12,
+  "source": "semanticscholar",
+  "source_id": "91d4ea51ade0b56a5bbfcd15674c57e2fc346b4a",
+  "paper_id": "semanticscholar:91d4ea51ade0b56a5bbfcd15674c57e2fc346b4a",
+  "doi": "10.1109/ACCESS.2025.3554342",
+  "arxiv_id": "",
+  "dblp_key": "journals/access/SinghAHKAM25",
+  "paper_url": "https://doi.org/10.1109/access.2025.3554342",
+  "published_iso": null,
+  "year_month": "2025"
+ },
+ {
+  "title": "Ellipsoid-Based Decision Boundaries for Open Intent Classification",
+  "title_norm": "ellipsoid based decision boundaries for open intent classification",
+  "abstract": "Textual open intent classification is crucial for real-world dialogue systems, enabling robust detection of unknown user intents without prior knowledge and contributing to the robustness of the system. While adaptive decision boundary methods have shown great potential by eliminating manual threshold tuning, existing approaches assume isotropic distributions of known classes, restricting boundaries to balls and overlooking distributional variance along different directions. To address this limitation, we propose EliDecide, a novel method that learns ellipsoid decision boundaries with varying scales along different feature directions. First, we employ supervised contrastive learning to obtain a discriminative feature space for known samples. Second, we apply learnable matrices to parameterize ellipsoids as the boundaries of each known class, offering greater flexibility than spherical boundaries defined solely by centers and radii. Third, we optimize the boundaries via a novelly designed dual loss function that balances empirical and open-space risks: expanding boundaries to cover known samples while contracting them against synthesized pseudo-open samples. Our method achieves state-of-the-art performance on multiple text intent benchmarks and further on a question classification dataset. The flexibility of the ellipsoids demonstrates superior open intent detection capability and strong potential for generalization to more text classification tasks in diverse complex open-world scenarios.",
+  "tldr": "EliDecide is a novel method that learns ellipsoid decision boundaries with varying scales along different feature directions that demonstrates superior open intent detection capability and strong potential for generalization to more text classification tasks in diverse complex open-world scenarios.",
+  "year": 2025,
+  "venue": "AAAI Conference on Artificial Intelligence",
+  "publication_types": [
+   "JournalArticle",
+   "Conference"
+  ],
+  "authors": [
+   "Y. Zou",
+   "Hanlei Zhang",
+   "Hua Xu",
+   "Songze Li",
+   "Longxiang Xiao"
+  ],
+  "citations": 0,
+  "source": "semanticscholar",
+  "source_id": "f5c8ead7e6e48f3bd8bdbc58e38da972a5755e5a",
+  "paper_id": "semanticscholar:f5c8ead7e6e48f3bd8bdbc58e38da972a5755e5a",
+  "doi": "10.48550/arXiv.2511.16685",
+  "arxiv_id": "2511.16685",
+  "dblp_key": "journals/corr/abs-2511-16685",
+  "paper_url": "https://www.semanticscholar.org/paper/f5c8ead7e6e48f3bd8bdbc58e38da972a5755e5a",
+  "published_iso": "2025-11-13",
+  "year_month": "2025-11"
+ },
+ {
+  "title": "DROID: Dual Representation for Out-of-Scope Intent Detection",
+  "title_norm": "droid dual representation for out of scope intent detection",
+  "abstract": "Detecting out-of-scope (OOS) user utterances remains a key challenge in task-oriented dialogue systems and, more broadly, in open-set intent recognition. Existing approaches often depend on strong distributional assumptions or auxiliary calibration modules. We present DROID (Dual Representation for Out-of-Scope Intent Detection), a compact end-to-end framework that combines two complementary encoders -- the Universal Sentence Encoder (USE) for broad semantic generalization and a domain-adapted Transformer-based Denoising Autoencoder (TSDAE) for domain-specific contextual distinctions. Their fused representations are processed by a lightweight branched classifier with a single calibrated threshold that separates in-domain and OOS intents without post-hoc scoring. To enhance boundary learning under limited supervision, DROID incorporates both synthetic and open-domain outlier augmentation. Despite using only 1.5M trainable parameters, DROID consistently outperforms recent state-of-the-art baselines across multiple intent benchmarks, achieving macro-F1 improvements of 6--15% for known and 8--20% for OOS intents, with the most significant gains in low-resource settings. These results demonstrate that dual-encoder representations with simple calibration can yield robust, scalable, and reliable OOS detection for neural dialogue systems.",
+  "tldr": "DROID (Dual Representation for Out-of-Scope Intent Detection), a compact end-to-end framework that combines two complementary encoders that yield robust, scalable, and reliable OOS detection for neural dialogue systems, is presented.",
+  "year": 2025,
+  "venue": "arXiv.org",
+  "publication_types": [
+   "JournalArticle"
+  ],
+  "authors": [
+   "Wael Rashwan",
+   "Hossam M. Zawbaa",
+   "Sourav Dutta",
+   "H. Assem"
+  ],
+  "citations": 0,
+  "source": "semanticscholar",
+  "source_id": "1c57d3f70142590b56fbcd8d2612cd6d4ef78559",
+  "paper_id": "semanticscholar:1c57d3f70142590b56fbcd8d2612cd6d4ef78559",
+  "doi": "10.48550/arXiv.2510.14110",
+  "arxiv_id": "2510.14110",
+  "dblp_key": "journals/corr/abs-2510-14110",
+  "paper_url": "https://www.semanticscholar.org/paper/1c57d3f70142590b56fbcd8d2612cd6d4ef78559",
+  "published_iso": "2025-10-15",
+  "year_month": "2025-10"
+ },
+ {
+  "title": "An Interdisciplinary Review of Commonsense Reasoning and Intent Detection",
+  "title_norm": "an interdisciplinary review of commonsense reasoning and intent detection",
+  "abstract": "This review explores recent advances in commonsense reasoning and intent detection, two key challenges in natural language understanding. We analyze 28 papers from ACL, EMNLP, and CHI (2020-2025), organizing them by methodology and application. Commonsense reasoning is reviewed across zero-shot learning, cultural adaptation, structured evaluation, and interactive contexts. Intent detection is examined through open-set models, generative formulations, clustering, and human-centered systems. By bridging insights from NLP and HCI, we highlight emerging trends toward more adaptive, multilingual, and context-aware models, and identify key gaps in grounding, generalization, and benchmark design.",
+  "tldr": "This review explores recent advances in commonsense reasoning and intent detection, two key challenges in natural language understanding, and highlights emerging trends toward more adaptive, multilingual, and context-aware models.",
+  "year": 2025,
+  "venue": "arXiv.org",
+  "publication_types": [
+   "JournalArticle",
+   "Review"
+  ],
+  "authors": [
+   "Md. Nazmus Sakib"
+  ],
+  "citations": 1,
+  "source": "semanticscholar",
+  "source_id": "062e87ce09ab323bbd7a0c66033ec8b5e73c7663",
+  "paper_id": "semanticscholar:062e87ce09ab323bbd7a0c66033ec8b5e73c7663",
+  "doi": "10.48550/arXiv.2506.14040",
+  "arxiv_id": "2506.14040",
+  "dblp_key": "journals/corr/abs-2506-14040",
+  "paper_url": "https://www.semanticscholar.org/paper/062e87ce09ab323bbd7a0c66033ec8b5e73c7663",
+  "published_iso": "2025-06-16",
+  "year_month": "2025-06"
+ },
+ {
+  "title": "Towards Open-World DoH Tunnel Detection: A Dual-View Contrastive Learning Framework with Adaptive Feature Boundaries",
+  "title_norm": "towards open world doh tunnel detection a dual view contrastive learning framewo",
+  "abstract": "The emergence of DNS-over-HTTPS (DoH) tunnels poses significant challenges to network security, particularly when encountering unknown traffic patterns not seen during training. Existing approaches struggle to effectively identify novel DoH tunnel variants while maintaining accurate classi-fication of known traffic patterns. In this paper, we propose DualConBound, a novel framework that combines dual-view contrastive learning with dynamic feature boundary estimation to address open-set network traffic classification. Our approach leverages complementary traffic representations and adaptive decision boundaries to better distinguish between known and unknown traffic patterns. Through extensive experiments on real-world network traffic datasets, we demonstrate that our framework achieves 91 % accuracy on known traffic patterns and 71 % accuracy on unknown variants, outperforming other methods by 6% in open-set scenarios. Our work provides a robust solution for identifying emerging DoH tunnel threats in real-world network environments and establishes a new paradigm for open-set network traffic classification.",
+  "tldr": "",
+  "year": 2025,
+  "venue": "International Conference on Computer Supported Cooperative Work in Design",
+  "publication_types": [
+   "JournalArticle",
+   "Conference"
+  ],
+  "authors": [
+   "Beibei Feng",
+   "Qi Wang",
+   "Zhefeng Nan",
+   "Jiang Xie",
+   "Tianning Zang",
+   "Xiaolin Xu"
+  ],
+  "citations": 1,
+  "source": "semanticscholar",
+  "source_id": "64a5bc636076feb7579bb279b7ed35c8f52e55e6",
+  "paper_id": "semanticscholar:64a5bc636076feb7579bb279b7ed35c8f52e55e6",
+  "doi": "10.1109/CSCWD64889.2025.11033452",
+  "arxiv_id": "",
+  "dblp_key": "conf/cscwd/FengWN0ZXM25",
+  "paper_url": "https://www.semanticscholar.org/paper/64a5bc636076feb7579bb279b7ed35c8f52e55e6",
+  "published_iso": "2025-05-05",
+  "year_month": "2025-05"
+ },
+ {
+  "title": "GUARD: Generation-time LLM Unlearning via Adaptive Restriction and Detection",
+  "title_norm": "guard generation time llm unlearning via adaptive restriction and detection",
+  "abstract": "Large Language Models (LLMs) have demonstrated strong capabilities in memorizing vast amounts of knowledge across diverse domains. However, the ability to selectively forget specific knowledge is critical for ensuring the safety and compliance of deployed models. Existing unlearning efforts typically fine-tune the model with resources such as forget data, retain data, and a calibration model. These additional gradient steps blur the decision boundary between forget and retain knowledge, making unlearning often at the expense of overall performance. To avoid the negative impact of fine-tuning, it would be better to unlearn solely at inference time by safely guarding the model against generating responses related to the forget target, without destroying the fluency of text generation. In this work, we propose Generation-time Unlearning via Adaptive Restriction and Detection (GUARD), a framework that enables dynamic unlearning during LLM generation. Specifically, we first employ a prompt classifier to detect unlearning targets and extract the corresponding forbidden token. We then dynamically penalize and filter candidate tokens during generation using a combination of token matching and semantic matching, effectively preventing the model from leaking the forgotten content. Experimental results on copyright content unlearning tasks over the Harry Potter dataset and the MUSE benchmark, as well as entity unlearning tasks on the TOFU dataset, demonstrate that GUARD achieves strong forget quality across various tasks while causing almost no degradation to the LLM's general capabilities, striking an excellent trade-off between forgetting and utility.",
+  "tldr": "This work proposes Generation-time Unlearning via Adaptive Restriction and Detection (GUARD), a framework that enables dynamic unlearning during LLM generation using a combination of token matching and semantic matching, striking an excellent trade-off between forgetting and utility.",
+  "year": 2025,
+  "venue": "arXiv.org",
+  "publication_types": [
+   "JournalArticle"
+  ],
+  "authors": [
+   "Zhijie Deng",
+   "Chris Liu",
+   "Zirui Pang",
+   "Xinlei He",
+   "Lei Feng",
+   "Qi Xuan"
+  ],
+  "citations": 15,
+  "source": "semanticscholar",
+  "source_id": "98c599ac7c9d33a01f896275481e0fd6dbb2201d",
+  "paper_id": "semanticscholar:98c599ac7c9d33a01f896275481e0fd6dbb2201d",
+  "doi": "10.48550/arXiv.2505.13312",
+  "arxiv_id": "2505.13312",
+  "dblp_key": "journals/corr/abs-2505-13312",
+  "paper_url": "https://www.semanticscholar.org/paper/98c599ac7c9d33a01f896275481e0fd6dbb2201d",
+  "published_iso": "2025-05-19",
+  "year_month": "2025-05"
+ },
+ {
+  "title": "Adaptive Open-Set Active Learning with Distance-Based Out-of-Distribution Detection for Robust Task-Oriented Dialog System",
+  "title_norm": "adaptive open set active learning with distance based out of distribution detect",
+  "abstract": "The advancements in time-efficient data collection techniques such as active learning (AL) has become salient for user intent classification performance in task-oriented dialog systems (TODS). In realistic settings, however, traditional AL techniques often fail to efficiently select targeted in-distribution (IND) data when encountering newly acquired out-of-distribution (OOD) user intents in the unlabeled pool. In this paper, we introduce a novel AL framework viz., AOSAL for TODS that combines a distance-based OOD detector using adaptive false positive rate threshold with an informativeness measure (e.g., entropy) to strategically select informative IND data points in the unlabeled pool. Specifically, we utilize the adaptive OOD detector to classify and filter out OOD samples from the unlabeled pool, then prioritize the acquisition of classified IND instances based on their informativeness scores. To validate our approach, we conduct experiments that display our framework’s flexibility and performance over multiple distance-based approaches and informativeness measures against deep AL baselines on benchmark text datasets. The results suggest that our AOSAL approach consistently outperforms the baselines on IND classification and OOD detection, advancing knowledge on improving robustness of task-oriented dialog systems.",
+  "tldr": "A novel AL framework viz., AOSAL for TODS is introduced that combines a distance-based OOD detector using adaptive false positive rate threshold with an informativeness measure to strategically select informative IND data points in the unlabeled pool.",
+  "year": 2024,
+  "venue": "SIGDIAL Conferences",
+  "publication_types": [
+   "JournalArticle"
+  ],
+  "authors": [
+   "Sai Keerthana Goruganthu",
+   "Roland Oruche",
+   "Prasad Calyam"
+  ],
+  "citations": 1,
+  "source": "semanticscholar",
+  "source_id": "69bd1097f7087e5be3fd270b0b1cf37ea534154c",
+  "paper_id": "semanticscholar:69bd1097f7087e5be3fd270b0b1cf37ea534154c",
+  "doi": "10.18653/v1/2024.sigdial-1.32",
+  "arxiv_id": "",
+  "dblp_key": "conf/sigdial/GoruganthuOC24",
+  "paper_url": "https://aclanthology.org/2024.sigdial-1.32.pdf",
+  "published_iso": null,
+  "year_month": "2024"
+ },
+ {
+  "title": "In-Situ Adaptive Interfaces for Online Browsing: Design Dimensions for Intent-Responsive Automation and User Control",
+  "title_norm": "in situ adaptive interfaces for online browsing design dimensions for intent res",
+  "abstract": "Online browsing often requires balancing open-ended exploration with focused comparison, yet most interfaces remain static regardless of user focus. Adaptive interfaces offer a way to better align interface presentation with browsing needs, but how such adaptations should be triggered, designed, and controlled in practice remains unclear. We investigate adaptive browsing interfaces that modify information hierarchy, information granularity, and session-based ordering in response to inferred browsing intent. Drawing from a conceptual framework of five adaptation dimensions, we implement ReLay, a browser-based probe that applies lightweight, in-situ adaptations automatically while allowing user overrides. In a two-phase study (n = 10), participants welcomed adaptive changes when they were transparent, consistent, and easily reversible. Users approached control as calibration rather than error correction, verifying system behavior before relying on it. These findings illustrate how intent-responsive, controllable adaptation can support browsing without diminishing user agency. Our work contributes (1) a conceptual framework for adaptive interface behaviors in online browsing, (2) an instantiation of the framework through three selected dimensions, and (3) empirical insights into user acceptance, control, and design implications for adaptive browsing systems.",
+  "tldr": "This work investigates adaptive browsing interfaces that modify information hierarchy, information granularity, and session-based ordering in response to inferred browsing intent, and implements ReLay, a browser-based probe that applies lightweight, in-situ adaptations automatically while allowing user overrides.",
+  "year": 2026,
+  "venue": "International Conference on Intelligent User Interfaces",
+  "publication_types": [
+   "Book",
+   "JournalArticle",
+   "Conference"
+  ],
+  "authors": [
+   "Eunhye Kim",
+   "Sadat Shams Chowdhury",
+   "Hyungwoo Song",
+   "Bongwon Suh"
+  ],
+  "citations": 1,
+  "source": "semanticscholar",
+  "source_id": "040773b91ac10dd01cf3c9f666e3a15240b14ea2",
+  "paper_id": "semanticscholar:040773b91ac10dd01cf3c9f666e3a15240b14ea2",
+  "doi": "10.1145/3742413.3789092",
+  "arxiv_id": "",
+  "dblp_key": "conf/iui/KimCSS26",
+  "paper_url": "https://doi.org/10.1145/3742413.3789092",
+  "published_iso": "2026-03-22",
+  "year_month": "2026-03"
+ },
+ {
+  "title": "SGAC-OWOD: saliency-guided foreground enhancement with adversarial calibration for open world object detection",
+  "title_norm": "sgac owod saliency guided foreground enhancement with adversarial calibration fo",
+  "abstract": "Open World Object Detection (OWOD) aims not only to recognize known classes but also to discover unknown objects and incrementally learn them in subsequent stages. In OWOD, complex background clutter hinders the accurate recognition of unknown objects, while the availability of only known-class labels further biases model predictions toward known categories. To address these issues, we propose a novel OWOD framework termed SGAC-OWOD. It consists of two key components: a Saliency-Guided Foreground Enhancement (SFE) module and an Adversarial Perturbation-based Classification Calibration (APCC) module. In SFE, we introduces a class-agnostic saliency prior to enhance foreground representations through adaptive multi-scale feature fusion and box-level filtering. In APCC, we applies multi-step adversarial perturbations to semantically enhance proposal features and calibrate classification confidence according to their stability under perturbations, effectively mitigating label bias. We conduct comprehensive evaluations on MS-COCO and PASCAL VOC. On Task 1, the unknown recall (U-Recall) reaches 43.7%, improving by about 7.6% over the state-of-the-art method. In addition, we conducted cross-dataset experiments on other benchmarks. Our method achieves the best performance on most key metrics, further demonstrating its cross-dataset generalization ability.",
+  "tldr": "This work proposes a novel OWOD framework that achieves the best performance on most key metrics, further demonstrating its cross-dataset generalization ability.",
+  "year": 2026,
+  "venue": "Journal of King Saud University: Computer and Information Sciences",
+  "publication_types": [
+   "JournalArticle"
+  ],
+  "authors": [
+   "Fei Wang",
+   "Weiji Li",
+   "Tuo Zhou"
+  ],
+  "citations": 0,
+  "source": "semanticscholar",
+  "source_id": "383700a7549b44971e0ae2002e1cf099e1cf44c8",
+  "paper_id": "semanticscholar:383700a7549b44971e0ae2002e1cf099e1cf44c8",
+  "doi": "10.1007/s44443-026-00543-7",
+  "arxiv_id": "",
+  "dblp_key": "journals/jksucis/WangLZ26",
+  "paper_url": "https://doi.org/10.1007/s44443-026-00543-7",
+  "published_iso": "2026-02-20",
+  "year_month": "2026-02"
+ },
+ {
+  "title": "A Multi-cluster Boundary Learning Method for Out-of-Scope Intent Detection via MiniLM Embedding",
+  "title_norm": "a multi cluster boundary learning method for out of scope intent detection via m",
+  "abstract": "Intent detection is a critical task that bridges human intents and system actions in human-machine interaction systems. However, there still exist challenges for detecting out-of-scope (OOS) intents. (i) The traditional methods view the OOS intent detection as a multi-class classification, then the detection accuracy decreases as the class number of the known intents increases; (ii) LLM-embedding methods require large parameters, that makes them difficult to train and practically deploy. Thus, this work proposes a multi-cluster boundary learning method to detect OOS intents via MiniLM embedding (i.e., all-MiniLM-L6-v2) in an one-class classification workflow. The method learns the boundaries of multi-cluster embeddings generated by MiniLM from the training utterances, and then rejects the out-of-domain utterances as OOS intents. Experiments are conducted on public CLINC150, StackOverflow and Banking77 datasets. The results show that the method achieves the state-of-the-art OOS intent detection performance compared the other baselines. Ablation studies are also conducted and the results show that the used MiniLM can better adapt to the workflow and utterance embedding requirements. The code is available at supplementary materials.",
+  "year": 2026,
+  "venue": "arXiv",
+  "authors": [
+   "Yihong Xu",
+   "Mingyu Kang",
+   "Linyuan Lü"
+  ],
+  "citations": null,
+  "source": "arxiv",
+  "source_id": "2607.07974v1",
+  "doi": "",
+  "paper_url": "https://arxiv.org/abs/2607.07974v1",
+  "published_iso": "2026-07-08T22:59:43Z",
+  "paper_id": "arxiv:2607.07974v1",
+  "year_month": "2026-07"
+ },
+ {
+  "title": "SIAgent: Spatial Interaction Agent via LLM-powered Eye-Hand Motion Intent Understanding in VR",
+  "title_norm": "siagent spatial interaction agent via llm powered eye hand motion intent underst",
+  "abstract": "Eye-hand coordinated interaction is becoming a mainstream interaction modality in Virtual Reality (VR) user interfaces.Current paradigms for this multimodal interaction require users to learn predefined gestures and memorize multiple gesture-task associations, which can be summarized as an ``Operation-to-Intent\" paradigm. This paradigm increases users' learning costs and has low interaction error tolerance. In this paper, we propose SIAgent, a novel \"Intent-to-Operation\" framework allowing users to express interaction intents through natural eye-hand motions based on common sense and habits. Our system features two main components: (1) intent recognition that translates spatial interaction data into natural language and infers user intent, and (2) agent-based execution that generates an agent to execute corresponding tasks. This eliminates the need for gesture memorization and accommodates individual motion preferences with high error tolerance. We conduct two user studies across over 60 interaction tasks, comparing our method with two \"Operation-to-Intent\" techniques. Results show our method achieves higher intent recognition accuracy than gaze + pinch interaction (97.2% vs 93.1%) while reducing arm fatigue and improving usability, and user preference. Another study verifies the function of eye gaze and hand motion channels in intent recognition. Our work offers valuable insights into enhancing VR interaction intelligence through intent-driven design. Our source code and LLM prompts will be made available upon publication.",
+  "year": 2026,
+  "venue": "arXiv",
+  "authors": [
+   "Zhimin Wang",
+   "Chenyu Gu",
+   "Feng Lu"
+  ],
+  "citations": null,
+  "source": "arxiv",
+  "source_id": "2603.00522v1",
+  "doi": "",
+  "paper_url": "https://arxiv.org/abs/2603.00522v1",
+  "published_iso": "2026-02-28T07:39:00Z",
+  "paper_id": "arxiv:2603.00522v1",
+  "year_month": "2026-02"
+ },
+ {
+  "title": "Boundary-Robust Transmission Asymmetry as a Topological Signature in Open Floquet Lattices",
+  "title_norm": "boundary robust transmission asymmetry as a topological signature in open floque",
+  "abstract": "We identify a boundary-robust topological signature of open Floquet lattices: although nonadiabatic boundaries strongly reshape the transmission lineshape, the integrated left--right transmission asymmetry saturates to a plateau set by the bulk Floquet winding number. Its origin is a deep-bulk branch-population principle: in the long-sample limit, each propagating Floquet--Bloch branch is generically populated with unit weight, since true Floquet bound states are nongeneric. The robust observable is therefore the cumulative transmission imbalance rather than the boundary-sensitive transmission profile. We propose direct detection by cold-atom transmission spectroscopy. For electronic transport, the same asymmetry admits contact-model-dependent electrical readouts: a coherent Floquet--Landauer--Büttiker interpretation predicts a near-\\(2ef\\) response in weak SAW devices, whereas a blocking-factor post-processing yields a qualitatively different signal.",
+  "year": 2026,
+  "venue": "arXiv",
+  "authors": [
+   "Ren Zhang",
+   "Xiao-Yu Ouyang",
+   "Xu-Dong Dai",
+   "Xi Dai"
+  ],
+  "citations": null,
+  "source": "arxiv",
+  "source_id": "2604.23420v1",
+  "doi": "",
+  "paper_url": "https://arxiv.org/abs/2604.23420v1",
+  "published_iso": "2026-04-25T19:27:19Z",
+  "paper_id": "arxiv:2604.23420v1",
+  "year_month": "2026-04"
+ },
+ {
+  "title": "Open World MRI Reconstruction with Bias-Calibrated Adaptation",
+  "title_norm": "open world mri reconstruction with bias calibrated adaptation",
+  "abstract": "Real-world MRI reconstruction systems face the open-world challenge: test data from unseen imaging centers, anatomical structures, or acquisition protocols can differ drastically from training data, causing severe performance degradation. Existing methods struggle with this challenge. To address this, we propose BiasRecon, a bias-calibrated adaptation framework grounded in the minimal intervention principle: preserve what transfers, calibrate what does not. Concretely, BiasRecon formulates open-world adaptation as an alternating optimization framework that jointly optimizes three components: (1) frequency-guided prior calibration that introduces layer-wise calibration variables to selectively modulate frequency-specific features of the pre-trained score network via self-supervised k-space signals, (2) score-based denoising that leverages the calibrated generative prior for high-fidelity image reconstruction, and (3) adaptive regularization that employs Stein's Unbiased Risk Estimator to dynamically balance the prior-measurement trade-off, matching test-time noise characteristics without requiring ground truth. By intervening minimally and precisely through this alternating scheme, BiasRecon achieves robust adaptation with fewer than 100 tunable parameters. Extensive experiments across four datasets demonstrate state-of-the-art performance on open-world reconstruction tasks.",
+  "year": 2026,
+  "venue": "arXiv",
+  "authors": [
+   "Jiyao Liu",
+   "Shangqi Gao",
+   "Lihao Liu",
+   "Junzhi Ning",
+   "Jinjie Wei",
+   "Junjun He",
+   "Xiahai Zhuang",
+   "Ningsheng Xu"
+  ],
+  "citations": null,
+  "source": "arxiv",
+  "source_id": "2603.13466v1",
+  "doi": "",
+  "paper_url": "https://arxiv.org/abs/2603.13466v1",
+  "published_iso": "2026-03-13T17:49:08Z",
+  "paper_id": "arxiv:2603.13466v1",
+  "year_month": "2026-03"
+ },
+ {
+  "title": "VL-Calibration: Decoupled Confidence Calibration for Large Vision-Language Models Reasoning",
+  "title_norm": "vl calibration decoupled confidence calibration for large vision language models",
+  "abstract": "Large Vision Language Models (LVLMs) achieve strong multimodal reasoning but frequently exhibit hallucinations and incorrect responses with high certainty, which hinders their usage in high-stakes domains. Existing verbalized confidence calibration methods, largely developed for text-only LLMs, typically optimize a single holistic confidence score using binary answer-level correctness. This design is mismatched to LVLMs: an incorrect prediction may arise from perceptual failures or from reasoning errors given correct perception, and a single confidence conflates these sources while visual uncertainty is often dominated by language priors. To address these issues, we propose VL-Calibration, a reinforcement learning framework that explicitly decouples confidence into visual and reasoning confidence. To supervise visual confidence without ground-truth perception labels, we introduce an intrinsic visual certainty estimation that combines (i) visual grounding measured by KL-divergence under image perturbations and (ii) internal certainty measured by token entropy. We further propose token-level advantage reweighting to focus optimization on tokens based on visual certainty, suppressing ungrounded hallucinations while preserving valid perception. Experiments on thirteen benchmarks show that VL-Calibration effectively improves calibration while boosting visual reasoning accuracy, and it generalizes to out-of-distribution benchmarks across model scales and architectures.",
+  "year": 2026,
+  "venue": "arXiv",
+  "authors": [
+   "Wenyi Xiao",
+   "Xinchi Xu",
+   "Leilei Gan"
+  ],
+  "citations": null,
+  "source": "arxiv",
+  "source_id": "2604.09529v1",
+  "doi": "",
+  "paper_url": "https://arxiv.org/abs/2604.09529v1",
+  "published_iso": "2026-04-10T17:47:19Z",
+  "paper_id": "arxiv:2604.09529v1",
+  "year_month": "2026-04"
+ },
+ {
+  "title": "INTACT: Intent-Aware Representation Learning for Cryptographic Traffic Violation Detection",
+  "title_norm": "intact intent aware representation learning for cryptographic traffic violation ",
+  "abstract": "Security monitoring systems typically treat anomaly detection as identifying statistical deviations from observed data distributions. In cryptographic traffic analysis, however, violations are defined not by rarity but by explicit policy constraints, including key reuse prohibition, downgrade prevention, and bounded key lifetimes. This fundamental mismatch limits the interpretability and adaptability of conventional anomaly detection methods. We introduce INTACT (INTent-Aware Cryptographic Traffic), a policy-conditioned framework that reformulates violation detection as conditional constraint learning. Instead of learning a static decision boundary over behavioral features, INTACT models the probability of violation conditioned on both observed behavior and declared security intent. The architecture factorizes representation learning into behavioral and intent encoders whose fused embeddings produce a violation score, yielding a policy-parameterized family of decision boundaries. We evaluate the framework on a real-world network flow dataset and a 210,000-trace synthetic multi-intent cryptographic dataset. INTACT matches or exceeds strong unsupervised and supervised baselines, achieving near-perfect discrimination (AUROC up to 1.0000) in the real dataset and consistent superiority in detecting relational and composite violations in the synthetic setting. These results demonstrate that explicit intent conditioning improves discrimination, interpretability, and robustness in cryptographic monitoring.",
+  "year": 2026,
+  "venue": "arXiv",
+  "authors": [
+   "Rahul D Ray"
+  ],
+  "citations": null,
+  "source": "arxiv",
+  "source_id": "2602.21252v1",
+  "doi": "",
+  "paper_url": "https://arxiv.org/abs/2602.21252v1",
+  "published_iso": "2026-02-22T07:38:46Z",
+  "paper_id": "arxiv:2602.21252v1",
+  "year_month": "2026-02"
+ },
+ {
+  "title": "InverseNet: Benchmarking Operator Mismatch and Calibration Across Compressive Imaging Modalities",
+  "title_norm": "inversenet benchmarking operator mismatch and calibration across compressive ima",
+  "abstract": "State-of-the-art EfficientSCI loses 20.58 dB when its assumed forward operator deviates from physical reality in just eight parameters, yet no existing benchmark quantifies operator mismatch, the default condition in deployed compressive imaging systems. We introduce InverseNet, the first cross-modality benchmark for operator mismatch, spanning CASSI, CACTI, and single-pixel cameras. Evaluating 12 methods under a four-scenario protocol (ideal, mismatched, oracle-corrected, blind calibration) across 27 simulated scenes and 9 real hardware captures, we find: (1) deep learning methods lose 10-21 dB under mismatch, eliminating their advantage over classical baselines; (2) performance and robustness are inversely correlated across modalities (Spearman r_s = -0.71, p < 0.01); (3) mask-oblivious architectures recover 0% of mismatch losses regardless of calibration quality, while operator-conditioned methods recover 41-90%; (4) blind grid-search calibration recovers 85-100% of the oracle bound without ground truth. Real hardware experiments confirm that simulation trends transfer to physical data. Code will be released upon acceptance.",
+  "year": 2026,
+  "venue": "arXiv",
+  "authors": [
+   "Chengshuai Yang",
+   "Xin Yuan"
+  ],
+  "citations": null,
+  "source": "arxiv",
+  "source_id": "2603.04538v1",
+  "doi": "",
+  "paper_url": "https://arxiv.org/abs/2603.04538v1",
+  "published_iso": "2026-03-04T19:25:32Z",
+  "paper_id": "arxiv:2603.04538v1",
+  "year_month": "2026-03"
+ },
+ {
+  "title": "Closing the Calibration Gap in Semantic Caching",
+  "title_norm": "closing the calibration gap in semantic caching",
+  "abstract": "Semantic caching cuts LLM inference costs by serving a cached response to semantically similar queries. Standard practice evaluates these systems using PR-AUC, a metric that only measures how well scores rank and ignores whether they are usable at a fixed threshold. We show this mismatch leads to systematically poor deployment choices, as models with the highest PR-AUC are often the worst in operation. We introduce Precision-Cache Hit Ratio (P-CHR) AUC, a cache-aware metric that measures precision across cache utilization levels, and Calibration Retention Rate (CRR), which captures how much offline ranking quality survives at deployment. We decompose the operational gap between offline and deployed quality into a recoverable calibration component and an irreducible structural component fixed by the dataset's positive rate. Our experiments show that the calibration gap is governed by the training objective rather than data scale, and post-hoc calibration only partially closes it. Ultimately, model selection for semantic caching is a calibration problem, not a ranking one, and measuring it is the first step to closing the gap.",
+  "year": 2026,
+  "venue": "arXiv",
+  "authors": [
+   "Aditeya Baral",
+   "Radoslav Ralev",
+   "Iliya Sotirov Zhechev",
+   "Srijith Rajamohan",
+   "Jen Agarwal"
+  ],
+  "citations": null,
+  "source": "arxiv",
+  "source_id": "2606.19719v2",
+  "doi": "",
+  "paper_url": "https://arxiv.org/abs/2606.19719v2",
+  "published_iso": "2026-06-18T02:34:33Z",
+  "paper_id": "arxiv:2606.19719v2",
+  "year_month": "2026-06"
+ },
+ {
+  "title": "Structured Intent as a Protocol-Like Communication Layer: Cross-Model Robustness, Framework Comparison, and the Weak-Model Compensation Effect",
+  "title_norm": "structured intent as a protocol like communication layer cross model robustness ",
+  "abstract": "How reliably can structured intent representations preserve user goals across different AI models, languages, and prompting frameworks? Prior work showed that PPS (Prompt Protocol Specification), a 5W3H-based structured intent framework, improves goal alignment in Chinese and generalizes to English and Japanese. This paper extends that line of inquiry in three directions: cross-model robustness across Claude, GPT-4o, and Gemini 2.5 Pro; controlled comparison with CO-STAR and RISEN; and a user study (N=50) of AI-assisted intent expansion in ecologically valid settings. Across 3,240 model outputs (3 languages x 6 conditions x 3 models x 3 domains x 20 tasks), evaluated by an independent judge (DeepSeek-V3), we find that structured prompting substantially reduces cross-language score variance relative to unstructured baselines. The strongest structured conditions reduce cross-language sigma from 0.470 to about 0.020. We also observe a weak-model compensation pattern: the lowest-baseline model (Gemini) shows a much larger D-A gain (+1.006) than the strongest model (Claude, +0.217). Under the current evaluation resolution, 5W3H, CO-STAR, and RISEN achieve similarly high goal-alignment scores, suggesting that dimensional decomposition itself is an important active ingredient. In the user study, AI-expanded 5W3H prompts reduce interaction rounds by 60 percent and increase user satisfaction from 3.16 to 4.04. These findings support the practical value of structured intent representation as a robust, protocol-like communication layer for human-AI interaction.",
+  "year": 2026,
+  "venue": "arXiv",
+  "authors": [
+   "Peng Gang"
+  ],
+  "citations": null,
+  "source": "arxiv",
+  "source_id": "2603.29953v1",
+  "doi": "",
+  "paper_url": "https://arxiv.org/abs/2603.29953v1",
+  "published_iso": "2026-03-31T16:20:28Z",
+  "paper_id": "arxiv:2603.29953v1",
+  "year_month": "2026-03"
+ },
+ {
+  "title": "L2IR: Revealing Latent Intent in Graph Fraud Detection",
+  "title_norm": "l2ir revealing latent intent in graph fraud detection",
+  "abstract": "Graph fraud detection has long depended on Graph Neural Networks (GNNs) to propagate and aggregate information across relational data. A critical obstacle in practice, however, is that fraudsters frequently disguise themselves by forging numerous connections with benign users, causing fraud signals to be progressively diluted during neighborhood aggregation and undermining detection reliability. While recent efforts have used Large Language Models (LLMs) to provide rich semantic cues for fraud detection, the underlying intent behind suspicious connections remains insufficiently explored. Compounding this issue, the scarcity of annotated fraud samples makes it difficult to train detectors that remain robust under heavy camouflage. To address these gaps, we propose L2IR, an LLM-driven Latent Intent Revealing framework for graph fraud detection. By uncovering latent intent from both user behaviors and suspicious connections, L2IR extracts intent-aware representations from raw behavioral traces and reasons about the true purpose behind individual connections, effectively distinguishing supportive links from misleading ones. It further incorporates adaptive self-training to enhance robustness under limited supervision. Evaluations on two real-world datasets characterized by pervasive camouflage demonstrate that L2IR surpasses strong baselines and can function as a plug-in enhancement for a range of GNN-based detectors, improving AUPRC by up to 8.27%.",
+  "year": 2026,
+  "venue": "arXiv",
+  "authors": [
+   "Jinsheng Guo",
+   "Zhenhao Weng",
+   "Yibo Liu",
+   "Yan Qiao",
+   "Meng Li"
+  ],
+  "citations": null,
+  "source": "arxiv",
+  "source_id": "2605.26040v1",
+  "doi": "",
+  "paper_url": "https://arxiv.org/abs/2605.26040v1",
+  "published_iso": "2026-05-25T17:06:13Z",
+  "paper_id": "arxiv:2605.26040v1",
+  "year_month": "2026-05"
+ }
+]

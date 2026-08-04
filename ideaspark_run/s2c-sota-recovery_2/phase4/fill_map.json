@@ -1,0 +1,92 @@
+{
+  "title_zh": "已知数据驱动的多子中心并集风险校准门",
+  "method_name": "Union-Risk Calibrated Subcenter Gate (URCSG)",
+  "abstract_draft": "Open-set intent detectors often gain Known coverage by adding local centers, but the union of those regions can accept unknown intents. The current s2c evidence makes this failure concrete: partition stability does not predict OOS benefit, StackOverflow suffers boundary-union overcoverage, and lawful Known-only lambda selection cannot use test OOS. Recent multi-cluster MiniLM work (arxiv:2607.07974v1) changes the boundary geometry but does not provide a test-independent estimate of the incremental risk contributed by each added region. URCSG reframes that missing quantity as a target-specific newly-accepted probability: in rotated leave-one-known-intent-out episodes, only one intent expands from K=1 to K>1 while all other intents remain at K=1. A Wilson upper bound on this marginal event, combined with an own-intent Known-coverage constraint, selects the largest safe K or deterministically falls back to K=1. The pilot compares URCSG with single-centroid, fixed K, BRAK, and a global geometry-calibrated abstention comparator on the frozen MiniLM protocol. The falsification criterion is downstream: if shuffling the held-out-intent episodes does not erase the OOS/coverage advantage, the claimed union-risk mechanism is not supported.",
+  "motivation.problem_framing": "The current s2c Gate is deliberately lightweight: frozen MiniLM embeddings feed per-intent centers, radii, and a minimum normalized distance score. E2 and E3 show that this design has a structural asymmetry. Adding centers can help Banking77, but the same operation can sharply increase StackOverflow false acceptance even when KMeans is stable; therefore cluster stability, effective rank, or a larger K sweep is not a sufficient decision signal.\n\nThe missing quantity is the marginal open-space risk created by the union of local regions. A fixed K or lambda is selected globally, while the final detector is a per-intent union; current test-oracle rows are descriptive only, and the existing protocol has no legal validation-unknown split for choosing K. URCSG treats the marginal union event itself as the object to estimate, using rotated known intents as construction-defined pseudo-OOS and retaining the existing detector geometry unchanged.",
+  "motivation.why_now": "The need is timely because arxiv:2607.07974v1 makes multi-cluster MiniLM boundaries a direct comparison point, while arxiv:2603.04538v1 shows how hidden calibration and operator mismatch can invalidate benchmark conclusions. The current audit has already frozen the data and provenance contracts, so the next useful step is a small risk-calibration experiment rather than another unregistered architecture or K sweep.",
+  "motivation.why_prior_stopped[0].what_they_did": "arxiv:2607.07974v1 replaced a single MiniLM boundary with fixed multi-cluster local regions for OOS intent detection.",
+  "motivation.why_prior_stopped[0].what_they_did_not_do": "It did not estimate the marginal unknown-space acceptance caused by adding one intent's extra regions under a test-independent protocol.",
+  "motivation.why_prior_stopped[0].structural_reason_they_stopped": "The method changes the boundary geometry but does not define a per-intent risk object that can be calibrated before test OOS is observed.",
+  "motivation.why_prior_stopped[1].what_they_did": "arxiv:2602.21252v1 conditioned a detection boundary on context and policy in a different security domain.",
+  "motivation.why_prior_stopped[1].what_they_did_not_do": "It did not test whether a semantic OOS detector's scalar distance score is sufficient after multiple accepted regions are unioned.",
+  "motivation.why_prior_stopped[1].structural_reason_they_stopped": "The context-conditioned boundary is not a known-only selection rule for the incremental risk of local-region expansion.",
+  "motivation.why_prior_stopped[2].what_they_did": "arxiv:2603.04538v1 isolated operator and calibration confounds in benchmark comparisons.",
+  "motivation.why_prior_stopped[2].what_they_did_not_do": "It did not construct a per-intent acceptance-union risk estimate that changes an open-intent Gate's final configuration.",
+  "motivation.why_prior_stopped[2].structural_reason_they_stopped": "Its diagnostic identifies mismatch but stops before a task-specific feasibility rule and downstream intervention.",
+  "motivation.what_changes_when_gap_closes": "The detector gains a legal bridge between Known-only calibration and per-intent multi-center selection: it can keep K=1 for unsafe intents without pretending that a global K is optimal. The paper's claim becomes testable at the level that fails in practice—newly accepted unknown-space events—while the existing embedding, distance, radius, and evaluation contracts remain comparable.",
+  "core_claim": "A construction-defined estimate of the marginal acceptance added by one intent's extra regions can select safe multi-center Gates without test OOS labels.",
+  "sub_claims": [
+    {"id":"C1","statement":"The target-specific newly-accepted event ΔU_{y,K} is computable from rotated known-intent calibration episodes and is distinct from a global abstention threshold.","supports_which_aspect":"mechanism definition"},
+    {"id":"C2","statement":"A coverage-constrained Wilson upper bound yields a deterministic per-intent K=1 fallback.","supports_which_aspect":"selection legality"},
+    {"id":"C3","statement":"If the mechanism is causal rather than a calibration artifact, shuffling episode assignments removes the downstream OOS/coverage advantage.","supports_which_aspect":"falsification"}
+  ],
+  "key_equations": [
+    {"id":"E1","linked_step_id":"S2","latex":"q_{y,k}(x)=d(z(x),c_{y,k})/r_{y,k}","description":"Existing normalized distance/radius score.","description_zh":"沿用现有距离与半径归一化得分。"},
+    {"id":"E2","linked_step_id":"S3","latex":"I_{y,K,h}(x)=\\mathbf{1}[A_{y,K}(x)=1\\land A_{y,1}(x)=0]", "description":"Target-specific newly accepted pseudo-OOS event.","description_zh":"目标意图扩展后新增接受的伪 OOS 事件。"},
+    {"id":"E3","linked_step_id":"S4","latex":"\\Delta U_{y,K}=P_h(I_{y,K,h}(x)=1\\mid x\\in h)","description":"Marginal union-risk estimate over eligible held-out intents.","description_zh":"在轮换留出意图上估计边界并集的增量风险。"},
+    {"id":"E4","linked_step_id":"S5","latex":"G_{y,K}\\ge G_{y,1}-\\epsilon_{cov}\\;\\land\\;UCB_{y,K}\\le\\rho_{risk}","description":"Pre-registered feasibility constraints.","description_zh":"预注册的已知覆盖和风险上界约束。"}
+  ],
+  "method_flow.high_level_pipeline": "URCSG starts from the unchanged frozen-MiniLM Gate and fits candidate K configurations from train_known. It rotates each known intent out of the Known universe, expands only one target intent at a time, and measures newly accepted held-out-intent samples relative to that target's K=1 baseline. A Wilson upper bound and own-intent coverage constraint select the largest feasible K or retain K=1; only after this rule is frozen does one final test pass run. A global geometry-calibrated abstention comparator is reported separately and cannot alter the selector.",
+  "method_flow.steps": [
+    {"step_id":"S1","title":"Freeze contracts","what_changes":"No model or data change; protocol, hashes, detector contract, and epsilon_cov/rho_risk become immutable.","why_this_step":"Prevents accidental migration or test-driven tuning.","linked_component":"engineering","linked_falsification":"both","input":"protocol manifests and configs","output":"frozen run specification"},
+    {"step_id":"S2","title":"Fit target expansion","what_changes":"Fit K=1 for all intents and K>1 only for target y from train_known.","why_this_step":"Isolates the marginal contribution of one intent's extra regions.","linked_component":"both","linked_falsification":"mechanism_distinguisher","input":"train_known embeddings","output":"centers, radii, q scores"},
+    {"step_id":"S3","title":"Rotate held-out intents","what_changes":"Treat each held-out known intent's calibration samples as construction-defined pseudo-OOS.","why_this_step":"Creates a legal proxy for unknown-space exposure without test labels.","linked_component":"engineering","linked_falsification":"metric_specification","input":"calibration-known intents","output":"eligible episodes"},
+    {"step_id":"S4","title":"Estimate marginal risk","what_changes":"Compute newly accepted indicators and Wilson upper bounds plus own-intent coverage.","why_this_step":"Turns union overcoverage into a measurable selection object.","linked_component":"theory","linked_falsification":"both","input":"episode scores","output":"DeltaU, UCB, G"},
+    {"step_id":"S5","title":"Select per-intent K","what_changes":"Choose the largest feasible K under fixed coverage/risk constraints, otherwise K=1.","why_this_step":"Provides a legal fallback rather than a universal K claim.","linked_component":"both","linked_falsification":"metric_specification","input":"UCB and coverage","output":"selected K_y and reason code"},
+    {"step_id":"S6","title":"Fit comparator","what_changes":"Fit a global geometry-calibrated abstention baseline under the same train/calibration contract.","why_this_step":"Separates target-specific union risk from generic calibration.","linked_component":"engineering","linked_falsification":"both","input":"same embeddings and calibration","output":"comparator metrics"},
+    {"step_id":"S7","title":"Freeze and test","what_changes":"Run one unchanged test evaluation with selected K_y.","why_this_step":"Keeps test OOS out of all decisions.","linked_component":"engineering","linked_falsification":"metric_specification","input":"frozen selector and test pools","output":"OOS/known metrics"},
+    {"step_id":"S8","title":"Shuffle negative control","what_changes":"Shuffle held-out-intent episode assignments before risk estimation.","why_this_step":"Intervenes on the producer of DeltaU while preserving counts and evaluator.","linked_component":"both","linked_falsification":"mechanism_distinguisher","input":"same episodes with permuted assignment","output":"negative-control downstream metrics"},
+    {"step_id":"S9","title":"Compare controls","what_changes":"Report Single, fixed K, BRAK, oracle-test-K descriptive upper bound, and comparator.","why_this_step":"Shows whether any gain is specific to the proposed risk object.","linked_component":"engineering","linked_falsification":"both","input":"all frozen outputs","output":"paired comparison table"}
+  ],
+  "method_flow.design_reasoning_echo": "The design keeps one central object—target-specific newly accepted union events—and makes every later step consume or validate it. It rejects more representation losses, more K sweeps, and generic local-score aggregation because those axes have already been audited and do not identify StackOverflow's failure; it also avoids collapsing the method to a global conformal threshold by requiring a same-contract comparator.",
+  "plain_motivation_en": "Adding several local regions can help a known intent, but it can also make the detector accept more unknown examples. Instead of choosing the number of regions from test performance, URCSG hides one known intent at a time and asks how many extra held-out examples become accepted when only one intent is expanded. It keeps an expansion only when known coverage is preserved and the upper confidence bound on this added acceptance risk stays below a fixed limit.",
+  "plain_motivation_zh": "增加多个局部区域有时能覆盖已知意图，但也可能让更多未知样本被错误接受。URCSG 不用测试集性能选择中心数，而是轮流隐藏一个已知意图，测量只扩展某个目标意图后新增接受的样本数量；只有在已知覆盖基本不下降且风险上界低于固定限制时，才保留额外中心，否则回退到 K=1。",
+  "plain_method_steps_en": [
+    {"step_id":"S1","what_to_do":"Freeze data, code, detector, and risk constants.","why_this_makes_sense":"The selection must be reproducible and test-independent."},
+    {"step_id":"S2","what_to_do":"Fit baseline balls for every intent and candidate extra balls for one target intent.","why_this_makes_sense":"This isolates the effect of adding regions to that intent."},
+    {"step_id":"S3","what_to_do":"Rotate each known intent out and use its calibration samples as pseudo-unknowns.","why_this_makes_sense":"The held-out identity is known by construction without using real test OOS."},
+    {"step_id":"S4","what_to_do":"Count newly accepted held-out samples and compute an upper confidence bound.","why_this_makes_sense":"The quantity directly measures union overcoverage."},
+    {"step_id":"S5","what_to_do":"Keep the largest K satisfying coverage and risk constraints.","why_this_makes_sense":"Unsafe intents retain the safe single-center fallback."},
+    {"step_id":"S6","what_to_do":"Fit and report a separate global abstention comparator.","why_this_makes_sense":"A gain must not be explained by generic calibration alone."},
+    {"step_id":"S7","what_to_do":"Evaluate the frozen selector once on test pools.","why_this_makes_sense":"Test data only measures the final method."},
+    {"step_id":"S8","what_to_do":"Shuffle episode assignments and repeat selection.","why_this_makes_sense":"The proposed mechanism should disappear when its risk signal is destroyed."},
+    {"step_id":"S9","what_to_do":"Compare all controls and report paired metrics.","why_this_makes_sense":"The claim is about mechanism-specific improvement, not a leaderboard maximum."}
+  ],
+  "plain_method_steps_zh": [
+    {"step_id":"S1","what_to_do":"冻结数据、代码、检测器和风险常数。","why_this_makes_sense":"保证选择过程可复现且不接触测试 OOS。"},
+    {"step_id":"S2","what_to_do":"拟合所有意图的单中心，并只给一个目标意图增加候选中心。","why_this_makes_sense":"隔离增加该意图区域的影响。"},
+    {"step_id":"S3","what_to_do":"轮流留出一个已知意图，把其校准样本当作伪未知。","why_this_makes_sense":"用构造身份获得未知代理，不使用真实测试 OOS。"},
+    {"step_id":"S4","what_to_do":"统计新增接受样本并计算风险上界。","why_this_makes_sense":"直接度量多个接受区域的并集过覆盖。"},
+    {"step_id":"S5","what_to_do":"在覆盖和风险约束下保留最大 K。","why_this_makes_sense":"不安全意图可以回退到单中心。"},
+    {"step_id":"S6","what_to_do":"单独运行全局几何校准拒识基线。","why_this_makes_sense":"排除只是普通校准带来的收益。"},
+    {"step_id":"S7","what_to_do":"冻结选择器后只进行一次测试评估。","why_this_makes_sense":"测试集只用于最终测量。"},
+    {"step_id":"S8","what_to_do":"打乱轮换意图分配后重复选择。","why_this_makes_sense":"破坏风险信号后机制效果应消失。"},
+    {"step_id":"S9","what_to_do":"与所有控制方法做配对比较。","why_this_makes_sense":"验证提升来自机制而非偶然最优数字。"}
+  ],
+  "plain_method_modules_en": [
+    {"module_id":"M1","purpose_oneline":"Contract and detector fitting","step_ids":["S1","S2"]},
+    {"module_id":"M2","purpose_oneline":"Rotated known-only risk measurement","step_ids":["S3","S4"]},
+    {"module_id":"M3","purpose_oneline":"Feasibility selection and comparator","step_ids":["S5","S6"]},
+    {"module_id":"M4","purpose_oneline":"Frozen evaluation and mechanism ablation","step_ids":["S7","S8","S9"]}
+  ],
+  "plain_method_modules_zh": [
+    {"module_id":"M1","purpose_oneline":"协议与检测器拟合","step_ids":["S1","S2"]},
+    {"module_id":"M2","purpose_oneline":"轮换已知意图风险测量","step_ids":["S3","S4"]},
+    {"module_id":"M3","purpose_oneline":"可行性选择与基线比较","step_ids":["S5","S6"]},
+    {"module_id":"M4","purpose_oneline":"冻结评估与机制消融","step_ids":["S7","S8","S9"]}
+  ],
+  "feasibility_validation.data.verdict":"feasible",
+  "feasibility_validation.data.rationale":"All required data, manifests, train/calibration splits, and frozen MiniLM caches already exist locally; no new corpus or redistribution is required.",
+  "feasibility_validation.theoretical.verdict":"feasible",
+  "feasibility_validation.theoretical.rationale":"The method uses a directly computable event and a standard Wilson upper bound; it makes an empirical calibration claim rather than requiring a new theorem.",
+  "feasibility_validation.engineering.verdict":"feasible",
+  "feasibility_validation.engineering.rationale":"The pilot reuses existing center/radius/evaluator code and adds rotated episode bookkeeping plus one comparator, with no encoder retraining.",
+  "feasibility_validation.falsification.verdict":"feasible",
+  "feasibility_validation.falsification.rationale":"The three-dataset, three-seed pilot, downstream metrics, load-bearing DeltaU variable, and shuffle negative control are concrete and available under the current tooling.",
+  "feasibility_validation.overall":"feasible",
+  "reviewer_concerns_and_responses[0].response":"The main novelty boundary is stated in core_mechanism and the revised method steps: DeltaU is a target-specific marginal event produced by expanding one intent while all other intents remain at K=1, not a global conformal threshold. The candidate also requires a same-contract global geometry-calibrated abstention comparator, directly addressing the Phase 3.2 borderline concern.",
+  "reviewer_concerns_and_responses[1].response":"A scoop-check must determine whether any prior work already constructs a per-intent newly-accepted event for a single-region expansion, rather than merely calibrating a global abstention score. If such a construction exists, the claim must be narrowed to the exact detector union and protocol regime where the prior does not operate.",
+  "reviewer_concerns_and_responses[2].response":"The method does not claim that MOGB or fixed K is universally inferior. It uses the frozen s2c detector contract and treats MOGB, BRAK, fixed K, and the global comparator as separate controls, so a positive result must survive same-split paired evaluation.",
+  "reviewer_concerns_and_responses[3].response":"The protocol deliberately forbids test OOS selection and marks oracle-test-K as descriptive only. All selection quantities are built from train_known and rotated calibration intents, with manifests, hashes, and a final one-way test pass recorded in the run ledger.",
+  "domain_landscape.position_note":"The candidate combines mid-frequency reframing, assumption auditing, and controlled diagnostics around a single union-risk object rather than adding another representation-learning or clustering pattern; the retrieved landscape uses these families often but does not expose this target-specific acceptance event."
+}

@@ -1,0 +1,80 @@
+{
+  "gap_closure_reject_check": {
+    "entries": [
+      {
+        "gap": "No retrieved leaf estimates, with a held-out and test-independent protocol, how much additional unknown-space acceptance is caused by adding a second or later region to a known intent.",
+        "main_pattern": "reframe_as_solvable_object",
+        "sub_pattern": "C00 (Reframe as a Solvable Object)",
+        "tactical_failure_mode_quoted": "The signature failure is treating the reframing as a mechanical wrapper: taking an established attribution, decomposition, or estimation tool and pointing it at a new input granularity, a new architecture, or a new domain without re-deriving why the resulting scores are faithful to the model.",
+        "reject_lessons_evaluated": [
+          {"lesson_quoted":"Pointing an off-the-shelf decomposition at a coarser input granularity without showing the coarser units preserve the signal reads as a wrapper, not a contribution.","candidate_match":"no","reasoning":"The candidate defines a new target-specific newly-accepted indicator and uses a causal shuffle ablation rather than merely applying an off-the-shelf score."},
+          {"lesson_quoted":"Proposing a new attribution definition without an axiomatic or causal argument for why it should count as ground-truth collapses the moment a reviewer asks why this is the real importance.","candidate_match":"borderline","reasoning":"The construction-defined pseudo-OOS episodes and downstream shuffle intervention provide causal support, but no formal soundness theorem is claimed."}
+        ],
+        "verdict":"borderline"
+      },
+      {
+        "gap": "No retrieved leaf tests whether the shared assumption that per-region distance/radius scores are sufficient for open-set acceptance remains valid when the final decision is an arbitrary union of regions.",
+        "main_pattern": "assumption_audit_and_pivot",
+        "sub_pattern": "C01 (Audit and Pivot an Assumption)",
+        "tactical_failure_mode_quoted": "A fourth is offering only a demonstration with no mechanistic account of WHY the locus carries the signal, which reads as a stacked pipeline of off-the-shelf components.",
+        "reject_lessons_evaluated": [
+          {"lesson_quoted":"Relocating to a locus already exploited by published work — normalization statistics, activation-similarity losses, semantic concept triggers — collapses the novelty boundary unless the difference is made explicit and measured.","candidate_match":"borderline","reasoning":"The candidate moves from scalar distance to a target-specific union profile, but it must explicitly compare against generic conformal/abstention calibration and show the marginal-union quantity is not a renamed global threshold."},
+          {"lesson_quoted":"Demonstrating the new locus only on fixed, non-adaptive or outdated baselines while omitting any account of why it works reads as a stacked pipeline of existing components rather than a principled shift.","candidate_match":"no","reasoning":"The candidate includes the causal DeltaU variable, a construction-defined probe, and a negative control; the pilot still needs a strong calibrated-abstention comparator."}
+        ],
+        "verdict":"borderline"
+      },
+      {
+        "gap": "No retrieved leaf gives a legal selection rule that can retain K=1 for unsafe intents and allow extra regions only when Known coverage and open-space risk are jointly acceptable across datasets.",
+        "main_pattern": "reframe_as_solvable_object",
+        "sub_pattern": "C00 (Reframe as a Solvable Object)",
+        "tactical_failure_mode_quoted": "A third variant under-specifies the object itself — an unformalized threat model, an operationally undefined key concept, or a fitting choice that makes all contributions trivially equal — leaving the central claim unverifiable.",
+        "reject_lessons_evaluated": [
+          {"lesson_quoted":"Surveying or recombining fragmented methods without a unifying axis or a decisive experiment yields a contribution reviewers dismiss as anecdotal.","candidate_match":"no","reasoning":"The per-intent feasibility object is the unifying axis and the proposed pilot contains a direct downstream negative control."},
+          {"lesson_quoted":"Conflating a methodological artifact — a computation-granularity difference, a degenerate zero baseline, an off-manifold perturbation — with genuine signal undermines the entire premise once the confound is identified.","candidate_match":"no","reasoning":"The candidate keeps the existing detector contract fixed and measures newly accepted events against the same evaluator."}
+        ],
+        "verdict":"clear"
+      }
+    ],
+    "verdict":"borderline",
+    "reasoning":"The anchor is computable and causally ablated, but both the reframing and locus-pivot entries remain borderline until the candidate explicitly separates marginal union-risk calibration from generic conformal or abstention thresholds. The feasibility leg is clear because it has fixed constraints, an upper bound, and an explicit fallback."
+  },
+  "recipe_application_check": {
+    "entries": [
+      {"gap":"No retrieved leaf estimates, with a held-out and test-independent protocol, how much additional unknown-space acceptance is caused by adding a second or later region to a known intent.","sub_pattern":"C00 (Reframe as a Solvable Object)","tactical_pattern_quoted":"This cluster recasts an opaque transparency question about an already-trained model or dataset as a concrete measurement over a well-studied object, fixes the unit of analysis and faithfulness constraint, and validates it by causal intervention or soundness.","instantiation_in_core_mechanism":"The candidate defines the target-specific newly-accepted indicator, estimates it over rotated episodes, fixes the unit at intent×episode×sample, and uses a shuffle intervention in the falsification plan.","verdict":"applied"},
+      {"gap":"No retrieved leaf tests whether the shared assumption that per-region distance/radius scores are sufficient for open-set acceptance remains valid when the final decision is an arbitrary union of regions.","sub_pattern":"C01 (Audit and Pivot an Assumption)","tactical_pattern_quoted":"This cluster relocates a detection signal from a presumed scalar or parameter locus to an overlooked distributional or behavioral locus and demonstrates why the new locus carries the property.","instantiation_in_core_mechanism":"The candidate relocates the gate's decision object from an individual q score to the target-specific profile of newly accepted samples under a union expansion, then tests that object with a construction-defined leave-one-intent-out episode.","verdict":"applied"},
+      {"gap":"No retrieved leaf gives a legal selection rule that can retain K=1 for unsafe intents and allow extra regions only when Known coverage and open-space risk are jointly acceptable across datasets.","sub_pattern":"C00 (Reframe as a Solvable Object)","tactical_pattern_quoted":"The cluster maps an opaque uncertainty or responsibility question to an explicit computable estimator or constrained object with a defended unit of analysis.","instantiation_in_core_mechanism":"The candidate maps per-intent K selection to a constrained feasibility object using coverage and a Wilson upper bound, then chooses the largest feasible K.","verdict":"applied"}
+    ],
+    "verdict":"applied",
+    "reasoning":"All three entries instantiate their cited cluster's distinctive measurement/relocation/constraint move rather than only naming the parent pattern."
+  },
+  "anti_pattern_check": {
+    "composition_set":["reframe_as_solvable_object","assumption_audit_and_pivot"],
+    "matched_pattern_id":null,
+    "required_mitigation_quoted":null,
+    "mitigation_substantively_delivered":"n/a",
+    "reasoning":"The candidate does not contain heterogeneous_decomposition, so none of the three reject-favored compositions matches."
+  },
+  "paper_pointed_threat": {
+    "threat_paper_id":"arxiv:2604.27914v1",
+    "threat_source":"collision_hits",
+    "threat_channel":"alias",
+    "subsumption_argument":"Geometry-Calibrated Conformal Abstention is a nearby calibration-family threat because it calibrates geometry-based abstention rather than relying on raw confidence. It does not, from the retrieved collision record, establish a target-specific marginal acceptance event for adding local regions, but a reviewer could reasonably treat the proposed Wilson feasibility rule as a specialized conformal/abstention wrapper unless the candidate measures that marginal event directly and includes a calibrated-abstention comparator.",
+    "addressable_via":"Add an explicit differentiation sentence and comparator requirement to core_mechanism: the fitted object is the target-specific newly-accepted event under a one-intent expansion, not a global conformal threshold, and the pilot must compare against a global geometry-calibrated abstention rule.",
+    "parametric_family_concern":"selective classification and conformal risk control; query phrases: class-conditional risk control, leave-class-out abstention calibration"
+  },
+  "falsification_structure_check": {
+    "minimal_experiment_named":"yes",
+    "outcome_metric_named":"yes",
+    "load_bearing_variable":"ΔU_{y,K}, the target-specific newly accepted pseudo-OOS probability after expanding only intent y",
+    "negative_control_target":"outcome_metric",
+    "verdict":"sound",
+    "reasoning":"The pilot names datasets, seeds, controls, downstream OOS/F1-All/Recall/FAR outcomes, one load-bearing variable, and a shuffle intervention predicted to return downstream performance toward fixed-K or K=1."
+  },
+  "verdict":"revise",
+  "verdict_layer":"soft_judgment",
+  "verdict_rationale":"The candidate passes recipe, anti-pattern, and falsification checks, but the C00/C01 legs are borderline because a marginal union-risk estimator can be mistaken for a generic abstention or conformal calibration wrapper. The collision threat arxiv:2604.27914v1 is addressable by making the target-specific newly-accepted event the explicit novelty boundary and adding a global geometry-calibrated abstention comparator; this is a tactical revision, not an exact-mechanism hard-floor overlap.",
+  "revision_targets":[
+    {"scope":"tactical","field":"core_mechanism","issue":"paper_pointed_threat and borderline C00/C01 novelty boundary","fix_direction":"Append a sentence that explicitly contrasts ΔU_{y,K}=P[A_{y,K}=1 and A_{y,1}=0] for a single intent expansion with a global conformal/abstention threshold, and require a global geometry-calibrated abstention comparator in the pilot; state that only the marginal union event is the claimed object."},
+    {"scope":"tactical","field":"core_mechanism_steps","issue":"paper_pointed_threat comparator is not currently an execution step","fix_direction":"Add one step before final evaluation that fits the strongest global geometry-calibrated abstention comparator using the same train/calibration contract, then reports it separately from the target-specific selector without changing the selector."}
+  ]
+}

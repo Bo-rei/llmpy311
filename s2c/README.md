@@ -6,15 +6,14 @@ s2c 是一个开放世界意图识别系统：
 文本 → Gate（Known/OOS）→ Router（domain）→ Expert（intent）
 ```
 
-当前系统和研究代码统一位于本目录。工作区职责、证据边界、实验结果和运行命令分别见：
+当前系统和研究代码统一位于本目录。当前入口只有四份：
 
-- [PROJECT.md](docs/PROJECT.md)：项目布局、模块边界和证据来源。
-- [CODE_LAYOUT.md](docs/CODE_LAYOUT.md)：源码放置、active/legacy 边界和 import 规范。
-- [EXPERIMENTS.md](docs/EXPERIMENTS.md)：Gate-only、完整 Cascade 和公开结果索引。
-- [RUNBOOK.md](docs/RUNBOOK.md)：环境检查、审计、测试和结果导出命令。
-- [DATASETS.md](docs/DATASETS.md)：固定 TEXTOIR snapshot 与 dataset-level 准入状态。
-- [DATA_PROTOCOL_V2.md](docs/DATA_PROTOCOL_V2.md)：独立数据、TEXTOIR-compatible KIR registry、views 与 exporter 契约。
-- [REPRODUCIBILITY.md](docs/REPRODUCIBILITY.md)：活动协议的 E0--E2 重建与验证边界。
+- [METHOD.md](docs/METHOD.md)：当前 Gate、公式和 split–merge 原型边界。
+- [CURRENT_STATUS.md](docs/CURRENT_STATUS.md)：唯一研究状态、阻断和下一步。
+- [EXPERIMENTS.md](docs/EXPERIMENTS.md)：主表、消融、基线和证据边界。
+- [REPRODUCIBILITY.md](docs/REPRODUCIBILITY.md)：数据、hash、命令和 artifact 规则。
+
+旧协议、closeout 和方法报告只在 `docs/archive/` 中保存，不作为当前事实来源。
 
 源码、配置、测试和活动文档在 `s2c/`；protocol_v2 的本地语料、canonical 和固定 views 在
 `data/`（不提交 Git），基础模型在 `../assets/`；原始实验结果在 `../artifacts/s2c/`；可公开的
