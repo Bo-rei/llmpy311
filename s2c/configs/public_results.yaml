@@ -383,3 +383,70 @@ files:
     category: external
     source: results/final_baselines/summary.csv
     public: final_baselines/summary.csv
+
+  # Lambda leakage and sensitivity audit. These files contain hashes, split
+  # identifiers, aggregate metrics and provenance only; no raw text, scores,
+  # embeddings, checkpoints or StackOverflow corpus is exported.
+  - experiment_id: lambda_leakage_audit_v1
+    category: robustness
+    source: results/diagnostics/lambda_leakage/data_split_audit.json
+    public: diagnostics/lambda_leakage/data_split_audit.json
+  - experiment_id: lambda_leakage_audit_v1
+    category: robustness
+    source: results/diagnostics/lambda_sensitivity/summary.csv
+    public: diagnostics/lambda_sensitivity/summary.csv
+  - experiment_id: lambda_leakage_audit_v1
+    category: robustness
+    source: results/diagnostics/lambda_sensitivity/mean_std.csv
+    public: diagnostics/lambda_sensitivity/mean_std.csv
+  - experiment_id: lambda_leakage_audit_v1
+    category: robustness
+    source: results/diagnostics/lambda_sensitivity/lambda_k_interaction.csv
+    public: diagnostics/lambda_sensitivity/lambda_k_interaction.csv
+  - experiment_id: lambda_leakage_audit_v1
+    category: robustness
+    source: results/diagnostics/lambda_sensitivity/lambda_k_interaction_mean_std.csv
+    public: diagnostics/lambda_sensitivity/lambda_k_interaction_mean_std.csv
+  - experiment_id: lambda_leakage_audit_v1
+    category: robustness
+    source: results/diagnostics/lambda_sensitivity/known_only_selected.csv
+    public: diagnostics/lambda_sensitivity/known_only_selected.csv
+  - experiment_id: lambda_leakage_audit_v1
+    category: robustness
+    source: results/diagnostics/lambda_sensitivity/adaptive_k_decision.json
+    public: diagnostics/lambda_sensitivity/adaptive_k_decision.json
+  - experiment_id: lambda_leakage_audit_v1
+    category: robustness
+    source: results/diagnostics/lambda_sensitivity/integrity.json
+    public: diagnostics/lambda_sensitivity/integrity.json
+  - experiment_id: lambda_leakage_audit_v1
+    category: robustness
+    source: results/diagnostics/lambda_sensitivity/lambda_usage.csv
+    public: diagnostics/lambda_sensitivity/lambda_usage.csv
+
+  # Read-only adaptive-K and MOGB diagnostics. These are aggregate audit
+  # tables/provenance, not sample-level predictions or training artifacts.
+  - experiment_id: adaptive_k_feasibility_audit_v1
+    category: robustness
+    source: results/diagnostics/adaptive_k/audit_manifest.json
+    public: diagnostics/adaptive_k/audit_manifest.json
+  - experiment_id: adaptive_k_feasibility_audit_v1
+    category: robustness
+    source: results/diagnostics/adaptive_k/dataset_level.csv
+    public: diagnostics/adaptive_k/dataset_level.csv
+  - experiment_id: adaptive_k_feasibility_audit_v1
+    category: robustness
+    source: results/diagnostics/adaptive_k/intent_level.csv
+    public: diagnostics/adaptive_k/intent_level.csv
+  - experiment_id: adaptive_k_feasibility_audit_v1
+    category: robustness
+    source: results/diagnostics/adaptive_k/seed_stability.csv
+    public: diagnostics/adaptive_k/seed_stability.csv
+  - experiment_id: mogb_diff_audit_v1
+    category: external
+    source: results/diagnostics/mogb_diff/first_divergence.json
+    public: diagnostics/mogb_diff/first_divergence.json
+  - experiment_id: mogb_diff_audit_v1
+    category: external
+    source: results/diagnostics/mogb_diff/stage_comparison.csv
+    public: diagnostics/mogb_diff/stage_comparison.csv

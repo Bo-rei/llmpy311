@@ -1,0 +1,324 @@
+{
+  "cache_inputs": [
+    {
+      "calibration_cache": "/home/bo/bo01/llmpy311/artifacts/s2c/cache/embeddings/protocol_v2_textoir_v1/clinc150/seed_13/kir_0.50/calibration_known_78bc5ba7e43287429e49.npz",
+      "calibration_embedding_sha256": "59b6805a22d5407c7e679bbda48a85552a77c49a2bb0f34aede669084cdc21fe",
+      "dataset": "clinc150",
+      "seed": 13,
+      "test_cache": "/home/bo/bo01/llmpy311/artifacts/s2c/cache/embeddings/protocol_v2_textoir_v1/clinc150/seed_13/kir_0.50/test_combined_ed853f680f148144f25d.npz",
+      "test_embedding_sha256": "fe6f8bb9932f49370e33ccfcc1d4a676fc1afca472222d2bbbffc54261517fbc",
+      "train_cache": "/home/bo/bo01/llmpy311/artifacts/s2c/cache/embeddings/protocol_v2_textoir_v1/clinc150/seed_13/kir_0.50/train_known_fd48403ccea779574537.npz",
+      "train_embedding_sha256": "016914e07648420d089b964d7fd66d3ae0d1375ac19d6189325327aca6ade9f4"
+    },
+    {
+      "calibration_cache": "/home/bo/bo01/llmpy311/artifacts/s2c/cache/embeddings/protocol_v2_textoir_v1/clinc150/seed_42/kir_0.50/calibration_known_a06a42d95a903ec9a9a7.npz",
+      "calibration_embedding_sha256": "8dedc73f091db7bb1373cd5c6f18869ff912954ec992ff4b0224bf7a83fdf4c2",
+      "dataset": "clinc150",
+      "seed": 42,
+      "test_cache": "/home/bo/bo01/llmpy311/artifacts/s2c/cache/embeddings/protocol_v2_textoir_v1/clinc150/seed_42/kir_0.50/test_combined_49d01fde5ddbb9bf6763.npz",
+      "test_embedding_sha256": "a0fcba86b9459b79bd12e56df04d1f4392fb8f6b625df70358fe58489311d476",
+      "train_cache": "/home/bo/bo01/llmpy311/artifacts/s2c/cache/embeddings/protocol_v2_textoir_v1/clinc150/seed_42/kir_0.50/train_known_b759b8a2ab007e5d8916.npz",
+      "train_embedding_sha256": "6ac5e04c0c06d79e941deced0be10f917e6b1a16912e82aed3b34b0d7dc43b79"
+    },
+    {
+      "calibration_cache": "/home/bo/bo01/llmpy311/artifacts/s2c/cache/embeddings/protocol_v2_textoir_v1/clinc150/seed_87/kir_0.50/calibration_known_d69a512c6521242cf354.npz",
+      "calibration_embedding_sha256": "145dff758e4f683f2d1a3f75d4f5818e9bc948e232268903c453d0fc1c75c927",
+      "dataset": "clinc150",
+      "seed": 87,
+      "test_cache": "/home/bo/bo01/llmpy311/artifacts/s2c/cache/embeddings/protocol_v2_textoir_v1/clinc150/seed_87/kir_0.50/test_combined_08560b544ff66ecb87e1.npz",
+      "test_embedding_sha256": "1caa2ead7fdc10b099eee92ae7fe07cdc85095aaf4abbfb777c9a710839497b9",
+      "train_cache": "/home/bo/bo01/llmpy311/artifacts/s2c/cache/embeddings/protocol_v2_textoir_v1/clinc150/seed_87/kir_0.50/train_known_e17cf1583c15a16ff4b6.npz",
+      "train_embedding_sha256": "7498a81403bea4696fbe770a21d88baaeb44c6af1e2f2614bac33685a11cb5d9"
+    },
+    {
+      "calibration_cache": "/home/bo/bo01/llmpy311/artifacts/s2c/cache/embeddings/protocol_v2_textoir_v1/banking77/seed_13/kir_0.50/calibration_known_318d504edf0d243244a6.npz",
+      "calibration_embedding_sha256": "8997c7d68373d74641b3de9a7bd2d243fbea31190d209e7bbbf0d36b685e100e",
+      "dataset": "banking77",
+      "seed": 13,
+      "test_cache": "/home/bo/bo01/llmpy311/artifacts/s2c/cache/embeddings/protocol_v2_textoir_v1/banking77/seed_13/kir_0.50/test_combined_b24585d73d646acdaa37.npz",
+      "test_embedding_sha256": "5bd49aa64c5fbd318b9c6d0625a5195541d79fd461409f41c8fab6705bede3e6",
+      "train_cache": "/home/bo/bo01/llmpy311/artifacts/s2c/cache/embeddings/protocol_v2_textoir_v1/banking77/seed_13/kir_0.50/train_known_cc4e90063e00c947e854.npz",
+      "train_embedding_sha256": "6374f6ae0ef7ec344d0eb67070dfd7f5d212a603121057514cb5e287b537fa00"
+    },
+    {
+      "calibration_cache": "/home/bo/bo01/llmpy311/artifacts/s2c/cache/embeddings/protocol_v2_textoir_v1/banking77/seed_42/kir_0.50/calibration_known_b01dfb6068be9059496f.npz",
+      "calibration_embedding_sha256": "2cd2a71e80e773120e918e8dd6eb04908f0321e09c8525eec01940f1f1b44e33",
+      "dataset": "banking77",
+      "seed": 42,
+      "test_cache": "/home/bo/bo01/llmpy311/artifacts/s2c/cache/embeddings/protocol_v2_textoir_v1/banking77/seed_42/kir_0.50/test_combined_2040630797da0945cf61.npz",
+      "test_embedding_sha256": "259222c8a5a925d83a7002482136f8f7d6c84c94c663ad1b605e8945a940da2c",
+      "train_cache": "/home/bo/bo01/llmpy311/artifacts/s2c/cache/embeddings/protocol_v2_textoir_v1/banking77/seed_42/kir_0.50/train_known_74d42a090206c239ccb6.npz",
+      "train_embedding_sha256": "73f566fccf7f70c038703f2b06fdf725b4f0dcf08de485b9c298e47bf4084153"
+    },
+    {
+      "calibration_cache": "/home/bo/bo01/llmpy311/artifacts/s2c/cache/embeddings/protocol_v2_textoir_v1/banking77/seed_87/kir_0.50/calibration_known_33ef6c31312da2593588.npz",
+      "calibration_embedding_sha256": "51354f40fedb088467a668418fbd85da2003e35f8de957d192d1061199bcd678",
+      "dataset": "banking77",
+      "seed": 87,
+      "test_cache": "/home/bo/bo01/llmpy311/artifacts/s2c/cache/embeddings/protocol_v2_textoir_v1/banking77/seed_87/kir_0.50/test_combined_94dfc42090be8f93893d.npz",
+      "test_embedding_sha256": "b51c1e4a79cfeecd19a0d7c03bab02ba25cad690ccfbe7cb095c05e7f49e6fa5",
+      "train_cache": "/home/bo/bo01/llmpy311/artifacts/s2c/cache/embeddings/protocol_v2_textoir_v1/banking77/seed_87/kir_0.50/train_known_3f6c060851208fb9884b.npz",
+      "train_embedding_sha256": "741ff3eaafb89b86899874a1cbc250f04abe7aec3d9ce2a328c4411a96a2638e"
+    },
+    {
+      "calibration_cache": "/home/bo/bo01/llmpy311/artifacts/s2c/cache/embeddings/protocol_v2_textoir_v1/stackoverflow/seed_13/kir_0.50/calibration_known_fcb111d30dc004f37b3d.npz",
+      "calibration_embedding_sha256": "bf12565024da52ac5d04ea6adba2c905a2ed9caa806e18befc07ffc0f7515800",
+      "dataset": "stackoverflow",
+      "seed": 13,
+      "test_cache": "/home/bo/bo01/llmpy311/artifacts/s2c/cache/embeddings/protocol_v2_textoir_v1/stackoverflow/seed_13/kir_0.50/test_combined_91d5fab33fdb9d7afb71.npz",
+      "test_embedding_sha256": "a3576bba04b2f4c9ae87f3267b25071e512758020e78de6ccb0b4556aa4981bb",
+      "train_cache": "/home/bo/bo01/llmpy311/artifacts/s2c/cache/embeddings/protocol_v2_textoir_v1/stackoverflow/seed_13/kir_0.50/train_known_dae3d82dabcc4c6b1f85.npz",
+      "train_embedding_sha256": "d254e8ad4256aac912f0820703351a80f46ec2a5e5fb948f43e02bcd2dd6d3be"
+    },
+    {
+      "calibration_cache": "/home/bo/bo01/llmpy311/artifacts/s2c/cache/embeddings/protocol_v2_textoir_v1/stackoverflow/seed_42/kir_0.50/calibration_known_69f8e156ac3fc38a874e.npz",
+      "calibration_embedding_sha256": "e8bdb0112ecccbf014d1aa133083050d49ac5e7cb7ff15506554ff18c8dd78dd",
+      "dataset": "stackoverflow",
+      "seed": 42,
+      "test_cache": "/home/bo/bo01/llmpy311/artifacts/s2c/cache/embeddings/protocol_v2_textoir_v1/stackoverflow/seed_42/kir_0.50/test_combined_6a31c0ca00d0188873df.npz",
+      "test_embedding_sha256": "34bd65f67e9fdd12a0af4ab9ab6c8e045367efc9613669dd92bb39950bdd162e",
+      "train_cache": "/home/bo/bo01/llmpy311/artifacts/s2c/cache/embeddings/protocol_v2_textoir_v1/stackoverflow/seed_42/kir_0.50/train_known_2ea1ff2fd18c9d9bd067.npz",
+      "train_embedding_sha256": "d38cbe1d5b100ff2aef28642df6c631a982d88c89c71c6b5299b163b77b6dd2c"
+    },
+    {
+      "calibration_cache": "/home/bo/bo01/llmpy311/artifacts/s2c/cache/embeddings/protocol_v2_textoir_v1/stackoverflow/seed_87/kir_0.50/calibration_known_fa1c4cbf8624c898e0b0.npz",
+      "calibration_embedding_sha256": "419787321cde5dcfa507566611173cca988b595312b144dd805caf79ceccaa17",
+      "dataset": "stackoverflow",
+      "seed": 87,
+      "test_cache": "/home/bo/bo01/llmpy311/artifacts/s2c/cache/embeddings/protocol_v2_textoir_v1/stackoverflow/seed_87/kir_0.50/test_combined_1bc836d88b50d7c0241e.npz",
+      "test_embedding_sha256": "8b4b17189aded8706d7a39e620a84d1bba2c12ca8310fade6c93508dbf8767ba",
+      "train_cache": "/home/bo/bo01/llmpy311/artifacts/s2c/cache/embeddings/protocol_v2_textoir_v1/stackoverflow/seed_87/kir_0.50/train_known_b8670a4996a74ac6ee4b.npz",
+      "train_embedding_sha256": "170fece37d6cf23305343ff73b8d2d74f390120a636bffffc36d9ae08e9f1a51"
+    }
+  ],
+  "completed_rows": 216,
+  "distance": "mahalanobis_diag",
+  "e2_lambda1_checks": [
+    {
+      "dataset": "clinc150",
+      "k": 1,
+      "max_abs_delta": 0.0,
+      "prediction_mismatch": 0,
+      "reference_run_id": "protocol_v2_textoir_v1__clinc150__kir_0.50__seed_13__repr_frozen_minilm__k_1__dist_mahalanobis_diag__boundary_mean_std",
+      "seed": 13
+    },
+    {
+      "dataset": "clinc150",
+      "k": 2,
+      "max_abs_delta": 0.0,
+      "prediction_mismatch": 0,
+      "reference_run_id": "protocol_v2_textoir_v1__clinc150__kir_0.50__seed_13__repr_frozen_minilm__k_2__dist_mahalanobis_diag__boundary_mean_std",
+      "seed": 13
+    },
+    {
+      "dataset": "clinc150",
+      "k": 2,
+      "max_abs_delta": 0.0,
+      "prediction_mismatch": 0,
+      "reference_run_id": "protocol_v2_textoir_v1__clinc150__kir_0.50__seed_13__repr_frozen_minilm__k_2__dist_mahalanobis_diag__boundary_mean_std",
+      "seed": 13
+    },
+    {
+      "dataset": "clinc150",
+      "k": 1,
+      "max_abs_delta": 0.0,
+      "prediction_mismatch": 0,
+      "reference_run_id": "protocol_v2_textoir_v1__clinc150__kir_0.50__seed_42__repr_frozen_minilm__k_1__dist_mahalanobis_diag__boundary_mean_std",
+      "seed": 42
+    },
+    {
+      "dataset": "clinc150",
+      "k": 2,
+      "max_abs_delta": 0.0,
+      "prediction_mismatch": 0,
+      "reference_run_id": "protocol_v2_textoir_v1__clinc150__kir_0.50__seed_42__repr_frozen_minilm__k_2__dist_mahalanobis_diag__boundary_mean_std",
+      "seed": 42
+    },
+    {
+      "dataset": "clinc150",
+      "k": 2,
+      "max_abs_delta": 0.0,
+      "prediction_mismatch": 0,
+      "reference_run_id": "protocol_v2_textoir_v1__clinc150__kir_0.50__seed_42__repr_frozen_minilm__k_2__dist_mahalanobis_diag__boundary_mean_std",
+      "seed": 42
+    },
+    {
+      "dataset": "clinc150",
+      "k": 1,
+      "max_abs_delta": 0.0,
+      "prediction_mismatch": 0,
+      "reference_run_id": "protocol_v2_textoir_v1__clinc150__kir_0.50__seed_87__repr_frozen_minilm__k_1__dist_mahalanobis_diag__boundary_mean_std",
+      "seed": 87
+    },
+    {
+      "dataset": "clinc150",
+      "k": 2,
+      "max_abs_delta": 0.0,
+      "prediction_mismatch": 0,
+      "reference_run_id": "protocol_v2_textoir_v1__clinc150__kir_0.50__seed_87__repr_frozen_minilm__k_2__dist_mahalanobis_diag__boundary_mean_std",
+      "seed": 87
+    },
+    {
+      "dataset": "clinc150",
+      "k": 2,
+      "max_abs_delta": 0.0,
+      "prediction_mismatch": 0,
+      "reference_run_id": "protocol_v2_textoir_v1__clinc150__kir_0.50__seed_87__repr_frozen_minilm__k_2__dist_mahalanobis_diag__boundary_mean_std",
+      "seed": 87
+    },
+    {
+      "dataset": "banking77",
+      "k": 1,
+      "max_abs_delta": 0.0,
+      "prediction_mismatch": 0,
+      "reference_run_id": "protocol_v2_textoir_v1__banking77__kir_0.50__seed_13__repr_frozen_minilm__k_1__dist_mahalanobis_diag__boundary_mean_std",
+      "seed": 13
+    },
+    {
+      "dataset": "banking77",
+      "k": 2,
+      "max_abs_delta": 0.0,
+      "prediction_mismatch": 0,
+      "reference_run_id": "protocol_v2_textoir_v1__banking77__kir_0.50__seed_13__repr_frozen_minilm__k_2__dist_mahalanobis_diag__boundary_mean_std",
+      "seed": 13
+    },
+    {
+      "dataset": "banking77",
+      "k": 2,
+      "max_abs_delta": 0.0,
+      "prediction_mismatch": 0,
+      "reference_run_id": "protocol_v2_textoir_v1__banking77__kir_0.50__seed_13__repr_frozen_minilm__k_2__dist_mahalanobis_diag__boundary_mean_std",
+      "seed": 13
+    },
+    {
+      "dataset": "banking77",
+      "k": 1,
+      "max_abs_delta": 0.0,
+      "prediction_mismatch": 0,
+      "reference_run_id": "protocol_v2_textoir_v1__banking77__kir_0.50__seed_42__repr_frozen_minilm__k_1__dist_mahalanobis_diag__boundary_mean_std",
+      "seed": 42
+    },
+    {
+      "dataset": "banking77",
+      "k": 2,
+      "max_abs_delta": 0.0,
+      "prediction_mismatch": 0,
+      "reference_run_id": "protocol_v2_textoir_v1__banking77__kir_0.50__seed_42__repr_frozen_minilm__k_2__dist_mahalanobis_diag__boundary_mean_std",
+      "seed": 42
+    },
+    {
+      "dataset": "banking77",
+      "k": 2,
+      "max_abs_delta": 0.0,
+      "prediction_mismatch": 0,
+      "reference_run_id": "protocol_v2_textoir_v1__banking77__kir_0.50__seed_42__repr_frozen_minilm__k_2__dist_mahalanobis_diag__boundary_mean_std",
+      "seed": 42
+    },
+    {
+      "dataset": "banking77",
+      "k": 1,
+      "max_abs_delta": 0.0,
+      "prediction_mismatch": 0,
+      "reference_run_id": "protocol_v2_textoir_v1__banking77__kir_0.50__seed_87__repr_frozen_minilm__k_1__dist_mahalanobis_diag__boundary_mean_std",
+      "seed": 87
+    },
+    {
+      "dataset": "banking77",
+      "k": 2,
+      "max_abs_delta": 0.0,
+      "prediction_mismatch": 0,
+      "reference_run_id": "protocol_v2_textoir_v1__banking77__kir_0.50__seed_87__repr_frozen_minilm__k_2__dist_mahalanobis_diag__boundary_mean_std",
+      "seed": 87
+    },
+    {
+      "dataset": "banking77",
+      "k": 2,
+      "max_abs_delta": 0.0,
+      "prediction_mismatch": 0,
+      "reference_run_id": "protocol_v2_textoir_v1__banking77__kir_0.50__seed_87__repr_frozen_minilm__k_2__dist_mahalanobis_diag__boundary_mean_std",
+      "seed": 87
+    },
+    {
+      "dataset": "stackoverflow",
+      "k": 1,
+      "max_abs_delta": 0.0,
+      "prediction_mismatch": 0,
+      "reference_run_id": "protocol_v2_textoir_v1__stackoverflow__kir_0.50__seed_13__repr_frozen_minilm__k_1__dist_mahalanobis_diag__boundary_mean_std",
+      "seed": 13
+    },
+    {
+      "dataset": "stackoverflow",
+      "k": 2,
+      "max_abs_delta": 0.0,
+      "prediction_mismatch": 0,
+      "reference_run_id": "protocol_v2_textoir_v1__stackoverflow__kir_0.50__seed_13__repr_frozen_minilm__k_2__dist_mahalanobis_diag__boundary_mean_std",
+      "seed": 13
+    },
+    {
+      "dataset": "stackoverflow",
+      "k": 2,
+      "max_abs_delta": 0.0,
+      "prediction_mismatch": 0,
+      "reference_run_id": "protocol_v2_textoir_v1__stackoverflow__kir_0.50__seed_13__repr_frozen_minilm__k_2__dist_mahalanobis_diag__boundary_mean_std",
+      "seed": 13
+    },
+    {
+      "dataset": "stackoverflow",
+      "k": 1,
+      "max_abs_delta": 0.0,
+      "prediction_mismatch": 0,
+      "reference_run_id": "protocol_v2_textoir_v1__stackoverflow__kir_0.50__seed_42__repr_frozen_minilm__k_1__dist_mahalanobis_diag__boundary_mean_std",
+      "seed": 42
+    },
+    {
+      "dataset": "stackoverflow",
+      "k": 2,
+      "max_abs_delta": 0.0,
+      "prediction_mismatch": 0,
+      "reference_run_id": "protocol_v2_textoir_v1__stackoverflow__kir_0.50__seed_42__repr_frozen_minilm__k_2__dist_mahalanobis_diag__boundary_mean_std",
+      "seed": 42
+    },
+    {
+      "dataset": "stackoverflow",
+      "k": 2,
+      "max_abs_delta": 0.0,
+      "prediction_mismatch": 0,
+      "reference_run_id": "protocol_v2_textoir_v1__stackoverflow__kir_0.50__seed_42__repr_frozen_minilm__k_2__dist_mahalanobis_diag__boundary_mean_std",
+      "seed": 42
+    },
+    {
+      "dataset": "stackoverflow",
+      "k": 1,
+      "max_abs_delta": 0.0,
+      "prediction_mismatch": 0,
+      "reference_run_id": "protocol_v2_textoir_v1__stackoverflow__kir_0.50__seed_87__repr_frozen_minilm__k_1__dist_mahalanobis_diag__boundary_mean_std",
+      "seed": 87
+    },
+    {
+      "dataset": "stackoverflow",
+      "k": 2,
+      "max_abs_delta": 0.0,
+      "prediction_mismatch": 0,
+      "reference_run_id": "protocol_v2_textoir_v1__stackoverflow__kir_0.50__seed_87__repr_frozen_minilm__k_2__dist_mahalanobis_diag__boundary_mean_std",
+      "seed": 87
+    },
+    {
+      "dataset": "stackoverflow",
+      "k": 2,
+      "max_abs_delta": 0.0,
+      "prediction_mismatch": 0,
+      "reference_run_id": "protocol_v2_textoir_v1__stackoverflow__kir_0.50__seed_87__repr_frozen_minilm__k_2__dist_mahalanobis_diag__boundary_mean_std",
+      "seed": 87
+    }
+  ],
+  "failed_rows": 0,
+  "invalid_rows": [],
+  "k_contract": {
+    "k_1": 1,
+    "k_2": 2,
+    "paper_default_aliases_k_2": true,
+    "paper_default_k": 2
+  },
+  "planned_rows": 216,
+  "unique_fit_cells": 18
+}

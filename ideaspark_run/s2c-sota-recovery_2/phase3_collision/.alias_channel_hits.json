@@ -1,0 +1,597 @@
+[
+ {
+  "title": "Explicit Abstention Knobs for Predictable Reliability in Video Question Answering",
+  "title_norm": "explicit abstention knobs for predictable reliability in video question answerin",
+  "abstract": "High-stakes deployment of vision-language models (VLMs) requires selective prediction, where systems abstain when uncertain rather than risk costly errors. We investigate whether confidence-based abstention provides reliable control over error rates in video question answering, and whether that control remains robust under distribution shift. Using NExT-QA and Gemini 2.0 Flash, we establish two findings. First, confidence thresholding provides mechanistic control in-distribution. Sweeping threshold epsilon produces smooth risk-coverage tradeoffs, reducing error rates f",
+  "year": 2025,
+  "venue": "arXiv",
+  "authors": [
+   "Jorge Ortiz"
+  ],
+  "citations": null,
+  "source": "arxiv",
+  "source_id": "2601.00138v2",
+  "doi": "",
+  "paper_url": "https://arxiv.org/abs/2601.00138v2",
+  "published_iso": "2025-12-31T23:27:32Z",
+  "paper_id": "arxiv:2601.00138v2",
+  "year_month": "2025-12"
+ },
+ {
+  "title": "An Explainable Agentic AI Framework for Uncertainty-Aware and Abstention-Enabled Acute Ischemic Stroke Imaging Decisions",
+  "title_norm": "an explainable agentic ai framework for uncertainty aware and abstention enabled",
+  "abstract": "Artificial intelligence models have shown strong potential in acute ischemic stroke imaging, particularly for lesion detection and segmentation using computed tomography and magnetic resonance imaging. However, most existing approaches operate as black box predictors, producing deterministic outputs without explicit uncertainty awareness or structured mechanisms to abstain under ambiguous conditions. This limitation raises serious safety and trust concerns in high risk emergency radiology settings. In this paper, we propose an explainable agentic AI framework for uncertainty aware and abstention enabled decision support in acute ischemic stroke imaging. The framework follows a modular agentic pipeline in which a perception agent performs lesion aware image analysis, an uncertainty estimation agent computes slice level predictive reliability, and a decision agent determines whether to issue a prediction or abstain based on predefined uncertainty thresholds. Unlike prior stroke imaging systems that primarily focus on improving segmentation or classification accuracy, the proposed framework explicitly prioritizes clinical safety, transparency, and clinician aligned decision behavior. Qualitative and case based analyses across representative stroke imaging scenarios demonstrate that uncertainty driven abstention naturally emerges in diagnostically ambiguous regions and low information slices. The framework further integrates visual explanation mechanisms to support both predictive and abstention decisions, addressing a key limitation of existing uncertainty aware medical imaging systems. Rather than introducing a new performance benchmark, this work presents agentic control, uncertainty awareness, and selective abstention as essential design principles for developing safe and trustworthy medical imaging AI systems.",
+  "year": 2026,
+  "venue": "arXiv",
+  "authors": [
+   "Md Rashadul Islam"
+  ],
+  "citations": null,
+  "source": "arxiv",
+  "source_id": "2601.01008v1",
+  "doi": "",
+  "paper_url": "https://arxiv.org/abs/2601.01008v1",
+  "published_iso": "2026-01-03T00:10:08Z",
+  "paper_id": "arxiv:2601.01008v1",
+  "year_month": "2026-01"
+ },
+ {
+  "title": "Fair and Calibrated Toxicity Detection with Robust Training and Abstention",
+  "title_norm": "fair and calibrated toxicity detection with robust training and abstention",
+  "abstract": "Fairness in toxicity classification involves three integrated axes: ranking, calibration, and abstention. Training-time interventions and post-hoc safety mechanisms cannot be evaluated independently because the former determines the efficacy of the latter. We compare Empirical Risk Minimization (ERM), instance-level reweighting, and Group DRO across these axes, combined with temperature scaling, confidence-based abstention, and per-identity threshold optimization. Evaluation uses subgroup AUC, BPSN/BNSP AUC, error gaps, and per-subgroup Expected Calibration Error (ECE) with bootstrap CIs ($n = 1000$).\n  We report four findings. (1) Calibration disparity is a hidden fairness violation. ERM has near-perfect aggregate calibration ($0.013$) but is significantly miscalibrated across all identity subgroups ($+0.029$ to $+0.134$). (2) Training interventions reshape rather than eliminate disparity. Reweighted ERM improves ranking (BPSN AUC $+0.06$ to $+0.12$) but worsens the calibration-fairness gap by up to $+0.232$. Group DRO eliminates calibration disparity but only by becoming uniformly miscalibrated globally (ECE $0.118$). (3) Post-hoc methods inherit training failure modes. Temperature scaling fails because miscalibration is non-uniform. Confidence-based abstention works under ERM but breaks under DRO, where the risk-coverage curve rises with deferral. (4) Abstention itself is unfair. Confidence-based deferral helps background content far more than identity-mentioning content. We argue that SRAI fairness requires a multi-axis framework: methods that differ only in aggregate ranking can differ sharply in failure modes that determine real-world harm.",
+  "year": 2026,
+  "venue": "arXiv",
+  "authors": [
+   "Mokshit Surana"
+  ],
+  "citations": null,
+  "source": "arxiv",
+  "source_id": "2605.14074v1",
+  "doi": "",
+  "paper_url": "https://arxiv.org/abs/2605.14074v1",
+  "published_iso": "2026-05-13T19:50:35Z",
+  "paper_id": "arxiv:2605.14074v1",
+  "year_month": "2026-05"
+ },
+ {
+  "title": "Geometry-Calibrated Conformal Abstention for Language Models",
+  "title_norm": "geometry calibrated conformal abstention for language models",
+  "abstract": "When language models lack relevant knowledge for a given query, they frequently generate plausible responses that can be hallucinations, rather than admitting being agnostic about the answer. Retraining models to reward admitting ignorance can lead to overly conservative behaviors and poor generalization due to scarce evaluation benchmarks. We propose a post hoc framework, Conformal Abstention (CA), adapted from conformal prediction (CP) to determine whether to abstain from answering a query. CA provides finite-sample guarantees on both the probability of participation (i.e., not abstaining) and the probability that the generated response is correct. Importantly, the abstention decision relies on prediction confidence rather than the non-conformity scores used in CP, which are intractable for open-ended generation. To better align prediction confidence with the model's ignorance, we introduce a calibration strategy using representation geometry within the model to measure knowledge involvement in shaping the response. Experiments demonstrate that we improve selective answering significantly with 75 percent conditional correctness.",
+  "year": 2026,
+  "venue": "arXiv",
+  "authors": [
+   "Rui Xu",
+   "Yi Chen",
+   "Sihong Xie",
+   "Hui Xiong"
+  ],
+  "citations": null,
+  "source": "arxiv",
+  "source_id": "2604.27914v1",
+  "doi": "",
+  "paper_url": "https://arxiv.org/abs/2604.27914v1",
+  "published_iso": "2026-04-30T14:20:16Z",
+  "paper_id": "arxiv:2604.27914v1",
+  "year_month": "2026-04"
+ },
+ {
+  "title": "Understanding Model Calibration -- A gentle introduction and visual exploration of calibration and the expected calibration error (ECE)",
+  "title_norm": "understanding model calibration a gentle introduction and visual exploration of ",
+  "abstract": "To be considered reliable, a model must be calibrated so that its confidence in each decision closely reflects its true outcome. In this blogpost we'll take a look at the most commonly used definition for calibration and then dive into a frequently used evaluation measure for model calibration. We'll then cover some of the drawbacks of this measure and how these surfaced the need for additional notions of calibration, which require their own new evaluation measures. This post is not intended to be an in-depth dissection of all works on calibration, nor does it focus on how to calibrate models. Instead, it is meant to provide a gentle introduction to the different notions and their evaluation measures as well as to re-highlight some issues with a measure that is still widely used to evaluate calibration.",
+  "year": 2025,
+  "venue": "arXiv",
+  "authors": [
+   "Maja Pavlovic"
+  ],
+  "citations": null,
+  "source": "arxiv",
+  "source_id": "2501.19047v5",
+  "doi": "",
+  "paper_url": "https://arxiv.org/abs/2501.19047v5",
+  "published_iso": "2025-01-31T11:18:45Z",
+  "paper_id": "arxiv:2501.19047v5",
+  "year_month": "2025-01"
+ },
+ {
+  "title": "Automatic Model Extraction of the Match Standard in Symmetric--Reciprocal--Match Calibration",
+  "title_norm": "automatic model extraction of the match standard in symmetric reciprocal match c",
+  "abstract": "This paper addresses the modeling of parasitics of the match standard in the symmetric-reciprocal-match (SRM) calibration method of vector network analyzers (VNAs). In the general SRM procedure, the match standard is assumed to be fully known. Here, we demonstrate that the match can be modeled with an arbitrary frequency-dependent model using a non-linear global optimization procedure. To highlight the validity of the suggested approach, numerical tests were conducted, demonstrating the ability to recover the match standard parasitic model down to software numerical precision. Additionally, we performed microstrip line measurements to compare the SRM calibration with match modeling to the multiline thru-reflect-line (TRL) calibration one, showing that automatic model extraction can achieve accuracy similar to using a match standard defined through multiline TRL calibration.",
+  "year": 2025,
+  "venue": "arXiv",
+  "authors": [
+   "Ziad Hatab",
+   "Michael Ernst Gadringer",
+   "Arash Arsanjani",
+   "Wolfgang Boesch"
+  ],
+  "citations": null,
+  "source": "arxiv",
+  "source_id": "2509.18426v2",
+  "doi": "",
+  "paper_url": "https://arxiv.org/abs/2509.18426v2",
+  "published_iso": "2025-09-22T21:13:15Z",
+  "paper_id": "arxiv:2509.18426v2",
+  "year_month": "2025-09"
+ },
+ {
+  "title": "Abstain-R1: Calibrated Abstention and Post-Refusal Clarification via Verifiable RL",
+  "title_norm": "abstain r1 calibrated abstention and post refusal clarification via verifiable r",
+  "abstract": "Reinforcement fine-tuning improves the reasoning ability of large language models, but it can also encourage them to answer unanswerable queries by guessing or hallucinating missing information. Existing abstention methods either train models to produce generic refusals or encourage follow-up clarifications without verifying whether those clarifications identify the key missing information. We study queries that are clear in meaning but cannot be reliably resolved from the given information, and argue that a reliable model should not only abstain, but also explain what is missing. We propose a clarification-aware RLVR reward that, while rewarding correct answers on answerable queries, jointly optimizes explicit abstention and semantically aligned post-refusal clarification on unanswerable queries. Using this reward, we train Abstain-R1, a 3B model that improves abstention and clarification on unanswerable queries while preserving strong performance on answerable ones. Experiments on Abstain-Test, Abstain-QA, and SelfAware show that Abstain-R1 substantially improves over its base model and achieves unanswerable-query behavior competitive with larger systems including DeepSeek-R1, suggesting that calibrated abstention and clarification can be learned through verifiable rewards rather than emerging from scale alone.",
+  "year": 2026,
+  "venue": "arXiv",
+  "authors": [
+   "Skylar Zhai",
+   "Jingcheng Liang",
+   "Dongyeop Kang"
+  ],
+  "citations": null,
+  "source": "arxiv",
+  "source_id": "2604.17073v1",
+  "doi": "",
+  "paper_url": "https://arxiv.org/abs/2604.17073v1",
+  "published_iso": "2026-04-18T17:21:40Z",
+  "paper_id": "arxiv:2604.17073v1",
+  "year_month": "2026-04"
+ },
+ {
+  "title": "Confidence Calibration of Classifiers with Many Classes",
+  "title_norm": "confidence calibration of classifiers with many classes",
+  "abstract": "For classification models based on neural networks, the maximum predicted class probability is often used as a confidence score. This score rarely predicts well the probability of making a correct prediction and requires a post-processing calibration step. However, many confidence calibration methods fail for problems with many classes. To address this issue, we transform the problem of calibrating a multiclass classifier into calibrating a single surrogate binary classifier. This approach allows for more efficient use of standard calibration methods. We evaluate our approach on numerous neural networks used for image or text classification and show that it significantly enhances existing calibration methods.",
+  "year": 2024,
+  "venue": "arXiv",
+  "authors": [
+   "Adrien LeCoz",
+   "Stéphane Herbin",
+   "Faouzi Adjed"
+  ],
+  "citations": null,
+  "source": "arxiv",
+  "source_id": "2411.02988v2",
+  "doi": "",
+  "paper_url": "https://arxiv.org/abs/2411.02988v2",
+  "published_iso": "2024-11-05T10:51:01Z",
+  "paper_id": "arxiv:2411.02988v2",
+  "year_month": "2024-11"
+ },
+ {
+  "title": "Deep Learning for Camera Calibration and Beyond: A Survey",
+  "title_norm": "deep learning for camera calibration and beyond a survey",
+  "abstract": "Camera calibration involves estimating camera parameters to infer geometric features from captured sequences, which is crucial for computer vision and robotics. However, conventional calibration is laborious and requires dedicated collection. Recent efforts show that learning-based solutions have the potential to be used in place of the repeatability works of manual calibrations. Among these solutions, various learning strategies, networks, geometric priors, and datasets have been investigated. In this paper, we provide a comprehensive survey of learning-based camera calibration techniques, by analyzing their strengths and limitations. Our main calibration categories include the standard pinhole camera model, distortion camera model, cross-view model, and cross-sensor model, following the research trend and extended applications. As there is no unified benchmark in this community, we collect a holistic calibration dataset that can serve as a public platform to evaluate the generalization of existing methods. It comprises both synthetic and real-world data, with images and videos captured by different cameras in diverse scenes. Toward the end of this paper, we discuss the challenges and provide further research directions. To our knowledge, this is the first survey for the learning-based camera calibration (spanned 10 years). The summarized methods, datasets, and benchmarks are available and will be regularly updated at https://github.com/KangLiao929/Awesome-Deep-Camera-Calibration.",
+  "year": 2023,
+  "venue": "arXiv",
+  "authors": [
+   "Kang Liao",
+   "Lang Nie",
+   "Shujuan Huang",
+   "Chunyu Lin",
+   "Jing Zhang",
+   "Yao Zhao",
+   "Moncef Gabbouj",
+   "Dacheng Tao"
+  ],
+  "citations": null,
+  "source": "arxiv",
+  "source_id": "2303.10559v3",
+  "doi": "",
+  "paper_url": "https://arxiv.org/abs/2303.10559v3",
+  "published_iso": "2023-03-19T04:00:05Z",
+  "paper_id": "arxiv:2303.10559v3",
+  "year_month": "2023-03"
+ },
+ {
+  "title": "A Thru-free Multiline Calibration",
+  "title_norm": "a thru free multiline calibration",
+  "abstract": "This paper proposes a modification to the traditional multiline thru-reflect-line (TRL) or line-reflect-line (LRL) calibration method used for vector network analyzers (VNAs). Our proposed method eliminates the need for a thru (or line) standard by using an arbitrary transmissive two-port device in combination with an additional reflect standard. This combination of standards allows us to arbitrarily set the location of the calibration plane using physical artifacts. In contrast to the standard multiline TRL method, the suggested approach avoids a post-processing step to shift the calibration plane if a line standard is used. We demonstrate our proposed method with measurements on a printed circuit board (PCB) and compare it to the multiline TRL method with a perfectly defined thru.",
+  "year": 2023,
+  "venue": "arXiv",
+  "authors": [
+   "Ziad Hatab",
+   "Michael Ernst Gadringer",
+   "Wolfgang Bösch"
+  ],
+  "citations": null,
+  "source": "arxiv",
+  "source_id": "2305.03597v2",
+  "doi": "",
+  "paper_url": "https://arxiv.org/abs/2305.03597v2",
+  "published_iso": "2023-05-05T15:01:16Z",
+  "paper_id": "arxiv:2305.03597v2",
+  "year_month": "2023-05"
+ },
+ {
+  "title": "Fact-Level Confidence Calibration and Self-Correction",
+  "title_norm": "fact level confidence calibration and self correction",
+  "abstract": "Confidence calibration in LLMs, i.e., aligning their self-assessed confidence with the actual accuracy of their responses, enabling them to self-evaluate the correctness of their outputs. However, current calibration methods for LLMs typically estimate two scalars to represent overall response confidence and correctness, which is inadequate for long-form generation where the response includes multiple atomic facts and may be partially confident and correct. These methods also overlook the relevance of each fact to the query. To address these challenges, we propose a Fact-Level Calibration framework that operates at a finer granularity, calibrating confidence to relevance-weighted correctness at the fact level. Furthermore, comprehensive analysis under the framework inspired the development of Confidence-Guided Fact-level Self-Correction ($\\textbf{ConFix}$), which uses high-confidence facts within a response as additional knowledge to improve low-confidence ones. Extensive experiments across four datasets and six models demonstrate that ConFix effectively mitigates hallucinations without requiring external knowledge sources such as retrieval systems.",
+  "year": 2024,
+  "venue": "arXiv",
+  "authors": [
+   "Yige Yuan",
+   "Bingbing Xu",
+   "Hexiang Tan",
+   "Fei Sun",
+   "Teng Xiao",
+   "Wei Li",
+   "Huawei Shen",
+   "Xueqi Cheng"
+  ],
+  "citations": null,
+  "source": "arxiv",
+  "source_id": "2411.13343v1",
+  "doi": "",
+  "paper_url": "https://arxiv.org/abs/2411.13343v1",
+  "published_iso": "2024-11-20T14:15:18Z",
+  "paper_id": "arxiv:2411.13343v1",
+  "year_month": "2024-11"
+ },
+ {
+  "title": "The Choice of Line Lengths in Multiline Thru-Reflect-Line Calibration",
+  "title_norm": "the choice of line lengths in multiline thru reflect line calibration",
+  "abstract": "This paper presents an analysis and rigorous procedure for determining the optimal lengths of line standards in multiline thru-reflect-line (TRL) calibration of vector network analyzers (VNAs). The solution is obtained through nonlinear constrained optimization of the eigenvalue problem in multiline TRL calibration. Additionally, we propose a simplified approach for near-optimal length selection based on predefined sparse rulers. Alongside the length calculation, we discuss the required number of lines to meet bandwidth requirements. The proposed methods are validated through measurements of multiple multiline TRL calibration kits on printed circuit boards of different materials and stackups, covering frequencies up to 150 GHz. A measurement-based Monte Carlo uncertainty analysis, using error boxes derived from impedance standard substrate measurements, demonstrates that the proposed line lengths distribute calibration uncertainty more evenly across lines compared to a commercial calibration kit. Practical examples are provided for various applications, including lossy and dispersive lines, as well as banded solutions for waveguides.",
+  "year": 2025,
+  "venue": "arXiv",
+  "authors": [
+   "Ziad Hatab",
+   "Michael Gadringer",
+   "Wolfgang Bösch"
+  ],
+  "citations": null,
+  "source": "arxiv",
+  "source_id": "2512.18641v3",
+  "doi": "",
+  "paper_url": "https://arxiv.org/abs/2512.18641v3",
+  "published_iso": "2025-12-21T08:31:08Z",
+  "paper_id": "arxiv:2512.18641v3",
+  "year_month": "2025-12"
+ },
+ {
+  "title": "Validation of the Reference Impedance in Multiline Calibration with Stepped Impedance Standards",
+  "title_norm": "validation of the reference impedance in multiline calibration with stepped impe",
+  "abstract": "This paper presents a new technique for evaluating the consistency of the reference impedance in multiline thru-reflect-line (TRL) calibration. During the calibration process, it is assumed that all transmission line standards have the same characteristic impedance. However, these assumptions are prone to errors due to imperfections, which can affect the validity of the reference impedance after calibration. Our proposed method involves using multiple stepped impedance lines of different lengths to extract the broadband reflection coefficient of the impedance transition. This reflection coefficient can be used to validate the reference impedance experimentally without requiring fully defined standards. We demonstrate this method using multiline TRL based on microstrip structures on a printed circuit board (PCB) with an on-wafer probing setup.",
+  "year": 2022,
+  "venue": "arXiv",
+  "authors": [
+   "Ziad Hatab",
+   "Michael Ernst Gadringer",
+   "Ahmad Bader Alothman Alterkawi",
+   "Wolfgang Bösch"
+  ],
+  "citations": null,
+  "source": "arxiv",
+  "source_id": "2209.09163v3",
+  "doi": "",
+  "paper_url": "https://arxiv.org/abs/2209.09163v3",
+  "published_iso": "2022-09-19T16:32:37Z",
+  "paper_id": "arxiv:2209.09163v3",
+  "year_month": "2022-09"
+ },
+ {
+  "title": "Calibrated Abstention for Reliable TCR--pMHC Binding Prediction under Epitope Shift",
+  "title_norm": "calibrated abstention for reliable tcr pmhc binding prediction under epitope shi",
+  "abstract": "Predicting T-cell receptor (TCR)--peptide-MHC (pMHC) binding is central to vaccine design and T-cell therapy, yet deployed models frequently encounter epitopes unseen during training, causing silent overconfidence and unreliable prioritization. We address this by framing TCR--pMHC prediction as a \\emph{selective prediction} problem: a calibrated model should either output a trustworthy confidence score or explicitly abstain. Concretely, we (1) introduce a dual-encoder architecture encoding both CDR3$α$/CDR3$β$ and peptide sequences via a pre-trained protein language model; (2) apply temperature scaling to correct systematic probability miscalibration; and (3) impose a conformal abstention rule that provides finite-sample coverage guarantees at a user-specified target error rate. Evaluated under three split strategies -- random, epitope-held-out, and distance-aware -- our method achieves AUROC 0.813 and ECE 0.043 under the challenging epitope-held-out protocol, reducing ECE by 69.7\\% relative to an uncalibrated baseline. At 80\\% coverage, the selective model further reduces error rate from 18.7\\% to 10.9\\%, demonstrating that calibrated abstention enables principled coverage-risk trade-offs aligned with practical screening budgets.",
+  "year": 2026,
+  "venue": "arXiv",
+  "authors": [
+   "Arman Bekov",
+   "Timur Bekzhanov",
+   "Bekzat Sadykov"
+  ],
+  "citations": null,
+  "source": "arxiv",
+  "source_id": "2604.13254v1",
+  "doi": "",
+  "paper_url": "https://arxiv.org/abs/2604.13254v1",
+  "published_iso": "2026-04-14T19:38:54Z",
+  "paper_id": "arxiv:2604.13254v1",
+  "year_month": "2026-04"
+ },
+ {
+  "title": "Proximity-Informed Calibration for Deep Neural Networks",
+  "title_norm": "proximity informed calibration for deep neural networks",
+  "abstract": "Confidence calibration is central to providing accurate and interpretable uncertainty estimates, especially under safety-critical scenarios. However, we find that existing calibration algorithms often overlook the issue of *proximity bias*, a phenomenon where models tend to be more overconfident in low proximity data (i.e., data lying in the sparse region of the data distribution) compared to high proximity samples, and thus suffer from inconsistent miscalibration across different proximity samples. We examine the problem over 504 pretrained ImageNet models and observe that: 1) Proximity bias exists across a wide variety of model architectures and sizes; 2) Transformer-based models are relatively more susceptible to proximity bias than CNN-based models; 3) Proximity bias persists even after performing popular calibration algorithms like temperature scaling; 4) Models tend to overfit more heavily on low proximity samples than on high proximity samples. Motivated by the empirical findings, we propose ProCal, a plug-and-play algorithm with a theoretical guarantee to adjust sample confidence based on proximity. To further quantify the effectiveness of calibration algorithms in mitigating proximity bias, we introduce proximity-informed expected calibration error (PIECE) with theoretical analysis. We show that ProCal is effective in addressing proximity bias and improving calibration on balanced, long-tail, and distribution-shift settings under four metrics over various model architectures. We believe our findings on proximity bias will guide the development of *fairer and better-calibrated* models, contributing to the broader pursuit of trustworthy AI. Our code is available at: https://github.com/MiaoXiong2320/ProximityBias-Calibration.",
+  "year": 2023,
+  "venue": "arXiv",
+  "authors": [
+   "Miao Xiong",
+   "Ailin Deng",
+   "Pang Wei Koh",
+   "Jiaying Wu",
+   "Shen Li",
+   "Jianqing Xu",
+   "Bryan Hooi"
+  ],
+  "citations": null,
+  "source": "arxiv",
+  "source_id": "2306.04590v2",
+  "doi": "",
+  "paper_url": "https://arxiv.org/abs/2306.04590v2",
+  "published_iso": "2023-06-07T16:40:51Z",
+  "paper_id": "arxiv:2306.04590v2",
+  "year_month": "2023-06"
+ },
+ {
+  "title": "Omni-Modal Dissonance Benchmark: Systematically Breaking Modality Consensus to Probe Robustness and Calibrated Abstention",
+  "title_norm": "omni modal dissonance benchmark systematically breaking modality consensus to pr",
+  "abstract": "Existing omni-modal benchmarks attempt to measure modality-specific contributions, but their measurements are confounded: naturally co-occurring modalities carry correlated yet unequal information, making it unclear whether results reflect true modality reliance or information asymmetry. We introduce OMD-Bench, where all modalities are initially congruent - each presenting the same anchor, an object or event independently perceivable through video, audio, and text - which we then systematically corrupt to isolate each modality's contribution. We also evaluate calibrated abstention: whether models appropriately refrain from answering when evidence is conflicting. The benchmark comprises 4,080 instances spanning 27 anchors across eight corruption conditions. Evaluating ten omni-modal models under zero-shot and chain-of-thought prompting, we find that models over-abstain when two modalities are corrupted yet under-abstain severely when all three are, while maintaining high confidence (~60-100%) even under full corruption. Chain-of-thought prompting improves abstention alignment with human judgment but amplifies overconfidence rather than mitigating it. OMD-Bench provides a diagnostic benchmark for diagnosing modality reliance, robustness to cross-modal inconsistency, and uncertainty calibration in omni-modal systems.",
+  "year": 2026,
+  "venue": "arXiv",
+  "authors": [
+   "Zabir Al Nazi",
+   "Shubhashis Roy Dipta",
+   "Md Rizwan Parvez"
+  ],
+  "citations": null,
+  "source": "arxiv",
+  "source_id": "2603.27187v1",
+  "doi": "",
+  "paper_url": "https://arxiv.org/abs/2603.27187v1",
+  "published_iso": "2026-03-28T08:29:15Z",
+  "paper_id": "arxiv:2603.27187v1",
+  "year_month": "2026-03"
+ },
+ {
+  "title": "VL-Calibration: Decoupled Confidence Calibration for Large Vision-Language Models Reasoning",
+  "title_norm": "vl calibration decoupled confidence calibration for large vision language models",
+  "abstract": "Large Vision Language Models (LVLMs) achieve strong multimodal reasoning but frequently exhibit hallucinations and incorrect responses with high certainty, which hinders their usage in high-stakes domains. Existing verbalized confidence calibration methods, largely developed for text-only LLMs, typically optimize a single holistic confidence score using binary answer-level correctness. This design is mismatched to LVLMs: an incorrect prediction may arise from perceptual failures or from reasoning errors given correct perception, and a single confidence conflates these sources while visual uncertainty is often dominated by language priors. To address these issues, we propose VL-Calibration, a reinforcement learning framework that explicitly decouples confidence into visual and reasoning confidence. To supervise visual confidence without ground-truth perception labels, we introduce an intrinsic visual certainty estimation that combines (i) visual grounding measured by KL-divergence under image perturbations and (ii) internal certainty measured by token entropy. We further propose token-level advantage reweighting to focus optimization on tokens based on visual certainty, suppressing ungrounded hallucinations while preserving valid perception. Experiments on thirteen benchmarks show that VL-Calibration effectively improves calibration while boosting visual reasoning accuracy, and it generalizes to out-of-distribution benchmarks across model scales and architectures.",
+  "year": 2026,
+  "venue": "arXiv",
+  "authors": [
+   "Wenyi Xiao",
+   "Xinchi Xu",
+   "Leilei Gan"
+  ],
+  "citations": null,
+  "source": "arxiv",
+  "source_id": "2604.09529v1",
+  "doi": "",
+  "paper_url": "https://arxiv.org/abs/2604.09529v1",
+  "published_iso": "2026-04-10T17:47:19Z",
+  "paper_id": "arxiv:2604.09529v1",
+  "year_month": "2026-04"
+ },
+ {
+  "title": "Ranking with Abstention",
+  "title_norm": "ranking with abstention",
+  "abstract": "We introduce a novel framework of ranking with abstention, where the learner can abstain from making prediction at some limited cost $c$. We present a extensive theoretical analysis of this framework including a series of $H$-consistency bounds for both the family of linear functions and that of neural networks with one hidden-layer. These theoretical guarantees are the state-of-the-art consistency guarantees in the literature, which are upper bounds on the target loss estimation error of a predictor in a hypothesis set $H$, expressed in terms of the surrogate loss estimation error of that predictor. We further argue that our proposed abstention methods are important when using common equicontinuous hypothesis sets in practice. We report the results of experiments illustrating the effectiveness of ranking with abstention.",
+  "year": 2023,
+  "venue": "arXiv",
+  "authors": [
+   "Anqi Mao",
+   "Mehryar Mohri",
+   "Yutao Zhong"
+  ],
+  "citations": null,
+  "source": "arxiv",
+  "source_id": "2307.02035v1",
+  "doi": "",
+  "paper_url": "https://arxiv.org/abs/2307.02035v1",
+  "published_iso": "2023-07-05T05:37:13Z",
+  "paper_id": "arxiv:2307.02035v1",
+  "year_month": "2023-07"
+ },
+ {
+  "title": "Symmetric-Reciprocal-Match Method for Vector Network Analyzer Calibration",
+  "title_norm": "symmetric reciprocal match method for vector network analyzer calibration",
+  "abstract": "This paper proposes a new approach, the symmetric-reciprocal-match (SRM) method, for calibrating vector network analyzers (VNAs). The method involves using multiple symmetric one-port loads, a two-port reciprocal device, and a matched load. The load standards consist of two-port symmetric one-port devices, and at least three unique loads are used. However, the specific impedances of the loads are not specified. The reciprocal device can be any transmissive device, although a non-reciprocal device can also be used if only the one-port error boxes are of interest. The matched load is fully defined and can be asymmetric. We numerically demonstrated the proposed method's accuracy with synthetic data and with measurements of coaxial standards using a commercial short-open-load-reciprocal (SOLR) calibration kit with verification standards. An advantage of the proposed method is that only the match standard is defined, whereas the remaining standards are partially defined, either through symmetry or reciprocity.",
+  "year": 2023,
+  "venue": "arXiv",
+  "authors": [
+   "Ziad Hatab",
+   "Michael Ernst Gadringer",
+   "Wolfgang Bösch"
+  ],
+  "citations": null,
+  "source": "arxiv",
+  "source_id": "2309.02886v2",
+  "doi": "",
+  "paper_url": "https://arxiv.org/abs/2309.02886v2",
+  "published_iso": "2023-09-06T10:20:57Z",
+  "paper_id": "arxiv:2309.02886v2",
+  "year_month": "2023-09"
+ },
+ {
+  "title": "An Efficient Calibration Framework for Volatility Derivatives under Rough Volatility with Jumps",
+  "title_norm": "an efficient calibration framework for volatility derivatives under rough volati",
+  "abstract": "We present a fast and robust calibration method for stochastic volatility models that admit Fourier-analytic transform-based pricing via characteristic functions. The design is structure-preserving: we keep the original pricing transform and (i) split the pricing formula into data-independent inte- grals and a market-dependent remainder; (ii) precompute those data-independent integrals with GPU acceleration; and (iii) approximate only the remaining, market-dependent pricing map with a small neural network. We instantiate the workflow on a rough volatility model with tempered-stable jumps tailored to power-type volatility derivatives and calibrate it to VIX options with a global-to-local search. We verify that a pure-jump rough volatility model adequately captures the VIX dynamics, consistent with prior empirical findings, and demonstrate that our calibration method achieves high accuracy and speed.",
+  "year": 2025,
+  "venue": "arXiv",
+  "authors": [
+   "Keyuan Wu",
+   "Tenghan Zhong",
+   "Yuxuan Ouyang"
+  ],
+  "citations": null,
+  "source": "arxiv",
+  "source_id": "2510.19126v1",
+  "doi": "",
+  "paper_url": "https://arxiv.org/abs/2510.19126v1",
+  "published_iso": "2025-10-21T23:10:40Z",
+  "paper_id": "arxiv:2510.19126v1",
+  "year_month": "2025-10"
+ },
+ {
+  "title": "InverseNet: Benchmarking Operator Mismatch and Calibration Across Compressive Imaging Modalities",
+  "title_norm": "inversenet benchmarking operator mismatch and calibration across compressive ima",
+  "abstract": "State-of-the-art EfficientSCI loses 20.58 dB when its assumed forward operator deviates from physical reality in just eight parameters, yet no existing benchmark quantifies operator mismatch, the default condition in deployed compressive imaging systems. We introduce InverseNet, the first cross-modality benchmark for operator mismatch, spanning CASSI, CACTI, and single-pixel cameras. Evaluating 12 methods under a four-scenario protocol (ideal, mismatched, oracle-corrected, blind calibration) across 27 simulated scenes and 9 real hardware captures, we find: (1) deep learning methods lose 10-21 dB under mismatch, eliminating their advantage over classical baselines; (2) performance and robustness are inversely correlated across modalities (Spearman r_s = -0.71, p < 0.01); (3) mask-oblivious architectures recover 0% of mismatch losses regardless of calibration quality, while operator-conditioned methods recover 41-90%; (4) blind grid-search calibration recovers 85-100% of the oracle bound without ground truth. Real hardware experiments confirm that simulation trends transfer to physical data. Code will be released upon acceptance.",
+  "year": 2026,
+  "venue": "arXiv",
+  "authors": [
+   "Chengshuai Yang",
+   "Xin Yuan"
+  ],
+  "citations": null,
+  "source": "arxiv",
+  "source_id": "2603.04538v1",
+  "doi": "",
+  "paper_url": "https://arxiv.org/abs/2603.04538v1",
+  "published_iso": "2026-03-04T19:25:32Z",
+  "paper_id": "arxiv:2603.04538v1",
+  "year_month": "2026-03"
+ },
+ {
+  "title": "Propagation of Linear Uncertainties through Multiline Thru-Reflect-Line Calibration",
+  "title_norm": "propagation of linear uncertainties through multiline thru reflect line calibrat",
+  "abstract": "This study proposes a linear approach for propagating uncertainties in the multiline thru-reflect-line (TRL) calibration method for vector network analyzers. The multiline TRL formulation we are proposing applies the law of uncertainty propagation as outlined in the ISO Guide to the Expression of Uncertainty in Measurement (GUM) to both measurement and model uncertainties. In addition, we conducted a Monte Carlo analysis using a combination of measured and synthetic data to model various uncertainties, such as additive noise, reflect asymmetry, line mismatch, and line length offset. The results of our linear uncertainty formulation demonstrate agreement with the Monte Carlo method and provide a more efficient means of assessing the uncertainty budget of the multiline TRL calibration.",
+  "year": 2023,
+  "venue": "arXiv",
+  "authors": [
+   "Ziad Hatab",
+   "Michael Ernst Gadringer",
+   "Wolfgang Bösch"
+  ],
+  "citations": null,
+  "source": "arxiv",
+  "source_id": "2301.09126v2",
+  "doi": "",
+  "paper_url": "https://arxiv.org/abs/2301.09126v2",
+  "published_iso": "2023-01-22T13:47:56Z",
+  "paper_id": "arxiv:2301.09126v2",
+  "year_month": "2023-01"
+ },
+ {
+  "title": "Cost-Saving LLM Cascades with Early Abstention",
+  "title_norm": "cost saving llm cascades with early abstention",
+  "abstract": "LLM cascades deploy small LLMs to answer most queries, limiting the use of large and expensive LLMs to difficult queries. This approach can significantly reduce costs without impacting performance. However, risk-sensitive domains such as finance or medicine place an additional premium on avoiding model errors. Since even the most expensive models are susceptible to making mistakes, applications in these domains benefit from allowing LLM systems to completely abstain from answering difficult queries. Introducing abstention poses a design question for LLM cascades: should abstention only be allowed at the final model or also at earlier models? Since the error patterns of small and large models are correlated, allowing earlier models to abstain may reduce inference costs and latency by anticipating abstention decisions by expensive and slow models, thus avoiding the need to run these models. We investigate the benefits of such \"early abstention\" in LLM cascades and find that it reduces overall test loss by 2.2% on average across six benchmarks (GSM8K, MedMCQA, MMLU, TriviaQA, TruthfulQA, and XSum). These gains result from a more effective use of abstention, trading a 4.1% average increase in the overall abstention rate for a 13.0% reduction in cost and a 5.0% reduction in error rate. Our findings demonstrate the possibility of leveraging correlations between the error patterns of different language models to drive performance improvements for LLM systems with abstention.",
+  "year": 2025,
+  "venue": "arXiv",
+  "authors": [
+   "Michael J. Zellinger",
+   "Rex Liu",
+   "Matt Thomson"
+  ],
+  "citations": null,
+  "source": "arxiv",
+  "source_id": "2502.09054v2",
+  "doi": "",
+  "paper_url": "https://arxiv.org/abs/2502.09054v2",
+  "published_iso": "2025-02-13T08:08:39Z",
+  "paper_id": "arxiv:2502.09054v2",
+  "year_month": "2025-02"
+ },
+ {
+  "title": "Auto-Calibration and Biconvex Compressive Sensing with Applications to Parallel MRI",
+  "title_norm": "auto calibration and biconvex compressive sensing with applications to parallel ",
+  "abstract": "We study an auto-calibration problem in which a transform-sparse signal is acquired via compressive sensing by multiple sensors in parallel, but with unknown calibration parameters of the sensors. This inverse problem has an important application in pMRI reconstruction, where the calibration parameters of the receiver coils are often difficult and costly to obtain explicitly, but nonetheless are a fundamental requirement for high-precision reconstructions. Most auto-calibration strategies for this problem involve solving a challenging biconvex optimization problem, which lacks reconstruction guarantees. In this work, we transform the auto-calibrated parallel compressive sensing problem to a convex optimization problem using the idea of `lifting'. By exploiting sparsity structures in the signal and the redundancy introduced by multiple sensors, we solve a mixed-norm minimization problem to recover the underlying signal and the sensing parameters simultaneously. Our method provides robust and stable recovery guarantees that take into account the presence of noise and sparsity deficiencies in the signals. As such, it offers a theoretically guaranteed approach to auto-calibrated parallel imaging in MRI under appropriate assumptions. Applications in compressive sensing pMRI are discussed, and numerical experiments using real and simulated MRI data are presented to support our theoretical results.",
+  "year": 2024,
+  "venue": "arXiv",
+  "authors": [
+   "Yuan Ni",
+   "Thomas Strohmer"
+  ],
+  "citations": null,
+  "source": "arxiv",
+  "source_id": "2401.10400v3",
+  "doi": "",
+  "paper_url": "https://arxiv.org/abs/2401.10400v3",
+  "published_iso": "2024-01-18T22:14:04Z",
+  "paper_id": "arxiv:2401.10400v3",
+  "year_month": "2024-01"
+ },
+ {
+  "title": "Closing the Calibration Gap in Semantic Caching",
+  "title_norm": "closing the calibration gap in semantic caching",
+  "abstract": "Semantic caching cuts LLM inference costs by serving a cached response to semantically similar queries. Standard practice evaluates these systems using PR-AUC, a metric that only measures how well scores rank and ignores whether they are usable at a fixed threshold. We show this mismatch leads to systematically poor deployment choices, as models with the highest PR-AUC are often the worst in operation. We introduce Precision-Cache Hit Ratio (P-CHR) AUC, a cache-aware metric that measures precision across cache utilization levels, and Calibration Retention Rate (CRR), which captures how much offline ranking quality survives at deployment. We decompose the operational gap between offline and deployed quality into a recoverable calibration component and an irreducible structural component fixed by the dataset's positive rate. Our experiments show that the calibration gap is governed by the training objective rather than data scale, and post-hoc calibration only partially closes it. Ultimately, model selection for semantic caching is a calibration problem, not a ranking one, and measuring it is the first step to closing the gap.",
+  "year": 2026,
+  "venue": "arXiv",
+  "authors": [
+   "Aditeya Baral",
+   "Radoslav Ralev",
+   "Iliya Sotirov Zhechev",
+   "Srijith Rajamohan",
+   "Jen Agarwal"
+  ],
+  "citations": null,
+  "source": "arxiv",
+  "source_id": "2606.19719v2",
+  "doi": "",
+  "paper_url": "https://arxiv.org/abs/2606.19719v2",
+  "published_iso": "2026-06-18T02:34:33Z",
+  "paper_id": "arxiv:2606.19719v2",
+  "year_month": "2026-06"
+ },
+ {
+  "title": "Uncertainty Calibration and its Application to Object Detection",
+  "title_norm": "uncertainty calibration and its application to object detection",
+  "abstract": "Image-based environment perception is an important component especially for driver assistance systems or autonomous driving. In this scope, modern neuronal networks are used to identify multiple objects as well as the according position and size information within a single frame. The performance of such an object detection model is important for the overall performance of the whole system. However, a detection model might also predict these objects under a certain degree of uncertainty. [...]\n  In this work, we examine the semantic uncertainty (which object type?) as well as the spatial uncertainty (where is the object and how large is it?). We evaluate if the predicted uncertainties of an object detection model match with the observed error that is achieved on real-world data. In the first part of this work, we introduce the definition for confidence calibration of the semantic uncertainty in the context of object detection, instance segmentation, and semantic segmentation. We integrate additional position information in our examinations to evaluate the effect of the object's position on the semantic calibration properties. Besides measuring calibration, it is also possible to perform a post-hoc recalibration of semantic uncertainty that might have turned out to be miscalibrated. [...]\n  The second part of this work deals with the spatial uncertainty obtained by a probabilistic detection model. [...] We review and extend common calibration methods so that it is possible to obtain parametric uncertainty distributions for the position information in a more flexible way.\n  In the last part, we demonstrate a possible use-case for our derived calibration methods in the context of object tracking. [...] We integrate our previously proposed calibration techniques and demonstrate the usefulness of semantic and spatial uncertainty calibration in a subsequent process. [...]",
+  "year": 2023,
+  "venue": "arXiv",
+  "authors": [
+   "Fabian Küppers"
+  ],
+  "citations": null,
+  "source": "arxiv",
+  "source_id": "2302.02622v1",
+  "doi": "",
+  "paper_url": "https://arxiv.org/abs/2302.02622v1",
+  "published_iso": "2023-02-06T08:41:07Z",
+  "paper_id": "arxiv:2302.02622v1",
+  "year_month": "2023-02"
+ },
+ {
+  "title": "Bounded-Abstention Pairwise Learning to Rank",
+  "title_norm": "bounded abstention pairwise learning to rank",
+  "abstract": "Ranking systems influence decision-making in high-stakes domains like health, education, and employment, where they can have substantial economic and social impacts. This makes the integration of safety mechanisms essential. One such mechanism is abstention, which enables algorithmic decision-making systems to defer uncertain or low-confidence decisions to human experts. While abstention has been predominantly explored in the context of classification tasks, its application to other machine learning paradigms remains underexplored. In this paper, we introduce a novel method for abstention in pairwise learning-to-rank tasks. Our approach is based on thresholding the ranker's conditional risk: the system abstains from making a decision when the estimated risk exceeds a predefined threshold. Our contributions are threefold: a theoretical characterization of the optimal abstention strategy, a model-agnostic, plug-in algorithm for constructing abstaining ranking models, and a comprehensive empirical evaluation across multiple datasets, demonstrating the effectiveness of our approach.",
+  "year": 2025,
+  "venue": "arXiv",
+  "authors": [
+   "Antonio Ferrara",
+   "Andrea Pugnana",
+   "Francesco Bonchi",
+   "Salvatore Ruggieri"
+  ],
+  "citations": null,
+  "source": "arxiv",
+  "source_id": "2505.23437v2",
+  "doi": "",
+  "paper_url": "https://arxiv.org/abs/2505.23437v2",
+  "published_iso": "2025-05-29T13:35:39Z",
+  "paper_id": "arxiv:2505.23437v2",
+  "year_month": "2025-05"
+ },
+ {
+  "title": "TIAR: Trajectory-Informed Advantage Reweighting for LLM Abstention Learning",
+  "title_norm": "tiar trajectory informed advantage reweighting for llm abstention learning",
+  "abstract": "This paper investigates large language model (LLM) abstention learning, specifically using ternary reward, which incentivize truthfulness in large language models. This paper extends that idea by moving from a ternary reward to a Trajectory-Informed advantage reweighting, dynamically re-weights the abstention reward during Group Relative Policy Optimization (GRPO) training. The objective of this work focuses on abstention learning instead of improving truthfulness, serving as an exploration into hallucination reduction. The novelty of this paper lies in methodological innovation, advantage re-weighting, and benchmark selection. Leveraging GRPO's multiple trajectories as a natural abstention signal, this method uses a reward signal to explore knowledge boundaries and encourage consistency. By demonstrating that trajectories can be used as a confidence indicator of the policy relative to the query, they are then used to dynamically calculate the abstention advantage. AbstentionBench is used as the evaluation benchmark, as this work aims to contribute to the field of abstention learning. All datasets on the benchmark were tested against this method and various baselines. Empirical results demonstrate that TIAR achieves state-of-the-art abstention F1 scores across five of six evaluation categories, outperforming the static ternary baseline on 17 of 31 benchmark datasets while fully preserving baseline accuracy.",
+  "year": 2026,
+  "venue": "arXiv",
+  "authors": [
+   "Muyu Pan",
+   "Shu Zhao",
+   "Nan Zhang",
+   "Philip Shin",
+   "Varun Parekh",
+   "Vijaykrishnan Narayanan",
+   "Rui Zhang"
+  ],
+  "citations": null,
+  "source": "arxiv",
+  "source_id": "2605.25850v1",
+  "doi": "",
+  "paper_url": "https://arxiv.org/abs/2605.25850v1",
+  "published_iso": "2026-05-25T13:42:37Z",
+  "paper_id": "arxiv:2605.25850v1",
+  "year_month": "2026-05"
+ },
+ {
+  "title": "QCore: Data-Efficient, On-Device Continual Calibration for Quantized Models -- Extended Version",
+  "title_norm": "qcore data efficient on device continual calibration for quantized models extend",
+  "abstract": "We are witnessing an increasing availability of streaming data that may contain valuable information on the underlying processes. It is thus attractive to be able to deploy machine learning models on edge devices near sensors such that decisions can be made instantaneously, rather than first having to transmit incoming data to servers. To enable deployment on edge devices with limited storage and computational capabilities, the full-precision parameters in standard models can be quantized to use fewer bits. The resulting quantized models are then calibrated using back-propagation and full training data to ensure accuracy. This one-time calibration works for deployments in static environments. However, model deployment in dynamic edge environments call for continual calibration to adaptively adjust quantized models to fit new incoming data, which may have different distributions. The first difficulty in enabling continual calibration on the edge is that the full training data may be too large and thus not always available on edge devices. The second difficulty is that the use of back-propagation on the edge for repeated calibration is too expensive. We propose QCore to enable continual calibration on the edge. First, it compresses the full training data into a small subset to enable effective calibration of quantized models with different bit-widths. We also propose means of updating the subset when new streaming data arrives to reflect changes in the environment, while not forgetting earlier training data. Second, we propose a small bit-flipping network that works with the subset to update quantized model parameters, thus enabling efficient continual calibration without back-propagation. An experimental study, conducted with real-world data in a continual learning setting, offers insight into the properties of QCore and shows that it is capable of outperforming strong baseline methods.",
+  "year": 2024,
+  "venue": "arXiv",
+  "authors": [
+   "David Campos",
+   "Bin Yang",
+   "Tung Kieu",
+   "Miao Zhang",
+   "Chenjuan Guo",
+   "Christian S. Jensen"
+  ],
+  "citations": null,
+  "source": "arxiv",
+  "source_id": "2404.13990v1",
+  "doi": "",
+  "paper_url": "https://arxiv.org/abs/2404.13990v1",
+  "published_iso": "2024-04-22T08:57:46Z",
+  "paper_id": "arxiv:2404.13990v1",
+  "year_month": "2024-04"
+ }
+]

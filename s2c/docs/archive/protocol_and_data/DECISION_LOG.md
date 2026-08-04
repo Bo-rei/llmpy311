@@ -321,3 +321,28 @@
   并以 `complete_recovered_intermediate_prediction` 登记，原 `failed` manifest 不覆盖。
 - 结果 Accuracy 88.6842、F1-All 90.2629、F1-U/OOS F1 87.0527、F1-K 90.2916；这不是严格默认预算或论文表格复现。
 - 决策：保留作为端到端兼容性证据；不把它与 Known-only Gate 方法混列，不扩展 DCLOOS 矩阵，先完成状态与公开汇总校验。
+
+## D32：lambda 选择与泄漏审计收口（2026-08-02）
+
+- 当前协议的 E2 半径参数是固定 `lambda=1.0`；历史 v19/旧 corrected runner 的 validation-OOS
+  搜索被单独标记，不能混入 Known-only 主证据。
+- 9 组 dataset/seed 的 train、Known calibration、test Known 和 test OOS 样本 ID 均通过不相交
+  检查。当前协议没有合法的 validation-OOS 或 validation-unknown-intent split，因此不能声称
+  已完成 OOS 验证集调参。
+- λ 敏感性覆盖 8 个候选值、3 个数据集、3 个 seed、K=1/K=2（另输出不重复拟合的 paper-default-K
+  别名），共 216 行、18 个唯一 detector fit；λ=1 与冻结 E2 的指标和预测逐项一致。
+- Known-only 的 5% calibration false-rejection 约束在部分 dataset/K 上连网格上限都无法满足；λ=2
+  只能作为诊断上限。Banking77 K=2 的收益未通过 F1-All 和 intent-level 门槛，StackOverflow K=2
+  仍明显增加 false acceptance，CLINC150 不提供稳定跨配置证据。
+- 决策：不注册或运行 split--merge adaptive-K pilot，不把 test-oracle intent 行升级为选择器；未来
+  若继续研究自适应 K，必须先补齐独立 validation-OOS 或严格 Known-only intent-level 选择契约。
+
+## D33：λ 审计与公开快照验证完成（2026-08-02）
+
+- λ 审计、adaptive-K/MOGB 只读诊断均已登记到公开白名单；102 个轻量文件、总计 13,820,620
+  bytes，通过 SHA/size 校验，未新增原始语料或逐样本分数。
+- 291 unit、8 integration、3 smoke、compileall、Ruff、data-tracking、development-log、
+  research-state、registry check-only 和 `git diff --check` 均通过。
+- 完整 registry 哈希扫描未作为本轮证据，因为它会遍历大型本地 checkpoint 树；check-only 结果为
+  pass，且本轮没有修改任何 artifact 内容。
+- 决策不变：λ 结果只用于泄漏和参数契约说明；adaptive-K 仍未获授权。

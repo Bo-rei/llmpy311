@@ -1,0 +1,27 @@
+[
+  {
+    "type": "title",
+    "value": "Multi-Granularity Open Intent Classification via Adaptive Granular-Ball Decision Boundary",
+    "raw_match": "MOGB"
+  },
+  {
+    "type": "arxiv_id",
+    "value": "2412.13542",
+    "raw_match": "2412.13542"
+  },
+  {
+    "type": "title",
+    "value": "Deep Open Intent Classification with Adaptive Decision Boundary",
+    "raw_match": "ADB"
+  },
+  {
+    "type": "title",
+    "value": "Out-of-Distribution Intent Detection with Self-Supervision and Discriminative Training",
+    "raw_match": "DCLOOS"
+  },
+  {
+    "type": "title",
+    "value": "A new approach for fine-tuning sentence transformers for intent classification and out-of-scope detection tasks",
+    "raw_match": "CE-Recon"
+  }
+]

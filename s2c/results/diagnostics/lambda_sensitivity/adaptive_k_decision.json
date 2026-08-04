@@ -1,0 +1,147 @@
+{
+  "adaptive_k_gate": {
+    "banking77": {
+      "aggregate_known_only_selected_lambda_deltas": [
+        {
+          "f1_all_delta_k2_minus_k1": 0.016236983930564164,
+          "false_accept_delta_k2_minus_k1": -0.05320512820512824,
+          "known_recall_delta_k2_minus_k1": -0.011184210526315796,
+          "lambda_k1": 2.0,
+          "lambda_k2": 2.0,
+          "oos_f1_delta_k2_minus_k1": 0.0511587678106189,
+          "seed": 13
+        },
+        {
+          "f1_all_delta_k2_minus_k1": -0.00735043449985473,
+          "false_accept_delta_k2_minus_k1": 0.00576923076923086,
+          "known_recall_delta_k2_minus_k1": 0.005921052631578938,
+          "lambda_k1": 2.0,
+          "lambda_k2": 2.0,
+          "oos_f1_delta_k2_minus_k1": -0.003637391531597811,
+          "seed": 42
+        },
+        {
+          "f1_all_delta_k2_minus_k1": 0.01868847121565176,
+          "false_accept_delta_k2_minus_k1": -0.09230769230769231,
+          "known_recall_delta_k2_minus_k1": -0.015789473684210575,
+          "lambda_k1": 2.0,
+          "lambda_k2": 2.0,
+          "oos_f1_delta_k2_minus_k1": 0.0843402570767654,
+          "seed": 87
+        }
+      ],
+      "direction_consistent_oos_f1_seeds": 2,
+      "gate_checks": {
+        "direction_consistent_in_at_least_2_of_3": true,
+        "f1_all_gain_ge_0.01": false,
+        "intent_positive_fraction_ge_0.20": null,
+        "known_recall_loss_le_0.02": true,
+        "lambda_stable": true,
+        "oos_f1_gain_ge_0.02": true
+      },
+      "known_only_selected_lambdas": [
+        2.0
+      ],
+      "lambda_stable_within_0.50": true,
+      "mean_f1_all_delta_k2_minus_k1": 0.009191673548787064,
+      "mean_known_recall_delta_k2_minus_k1": -0.007017543859649145,
+      "mean_oos_f1_delta_k2_minus_k1": 0.04395387778526216,
+      "overall_pass": false,
+      "reason": "Per-intent positive-fraction evidence is unavailable under the Known-only lambda contract; existing intent rows are test-oracle diagnostics only.",
+      "status": "not_authorized"
+    },
+    "clinc150": {
+      "aggregate_known_only_selected_lambda_deltas": [
+        {
+          "f1_all_delta_k2_minus_k1": 0.008240372054521217,
+          "false_accept_delta_k2_minus_k1": -0.06144927536231881,
+          "known_recall_delta_k2_minus_k1": -0.03511111111111109,
+          "lambda_k1": 2.0,
+          "lambda_k2": 2.0,
+          "oos_f1_delta_k2_minus_k1": 0.027082566392785612,
+          "seed": 13
+        },
+        {
+          "f1_all_delta_k2_minus_k1": -0.004505982530805253,
+          "false_accept_delta_k2_minus_k1": -0.038840579710144874,
+          "known_recall_delta_k2_minus_k1": -0.02311111111111097,
+          "lambda_k1": 2.0,
+          "lambda_k2": 2.0,
+          "oos_f1_delta_k2_minus_k1": 0.016087304338160968,
+          "seed": 42
+        },
+        {
+          "f1_all_delta_k2_minus_k1": -0.0007845324761164285,
+          "false_accept_delta_k2_minus_k1": -0.03536231884057969,
+          "known_recall_delta_k2_minus_k1": -0.034222222222222154,
+          "lambda_k1": 2.0,
+          "lambda_k2": 2.0,
+          "oos_f1_delta_k2_minus_k1": 0.011331283795643077,
+          "seed": 87
+        }
+      ],
+      "direction_consistent_oos_f1_seeds": 3,
+      "gate_checks": {},
+      "known_only_selected_lambdas": [
+        2.0
+      ],
+      "lambda_stable_within_0.50": true,
+      "mean_f1_all_delta_k2_minus_k1": 0.0009832856825331786,
+      "mean_known_recall_delta_k2_minus_k1": -0.03081481481481474,
+      "mean_oos_f1_delta_k2_minus_k1": 0.01816705150886322,
+      "overall_pass": null,
+      "reason": "CLINC150 is retained as a neutral dataset; no adaptive-K authorization is inferred from aggregate test sensitivity.",
+      "status": "neutral_control"
+    },
+    "stackoverflow": {
+      "aggregate_known_only_selected_lambda_deltas": [
+        {
+          "f1_all_delta_k2_minus_k1": -0.06486315981393809,
+          "false_accept_delta_k2_minus_k1": 0.1393333333333333,
+          "known_recall_delta_k2_minus_k1": 0.03299999999999992,
+          "lambda_k1": 2.0,
+          "lambda_k2": 2.0,
+          "oos_f1_delta_k2_minus_k1": -0.15839841996588572,
+          "seed": 13
+        },
+        {
+          "f1_all_delta_k2_minus_k1": -0.08158731271468189,
+          "false_accept_delta_k2_minus_k1": 0.28933333333333333,
+          "known_recall_delta_k2_minus_k1": 0.03333333333333344,
+          "lambda_k1": 2.0,
+          "lambda_k2": 2.0,
+          "oos_f1_delta_k2_minus_k1": -0.29161125687077244,
+          "seed": 42
+        },
+        {
+          "f1_all_delta_k2_minus_k1": -0.08299400371827659,
+          "false_accept_delta_k2_minus_k1": 0.29300000000000004,
+          "known_recall_delta_k2_minus_k1": 0.061666666666666536,
+          "lambda_k1": 2.0,
+          "lambda_k2": 2.0,
+          "oos_f1_delta_k2_minus_k1": -0.33161131788934584,
+          "seed": 87
+        }
+      ],
+      "direction_consistent_oos_f1_seeds": 0,
+      "gate_checks": {
+        "fallback_to_k1_executed": false,
+        "negative_control_f1_all_drop_le_0.01": false,
+        "negative_control_oos_f1_drop_le_0.02": false
+      },
+      "known_only_selected_lambdas": [
+        2.0
+      ],
+      "lambda_stable_within_0.50": true,
+      "mean_f1_all_delta_k2_minus_k1": -0.07648149208229886,
+      "mean_known_recall_delta_k2_minus_k1": 0.04266666666666663,
+      "mean_oos_f1_delta_k2_minus_k1": -0.2605403315753347,
+      "overall_pass": false,
+      "reason": "No split-merge rule was executed; fixed K=2 remains a negative control and the selected-lambda aggregate still shows boundary-union degradation.",
+      "status": "not_authorized"
+    }
+  },
+  "protocol_version": "protocol_v2_textoir_v1",
+  "split_merge_pilot_authorized": false,
+  "stage": "lambda_leakage_audit_v1"
+}

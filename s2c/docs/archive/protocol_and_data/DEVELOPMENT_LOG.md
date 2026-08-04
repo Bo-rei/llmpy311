@@ -908,3 +908,41 @@
 - Dataset rows additionally report the number of intent×KIR×distance groups with any K>1 test-oracle
   winner on at least 3/5 seeds. This is descriptive sensitivity evidence, not a validation selector.
 - No model, embedding, registry, view, export, or original artifact was changed.
+
+## 2026-08-02 — lambda leakage audit and sensitivity closeout
+
+- Base commit: `03a6e26ed373747baccabbbb459d0a355af935ae`; branch:
+  `experiment/lambda-leakage-audit`. The frozen E0--E3/R1/M1 and external-baseline
+  artifacts were not modified, and no write occurred under `../artifacts/s2c`.
+- Added the read-only audit/summary tools
+  `tools/analysis/run_lambda_leakage_audit.py`,
+  `tools/analysis/summarize_lambda_sensitivity.py`, and the focused unit test
+  `tests/unit/test_lambda_leakage_audit.py`.
+- Added the append-only ledger row `lambda_leakage_audit_v1` and diagnostic outputs under
+  `results/diagnostics/lambda_leakage/` and `results/diagnostics/lambda_sensitivity/`.
+  The audit covers 9 dataset/seed split contracts and 216 scoring rows from 18 unique detector
+  fits; `paper_default_k` is an explicit alias of K=2 and does not create another fit.
+- Evidence: all split IDs are disjoint; the active E2 contract uses fixed `lambda=1.0` without
+  test-OOS selection; the 18 lambda=1 comparisons reproduce frozen E2 metrics and predictions
+  exactly. Historical validation-OOS lambda searches remain excluded from the primary evidence.
+- Decision: Known-only evidence does not satisfy the pre-registered adaptive-K gates. Banking77
+  remains conditional and misses the strict F1-All/intent-level requirements; StackOverflow is a
+  negative control with strong K=2 false-acceptance growth; no split--merge pilot is authorized.
+- Targeted verification passed (`py_compile` for both tools and the two new unit tests). Full
+  repository validation remains the final closeout step. Next: review this audit in the paper's
+  parameter/leakage section; if adaptive-K is revisited, first establish an independent validation
+  OOS or a strict Known-only intent-level selection contract.
+
+## 2026-08-02 — lambda audit verification closeout
+
+- Public whitelist now includes the aggregate adaptive-K/MOGB diagnostics and the lambda audit;
+  `export_public_results.py --verify` passed with 102 records and 13,820,620 bytes. No raw text,
+  embedding, checkpoint or sample-level score was added.
+- Verification passed: 291 unit tests, 8 integration tests, 3 smoke tests, compileall, Ruff,
+  data-tracking, development-log, research-state (`ledger_rows=39`), registry `--check-only`,
+  public-result SHA/size verification, and `git diff --check`.
+- The full registry hash pass was not used for this closeout because its checkpoint glob walks the
+  large local artifact tree; the check-only audit passed and no source/artifact content changed.
+- Decision and next step are unchanged: keep the lambda result as leakage/parameter evidence, do not
+  launch adaptive-K or any new training stage until a legal validation-OOS or Known-only intent-level
+  selection contract exists.

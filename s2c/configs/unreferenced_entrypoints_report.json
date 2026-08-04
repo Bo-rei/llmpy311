@@ -1,7 +1,7 @@
 {
   "action": "report_only",
-  "count": 201,
-  "generated_at": "2026-08-02T09:18:20.666616+00:00",
+  "count": 203,
+  "generated_at": "2026-08-02T11:26:40.601631+00:00",
   "paths": [
     "scripts/data/active/audit_v19_2_data.py",
     "scripts/data/active/build_known_intents_ratio_splits_v19.py",
@@ -160,6 +160,7 @@
     "tools/analysis/recompose_clinc_umap_single_paper_v19.py",
     "tools/analysis/remix_clinc_clean_umap_readable_v19.py",
     "tools/analysis/rerender_gate_score_distribution_v19.py",
+    "tools/analysis/run_lambda_leakage_audit.py",
     "tools/analysis/run_minimal_paper_ablation_v19.py",
     "tools/analysis/run_multi_dataset_benchmark_v19.py",
     "tools/analysis/run_multi_dataset_training_v19.py",
@@ -167,6 +168,7 @@
     "tools/analysis/run_structure_backbone_ablation_v19.py",
     "tools/analysis/s2c_code_inventory_v19.py",
     "tools/analysis/summarize_ablation_results_v19.py",
+    "tools/analysis/summarize_lambda_sensitivity.py",
     "tools/analysis/summarize_r1_full.py",
     "tools/analysis/threshold_selection_v19.py",
     "tools/analysis/validate_router_confidence_threshold_v19.py",

@@ -1,0 +1,874 @@
+{
+  "title": "Union-Risk Calibrated Subcenter Gates for Known-Only Open Intent Detection",
+  "title_zh": "已知数据驱动的多子中心并集风险校准门",
+  "method_name": "Union-Risk Calibrated Subcenter Gate (URCSG)",
+  "hook": "Across the frozen-MiniLM E2/E3 grid, stable KMeans partitions did not predict OOS benefit: Banking77 could gain from extra centers while StackOverflow collapsed through false acceptance. The candidate predicts that a known-only estimate of incremental union acceptance risk can identify this regime before test OOS is seen.",
+  "abstract_draft": "Open-set intent detectors often gain Known coverage by adding local centers, but the union of those regions can accept unknown intents. The current s2c evidence makes this failure concrete: partition stability does not predict OOS benefit, StackOverflow suffers boundary-union overcoverage, and lawful Known-only lambda selection cannot use test OOS. Recent multi-cluster MiniLM work (arxiv:2607.07974v1) changes the boundary geometry but does not provide a test-independent estimate of the incremental risk contributed by each added region. URCSG reframes that missing quantity as a target-specific newly-accepted probability: in rotated leave-one-known-intent-out episodes, only one intent expands from K=1 to K>1 while all other intents remain at K=1. A Wilson upper bound on this marginal event, combined with an own-intent Known-coverage constraint, selects the largest safe K or deterministically falls back to K=1. The pilot compares URCSG with single-centroid, fixed K, BRAK, and a global geometry-calibrated abstention comparator on the frozen MiniLM protocol. The falsification criterion is downstream: if shuffling the held-out-intent episodes does not erase the OOS/coverage advantage, the claimed union-risk mechanism is not supported.",
+  "motivation": {
+    "problem_framing": "The current s2c Gate is deliberately lightweight: frozen MiniLM embeddings feed per-intent centers, radii, and a minimum normalized distance score. E2 and E3 show that this design has a structural asymmetry. Adding centers can help Banking77, but the same operation can sharply increase StackOverflow false acceptance even when KMeans is stable; therefore cluster stability, effective rank, or a larger K sweep is not a sufficient decision signal.\n\nThe missing quantity is the marginal open-space risk created by the union of local regions. A fixed K or lambda is selected globally, while the final detector is a per-intent union; current test-oracle rows are descriptive only, and the existing protocol has no legal validation-unknown split for choosing K. URCSG treats the marginal union event itself as the object to estimate, using rotated known intents as construction-defined pseudo-OOS and retaining the existing detector geometry unchanged.",
+    "why_now": "The need is timely because arxiv:2607.07974v1 makes multi-cluster MiniLM boundaries a direct comparison point, while arxiv:2603.04538v1 shows how hidden calibration and operator mismatch can invalidate benchmark conclusions. The current audit has already frozen the data and provenance contracts, so the next useful step is a small risk-calibration experiment rather than another unregistered architecture or K sweep.",
+    "why_prior_stopped": [
+      {
+        "paper_id": "arxiv:2607.07974v1",
+        "venue_year": "arXiv 2026-07",
+        "what_they_did": "arxiv:2607.07974v1 replaced a single MiniLM boundary with fixed multi-cluster local regions for OOS intent detection.",
+        "what_they_did_not_do": "It did not estimate the marginal unknown-space acceptance caused by adding one intent's extra regions under a test-independent protocol.",
+        "structural_reason_they_stopped": "The method changes the boundary geometry but does not define a per-intent risk object that can be calibrated before test OOS is observed."
+      },
+      {
+        "paper_id": "arxiv:2602.21252v1",
+        "venue_year": "arXiv 2026-02",
+        "what_they_did": "arxiv:2602.21252v1 conditioned a detection boundary on context and policy in a different security domain.",
+        "what_they_did_not_do": "It did not test whether a semantic OOS detector's scalar distance score is sufficient after multiple accepted regions are unioned.",
+        "structural_reason_they_stopped": "The context-conditioned boundary is not a known-only selection rule for the incremental risk of local-region expansion."
+      },
+      {
+        "paper_id": "arxiv:2603.04538v1",
+        "venue_year": "arXiv 2026-03",
+        "what_they_did": "arxiv:2603.04538v1 isolated operator and calibration confounds in benchmark comparisons.",
+        "what_they_did_not_do": "It did not construct a per-intent acceptance-union risk estimate that changes an open-intent Gate's final configuration.",
+        "structural_reason_they_stopped": "Its diagnostic identifies mismatch but stops before a task-specific feasibility rule and downstream intervention."
+      }
+    ],
+    "what_changes_when_gap_closes": "The detector gains a legal bridge between Known-only calibration and per-intent multi-center selection: it can keep K=1 for unsafe intents without pretending that a global K is optimal. The paper's claim becomes testable at the level that fails in practice—newly accepted unknown-space events—while the existing embedding, distance, radius, and evaluation contracts remain comparable."
+  },
+  "core_claim": "A construction-defined estimate of the marginal acceptance added by one intent's extra regions can select safe multi-center Gates without test OOS labels.",
+  "sub_claims": [
+    {
+      "id": "C1",
+      "statement": "The target-specific newly-accepted event ΔU_{y,K} is computable from rotated known-intent calibration episodes and is distinct from a global abstention threshold.",
+      "supports_which_aspect": "mechanism definition"
+    },
+    {
+      "id": "C2",
+      "statement": "A coverage-constrained Wilson upper bound yields a deterministic per-intent K=1 fallback.",
+      "supports_which_aspect": "selection legality"
+    },
+    {
+      "id": "C3",
+      "statement": "If the mechanism is causal rather than a calibration artifact, shuffling episode assignments removes the downstream OOS/coverage advantage.",
+      "supports_which_aspect": "falsification"
+    }
+  ],
+  "key_equations": [
+    {
+      "id": "E1",
+      "linked_step_id": "S2",
+      "latex": "q_{y,k}(x)=d(z(x),c_{y,k})/r_{y,k}",
+      "description": "Existing normalized distance/radius score.",
+      "description_zh": "沿用现有距离与半径归一化得分。"
+    },
+    {
+      "id": "E2",
+      "linked_step_id": "S3",
+      "latex": "I_{y,K,h}(x)=\\mathbf{1}[A_{y,K}(x)=1\\land A_{y,1}(x)=0]",
+      "description": "Target-specific newly accepted pseudo-OOS event.",
+      "description_zh": "目标意图扩展后新增接受的伪 OOS 事件。"
+    },
+    {
+      "id": "E3",
+      "linked_step_id": "S4",
+      "latex": "\\Delta U_{y,K}=P_h(I_{y,K,h}(x)=1\\mid x\\in h)",
+      "description": "Marginal union-risk estimate over eligible held-out intents.",
+      "description_zh": "在轮换留出意图上估计边界并集的增量风险。"
+    },
+    {
+      "id": "E4",
+      "linked_step_id": "S5",
+      "latex": "G_{y,K}\\ge G_{y,1}-\\epsilon_{cov}\\;\\land\\;UCB_{y,K}\\le\\rho_{risk}",
+      "description": "Pre-registered feasibility constraints.",
+      "description_zh": "预注册的已知覆盖和风险上界约束。"
+    }
+  ],
+  "method_flow": {
+    "high_level_pipeline": "URCSG starts from the unchanged frozen-MiniLM Gate and fits candidate K configurations from train_known. It rotates each known intent out of the Known universe, expands only one target intent at a time, and measures newly accepted held-out-intent samples relative to that target's K=1 baseline. A Wilson upper bound and own-intent coverage constraint select the largest feasible K or retain K=1; only after this rule is frozen does one final test pass run. A global geometry-calibrated abstention comparator is reported separately and cannot alter the selector.",
+    "steps": [
+      {
+        "step_id": "S1",
+        "title": "Freeze contracts",
+        "what_changes": "No model or data change; protocol, hashes, detector contract, and epsilon_cov/rho_risk become immutable.",
+        "why_this_step": "Prevents accidental migration or test-driven tuning.",
+        "linked_component": "engineering",
+        "linked_falsification": "both",
+        "input": "protocol manifests and configs",
+        "output": "frozen run specification"
+      },
+      {
+        "step_id": "S2",
+        "title": "Fit target expansion",
+        "what_changes": "Fit K=1 for all intents and K>1 only for target y from train_known.",
+        "why_this_step": "Isolates the marginal contribution of one intent's extra regions.",
+        "linked_component": "both",
+        "linked_falsification": "mechanism_distinguisher",
+        "input": "train_known embeddings",
+        "output": "centers, radii, q scores"
+      },
+      {
+        "step_id": "S3",
+        "title": "Rotate held-out intents",
+        "what_changes": "Treat each held-out known intent's calibration samples as construction-defined pseudo-OOS.",
+        "why_this_step": "Creates a legal proxy for unknown-space exposure without test labels.",
+        "linked_component": "engineering",
+        "linked_falsification": "metric_specification",
+        "input": "calibration-known intents",
+        "output": "eligible episodes"
+      },
+      {
+        "step_id": "S4",
+        "title": "Estimate marginal risk",
+        "what_changes": "Compute newly accepted indicators and Wilson upper bounds plus own-intent coverage.",
+        "why_this_step": "Turns union overcoverage into a measurable selection object.",
+        "linked_component": "theory",
+        "linked_falsification": "both",
+        "input": "episode scores",
+        "output": "DeltaU, UCB, G"
+      },
+      {
+        "step_id": "S5",
+        "title": "Select per-intent K",
+        "what_changes": "Choose the largest feasible K under fixed coverage/risk constraints, otherwise K=1.",
+        "why_this_step": "Provides a legal fallback rather than a universal K claim.",
+        "linked_component": "both",
+        "linked_falsification": "metric_specification",
+        "input": "UCB and coverage",
+        "output": "selected K_y and reason code"
+      },
+      {
+        "step_id": "S6",
+        "title": "Fit comparator",
+        "what_changes": "Fit a global geometry-calibrated abstention baseline under the same train/calibration contract.",
+        "why_this_step": "Separates target-specific union risk from generic calibration.",
+        "linked_component": "engineering",
+        "linked_falsification": "both",
+        "input": "same embeddings and calibration",
+        "output": "comparator metrics"
+      },
+      {
+        "step_id": "S7",
+        "title": "Freeze and test",
+        "what_changes": "Run one unchanged test evaluation with selected K_y.",
+        "why_this_step": "Keeps test OOS out of all decisions.",
+        "linked_component": "engineering",
+        "linked_falsification": "metric_specification",
+        "input": "frozen selector and test pools",
+        "output": "OOS/known metrics"
+      },
+      {
+        "step_id": "S8",
+        "title": "Shuffle negative control",
+        "what_changes": "Shuffle held-out-intent episode assignments before risk estimation.",
+        "why_this_step": "Intervenes on the producer of DeltaU while preserving counts and evaluator.",
+        "linked_component": "both",
+        "linked_falsification": "mechanism_distinguisher",
+        "input": "same episodes with permuted assignment",
+        "output": "negative-control downstream metrics"
+      },
+      {
+        "step_id": "S9",
+        "title": "Compare controls",
+        "what_changes": "Report Single, fixed K, BRAK, oracle-test-K descriptive upper bound, and comparator.",
+        "why_this_step": "Shows whether any gain is specific to the proposed risk object.",
+        "linked_component": "engineering",
+        "linked_falsification": "both",
+        "input": "all frozen outputs",
+        "output": "paired comparison table"
+      }
+    ],
+    "design_reasoning_echo": "The design keeps one central object—target-specific newly accepted union events—and makes every later step consume or validate it. It rejects more representation losses, more K sweeps, and generic local-score aggregation because those axes have already been audited and do not identify StackOverflow's failure; it also avoids collapsing the method to a global conformal threshold by requiring a same-contract comparator."
+  },
+  "plain_motivation_en": "Adding several local regions can help a known intent, but it can also make the detector accept more unknown examples. Instead of choosing the number of regions from test performance, URCSG hides one known intent at a time and asks how many extra held-out examples become accepted when only one intent is expanded. It keeps an expansion only when known coverage is preserved and the upper confidence bound on this added acceptance risk stays below a fixed limit.",
+  "plain_motivation_zh": "增加多个局部区域有时能覆盖已知意图，但也可能让更多未知样本被错误接受。URCSG 不用测试集性能选择中心数，而是轮流隐藏一个已知意图，测量只扩展某个目标意图后新增接受的样本数量；只有在已知覆盖基本不下降且风险上界低于固定限制时，才保留额外中心，否则回退到 K=1。",
+  "plain_method_steps_en": [
+    {
+      "step_id": "S1",
+      "what_to_do": "Freeze data, code, detector, and risk constants.",
+      "why_this_makes_sense": "The selection must be reproducible and test-independent."
+    },
+    {
+      "step_id": "S2",
+      "what_to_do": "Fit baseline balls for every intent and candidate extra balls for one target intent.",
+      "why_this_makes_sense": "This isolates the effect of adding regions to that intent."
+    },
+    {
+      "step_id": "S3",
+      "what_to_do": "Rotate each known intent out and use its calibration samples as pseudo-unknowns.",
+      "why_this_makes_sense": "The held-out identity is known by construction without using real test OOS."
+    },
+    {
+      "step_id": "S4",
+      "what_to_do": "Count newly accepted held-out samples and compute an upper confidence bound.",
+      "why_this_makes_sense": "The quantity directly measures union overcoverage."
+    },
+    {
+      "step_id": "S5",
+      "what_to_do": "Keep the largest K satisfying coverage and risk constraints.",
+      "why_this_makes_sense": "Unsafe intents retain the safe single-center fallback."
+    },
+    {
+      "step_id": "S6",
+      "what_to_do": "Fit and report a separate global abstention comparator.",
+      "why_this_makes_sense": "A gain must not be explained by generic calibration alone."
+    },
+    {
+      "step_id": "S7",
+      "what_to_do": "Evaluate the frozen selector once on test pools.",
+      "why_this_makes_sense": "Test data only measures the final method."
+    },
+    {
+      "step_id": "S8",
+      "what_to_do": "Shuffle episode assignments and repeat selection.",
+      "why_this_makes_sense": "The proposed mechanism should disappear when its risk signal is destroyed."
+    },
+    {
+      "step_id": "S9",
+      "what_to_do": "Compare all controls and report paired metrics.",
+      "why_this_makes_sense": "The claim is about mechanism-specific improvement, not a leaderboard maximum."
+    }
+  ],
+  "plain_method_steps_zh": [
+    {
+      "step_id": "S1",
+      "what_to_do": "冻结数据、代码、检测器和风险常数。",
+      "why_this_makes_sense": "保证选择过程可复现且不接触测试 OOS。"
+    },
+    {
+      "step_id": "S2",
+      "what_to_do": "拟合所有意图的单中心，并只给一个目标意图增加候选中心。",
+      "why_this_makes_sense": "隔离增加该意图区域的影响。"
+    },
+    {
+      "step_id": "S3",
+      "what_to_do": "轮流留出一个已知意图，把其校准样本当作伪未知。",
+      "why_this_makes_sense": "用构造身份获得未知代理，不使用真实测试 OOS。"
+    },
+    {
+      "step_id": "S4",
+      "what_to_do": "统计新增接受样本并计算风险上界。",
+      "why_this_makes_sense": "直接度量多个接受区域的并集过覆盖。"
+    },
+    {
+      "step_id": "S5",
+      "what_to_do": "在覆盖和风险约束下保留最大 K。",
+      "why_this_makes_sense": "不安全意图可以回退到单中心。"
+    },
+    {
+      "step_id": "S6",
+      "what_to_do": "单独运行全局几何校准拒识基线。",
+      "why_this_makes_sense": "排除只是普通校准带来的收益。"
+    },
+    {
+      "step_id": "S7",
+      "what_to_do": "冻结选择器后只进行一次测试评估。",
+      "why_this_makes_sense": "测试集只用于最终测量。"
+    },
+    {
+      "step_id": "S8",
+      "what_to_do": "打乱轮换意图分配后重复选择。",
+      "why_this_makes_sense": "破坏风险信号后机制效果应消失。"
+    },
+    {
+      "step_id": "S9",
+      "what_to_do": "与所有控制方法做配对比较。",
+      "why_this_makes_sense": "验证提升来自机制而非偶然最优数字。"
+    }
+  ],
+  "plain_method_modules_en": [
+    {
+      "module_id": "M1",
+      "purpose_oneline": "Contract and detector fitting",
+      "step_ids": [
+        "S1",
+        "S2"
+      ]
+    },
+    {
+      "module_id": "M2",
+      "purpose_oneline": "Rotated known-only risk measurement",
+      "step_ids": [
+        "S3",
+        "S4"
+      ]
+    },
+    {
+      "module_id": "M3",
+      "purpose_oneline": "Feasibility selection and comparator",
+      "step_ids": [
+        "S5",
+        "S6"
+      ]
+    },
+    {
+      "module_id": "M4",
+      "purpose_oneline": "Frozen evaluation and mechanism ablation",
+      "step_ids": [
+        "S7",
+        "S8",
+        "S9"
+      ]
+    }
+  ],
+  "plain_method_modules_zh": [
+    {
+      "module_id": "M1",
+      "purpose_oneline": "协议与检测器拟合",
+      "step_ids": [
+        "S1",
+        "S2"
+      ]
+    },
+    {
+      "module_id": "M2",
+      "purpose_oneline": "轮换已知意图风险测量",
+      "step_ids": [
+        "S3",
+        "S4"
+      ]
+    },
+    {
+      "module_id": "M3",
+      "purpose_oneline": "可行性选择与基线比较",
+      "step_ids": [
+        "S5",
+        "S6"
+      ]
+    },
+    {
+      "module_id": "M4",
+      "purpose_oneline": "冻结评估与机制消融",
+      "step_ids": [
+        "S7",
+        "S8",
+        "S9"
+      ]
+    }
+  ],
+  "falsification_prediction": "Run a bounded pilot on CLINC150, Banking77, and StackOverflow at KIR=0.50 with seeds 13, 42, and 87 using the frozen MiniLM cache; compare K=1, fixed K=2, current BRAK, and the proposed selector, with all selection computed from train_known and rotated calibration intents. If the method works, the primary downstream changes are higher or unchanged F1-All and Known Recall together with lower StackOverflow FAR and a non-positive K=2 loss, while the load-bearing variable ΔU_{y,K} is lower for selected multi-center intents than for rejected ones. The negative control randomizes the held-out-intent episode assignments before computing ΔU; if the mechanism is real, this intervention should erase the candidate's OOS/coverage advantage and return performance toward fixed-K or K=1, not merely change ΔU itself. A positive control is the descriptive oracle-test-K ranking, which may show available headroom but is prohibited from selecting a final configuration.",
+  "compute_budget": "0.2 GPU-day or less plus CPU evaluation; $0 API",
+  "almost_prior_paper_id": "arxiv:2607.07974v1",
+  "almost_prior_venue_year": "arXiv 2026-07",
+  "what_step_was_missed": "The paper would have needed to construct and validate a leave-one-known-intent rotation that measures the marginal acceptance contribution of each added local region before selecting its boundary configuration; its reported multi-cluster result does not contain this risk decomposition.",
+  "feasibility_validation": {
+    "compute": {
+      "verdict": "feasible",
+      "rationale": "GPU line ≈ 0.2 vs 150 GPU-day (0%) → feasible; API line ≈ $0 vs $10000 (0%) → feasible. Overall (worse line) → feasible."
+    },
+    "data": {
+      "verdict": "feasible",
+      "rationale": "All required data, manifests, train/calibration splits, and frozen MiniLM caches already exist locally; no new corpus or redistribution is required."
+    },
+    "theoretical": {
+      "verdict": "feasible",
+      "rationale": "The method uses a directly computable event and a standard Wilson upper bound; it makes an empirical calibration claim rather than requiring a new theorem."
+    },
+    "engineering": {
+      "verdict": "feasible",
+      "rationale": "The pilot reuses existing center/radius/evaluator code and adds rotated episode bookkeeping plus one comparator, with no encoder retraining."
+    },
+    "falsification": {
+      "verdict": "feasible",
+      "rationale": "The three-dataset, three-seed pilot, downstream metrics, load-bearing DeltaU variable, and shuffle negative control are concrete and available under the current tooling."
+    },
+    "overall": "feasible"
+  },
+  "differentiation_from_lit": [
+    {
+      "paper_id": "arxiv:2607.07974v1",
+      "venue_year": "arXiv 2026-07",
+      "delta": "The paper constructs fixed multi-cluster MiniLM boundaries but does not construct a rotated-known-intent estimator or confidence-bounded quantity for the incremental unknown-space acceptance caused by adding regions."
+    },
+    {
+      "paper_id": "arxiv:2602.21252v1",
+      "venue_year": "arXiv 2026-02",
+      "delta": "INTACT conditions a boundary on context in another security domain, whereas this candidate measures the downstream union-risk increment of a semantic intent gate and uses it to enforce a pre-registered Known-only feasibility rule."
+    },
+    {
+      "paper_id": "arxiv:2603.04538v1",
+      "venue_year": "arXiv 2026-03",
+      "delta": "InverseNet diagnoses benchmark/operator mismatch but does not construct a per-intent acceptance-union risk object whose intervention changes an open-intent detector's final OOS decision."
+    }
+  ],
+  "reviewer_concerns_and_responses": [
+    {
+      "attack": "Paper-pointed threat: arxiv:2604.27914v1 (collision_hits). Geometry-Calibrated Conformal Abstention is a nearby calibration-family threat because it calibrates geometry-based abstention rather than relying on raw confidence. It does not, from the retrieved collision record, establish a target-specific marginal acceptance event for adding local regions, but a reviewer could reasonably treat the proposed Wilson feasibility rule as a specialized conformal/abstention wrapper unless the candidate measures that marginal event directly and includes a calibrated-abstention comparator.",
+      "severity": "non_blocking",
+      "response": "The main novelty boundary is stated in core_mechanism and the revised method steps: DeltaU is a target-specific marginal event produced by expanding one intent while all other intents remain at K=1, not a global conformal threshold. The candidate also requires a same-contract global geometry-calibrated abstention comparator, directly addressing the Phase 3.2 borderline concern.",
+      "fields_changed_to_address": [
+        "core_mechanism",
+        "core_mechanism_steps"
+      ]
+    },
+    {
+      "attack": "Un-retrieved mechanism family flagged by the audit (parametric knowledge, not in the retrieved pool): selective classification and conformal risk control; query phrases: class-conditional risk control, leave-class-out abstention calibration — novelty vs this family is UNVERIFIED; run a targeted scoop-check on that vocabulary before investing.",
+      "severity": "non_blocking",
+      "response": "A scoop-check must determine whether any prior work already constructs a per-intent newly-accepted event for a single-region expansion, rather than merely calibrating a global abstention score. If such a construction exists, the claim must be narrowed to the exact detector union and protocol regime where the prior does not operate.",
+      "fields_changed_to_address": [
+        "core_mechanism",
+        "core_mechanism_steps"
+      ]
+    },
+    {
+      "attack": "Gap-closure reject-check borderline on gap 1 (C00 (Reframe as a Solvable Object)): Proposing a new attribution definition without an axiomatic or causal argument for why it should count as ground-truth collapses the moment a reviewer asks why this is the real importance.",
+      "severity": "non_blocking",
+      "response": "The method does not claim that MOGB or fixed K is universally inferior. It uses the frozen s2c detector contract and treats MOGB, BRAK, fixed K, and the global comparator as separate controls, so a positive result must survive same-split paired evaluation.",
+      "fields_changed_to_address": [
+        "core_mechanism",
+        "core_mechanism_steps"
+      ]
+    },
+    {
+      "attack": "Gap-closure reject-check borderline on gap 2 (C01 (Audit and Pivot an Assumption)): Relocating to a locus already exploited by published work — normalization statistics, activation-similarity losses, semantic concept triggers — collapses the novelty boundary unless the difference is ",
+      "severity": "non_blocking",
+      "response": "The protocol deliberately forbids test OOS selection and marks oracle-test-K as descriptive only. All selection quantities are built from train_known and rotated calibration intents, with manifests, hashes, and a final one-way test pass recorded in the run ledger.",
+      "fields_changed_to_address": [
+        "core_mechanism",
+        "core_mechanism_steps"
+      ]
+    }
+  ],
+  "domain_landscape": {
+    "n_papers": 9,
+    "pattern_distribution": [
+      {
+        "pattern_id": "assumption_audit_and_pivot",
+        "count": 4,
+        "share": 0.44,
+        "saturation_band": "mid_frequency"
+      },
+      {
+        "pattern_id": "architectural_operator_substitution",
+        "count": 2,
+        "share": 0.22,
+        "saturation_band": "mid_frequency"
+      },
+      {
+        "pattern_id": "generative_process_redesign",
+        "count": 0,
+        "share": 0.0,
+        "saturation_band": "untested"
+      },
+      {
+        "pattern_id": "controlled_diagnostic_design",
+        "count": 4,
+        "share": 0.44,
+        "saturation_band": "mid_frequency"
+      },
+      {
+        "pattern_id": "unify_into_shared_representation",
+        "count": 0,
+        "share": 0.0,
+        "saturation_band": "untested"
+      },
+      {
+        "pattern_id": "reframe_as_solvable_object",
+        "count": 1,
+        "share": 0.11,
+        "saturation_band": "mid_frequency"
+      },
+      {
+        "pattern_id": "self_supervised_signal_engineering",
+        "count": 1,
+        "share": 0.11,
+        "saturation_band": "mid_frequency"
+      },
+      {
+        "pattern_id": "structural_prior_encoding",
+        "count": 2,
+        "share": 0.22,
+        "saturation_band": "mid_frequency"
+      },
+      {
+        "pattern_id": "algebraic_equivalence_unification",
+        "count": 0,
+        "share": 0.0,
+        "saturation_band": "untested"
+      },
+      {
+        "pattern_id": "heterogeneous_decomposition",
+        "count": 3,
+        "share": 0.33,
+        "saturation_band": "mid_frequency"
+      },
+      {
+        "pattern_id": "decompose_and_delegate",
+        "count": 1,
+        "share": 0.11,
+        "saturation_band": "mid_frequency"
+      },
+      {
+        "pattern_id": "relax_discrete_search_to_continuous",
+        "count": 0,
+        "share": 0.0,
+        "saturation_band": "untested"
+      },
+      {
+        "pattern_id": "adapt_via_conditioning",
+        "count": 4,
+        "share": 0.44,
+        "saturation_band": "mid_frequency"
+      },
+      {
+        "pattern_id": "characterize_limit_then_surpass",
+        "count": 0,
+        "share": 0.0,
+        "saturation_band": "untested"
+      },
+      {
+        "pattern_id": "targeted_self_supervised_objective",
+        "count": 3,
+        "share": 0.33,
+        "saturation_band": "mid_frequency"
+      }
+    ],
+    "candidate_uses": [
+      {
+        "pattern_id": "reframe_as_solvable_object",
+        "role": "closes Gap 1",
+        "sub_pattern_id": "C00 (Reframe as a Solvable Object)",
+        "saturation_in_domain": "mid_frequency"
+      },
+      {
+        "pattern_id": "assumption_audit_and_pivot",
+        "role": "closes Gap 2",
+        "sub_pattern_id": "C01 (Audit and Pivot an Assumption)",
+        "saturation_in_domain": "mid_frequency"
+      },
+      {
+        "pattern_id": "reframe_as_solvable_object",
+        "role": "closes Gap 3",
+        "sub_pattern_id": "C00 (Reframe as a Solvable Object)",
+        "saturation_in_domain": "mid_frequency"
+      }
+    ],
+    "position_note": "The candidate combines mid-frequency reframing, assumption auditing, and controlled diagnostics around a single union-risk object rather than adding another representation-learning or clustering pattern; the retrieved landscape uses these families often but does not expose this target-specific acceptance event."
+  },
+  "literature_breakdown": {
+    "summary": {
+      "n_phase0_total": 10,
+      "n_phase0_on_topic": 9,
+      "n_phase0_outside_taxonomy": 1,
+      "n_phase3_collision": 44
+    },
+    "phase0_by_pattern": [
+      {
+        "pattern_id": "adapt_via_conditioning",
+        "pattern_name": "Adapt by Conditioning, Not Retraining",
+        "papers": [
+          {
+            "paper_id": "arxiv:2602.21252v1",
+            "title": "INTACT: Intent-Aware Representation Learning for Cryptographic Traffic Violation Detection",
+            "venue_year": "arXiv 2026-02",
+            "bottleneck_targeted": "Static anomaly boundaries that ignore declared intent and policy context"
+          }
+        ]
+      },
+      {
+        "pattern_id": "assumption_audit_and_pivot",
+        "pattern_name": "Audit and Pivot an Assumption",
+        "papers": [
+          {
+            "paper_id": "arxiv:2607.07974v1",
+            "title": "A Multi-cluster Boundary Learning Method for Out-of-Scope Intent Detection via MiniLM Embedding",
+            "venue_year": "arXiv 2026-07",
+            "bottleneck_targeted": "Fixed single-boundary and large-backbone assumptions in OOS intent detection"
+          },
+          {
+            "paper_id": "arxiv:2605.22580v1",
+            "title": "Practical Countermeasure Against Attacks Exploiting Detection Efficiency Mismatch in Quantum Key Distribution",
+            "venue_year": "arXiv 2026-03",
+            "bottleneck_targeted": "A detector-assumption mismatch that creates an exploitable failure mode"
+          },
+          {
+            "paper_id": "arxiv:2604.28022v2",
+            "title": "Are DeepFakes Realistic Enough? Exploring Semantic Mismatch as a Novel Challenge",
+            "venue_year": "arXiv 2026-04",
+            "bottleneck_targeted": "Evaluation blindness to semantic mismatch in multimodal detection"
+          },
+          {
+            "paper_id": "arxiv:2602.08776v1",
+            "title": "Mind the Gap: Learning Implicit Impedance in Visuomotor Policies via Intent-Execution Mismatch",
+            "venue_year": "arXiv 2026-02",
+            "bottleneck_targeted": "Treating execution mismatch as noise rather than signal"
+          }
+        ]
+      },
+      {
+        "pattern_id": "controlled_diagnostic_design",
+        "pattern_name": "Design a Confound-Isolating Diagnostic",
+        "papers": [
+          {
+            "paper_id": "arxiv:2603.04538v1",
+            "title": "InverseNet: Benchmarking Operator Mismatch and Calibration Across Compressive Imaging Modalities",
+            "venue_year": "arXiv 2026-03",
+            "bottleneck_targeted": "Hidden operator mismatch and calibration failure in benchmark comparisons"
+          }
+        ]
+      },
+      {
+        "pattern_id": "heterogeneous_decomposition",
+        "pattern_name": "Decompose for Differentiated Treatment",
+        "papers": [
+          {
+            "paper_id": "arxiv:2603.29953v1",
+            "title": "Structured Intent as a Protocol-Like Communication Layer: Cross-Model Robustness, Framework Comparison, and the Weak-Model Compensation Effect",
+            "venue_year": "arXiv 2026-03",
+            "bottleneck_targeted": "Unstructured intent representations and confounded framework comparisons"
+          }
+        ]
+      },
+      {
+        "pattern_id": "reframe_as_solvable_object",
+        "pattern_name": "Reframe as a Solvable Object",
+        "papers": [
+          {
+            "paper_id": "arxiv:2603.00522v1",
+            "title": "SIAgent: Spatial Interaction Agent via LLM-powered Eye-Hand Motion Intent Understanding in VR",
+            "venue_year": "arXiv 2026-02",
+            "bottleneck_targeted": "Rigid operation-to-intent mappings and weak execution robustness"
+          }
+        ]
+      },
+      {
+        "pattern_id": "self_supervised_signal_engineering",
+        "pattern_name": "Manufacture the Supervisory Signal",
+        "papers": [
+          {
+            "paper_id": "arxiv:2603.14525v1",
+            "title": "MALicious INTent Dataset and Inoculating LLMs for Enhanced Disinformation Detection",
+            "venue_year": "arXiv 2026-03",
+            "bottleneck_targeted": "Missing intent-aware supervision and robustness evaluation for disinformation detection"
+          }
+        ]
+      }
+    ],
+    "phase0_outside_taxonomy": [
+      {
+        "paper_id": "arxiv:2603.14970v2",
+        "title": "Stable infinity-categories for representation theorists",
+        "venue_year": "arXiv 2026-03",
+        "bottleneck_targeted": "Not an intent/OOS detection bottleneck"
+      }
+    ],
+    "phase3_collision": [
+      {
+        "paper_id": "arxiv:2606.29654v1",
+        "title": "Budgeted Act-or-Defer Multi-Agent LLM Deliberation with Local Reliability Bounds",
+        "venue_year": "arXiv 2026"
+      },
+      {
+        "paper_id": "arxiv:2604.11245v1",
+        "title": "Knowledge on a Budget",
+        "venue_year": "arXiv 2026"
+      },
+      {
+        "paper_id": "arxiv:2607.26287v1",
+        "title": "Studying Competing Events with Federated Cumulative Incidence Curves",
+        "venue_year": "arXiv 2026"
+      },
+      {
+        "paper_id": "arxiv:2511.21975v1",
+        "title": "The Risk-Adjusted Intelligence Dividend: A Quantitative Framework for Measuring AI Return on Investment Integrating ISO 42001 and Regulatory Exposure",
+        "venue_year": "arXiv 2025"
+      },
+      {
+        "paper_id": "arxiv:2604.09529v1",
+        "title": "VL-Calibration: Decoupled Confidence Calibration for Large Vision-Language Models Reasoning",
+        "venue_year": "arXiv 2026"
+      },
+      {
+        "paper_id": "arxiv:2603.04538v1",
+        "title": "InverseNet: Benchmarking Operator Mismatch and Calibration Across Compressive Imaging Modalities",
+        "venue_year": "arXiv 2026"
+      },
+      {
+        "paper_id": "arxiv:2512.20468v2",
+        "title": "Calibration Method of Spacecraft-Inertial Sensor Center-of-Mass Offset for the Taiji Gravitational Wave Detection Mission under Science Mode",
+        "venue_year": "arXiv 2025"
+      },
+      {
+        "paper_id": "arxiv:2605.30626v1",
+        "title": "Advancing Heliophysics and Space Weather Modeling through Open Science",
+        "venue_year": "arXiv 2026"
+      },
+      {
+        "paper_id": "arxiv:2602.03972v3",
+        "title": "Fixed Budget is No Harder Than Fixed Confidence in Best-Arm Identification up to Logarithmic Factors",
+        "venue_year": "arXiv 2026"
+      },
+      {
+        "paper_id": "arxiv:2512.18016v1",
+        "title": "Equivalent bounded confidence processes",
+        "venue_year": "arXiv 2025"
+      },
+      {
+        "paper_id": "arxiv:2604.16716v1",
+        "title": "Climate Risk Stress Testing in California: A Geospatial Framework for Banking and Climate-Exposed Sectors",
+        "venue_year": "arXiv 2026"
+      },
+      {
+        "paper_id": "arxiv:2607.17381v1",
+        "title": "Determining Insolvency Regions in Banks: A Stochastic Dynamic Approach Integrating Liquidity and Credit Risk",
+        "venue_year": "arXiv 2026"
+      },
+      {
+        "paper_id": "arxiv:2512.18641v3",
+        "title": "The Choice of Line Lengths in Multiline Thru-Reflect-Line Calibration",
+        "venue_year": "arXiv 2025"
+      },
+      {
+        "paper_id": "arxiv:2510.19126v1",
+        "title": "An Efficient Calibration Framework for Volatility Derivatives under Rough Volatility with Jumps",
+        "venue_year": "arXiv 2025"
+      },
+      {
+        "paper_id": "arxiv:2606.19719v2",
+        "title": "Closing the Calibration Gap in Semantic Caching",
+        "venue_year": "arXiv 2026"
+      },
+      {
+        "paper_id": "arxiv:2604.27149v1",
+        "title": "ConformaDecompose: Explaining Uncertainty via Calibration Localization",
+        "venue_year": "arXiv 2026"
+      },
+      {
+        "paper_id": "arxiv:2606.13295v2",
+        "title": "Simultaneous Latent Budget Trees for Stratified Classification",
+        "venue_year": "arXiv 2026"
+      },
+      {
+        "paper_id": "arxiv:2607.00728v2",
+        "title": "When to Repair a Graph ANN Index: A Matched-Budget Negative Result, and the Interpolated-Baseline Trap That Hid It",
+        "venue_year": "arXiv 2026"
+      },
+      {
+        "paper_id": "arxiv:2603.11391v2",
+        "title": "BEACON: Budget-Aware Entity Matching Across Domains (Extended Technical Report)",
+        "venue_year": "arXiv 2026"
+      },
+      {
+        "paper_id": "arxiv:2607.10379v1",
+        "title": "Towards Automated Confidence Bound Provers and Searchers",
+        "venue_year": "arXiv 2026"
+      },
+      {
+        "paper_id": "arxiv:2601.01008v1",
+        "title": "An Explainable Agentic AI Framework for Uncertainty-Aware and Abstention-Enabled Acute Ischemic Stroke Imaging Decisions",
+        "venue_year": "arXiv 2026"
+      },
+      {
+        "paper_id": "arxiv:2605.14074v1",
+        "title": "Fair and Calibrated Toxicity Detection with Robust Training and Abstention",
+        "venue_year": "arXiv 2026"
+      },
+      {
+        "paper_id": "arxiv:2505.23437v2",
+        "title": "Bounded-Abstention Pairwise Learning to Rank",
+        "venue_year": "arXiv 2025"
+      },
+      {
+        "paper_id": "arxiv:2601.00138v2",
+        "title": "Explicit Abstention Knobs for Predictable Reliability in Video Question Answering",
+        "venue_year": "arXiv 2025"
+      },
+      {
+        "paper_id": "arxiv:2604.27914v1",
+        "title": "Geometry-Calibrated Conformal Abstention for Language Models",
+        "venue_year": "arXiv 2026"
+      },
+      {
+        "paper_id": "arxiv:2604.13254v1",
+        "title": "Calibrated Abstention for Reliable TCR--pMHC Binding Prediction under Epitope Shift",
+        "venue_year": "arXiv 2026"
+      },
+      {
+        "paper_id": "arxiv:2411.02988v2",
+        "title": "Confidence Calibration of Classifiers with Many Classes",
+        "venue_year": "arXiv 2024"
+      },
+      {
+        "paper_id": "arxiv:2209.09163v3",
+        "title": "Validation of the Reference Impedance in Multiline Calibration with Stepped Impedance Standards",
+        "venue_year": "arXiv 2022"
+      },
+      {
+        "paper_id": "arxiv:2603.27187v1",
+        "title": "Omni-Modal Dissonance Benchmark: Systematically Breaking Modality Consensus to Probe Robustness and Calibrated Abstention",
+        "venue_year": "arXiv 2026"
+      },
+      {
+        "paper_id": "arxiv:2301.09126v2",
+        "title": "Propagation of Linear Uncertainties through Multiline Thru-Reflect-Line Calibration",
+        "venue_year": "arXiv 2023"
+      },
+      {
+        "paper_id": "arxiv:2502.09054v2",
+        "title": "Cost-Saving LLM Cascades with Early Abstention",
+        "venue_year": "arXiv 2025"
+      },
+      {
+        "paper_id": "arxiv:2605.25850v1",
+        "title": "TIAR: Trajectory-Informed Advantage Reweighting for LLM Abstention Learning",
+        "venue_year": "arXiv 2026"
+      },
+      {
+        "paper_id": "arxiv:2501.19047v5",
+        "title": "Understanding Model Calibration -- A gentle introduction and visual exploration of calibration and the expected calibration error (ECE)",
+        "venue_year": "arXiv 2025"
+      },
+      {
+        "paper_id": "arxiv:2509.18426v2",
+        "title": "Automatic Model Extraction of the Match Standard in Symmetric--Reciprocal--Match Calibration",
+        "venue_year": "arXiv 2025"
+      },
+      {
+        "paper_id": "arxiv:2604.17073v1",
+        "title": "Abstain-R1: Calibrated Abstention and Post-Refusal Clarification via Verifiable RL",
+        "venue_year": "arXiv 2026"
+      },
+      {
+        "paper_id": "arxiv:2303.10559v3",
+        "title": "Deep Learning for Camera Calibration and Beyond: A Survey",
+        "venue_year": "arXiv 2023"
+      },
+      {
+        "paper_id": "arxiv:2305.03597v2",
+        "title": "A Thru-free Multiline Calibration",
+        "venue_year": "arXiv 2023"
+      },
+      {
+        "paper_id": "arxiv:2411.13343v1",
+        "title": "Fact-Level Confidence Calibration and Self-Correction",
+        "venue_year": "arXiv 2024"
+      },
+      {
+        "paper_id": "arxiv:2306.04590v2",
+        "title": "Proximity-Informed Calibration for Deep Neural Networks",
+        "venue_year": "arXiv 2023"
+      },
+      {
+        "paper_id": "arxiv:2307.02035v1",
+        "title": "Ranking with Abstention",
+        "venue_year": "arXiv 2023"
+      },
+      {
+        "paper_id": "arxiv:2309.02886v2",
+        "title": "Symmetric-Reciprocal-Match Method for Vector Network Analyzer Calibration",
+        "venue_year": "arXiv 2023"
+      },
+      {
+        "paper_id": "arxiv:2401.10400v3",
+        "title": "Auto-Calibration and Biconvex Compressive Sensing with Applications to Parallel MRI",
+        "venue_year": "arXiv 2024"
+      },
+      {
+        "paper_id": "arxiv:2302.02622v1",
+        "title": "Uncertainty Calibration and its Application to Object Detection",
+        "venue_year": "arXiv 2023"
+      },
+      {
+        "paper_id": "arxiv:2404.13990v1",
+        "title": "QCore: Data-Efficient, On-Device Continual Calibration for Quantized Models -- Extended Version",
+        "venue_year": "arXiv 2024"
+      }
+    ]
+  }
+}
