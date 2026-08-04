@@ -473,3 +473,30 @@ files:
     category: robustness
     source: results/diagnostics/urcsg/decision.json
     public: diagnostics/urcsg/decision.json
+
+  # CCSG is a completed Known-only scoring pilot.  These aggregate files do
+  # not contain raw text, embeddings, checkpoints or sample-level predictions.
+  - experiment_id: ccsg_pilot_v1
+    category: robustness
+    source: results/diagnostics/ccsg/pilot_summary.csv
+    public: diagnostics/ccsg/pilot_summary.csv
+  - experiment_id: ccsg_pilot_v1
+    category: robustness
+    source: results/diagnostics/ccsg/mechanism_ablation.csv
+    public: diagnostics/ccsg/mechanism_ablation.csv
+  - experiment_id: ccsg_pilot_v1
+    category: robustness
+    source: results/diagnostics/ccsg/k_effects.csv
+    public: diagnostics/ccsg/k_effects.csv
+  - experiment_id: ccsg_pilot_v1
+    category: robustness
+    source: results/diagnostics/ccsg/calibration_summary.csv
+    public: diagnostics/ccsg/calibration_summary.csv
+  - experiment_id: ccsg_pilot_v1
+    category: robustness
+    source: results/diagnostics/ccsg/sphere_statistics.csv
+    public: diagnostics/ccsg/sphere_statistics.csv
+  - experiment_id: ccsg_pilot_v1
+    category: robustness
+    source: results/diagnostics/ccsg/decision.json
+    public: diagnostics/ccsg/decision.json

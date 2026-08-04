@@ -380,6 +380,17 @@ def estimate_target_risk_rows(**kwargs: Any) -> list[dict[str, Any]]:
                 "q95_normalized_score_k1": item.q95_normalized_score_k1,
                 "feasible": item.feasible,
                 "shuffled_feasible": item.shuffled_feasible,
+                # The generic fields are the primary (min-q95) selector
+                # contract.  Strategy-specific fields remain below for the
+                # registered ablation and shuffled negative control.
+                "selected_k": primary.candidate_k,
+                "selection_reason": "min_q95_among_feasible",
+                "ineligible": bool(item.eligible_episode_count < 1 or item.pseudo_oos_count == 0),
+                "skip_reason": (
+                    "fewer_than_two_remaining_known_intents_or_empty_calibration"
+                    if item.eligible_episode_count < 1 or item.pseudo_oos_count == 0
+                    else ""
+                ),
                 "selected_k_primary": primary.candidate_k,
                 "selected_k_largest": largest.candidate_k,
                 "selected_k_shuffled_primary": shuffled_primary.candidate_k,

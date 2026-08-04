@@ -43,6 +43,23 @@ shuffled episode control 也没有形成可用于晋级的优势。因此该阶�
 证据入口：`results/diagnostics/urcsg/` 和
 `../artifacts/s2c/runs/protocol_v2_textoir_v1/urcsg_pilot_v1/`。
 
+## CCSG competition-calibrated support pilot
+
+`ccsg_pilot_v1` 是 URCSG 失败后单独登记的评分机制实验，不是 E2/E3 或 adaptive-K 的
+重复。它复用冻结 all-MiniLM、相同 registry/view/export、diagonal Mahalanobis 和
+mean+std 半径；只把子中心从独立 union 接受器改为意图级混合支持分数，并加入 top-1/top-2
+竞争间隔。阈值完全由 Known calibration 的固定 5% false-rejection 目标产生。
+
+覆盖为 3 datasets × KIR=.50 × 3 seeds × 8 机制配置（72 metric rows）。配置包括当前
+K=1/K=2 union、mixture-support、margin-only、CCSG joint 和 independent-AND 消融。9/9
+cells 完成且无失败、缺失、重复或测试选择泄漏；但 Banking77、CLINC150 和 StackOverflow
+的预注册晋级门均未通过，StackOverflow K=2 的 false acceptance 仍比 CCSG-K1 高 3.00pp。
+因此 CCSG 不扩展到 full matrix，当前仅作为“类级支持聚合不能在冻结表示上自动救活多中心”的
+负结果。
+
+证据入口：`results/diagnostics/ccsg/` 和
+`../artifacts/s2c/runs/protocol_v2_textoir_v1/ccsg_pilot_v1/`。
+
 ## 指标契约
 
 Gate-only 主指标为 OOS F1、AUROC、AUPR-OOS、Known Recall、false acceptance/rejection；

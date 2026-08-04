@@ -42,7 +42,12 @@ def _write_csv(path: Path, rows: list[dict[str, Any]]) -> None:
     from io import StringIO
 
     buffer = StringIO()
-    writer = csv.DictWriter(buffer, fieldnames=fields, extrasaction="ignore")
+    writer = csv.DictWriter(
+        buffer,
+        fieldnames=fields,
+        extrasaction="ignore",
+        lineterminator="\n",
+    )
     writer.writeheader()
     writer.writerows({field: row.get(field, "") for field in fields} for row in rows)
     atomic_write_text(path, buffer.getvalue())
@@ -74,6 +79,42 @@ def _load_rows(root: Path) -> tuple[list[dict[str, str]], list[dict[str, str]], 
         if mechanism_path.is_file():
             mechanisms.append(json.loads(mechanism_path.read_text(encoding="utf-8")))
     return metrics, selections, mechanisms
+
+
+def _repair_selection_schema(root: Path) -> None:
+    """Add the stable generic selection fields without rerunning a cell.
+
+    This is a serialization migration for completed pilot artifacts.  It must
+    not change any risk estimate or selected map; the strategy-specific fields
+    remain the source of truth for audit comparisons.
+    """
+
+    for path in sorted((root / "runs").glob("*/seed_*/intent_selection.csv")):
+        rows = _read_csv(path)
+        if not rows:
+            continue
+        changed = False
+        for row in rows:
+            if "selected_k" not in row:
+                row["selected_k"] = row.get("selected_k_primary", "")
+                changed = True
+            if "selection_reason" not in row:
+                row["selection_reason"] = row.get("selection_reason_primary", "")
+                changed = True
+            if "ineligible" not in row:
+                eligible = int(float(row.get("eligible_episode_count", "0") or 0))
+                pseudo = int(float(row.get("pseudo_oos_count", "0") or 0))
+                row["ineligible"] = str(eligible < 1 or pseudo == 0).lower()
+                changed = True
+            if "skip_reason" not in row:
+                row["skip_reason"] = (
+                    "fewer_than_two_remaining_known_intents_or_empty_calibration"
+                    if row["ineligible"] == "true"
+                    else ""
+                )
+                changed = True
+        if changed:
+            _write_csv(path, rows)
 
 
 def _group_summary(metrics: list[dict[str, str]]) -> list[dict[str, Any]]:
@@ -138,6 +179,10 @@ def _selection_summary(selections: list[dict[str, str]]) -> list[dict[str, Any]]
                 "selected_k_primary_mode": first.get("selected_k_primary", ""),
                 "selected_k_largest_mode": first.get("selected_k_largest", ""),
                 "selected_k_shuffled_primary_mode": first.get("selected_k_shuffled_primary", ""),
+                "selected_k_mode": first.get("selected_k", first.get("selected_k_primary", "")),
+                "selected_k": first.get("selected_k", first.get("selected_k_primary", "")),
+                "selection_reason": first.get("selection_reason", first.get("selection_reason_primary", "")),
+                "ineligible_fraction": float(np.mean([str(r.get("ineligible", "false")).lower() == "true" for r in rows])),
             }
         )
     return result
@@ -203,6 +248,7 @@ def _decision(metrics: list[dict[str, str]], selections: list[dict[str, str]], m
 
 
 def summarize(root: Path, results_root: Path) -> dict[str, Any]:
+    _repair_selection_schema(root)
     metrics, selections, mechanisms = _load_rows(root)
     out = results_root / "diagnostics" / "urcsg"
     out.mkdir(parents=True, exist_ok=True)

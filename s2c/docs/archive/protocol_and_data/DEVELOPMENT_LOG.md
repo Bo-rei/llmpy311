@@ -969,3 +969,35 @@
   SHA/size verified. Validation included focused tests, pilot integrity/verify, registry
   check-only, and no changes to prior E2/E3/BRAK results. Next step: stop this selector and register
   a different experiment before any further multicenter expansion.
+
+## 2026-08-04 — URCSG output-contract serialization repair
+
+- Scope: serialization only; no URCSG cell, detector fit, embedding, test score, or frozen artifact was
+  rerun or changed. Completed per-intent CSVs now expose the required generic `selected_k`,
+  `selection_reason`, `ineligible`, and `skip_reason` fields while retaining the strategy-specific
+  audit columns.
+- Evidence: `summarize_urcsg.py` performs an atomic schema migration before aggregation; the six
+  existing run manifests still report 6/6 and the pilot decision remains `stop` with unchanged deltas.
+- Validation: focused URCSG tests, schema verification, research-state check, registry check-only,
+  data-tracking check, public-results SHA/size verification, and `git diff --check` passed. The full
+  unit suite was rerun after the migration.
+
+## 2026-08-04 — CCSG competition-calibrated support pilot
+
+- Base commit: recorded in `../artifacts/s2c/runs/protocol_v2_textoir_v1/ccsg_pilot_v1/CCSG_PROVENANCE.json`;
+  no prior E2/E3/URCSG/BRAK artifact was modified and no encoder was trained.
+- Registered `ccsg_pilot_v1` under `protocol_v2_textoir_v1`. The pilot reused frozen all-MiniLM caches
+  for CLINC150, Banking77 and StackOverflow at KIR=.50 and seeds 13/42/87. It fitted K=1 and K=2
+  detectors once per cell and compared current union, mixture-support, margin-only, CCSG joint and
+  independent-AND scoring.
+- CCSG uses a class-level log-mixture support score and top-two competition margin. A single joint
+  threshold is calibrated from Known calibration only with target false rejection 5%; test OOS is never
+  used for threshold or configuration selection.
+- Result: 9/9 cells, 72 metric rows, zero failures/missing/duplicates/invalid. CCSG-K2 versus CCSG-K1
+  F1-All changed by -1.26pp (Banking77), -3.68pp (CLINC150) and -0.39pp (StackOverflow); StackOverflow
+  false acceptance increased 3.00pp. All pre-registered dataset gates failed, so no full matrix was
+  authorized. Decision: `stop_ccsg_pilot`.
+- Artifacts: `../artifacts/s2c/runs/protocol_v2_textoir_v1/ccsg_pilot_v1/`; lightweight summaries:
+  `results/diagnostics/ccsg/`. Validation included focused CCSG tests, pilot integrity/verify, and
+  Known-only split contract checks. Next step: do not tune CCSG or expand K; register a separate
+  strong-baseline or representation-boundary experiment if needed.

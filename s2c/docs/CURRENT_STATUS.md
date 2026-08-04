@@ -78,8 +78,14 @@ dirty；父仓库没有运行中的实验。`third_party/mogb_official` 仍是�
 ## 当前唯一下一步
 
 停止 URCSG 和固定多中心扩展；保留该 pilot 作为 Known-only 自适应 K 的负结果和 StackOverflow
-union-risk 证据。下一次实验只能另行登记，优先处理统一强基线/端到端对比或新的表示—边界机制，
-不得在相同契约下重复 URCSG、E2、E3 或 BRAK。
+union-risk 证据。随后已另行登记并完成 `ccsg_pilot_v1`：它把多个子中心聚合为意图级混合支持分数，
+再用 top-1/top-2 竞争间隔和 Known-only 联合阈值限制多球并集过覆盖；没有训练编码器，也没有
+修改 E2/E3/URCSG/BRAK。CCSG 的 9/9 cells、72 行指标和校准审计均完整，但 Banking77、
+CLINC150、StackOverflow 的预注册晋级门均未通过；StackOverflow 的 K=2 false acceptance 仍然
+明显，故不启动 CCSG full matrix。
+
+下一步只能在新的登记下选择强基线/端到端对比或新的表示—边界机制；不得在相同契约下重复
+URCSG、CCSG、E2、E3 或 BRAK。
 
 ## 当前阻断和风险
 
@@ -91,7 +97,21 @@ union-risk 证据。下一次实验只能另行登记，优先处理统一强基
 - StackOverflow 完整文本、模型、embedding、checkpoint 和逐样本结果仍只保留在本地，
   不进入 GitHub 结果快照。
 
+## CCSG pilot（2026-08-04）
+
+- 固定 `protocol_v2_textoir_v1`、KIR=.50、三数据集、seeds 13/42/87、冻结 all-MiniLM、
+  diagonal Mahalanobis、mean+std radius 和 Known calibration 阈值；每个 cell 同时拟合 K=1/2。
+- 比较当前 K=1/K=2 union、mixture-support、margin-only、CCSG joint 和 independent-AND 消融；
+  未使用测试 OOS 选择阈值，未重新编码或训练。
+- 9/9 cells、72 metric rows、0 failed/missing/duplicate/invalid。CCSG-K2 相对 CCSG-K1 的
+  F1-All 增量为 Banking77 -1.26pp、CLINC150 -3.68pp、StackOverflow -0.39pp；StackOverflow
+  false acceptance 增量为 +3.00pp，超过 +1pp 安全门。最终决策为 `stop_ccsg_pilot`。
+- 证据入口：`results/diagnostics/ccsg/` 和
+  `../artifacts/s2c/runs/protocol_v2_textoir_v1/ccsg_pilot_v1/`。
+
 ## 当前证据入口
+
+- MOGB/DCLOOS 中文对比主报告：`docs/对比实验/MOGB_DCLOOS_对比结果报告.md`；该报告区分同协议 Frozen MiniLM 组件比较、MOGB 官方兼容负复现和 DCLOOS reduced-budget 参考结果。
 
 - 固定 K 审计：`results/diagnostics/adaptive_k/`；
 - MOGB 四组合审计：`results/diagnostics/mogb_diff/` 和

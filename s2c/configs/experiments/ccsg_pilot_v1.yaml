@@ -1,0 +1,40 @@
+name: ccsg_pilot_v1
+stage: ccsg_pilot
+protocol_version: protocol_v2_textoir_v1
+datasets:
+  - clinc150
+  - banking77
+  - stackoverflow
+kirs:
+  - 0.50
+seeds:
+  - 13
+  - 42
+  - 87
+k_values:
+  - 1
+  - 2
+distances:
+  - mahalanobis_diag
+defaults:
+  representation: frozen_minilm
+  boundary: mean_std
+  radius_lambda: 1.0
+  temperature: 1.0
+  target_false_rejection: 0.05
+  encoder_name: all-MiniLM-L6-v2
+  encoder_device: cpu
+methods:
+  - current_k1
+  - current_k2_union
+  - mixture_support_k1
+  - mixture_support_k2
+  - margin_only_k1
+  - ccsg_k1
+  - ccsg_k2
+  - ccsg_independent_k2
+selection:
+  data: known_calibration_only
+  test_used_for_selection: false
+  threshold_policy: finite_sample_known_calibration_upper_order_statistic
+cache_policy: reuse_only_no_implicit_encoding
