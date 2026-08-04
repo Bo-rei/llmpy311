@@ -63,11 +63,23 @@ dirty；父仓库没有运行中的实验。`third_party/mogb_official` 仍是�
 - λ 审计摘要已加入 `configs/public_results.yaml`；公开白名单校验通过，102 个轻量文件共
   13,820,620 bytes，未包含原始文本、embedding、checkpoint 或逐样本 score。
 
+## URCSG pilot（2026-08-04）
+
+- `urcsg_pilot_v1` 已在固定 `protocol_v2_textoir_v1`、KIR=.50、Banking77/StackOverflow、
+  seeds 13/42/87、`mahalanobis_diag`、`mean+lambda*std (lambda=1.0)` 下完成 6/6 cell。
+- 选择器只使用 proper-train 和 Known calibration 的 leave-one-known-intent 伪 OOS 风险，
+  并保留 shuffled episode negative control；冻结 all-MiniLM cache，没有重新编码或训练。
+- Banking77 的 URCSG-primary 相对 single-centroid：OOS F1 `-0.39pp`、F1-All `-0.35pp`、
+  Known Recall `-0.20pp`；StackOverflow：OOS F1 `-6.10pp`、F1-All `-2.67pp`，false acceptance
+  增加 `+10.93pp`。两数据集预注册门槛均失败，未进入 full matrix。
+- 产物：`results/diagnostics/urcsg/{pilot_summary.csv,intent_selection.csv,mechanism_analysis.csv,shuffled_control.csv,decision.json}`；
+  详细输入和 run manifest 在 `../artifacts/s2c/runs/protocol_v2_textoir_v1/urcsg_pilot_v1/`。
+
 ## 当前唯一下一步
 
-冻结并审阅 λ 审计结果，将其纳入论文的参数选择和泄漏说明；不注册或运行新的
-split–merge adaptive-K pilot。若未来仍要研究自适应 K，必须先提供独立的 validation-OOS
-或严格的 Known-only intent-level 选择契约，并重新登记实验，不得复用本阶段 test-oracle 行。
+停止 URCSG 和固定多中心扩展；保留该 pilot 作为 Known-only 自适应 K 的负结果和 StackOverflow
+union-risk 证据。下一次实验只能另行登记，优先处理统一强基线/端到端对比或新的表示—边界机制，
+不得在相同契约下重复 URCSG、E2、E3 或 BRAK。
 
 ## 当前阻断和风险
 

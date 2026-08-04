@@ -27,6 +27,22 @@ intent-level 的 `delta_intent_class_f1_vs_k1` 是单个 Known 类的类别 F1 �
 F1-All。它回答“哪些意图在测试敏感性分析中偶尔受益”，不提供合法的验证集选 K。正式实验
 在 split–merge 原型通过 dry-run 和 Known-only 门之前不得启动。
 
+## URCSG Known-only 自适应 K pilot
+
+`urcsg_pilot_v1` 是一次独立的、已完成的选择器诊断：在每个 intent 上只替换目标意图的
+K=1..5，使用 leave-one-known-intent-out calibration 估计新增接受风险，并以 coverage 安全门
+和 Wilson UCB95 约束选择 K。它复用了冻结 all-MiniLM cache，未重新训练/编码，测试 OOS 只用于
+最终描述性评价；`oracle_test_k` 明确不参与选择。
+
+6/6 cell（Banking77、StackOverflow × 3 seeds）完成，但 URCSG-primary 未通过预注册门：
+Banking77 相对 single-centroid 的 OOS F1/F1-All 为 -0.39/-0.35 pp，StackOverflow 为
+-6.10/-2.67 pp 且 false acceptance +10.93 pp。选择器在 StackOverflow 仍有过多 K>1，
+shuffled episode control 也没有形成可用于晋级的优势。因此该阶段仅作为负结果和机制证据，
+不启动 full matrix，不把它称为最终 adaptive-K 方法。
+
+证据入口：`results/diagnostics/urcsg/` 和
+`../artifacts/s2c/runs/protocol_v2_textoir_v1/urcsg_pilot_v1/`。
+
 ## 指标契约
 
 Gate-only 主指标为 OOS F1、AUROC、AUPR-OOS、Known Recall、false acceptance/rejection；

@@ -346,3 +346,15 @@
 - 完整 registry 哈希扫描未作为本轮证据，因为它会遍历大型本地 checkpoint 树；check-only 结果为
   pass，且本轮没有修改任何 artifact 内容。
 - 决策不变：λ 结果只用于泄漏和参数契约说明；adaptive-K 仍未获授权。
+
+## D34：URCSG union-risk selector pilot 失败并停止（2026-08-04）
+
+- `urcsg_pilot_v1` 预注册了 leave-one-known-intent calibration 伪 OOS 风险、coverage 安全门、
+  Wilson UCB95 和 shuffled episode control；它只在冻结 all-MiniLM 表示上选择每个 intent 的 K，
+  不改变 Gate 几何，也不使用 test OOS 选参。
+- 6/6 cell 完成。Banking77 URCSG-primary 相对 single-centroid 的 OOS F1/F1-All 为
+  -0.39/-0.35 pp；StackOverflow 为 -6.10/-2.67 pp，false acceptance +10.93 pp。两数据集
+  晋级门均失败，StackOverflow 仍出现过多 K>1 选择，shuffled control 未形成可晋级优势。
+- 决策：将 URCSG 归为 Known-only risk proxy 的负结果，不启动 full matrix，不重复 E2/E3/BRAK，
+  也不宣称已经得到 adaptive-K 方法。后续若继续自适应 K，必须更换并单独登记选择信号或转向
+  表示/边界机制；当前唯一事实入口为 `docs/CURRENT_STATUS.md` 和 `results/diagnostics/urcsg/`。

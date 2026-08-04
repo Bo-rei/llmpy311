@@ -450,3 +450,26 @@ files:
     category: external
     source: results/diagnostics/mogb_diff/stage_comparison.csv
     public: diagnostics/mogb_diff/stage_comparison.csv
+
+  # URCSG is a completed Known-only pilot.  These aggregate CSV/JSON files
+  # contain no raw text, embeddings, checkpoints or sample-level predictions.
+  - experiment_id: urcsg_pilot_v1
+    category: robustness
+    source: results/diagnostics/urcsg/pilot_summary.csv
+    public: diagnostics/urcsg/pilot_summary.csv
+  - experiment_id: urcsg_pilot_v1
+    category: robustness
+    source: results/diagnostics/urcsg/intent_selection.csv
+    public: diagnostics/urcsg/intent_selection.csv
+  - experiment_id: urcsg_pilot_v1
+    category: robustness
+    source: results/diagnostics/urcsg/mechanism_analysis.csv
+    public: diagnostics/urcsg/mechanism_analysis.csv
+  - experiment_id: urcsg_pilot_v1
+    category: robustness
+    source: results/diagnostics/urcsg/shuffled_control.csv
+    public: diagnostics/urcsg/shuffled_control.csv
+  - experiment_id: urcsg_pilot_v1
+    category: robustness
+    source: results/diagnostics/urcsg/decision.json
+    public: diagnostics/urcsg/decision.json

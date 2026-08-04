@@ -260,6 +260,30 @@ experiments:
       count_source: csv_rows
       count_summary: summaries/MINILM_PILOT_GATE.tsv
 
+    urcsg_pilot_v1:
+      id: gate_mechanism.urcsg_pilot_v1
+      research_question: "Can Known-only leave-one-intent union-risk calibration select safe per-intent subcenter counts?"
+      status: complete
+      entrypoints:
+        - scripts/experiments/run_urcsg_pilot.py
+        - scripts/experiments/summarize_urcsg.py
+        - scripts/experiments/verify_urcsg.py
+        - src/protocol_v2/experiments/urcsg.py
+      protocol: protocol_v2_textoir_v1
+      artifact_root: ../../runs/protocol_v2_textoir_v1/urcsg_pilot_v1
+      manifest:
+        - URCSG_PROVENANCE.json
+        - URCSG_INTEGRITY.json
+      summary:
+        - summaries/URCSG_PILOT_SUMMARY.csv
+        - summaries/URCSG_INTENT_SELECTION.csv
+        - summaries/URCSG_MECHANISM_ANALYSIS.csv
+        - summaries/URCSG_SHUFFLED_CONTROL.csv
+        - summaries/URCSG_DECISION.json
+      expected_unit_count: 6
+      count_source: matrix_manifest
+      count_manifest: URCSG_INTEGRITY.json
+
   external_validation:
     hard_negative_oos:
       id: external_validation.hard_negative_oos

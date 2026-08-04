@@ -946,3 +946,26 @@
 - Decision and next step are unchanged: keep the lambda result as leakage/parameter evidence, do not
   launch adaptive-K or any new training stage until a legal validation-OOS or Known-only intent-level
   selection contract exists.
+
+## 2026-08-04 — URCSG Known-only pilot closeout
+
+- Base commit: `4eec67da592b580867afa8529024e85541adfa7d`; the worktree retained the pre-existing
+  nested `third_party/mogb_official` change and no old artifact directory was modified. New files are
+  `src/protocol_v2/experiments/urcsg.py`, `scripts/experiments/{run_urcsg_pilot.py,summarize_urcsg.py,verify_urcsg.py}`,
+  `configs/experiments/urcsg_pilot_v1.yaml`, and focused unit/integration tests.
+- Registered `urcsg_pilot_v1` under `protocol_v2_textoir_v1`. The pilot reused frozen all-MiniLM
+  train/calibration/test caches for Banking77 and StackOverflow at KIR=.50, seeds 13/42/87, K=1..5,
+  diagonal Mahalanobis, mean+std radius with lambda=1.0; no encoder training or implicit encoding.
+- The selector estimates target-intent union risk from leave-one-known-intent-out Known calibration,
+  records Wilson UCB95 and coverage deltas, and includes a shuffled episode negative control. Test OOS
+  is not used for selection; `oracle_test_k` is descriptive only.
+- Result: 6/6 cells, 54 metric rows and 720 candidate-intent rows, zero failures/missing/duplicates.
+  URCSG-primary vs single-centroid was Banking77 OOS F1 -0.39 pp / F1-All -0.35 pp and StackOverflow
+  OOS F1 -6.10 pp / F1-All -2.67 pp with false acceptance +10.93 pp. Both pre-registered dataset gates
+  failed, so the full matrix was not authorized. The pilot is retained as a negative result: this
+  union-risk proxy did not safely identify multicenter headroom in the frozen representation.
+- Artifacts: `../artifacts/s2c/runs/protocol_v2_textoir_v1/urcsg_pilot_v1/`; lightweight summaries:
+  `results/diagnostics/urcsg/`; the five aggregate files are now in the public-results whitelist and
+  SHA/size verified. Validation included focused tests, pilot integrity/verify, registry
+  check-only, and no changes to prior E2/E3/BRAK results. Next step: stop this selector and register
+  a different experiment before any further multicenter expansion.

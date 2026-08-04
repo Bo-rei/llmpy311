@@ -1,0 +1,35 @@
+name: urcsg_pilot_v1
+stage: urcsg_pilot
+protocol_version: protocol_v2_textoir_v1
+datasets:
+  - banking77
+  - stackoverflow
+kirs:
+  - 0.50
+seeds:
+  - 13
+  - 42
+  - 87
+k_values:
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5
+distances:
+  - mahalanobis_diag
+defaults:
+  representation: frozen_minilm
+  boundary: mean_std
+  radius_lambda: 1.0
+  encoder_name: all-MiniLM-L6-v2
+  encoder_device: cpu
+selection:
+  primary: urcsg_min_q95
+  secondary: urcsg_largest_feasible
+  epsilon_coverage: 0.02
+  rho_union_risk: 0.05
+  bootstrap_repeats: 10000
+  shuffled_negative_control: true
+  test_used_for_selection: false
+cache_policy: reuse_only_no_implicit_encoding
