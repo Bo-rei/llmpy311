@@ -1,0 +1,41 @@
+name: adaptive_v1
+stage: risk_calibrated_adaptive_multicentre_boundary
+protocol_version: protocol_v2_textoir_v1
+dataset: stackoverflow
+kir: 0.50
+seeds: [13, 42, 87]
+representation: frozen_minilm
+distance: mahalanobis_diag
+radius_method: mean_std
+radius_lambda: 1.0
+covariance_epsilon: 1.0e-6
+calibration_split:
+  mode: per_intent_seedsequence
+  select_fraction: 0.50
+  threshold_fraction: 0.50
+  test_used_for_selection: false
+structure:
+  max_centers_per_intent: 4
+  max_rounds: 3
+  min_samples_absolute: 10
+  min_samples_ratio: 0.05
+  pca_split: median
+  bootstrap_repeats: 20
+  stability_threshold: 0.80
+  rho_candidates: [0.25, 0.50, 0.75]
+  merge_overlap_ratio: 0.25
+selection:
+  known_only: [known_recall, cross_intent_ambiguity, compactness, stability, complexity]
+  proxy_oos: [proxy_false_acceptance, known_recall, compactness, stability, complexity]
+  target_false_rejection: 0.05
+  test_used_for_selection: false
+methods:
+  - s2c_k1_nearest_sphere
+  - s2c_fixed_k2_nearest_sphere
+  - random_balanced_k2_nearest_sphere
+  - BRAK_known_only
+  - URCSG_primary_reused
+  - CCSG_k1_reused
+  - CCSG_k2_reused
+  - RC-AMBL-KnownOnly
+  - RC-AMBL-ProxyOOS

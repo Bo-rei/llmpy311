@@ -43,6 +43,19 @@ shuffled episode control 也没有形成可用于晋级的优势。因此该阶�
 证据入口：`results/diagnostics/urcsg/` 和
 `../artifacts/s2c/runs/protocol_v2_textoir_v1/urcsg_pilot_v1/`。
 
+## RC-AMBL risk-calibrated pilot
+
+`adaptive_v1` 是一个独立的结构自适应 pilot，不重复 E2/E3/URCSG/CCSG/BRAK。它固定
+StackOverflow、KIR=.50、seeds 13/42/87，使用冻结 MiniLM、PCA median split、父级边界保护、
+收缩对角协方差和类级加权 evidence。KnownOnly 与 ProxyOOS 共 6/6 单元完成，测试 OOS 不参与
+选择。所有候选分裂均被安全门拒绝，最终 `K_y=1`；RC-AMBL 的 OOS F1 `0.5785±0.0926`，
+相对 E2 K=1 下降 `19.44pp`，false acceptance 增加 `29.14pp`，因此该阶段停止，不进入其他
+数据集、KIR 或 K 网格。
+
+证据入口：`docs/adaptive_v1/ADAPTIVE_V1_REPORT.md`、
+`../artifacts/s2c/runs/protocol_v2_textoir_v1/adaptive_v1/contract_repair5/` 和
+`results/diagnostics/adaptive_v1/`。
+
 ## CCSG competition-calibrated support pilot
 
 `ccsg_pilot_v1` 是 URCSG 失败后单独登记的评分机制实验，不是 E2/E3 或 adaptive-K 的

@@ -1,8 +1,8 @@
 # 当前研究状态
 
 这是当前唯一状态入口。活动协议为 `protocol_v2_textoir_v1`；本轮整理已冻结在
-`03a6e26ed373747baccabbbb459d0a355af935ae`，当前工作分支为
-`experiment/lambda-leakage-audit`。当前工作树因 λ 审计代码、轻量结果和文档尚未提交而
+`fb0237ac74a298a88cca2872b78be551f9f090bb`，当前工作分支为
+`main`。当前工作树因 RC-AMBL 代码、轻量结果和文档尚未提交而
 dirty；父仓库没有运行中的实验。`third_party/mogb_official` 仍是独立只读来源 checkout，
 其本地审计元数据保持在子仓库工作树中，不修改第三方源码。GitHub 尚未推送本轮提交或
 本阶段诊断结果。
@@ -18,6 +18,7 @@ dirty；父仓库没有运行中的实验。`third_party/mogb_official` 仍是�
 | R1/M1 | 已完成但按 contract audit superseded；不得重跑 | `../artifacts/s2c/runs/protocol_v2_textoir_v1/r1_*`、`minilm_training_and_stackoverflow_repair_v1/` |
 | MOGB/ADB/DA-ADB/DCLOOS | 已审计或完成隔离单元；不扩展旧矩阵 | `docs/archive/mogb_reproduction/`、`docs/archive/external_baselines/` |
 | λ 泄漏与敏感性审计 | complete：9 个 split 审计、216 行评分（18 个唯一中心拟合；论文默认 K 行复用 K=2） | `results/diagnostics/lambda_leakage/`、`results/diagnostics/lambda_sensitivity/` |
+| RC-AMBL adaptive_v1 pilot | complete：StackOverflow/KIR=.50、3 seeds、KnownOnly/ProxyOOS 共 6/6；0 failed/missing/duplicate/invalid；全部分裂安全回退 | `../artifacts/s2c/runs/protocol_v2_textoir_v1/adaptive_v1/contract_repair5/` |
 
 ## 已确认结论
 
@@ -39,6 +40,10 @@ dirty；父仓库没有运行中的实验。`third_party/mogb_official` 仍是�
   因此这些行只能说明候选结构，且明确标为 test-sensitivity，不能当作选择规则。
 - Meta-review 所要求的直接基线、五 seed 统计、K/λ 消融和泄漏证明被列为后续论文证据
   backlog；本轮只整理已有 MOGB/ADB/DA-ADB/DCLOOS 证据，不重跑这些冻结单元。
+- RC-AMBL pilot 的 6/6 单元均完成且没有测试选择泄漏，但 3 个 seed 的候选分裂均因
+  bootstrap median ARI（0.7051--0.7712）低于 0.80 或 Known-only 安全门而拒绝；10 个
+  Known intent 最终全部为 `K_y=1`。RC-AMBL OOS F1 `0.5785±0.0926`，相对 E2 K=1
+  下降 `19.44pp`，false acceptance 增加 `29.14pp`，不能称为新方法成功。
 
 ## λ 选择与数据泄漏审计（2026-08-02）
 
@@ -84,8 +89,9 @@ union-risk 证据。随后已另行登记并完成 `ccsg_pilot_v1`：它把多�
 CLINC150、StackOverflow 的预注册晋级门均未通过；StackOverflow 的 K=2 false acceptance 仍然
 明显，故不启动 CCSG full matrix。
 
-下一步只能在新的登记下选择强基线/端到端对比或新的表示—边界机制；不得在相同契约下重复
-URCSG、CCSG、E2、E3 或 BRAK。
+下一步先停止 RC-AMBL 扩展；只允许在同一 RC-AMBL evidence 合同下做一个 Known-only K=1
+校准控制，确认高 false acceptance 是否来自 evidence/阈值定义。若控制仍失败，则保留 E2 K=1，
+转向已登记的强基线/端到端对比；不得在相同契约下重复 URCSG、CCSG、E2、E3、BRAK 或本 pilot。
 
 ## 当前阻断和风险
 
@@ -114,6 +120,8 @@ URCSG、CCSG、E2、E3 或 BRAK。
 - MOGB/DCLOOS 中文对比主报告：`docs/对比实验/MOGB_DCLOOS_对比结果报告.md`；该报告区分同协议 Frozen MiniLM 组件比较、MOGB 官方兼容负复现和 DCLOOS reduced-budget 参考结果。
 
 - 固定 K 审计：`results/diagnostics/adaptive_k/`；
+- RC-AMBL：`docs/adaptive_v1/ADAPTIVE_V1_REPORT.md`、`docs/adaptive_v1/REPRODUCE_ADAPTIVE_V1.md`、
+  `results/diagnostics/adaptive_v1/`；
 - MOGB 四组合审计：`results/diagnostics/mogb_diff/` 和
   `docs/archive/mogb_reproduction/MOGB_DIAGNOSIS.md`；
 - λ 数据集契约与敏感性：`results/diagnostics/lambda_leakage/data_split_audit.json`、

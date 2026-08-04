@@ -1001,3 +1001,16 @@
   `results/diagnostics/ccsg/`. Validation included focused CCSG tests, pilot integrity/verify, and
   Known-only split contract checks. Next step: do not tune CCSG or expand K; register a separate
   strong-baseline or representation-boundary experiment if needed.
+
+## 2026-08-04 — RC-AMBL adaptive_v1 StackOverflow pilot
+
+- 目标：在不重跑 E2/E3/URCSG/CCSG/BRAK/MOGB 的前提下，验证 Risk-Calibrated Adaptive Multi-centre Boundary Learning 是否能在 StackOverflow/KIR=.50 上安全地决定是否增加局部中心。
+- 范围：冻结 `protocol_v2_textoir_v1`、StackOverflow、KIR=.50、正式 seed 13/42/87；每个 seed 运行 `RC-AMBL-KnownOnly` 和 `RC-AMBL-ProxyOOS`，计划 6 个评价单元，实际完成 6/6。
+- 新增代码：`src/protocol_v2/experiments/adaptive_v1/`、`scripts/experiments/adaptive_v1/`、`configs/experiments/protocol_v2_textoir_v1/adaptive_v1.yaml`；旧 E2/E3/R1/BRAK/MOGB 文件未修改。
+- 方法：每个 intent 从 K=1 父边界开始，使用 PCA median split、收缩 diagonal covariance、类级加权 evidence、父级边界保护、top-two margin 和 Known-only 安全门；不枚举 K，不读取 test OOS 选择中心或阈值。
+- 防泄漏：训练 6000、calibration 1000（SeedSequence 的 select/threshold 两部分）、test 6000；每个 run 的 registry/view/export/cache hash 和 `test_used_for_selection=false` 均写入 provenance。
+- 运行与验证：dry-run、3 seed runner、verify、summarize、diagnose、plot 均完成；专项回归测试与 E3 partition 测试通过。`ADAPTIVE_V1_VERIFY.json` 为 3/3 seed、6 行指标、status=pass。
+- 结果：三次候选分裂均被拒绝，bootstrap median ARI 为 0.7051--0.7712，10 个 Known intent 最终均为 `K_y=1`；RC-AMBL 两模式 OOS F1 均值 `0.5785±0.0926`，相对 E2 K=1 下降 `19.44pp`，false acceptance 增加 `29.14pp`。
+- 决策：`stop_adaptive_v1_pilot`。这是安全回退和 evidence/阈值失败诊断，不是新方法成功，不授权扩展 CLINC150、Banking77、其他 KIR、K 网格或完整 Pipeline。
+- 产物：`../artifacts/s2c/runs/protocol_v2_textoir_v1/adaptive_v1/contract_repair5/`、`results/diagnostics/adaptive_v1/`、`docs/adaptive_v1/ADAPTIVE_V1_REPORT.md`、`docs/adaptive_v1/REPRODUCE_ADAPTIVE_V1.md`。
+- 风险：当前 RC-AMBL evidence 阈值不是 E2 nearest-sphere 逐值复现；MOGB 主表行仍是兼容组件参考，不能称官方 BERT 复现或 SOTA。下一步只允许先做同合同 K=1 calibration control，若仍有高 false acceptance，则保留 E2 K=1 并转向已登记强基线/端到端对比。
