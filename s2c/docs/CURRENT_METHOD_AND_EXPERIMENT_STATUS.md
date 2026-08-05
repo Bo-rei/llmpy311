@@ -9,7 +9,8 @@
 
 ## 1. 先给结论
 
-当前 s2c 不是一个已经验证成功的“通用自适应多中心方法”。当前最可靠的自有结果是：
+当前 s2c 不是一个已经验证成功的“通用自适应多中心方法”。本轮已经补做了真正的“表示—中心共同训练”
+受控 pilot，但它在 StackOverflow 上没有接受任何新增中心。当前最可靠的自有结果仍是：
 
 > **Known-only 训练的 Trainable MiniLM + 单中心 Gate（K=1）在 StackOverflow 上明显优于冻结
 > MiniLM K=1；但在同一 Trainable MiniLM 表示上固定改成 K=2 后，Known Recall 上升，却产生大规模
@@ -20,12 +21,13 @@
 - 表示适配（K=1）已经出现稳定正收益；
 - 固定多中心的收益高度依赖数据集和意图，不能作为默认配置；
 - StackOverflow 上的主要瓶颈是多球接受区域的过覆盖，而不是单纯的 MiniLM 没训练；
+- 本轮的训练参与式自适应 pilot 没有产生 `K_y>1`，所以不能宣称已经得到自适应多中心收益；
 - 当前不能宣称超过 MOGB 论文或 DCLOOS，也不能宣称已达到 SOTA；
 - MOGB、ADB、DA-ADB、DCLOOS 的现有结果中，有些是同协议组件比较，有些是不同 BERT/OOS 监督条件下的兼容性结果，必须分开报告。
 
 ## 2. 当前代码实现的方法是什么
 
-### 2.0 一个必须先澄清的事实：当前还没有完成真正的自适应多中心
+### 2.0 一个必须先澄清的事实：此前没有完成；本轮已实现但未得到正的结构选择
 
 你的判断是正确的。当前代码中“多中心”和“自适应”是两个尚未同时成立的概念：
 
@@ -35,16 +37,20 @@
   但没有训练多个中心，也没有学习中心数。
 - **RACAL 阶段二只是固定 K=2 归因实验**：它复用阶段一 checkpoint，再对每个 intent 做 KMeans-2；
   没有重新训练表示，也没有根据 calibration 学习中心激活规则。
-- **RC-AMBL 才是一次自适应结构原型**：它尝试根据 Known-only 风险和稳定性接受/拒绝分裂，
-  但第一轮所有候选分裂都被安全门拒绝，最终所有 intent 都回退到 `K_y=1`，因此没有形成成功的
-  adaptive-K 结果。
+- **RC-AMBL 是冻结表示下的风险门原型**：它不参与编码器训练，第一轮所有候选分裂都被安全门拒绝。
+- **joint_adaptive_multicenter_v1 是本轮真正参与训练的版本**：它从已验证的 RACAL Trainable K=1
+  checkpoint 初始化，训练 MiniLM 最后两层、残差投影和 intent prototypes；候选 split 从 Known train
+  的 PCA 残差提出，候选模型用 Known train 更新，结构只由 Known calibration 的 recall/compactness/
+  父边界约束决定。测试 OOS 只在最终评估读取。
+- 但 `repair6` 的 3 个 seed 均拒绝候选 split，最终 10 个 intent 全部为 `K_y=1`。因此这是“真正实现并
+  得到负诊断结果”，不是“已经成功的 adaptive-K”。
 
 因此，当前最准确的方法命名是：
 
 ```text
 主协议：fixed-K post-hoc multi-centroid Gate
 当前最佳自有结果：Known-only trainable MiniLM + K=1 Gate
-已尝试但未成功：RC-AMBL adaptive split pilot
+已尝试但未成功：RC-AMBL adaptive split pilot、joint_adaptive_multicenter_v1
 尚未完成：joint representation–center training + calibration-selected K_y
 ```
 
@@ -167,6 +173,31 @@ Gate detector
 | RC-AMBL | PCA split、父边界、收缩协方差、风险门 | 6/6 | 所有候选分裂被拒绝，未形成成功 adaptive-K |
 | RACAL stage1 | Frozen K=1 回放 vs Trainable MiniLM K=1 | 3/3 + 3/3 | 当前最可靠的正收益来自 K=1 表示适配 |
 | RACAL stage2 | 同一 Trainable checkpoint 下纯 K=1 vs 固定 K=2 | 3/3 | K=2 的 OOS 过接受仍然严重，停止 K=3--5 |
+| joint_adaptive_multicenter_v1 | Trainable MiniLM + trainable prototypes；每轮提出一个 PCA split，Known calibration 安全门决定是否接受 | 3/3（repair6） | 真正的共同训练链路可运行，但 3/3 候选均拒绝，最终 `mean K_y=1.0` |
+
+### 3.3 训练参与式自适应多中心 pilot：joint_adaptive_multicenter_v1
+
+本阶段不是把固定 KMeans 的结果重新命名为“自适应”。每个 seed 的候选 intent 先由 Known train
+表示的残差 P90 选择，PCA 主方向二分后生成子中心；随后 encoder 和 prototypes 共同训练 2 个 epoch。
+候选只有同时满足 Known calibration Recall、compactness gain、objective regression 和父边界保护才
+能写入最终结构。当前配置 `max_candidate_splits=1`、`max_accepted_splits=1`，因此这是一个明确的
+小规模归因 pilot，不是大网格搜索。
+
+StackOverflow/KIR=0.50、seed=13/42/87 的结果如下：
+
+| 方法 | OOS F1 | F1-All | Known Recall | False Acceptance | 平均 K_y |
+|---|---:|---:|---:|---:|---:|
+| RACAL Trainable K=1 | 0.8671 ± 0.0079 | 0.8565 ± 0.0030 | 0.8392 ± 0.0032 | 0.1114 ± 0.0165 | 1.0 |
+| joint adaptive（repair6） | 0.8661 ± 0.0111 | 0.8563 ± 0.0050 | 0.8388 ± 0.0045 | 0.1129 ± 0.0228 | 1.0 |
+
+3/3 候选 split 均实际训练并被拒绝：seed13 的 calibration score gain 仅 `+0.00056`，seed42 为
+`-0.00900`，seed87 为 `-0.02172`；拒绝原因均为 `no_known_only_compactness_gain`。这说明当前
+StackOverflow 表示中，候选局部划分没有在不损害 Known-only 安全的前提下提供足够收益。
+
+为核验“拒绝 split”不是代码没有真正执行训练，pilot 还做了同一候选子中心的事后边界诊断：不加
+父边界保护的 K=2 union 平均 OOS F1 只有 `0.6777`、false acceptance `0.4513`；加父边界保护后
+平均 OOS F1 为 `0.8663`、false acceptance `0.1118`，但它仍是诊断，不是自适应正式结果。这个对照
+直接显示：StackOverflow 的风险主要来自多球 union 过覆盖，而不是“没有调用训练代码”。
 
 ### 3.1 RACAL 阶段一：当前最好的自有结果
 

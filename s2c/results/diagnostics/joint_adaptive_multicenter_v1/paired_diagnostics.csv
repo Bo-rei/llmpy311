@@ -1,0 +1,4 @@
+seed,adaptive_oos_f1,joint_k1_oos_f1,fixed_k2_union_oos_f1,adaptive_minus_k1_oos_f1,adaptive_false_accept,k1_false_accept,fixed_k2_union_false_accept,source_artifact
+13,0.853654512,0.853654512,0.618198,0.000000000,0.137666667,0.137666667,0.526666667,../artifacts/s2c/runs/protocol_v2_textoir_v1/joint_adaptive_multicenter_v1/repair6/analysis/JOINT_ADAPTIVE_PAIRED.csv
+42,0.875100466,0.875100466,0.767509,0.000000000,0.092666667,0.092666667,0.337000000,../artifacts/s2c/runs/protocol_v2_textoir_v1/joint_adaptive_multicenter_v1/repair6/analysis/JOINT_ADAPTIVE_PAIRED.csv
+87,0.869494556,0.869494556,0.647333,0.000000000,0.108333333,0.108333333,0.490333333,../artifacts/s2c/runs/protocol_v2_textoir_v1/joint_adaptive_multicenter_v1/repair6/analysis/JOINT_ADAPTIVE_PAIRED.csv

@@ -1,7 +1,7 @@
 # 当前研究状态
 
-这是当前唯一状态入口。活动协议为 `protocol_v2_textoir_v1`；本轮整理已冻结在
-`fb0237ac74a298a88cca2872b78be551f9f090bb`，当前工作分支为
+这是当前唯一状态入口。活动协议为 `protocol_v2_textoir_v1`；当前基准 commit 为
+`dc2c0b59fa200a9590dcbebaadf6b244f53c84e2`，当前工作分支为
 `main`。当前工作树因 RC-AMBL 代码、轻量结果和文档尚未提交而
 dirty；父仓库没有运行中的实验。`third_party/mogb_official` 仍是独立只读来源 checkout，
 其本地审计元数据保持在子仓库工作树中，不修改第三方源码。GitHub 尚未推送本轮提交或
@@ -19,6 +19,7 @@ dirty；父仓库没有运行中的实验。`third_party/mogb_official` 仍是�
 | MOGB/ADB/DA-ADB/DCLOOS | 已审计或完成隔离单元；不扩展旧矩阵 | `docs/archive/mogb_reproduction/`、`docs/archive/external_baselines/` |
 | λ 泄漏与敏感性审计 | complete：9 个 split 审计、216 行评分（18 个唯一中心拟合；论文默认 K 行复用 K=2） | `results/diagnostics/lambda_leakage/`、`results/diagnostics/lambda_sensitivity/` |
 | RC-AMBL adaptive_v1 pilot | complete：StackOverflow/KIR=.50、3 seeds、KnownOnly/ProxyOOS 共 6/6；0 failed/missing/duplicate/invalid；全部分裂安全回退 | `../artifacts/s2c/runs/protocol_v2_textoir_v1/adaptive_v1/contract_repair5/` |
+| joint_adaptive_multicenter_v1 | complete：StackOverflow/KIR=.50、3 seeds；MiniLM、projection 和 intent prototypes 共同训练；3/3 候选 split 由 Known calibration 拒绝，最终 mean `K_y=1.0` | `../artifacts/s2c/runs/protocol_v2_textoir_v1/joint_adaptive_multicenter_v1/repair6/` |
 
 ## 已确认结论
 
@@ -44,6 +45,12 @@ dirty；父仓库没有运行中的实验。`third_party/mogb_official` 仍是�
   bootstrap median ARI（0.7051--0.7712）低于 0.80 或 Known-only 安全门而拒绝；10 个
   Known intent 最终全部为 `K_y=1`。RC-AMBL OOS F1 `0.5785±0.0926`，相对 E2 K=1
   下降 `19.44pp`，false acceptance 增加 `29.14pp`，不能称为新方法成功。
+- joint_adaptive_multicenter_v1 的 `repair6` 是第一次真正把训练参与扩展到多中心候选：从 RACAL
+  Trainable K=1 checkpoint 初始化，MiniLM 最后两层、残差 projection 和 intent prototypes 一起
+  训练候选 split；候选只由 Known train/ calibration 决定。StackOverflow/KIR=.50 的 3 个 seed
+  均完成，3/3 候选 split 被拒绝，最终 `mean K_y=1.0`。joint adaptive OOS F1 为
+  `0.8661±0.0111`，F1-All `0.8563±0.0050`，Known Recall `0.8388±0.0045`，false acceptance
+  `0.1129±0.0228`；这是真正的训练链路负诊断，不是 adaptive-K 正结果。
 
 ## λ 选择与数据泄漏审计（2026-08-02）
 
@@ -82,16 +89,17 @@ dirty；父仓库没有运行中的实验。`third_party/mogb_official` 仍是�
 
 ## 当前唯一下一步
 
-停止 URCSG、CCSG、RC-AMBL 和固定多中心扩展；保留这些 pilot 作为 Known-only 自适应 K
-和 StackOverflow union-risk 的负结果证据。RACAL-v1 阶段一已经完成了 Frozen K=1 精确回放和
-Trainable MiniLM K=1 三 seed 控制，阶段二 fixed K=2 也已完成并判定为 A 主导、伴随 intent-level
-C 异质性。当前唯一允许登记的后续步骤是重新冻结一次最小 risk-gated K=1→K=2 intent 激活契约；
-不得自动启动该阶段、K=3--5、Proxy-OOS、其他数据集、KIR 扩展、完整 Pipeline 或外部 baseline。
+停止 URCSG、CCSG、RC-AMBL、joint_adaptive_multicenter_v1 和固定多中心扩展；保留这些 pilot 作为
+Known-only 自适应 K 与 StackOverflow union-risk 的负结果证据。训练参与式链路已经验证可运行，但
+当前候选分裂没有通过 Known-only 安全门。下一步只能先登记一个明确的候选目标函数/分裂规则修订，
+并在同一 StackOverflow/KIR=.50/3 seed 小 pilot 上复验；在规则修订前不得自动扩展其他数据集、KIR、
+K=3--5、Proxy-OOS、完整 Pipeline 或外部 baseline。
 
 补充定义：当前 s2c 还不能称为“已完成的自适应多中心方法”。E2/E3 是固定 K 的后处理中心，
-RACAL 阶段一只训练 K=1 表示，RACAL 阶段二只复用表示做固定 K=2 归因；RC-AMBL 的候选分裂
-全部被安全门拒绝。因此后续任何 adaptive-K 论文表述都必须标记为“未完成/待验证”，不能把
-固定 K 结果或阶段二诊断误写成自适应多中心成功。
+RACAL 阶段一只训练 K=1 表示，RACAL 阶段二只复用表示做固定 K=2 归因；RC-AMBL 和
+joint_adaptive_multicenter_v1 虽然分别实现了冻结表示风险门和训练参与式候选 split，但候选均未
+通过 Known-only 安全门。因此后续任何 adaptive-K 论文表述都必须标记为“未完成/待验证”，不能把
+固定 K 结果或本轮共同训练诊断误写成自适应多中心成功。
 
 ## 当前阻断和风险
 
@@ -131,6 +139,21 @@ RACAL 阶段一只训练 K=1 表示，RACAL 阶段二只复用表示做固定 K=
 - K=2 相对 K=1 的均值变化：OOS F1 `-19.06pp`、F1-All `-8.85pp`、Known Recall `+9.70pp`、false acceptance `+34.11pp`、AUROC `-2.30pp`；新增 OOS false acceptance 为 1169/753/1154，恢复 Known false rejection 为 298/309/285。
 - 判定为 `A_primary_with_C_heterogeneity`：固定 K=2 明显退化，但 intent-level 存在异质性。停止 K=3--5；RACAL 不停止，但只能登记最小 risk-gated intent 激活，不得自动运行。
 - 证据入口：`docs/racal_v1/RACAL_V1_STAGE2_REPORT.md`、`docs/racal_v1/RACAL_V1_STAGE2_CLOSEOUT.md`、`results/diagnostics/racal_v1/stage2_fixed_k2/`、`../artifacts/s2c/runs/protocol_v2_textoir_v1/racal_v1/stage2_fixed_k2/`。
+
+## joint_adaptive_multicenter_v1（2026-08-05）
+
+- 这是本项目第一次真正把多中心候选放进训练闭环：encoder 最后两层、residual projection 和
+  intent prototypes 共同优化；候选 split 从 Known train 的 PCA 残差提出，候选模型只用 Known
+  train 训练，结构只由 Known calibration 的 recall、compactness、objective 和父边界约束决定。
+- `repair6` 固定 StackOverflow/KIR=.50、seed=13/42/87，3/3 完成，0 failed/missing/duplicate/invalid；
+  `test_used_for_selection=false` 且 `oos_used_for_training=false`。
+- 3/3 候选 split 均被拒绝，最终 10 个 Known intent 全部为 `K_y=1`。均值：OOS F1
+  `0.8661±0.0111`、F1-All `0.8563±0.0050`、Known Recall `0.8388±0.0045`、false acceptance
+  `0.1129±0.0228`。因此本阶段证明了训练参与式实现存在且执行了候选训练，但没有证明自适应多中心
+  在当前 StackOverflow 条件下有收益。
+- 证据入口：`docs/joint_adaptive_multicenter_v1/JOINT_ADAPTIVE_V1_REPORT.md`、
+  `docs/joint_adaptive_multicenter_v1/REPRODUCE_JOINT_ADAPTIVE_V1.md`、
+  `../artifacts/s2c/runs/protocol_v2_textoir_v1/joint_adaptive_multicenter_v1/repair6/`。
 
 ## 当前证据入口
 

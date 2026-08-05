@@ -1040,3 +1040,27 @@
 - intent 诊断：30 行均记录 K=1 半径、K=2 子簇大小/半径/方差、bootstrap ARI、silhouette、Known Recall 变化和净收益。跨 seed 有正净收益 intent 16 行、负净收益 intent 14 行，但多数高风险 intent 在三个 seed 均负，说明存在意图异质性且总体风险由过覆盖主导。
 - 判定：`A_primary_with_C_heterogeneity`。fixed K=2 明显退化，停止 K=3--5；不停止 RACAL，但下一阶段只能登记一次最小 risk-gated K=1→K=2 center activation，不能自动运行。
 - 测试：阶段二专项测试 4/4；后续执行 full unit/integration/smoke、compileall、ruff、git diff --check、data tracking、research state、development log 和 public whitelist verify。
+
+## 2026-08-05 — joint_adaptive_multicenter_v1 训练参与式自适应多中心 pilot
+
+- Base commit：`dc2c0b59fa200a9590dcbebaadf6b244f53c84e2`；工作树 dirty；当前代码快照和配置哈希记录在
+  `../artifacts/s2c/runs/protocol_v2_textoir_v1/joint_adaptive_multicenter_v1/repair6/JOINT_ADAPTIVE_PROVENANCE.json`。
+- 目标：验证局部中心参与 MiniLM 表示训练、每个 intent 的第二中心由 Known-only calibration 决定时，能否避免
+  StackOverflow 固定 K=2 的 false-acceptance 爆炸；不重跑 E2/E3/R1/RC-AMBL/RACAL/MOGB 历史实验。
+- 新增代码：`src/protocol_v2/experiments/joint_adaptive_v1/`、`scripts/experiments/run_joint_adaptive_multicenter_v1.py`、
+  `scripts/experiments/analyze_joint_adaptive_v1.py`、配置和专项单元测试；新 artifact 根为
+  `../artifacts/s2c/runs/protocol_v2_textoir_v1/joint_adaptive_multicenter_v1/repair6/`。
+- 方法：RACAL Trainable K=1 checkpoint 作为初始模型；MiniLM 最后两层、残差 projection 和 intent prototypes 共同训练；
+  候选 split 由 Known train PCA 残差提出；结构选择只读 Known calibration，父边界保护不允许子中心扩大已知安全区域；
+  `test_used_for_selection=false`、`oos_used_for_training=false`。
+- 实验：StackOverflow/KIR=.50/seeds 13、42、87，计划 3，完成 3，失败 0；候选每 seed 实际训练一次，3/3 被
+  `no_known_only_compactness_gain` 拒绝，最终 10 个 Known intent 均为 `K_y=1`。
+- 结果：joint adaptive OOS F1 `0.8661±0.0111`、F1-All `0.8563±0.0050`、Known Recall `0.8388±0.0045`、
+  false acceptance `0.1129±0.0228`；相对 RACAL Trainable K=1 的 OOS F1 `-0.10pp`、F1-All `-0.03pp`、Known Recall
+  `-0.04pp`、false acceptance `+0.14pp`，没有安全的新增中心收益。
+- 诊断：相同候选的无父边界 K=2 union 平均 OOS F1 `0.6777`、false acceptance `0.4513`；parent guard 后为
+  `0.8663`、`0.1118`，说明 union 过覆盖是主要风险。后者仅为事后诊断，不是正式 adaptive 结果。
+- 验证：专项测试 3/3、compileall、run summarize、verify、analysis 完成；repair1--repair5 仅保留为被修复的实现尝试，
+  repair6 是当前有效合同（修复 NaN/Inf、父边界陈旧和候选学习率问题）。
+- 决策：训练参与式链路已证实可运行，但当前 StackOverflow/KIR=.50 未证明 `K_y>1` 有益；停止扩大数据集、KIR、
+  K=3--5 和新损失，下一步必须先登记新的 split objective/边界契约，再做同规模小 pilot。
