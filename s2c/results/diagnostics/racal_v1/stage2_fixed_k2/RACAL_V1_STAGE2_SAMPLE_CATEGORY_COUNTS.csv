@@ -1,0 +1,16 @@
+category,count
+seed_13:both_false_accept_oos,397
+seed_13:k1_correct_reject_k2_wrong_accept_oos,1169
+seed_13:k1_false_reject_k2_correct_known,298
+seed_13:k2_changed_center_or_intent,5733
+seed_13:unchanged_or_other,245
+seed_42:both_false_accept_oos,277
+seed_42:k1_correct_reject_k2_wrong_accept_oos,753
+seed_42:k1_false_reject_k2_correct_known,309
+seed_42:k2_changed_center_or_intent,5747
+seed_42:unchanged_or_other,230
+seed_87:both_false_accept_oos,323
+seed_87:k1_correct_reject_k2_wrong_accept_oos,1154
+seed_87:k1_false_reject_k2_correct_known,285
+seed_87:k2_changed_center_or_intent,5947
+seed_87:unchanged_or_other,51

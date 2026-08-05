@@ -82,16 +82,16 @@ dirty；父仓库没有运行中的实验。`third_party/mogb_official` 仍是�
 
 ## 当前唯一下一步
 
-停止 URCSG 和固定多中心扩展；保留该 pilot 作为 Known-only 自适应 K 的负结果和 StackOverflow
-union-risk 证据。随后已另行登记并完成 `ccsg_pilot_v1`：它把多个子中心聚合为意图级混合支持分数，
-再用 top-1/top-2 竞争间隔和 Known-only 联合阈值限制多球并集过覆盖；没有训练编码器，也没有
-修改 E2/E3/URCSG/BRAK。CCSG 的 9/9 cells、72 行指标和校准审计均完整，但 Banking77、
-CLINC150、StackOverflow 的预注册晋级门均未通过；StackOverflow 的 K=2 false acceptance 仍然
-明显，故不启动 CCSG full matrix。
+停止 URCSG、CCSG、RC-AMBL 和固定多中心扩展；保留这些 pilot 作为 Known-only 自适应 K
+和 StackOverflow union-risk 的负结果证据。RACAL-v1 阶段一已经完成了 Frozen K=1 精确回放和
+Trainable MiniLM K=1 三 seed 控制，阶段二 fixed K=2 也已完成并判定为 A 主导、伴随 intent-level
+C 异质性。当前唯一允许登记的后续步骤是重新冻结一次最小 risk-gated K=1→K=2 intent 激活契约；
+不得自动启动该阶段、K=3--5、Proxy-OOS、其他数据集、KIR 扩展、完整 Pipeline 或外部 baseline。
 
-下一步先停止 RC-AMBL 扩展；只允许在同一 RC-AMBL evidence 合同下做一个 Known-only K=1
-校准控制，确认高 false acceptance 是否来自 evidence/阈值定义。若控制仍失败，则保留 E2 K=1，
-转向已登记的强基线/端到端对比；不得在相同契约下重复 URCSG、CCSG、E2、E3、BRAK 或本 pilot。
+补充定义：当前 s2c 还不能称为“已完成的自适应多中心方法”。E2/E3 是固定 K 的后处理中心，
+RACAL 阶段一只训练 K=1 表示，RACAL 阶段二只复用表示做固定 K=2 归因；RC-AMBL 的候选分裂
+全部被安全门拒绝。因此后续任何 adaptive-K 论文表述都必须标记为“未完成/待验证”，不能把
+固定 K 结果或阶段二诊断误写成自适应多中心成功。
 
 ## 当前阻断和风险
 
@@ -115,7 +115,26 @@ CLINC150、StackOverflow 的预注册晋级门均未通过；StackOverflow 的 K
 - 证据入口：`results/diagnostics/ccsg/` 和
   `../artifacts/s2c/runs/protocol_v2_textoir_v1/ccsg_pilot_v1/`。
 
+## RACAL-v1 阶段一（2026-08-05）
+
+- RACAL-v1 是独立的新阶段，未修改或覆盖 E2、E3、R1、URCSG、CCSG、BRAK、RC-AMBL 和 MOGB 历史产物。
+- StackOverflow、KIR=0.50、seeds 13/42/87 的 frozen K=1 E2 精确回放已完成 3/3：sample_id 与预测零不匹配，score 和指标最大绝对差均为 0。
+- Trainable MiniLM K=1 已完成 3/3；仅使用 Known train/calibration，先 projection warm-up，再解冻 MiniLM 最后两层，未使用测试 OOS 选 epoch、边界或阈值。
+- 三 seed 均值显示，Trainable 相对 Frozen：OOS F1 +9.42pp、F1-All +7.06pp、Known Recall +0.21pp、false acceptance -15.40pp、AUROC +3.56pp；Trainable OOS F1 标准差为 0.79pp，低于 Frozen 的 4.17pp。
+- 阶段一结论：K=1 表示训练是当前可复现且有正收益的方向，允许登记下一阶段，但不得自动启动固定 K=2、中心激活、Proxy-OOS 或其他数据集扩展；当前仍不能声称多中心或 SOTA 已解决。
+- 证据入口：`docs/racal_v1/RACAL_V1_REPORT.md`、`docs/racal_v1/RACAL_V1_CLOSEOUT.md`、`results/diagnostics/racal_v1/`、`../artifacts/s2c/runs/protocol_v2_textoir_v1/racal_v1/`。
+
+## RACAL-v1 阶段二（2026-08-05）
+
+- 在阶段一同一 Trainable MiniLM checkpoint 上完成 StackOverflow/KIR=.50、seeds 13/42/87 的纯 K=1/K=2 对照；没有重新训练或选择 K=2 表示，也没有加入风险门控或 proxy-OOS。
+- K=1 重新编码结果与阶段一指标最大差异为 0；K=2 每个 intent 内使用 KMeans-2，三 seed 完成 3/3。
+- K=2 相对 K=1 的均值变化：OOS F1 `-19.06pp`、F1-All `-8.85pp`、Known Recall `+9.70pp`、false acceptance `+34.11pp`、AUROC `-2.30pp`；新增 OOS false acceptance 为 1169/753/1154，恢复 Known false rejection 为 298/309/285。
+- 判定为 `A_primary_with_C_heterogeneity`：固定 K=2 明显退化，但 intent-level 存在异质性。停止 K=3--5；RACAL 不停止，但只能登记最小 risk-gated intent 激活，不得自动运行。
+- 证据入口：`docs/racal_v1/RACAL_V1_STAGE2_REPORT.md`、`docs/racal_v1/RACAL_V1_STAGE2_CLOSEOUT.md`、`results/diagnostics/racal_v1/stage2_fixed_k2/`、`../artifacts/s2c/runs/protocol_v2_textoir_v1/racal_v1/stage2_fixed_k2/`。
+
 ## 当前证据入口
+
+- 当前方法、实验进展和基线差异总览：`docs/CURRENT_METHOD_AND_EXPERIMENT_STATUS.md`。
 
 - MOGB/DCLOOS 中文对比主报告：`docs/对比实验/MOGB_DCLOOS_对比结果报告.md`；该报告区分同协议 Frozen MiniLM 组件比较、MOGB 官方兼容负复现和 DCLOOS reduced-budget 参考结果。
 

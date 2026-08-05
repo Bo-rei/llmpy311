@@ -1014,3 +1014,29 @@
 - 决策：`stop_adaptive_v1_pilot`。这是安全回退和 evidence/阈值失败诊断，不是新方法成功，不授权扩展 CLINC150、Banking77、其他 KIR、K 网格或完整 Pipeline。
 - 产物：`../artifacts/s2c/runs/protocol_v2_textoir_v1/adaptive_v1/contract_repair5/`、`results/diagnostics/adaptive_v1/`、`docs/adaptive_v1/ADAPTIVE_V1_REPORT.md`、`docs/adaptive_v1/REPRODUCE_ADAPTIVE_V1.md`。
 - 风险：当前 RC-AMBL evidence 阈值不是 E2 nearest-sphere 逐值复现；MOGB 主表行仍是兼容组件参考，不能称官方 BERT 复现或 SOTA。下一步只允许先做同合同 K=1 calibration control，若仍有高 false acceptance，则保留 E2 K=1 并转向已登记强基线/端到端对比。
+
+## 2026-08-05 — RACAL-v1 第一阶段 Trainable K=1
+
+- Base commit：记录于 ../artifacts/s2c/runs/protocol_v2_textoir_v1/racal_v1/RACAL_PROVENANCE.json；第三方 third_party/mogb_official 保持只读 dirty 状态，未修改或清理。
+- 目标：建立独立 RACAL-v1 框架，先精确复现 E2 StackOverflow/KIR=.50/K=1，再验证最后两层 MiniLM 加 384D 残差投影的 Known-only 单中心训练。
+- 新增文件：src/protocol_v2/experiments/racal_v1/、scripts/experiments/racal_v1/、configs/experiments/protocol_v2_textoir_v1/racal_v1.yaml、tests/unit/test_racal_v1.py、tests/integration/test_racal_v1_integration.py、docs/racal_v1/；新 artifact 根为 ../artifacts/s2c/runs/protocol_v2_textoir_v1/racal_v1/。
+- 数据影响：只读取固定 StackOverflow train=6000、calibration=1000、test=6000；train/calibration 仅 Known；三个 split 的 sample-id 无交叉；test OOS 未参与训练或选模。
+- E2 replay：seed 13/42/87 共 3/3；sample-id mismatch、prediction mismatch、score max delta 和 metric max delta 均为 0。
+- Trainable K=1：3/3 checkpoint 和 Gate 结果完成；训练只包含 CE、类内中心紧致和最近异类中心 margin；最后两个 MiniLM block 与 projection 可训练，前四层冻结。
+- 结果：Frozen OOS F1 0.7729±0.0417，Trainable OOS F1 0.8671±0.0079；F1-All 0.7860→0.8565；Known Recall 0.8371→0.8392；false acceptance 0.2654→0.1114。三个 seed 方向一致。
+- 测试：RACAL targeted tests 4/4 通过；dry-run、checkpoint reload、E2 replay、verify 通过；compileall/ruff 已通过。数据 tracking 通过；development-log checker 仍报告预-existing third-party dirty 例外。
+- 决策：Trainable K=1 满足晋级门，允许登记下一阶段 fixed K=2、proxy-OOS 和风险约束中心激活，但本批不自动启动。
+- 风险：当前结果仍是单中心表示证据，不能宣称 RACAL 多中心已成功或达到 SOTA；下一阶段必须先运行 fixed K=2 对照，并继续保持 StackOverflow/KIR=.50。
+
+## 2026-08-05 — RACAL-v1 阶段二 fixed K=2 边界对照
+
+- Base commit/provenance：`../artifacts/s2c/runs/protocol_v2_textoir_v1/racal_v1/stage2_fixed_k2/RACAL_STAGE2_PROVENANCE.json`；阶段一 checkpoint 只读复用，第三方 MOGB checkout 未修改。
+- 目标：在已验证有效的 Trainable MiniLM 表示上，只比较同一 checkpoint 的 K=1 与每个 intent 内 KMeans-2；不引入 proxy-OOS、risk gate、adaptive K、阈值调参、K=3--5、其他数据集或 Cascade。
+- 新增文件：`src/protocol_v2/experiments/racal_v1/stage2.py`、`scripts/experiments/racal_v1/run_racal_v1_stage2.py`、`verify_racal_v1_stage2.py`、`summarize_racal_v1_stage2.py`、`diagnose_racal_v1_stage2.py`、阶段二配置和测试；新 artifact 根为 `../artifacts/s2c/runs/protocol_v2_textoir_v1/racal_v1/stage2_fixed_k2/`。
+- 数据与防泄漏：StackOverflow/KIR=.50、seeds 13/42/87；每个 seed train=6000、calibration=1000、test=6000，split overlap 为 0；阶段一 sample-id、registry 和 canonical hash 全部复核；checkpoint 不重新训练；`test_used_for_selection=false`。
+- 运行：dry-run、seed42 smoke、seeds13/87、verify、summarize、diagnose 完成；3/3 run、30 intent diagnostics、18,000 hashed sample-audit rows，失败/缺失/重复/无效为 0。
+- 结果：Trainable K=1 OOS F1 `0.8671±0.0079`、false acceptance `0.1114±0.0165`；fixed K=2 OOS F1 `0.6765±0.0615`、false acceptance `0.4526±0.0782`；K=2 相对 K=1 OOS F1 `-19.06pp`、F1-All `-8.85pp`、Known Recall `+9.70pp`、false acceptance `+34.11pp`、AUROC `-2.30pp`。
+- 逐样本：三个 seed 新增 OOS false acceptance 分别为 1169、753、1154；恢复 Known false rejection 分别为 298、309、285；净收益均为负。K=2 改变最近中心/意图的样本数为 5733、5747、5947。
+- intent 诊断：30 行均记录 K=1 半径、K=2 子簇大小/半径/方差、bootstrap ARI、silhouette、Known Recall 变化和净收益。跨 seed 有正净收益 intent 16 行、负净收益 intent 14 行，但多数高风险 intent 在三个 seed 均负，说明存在意图异质性且总体风险由过覆盖主导。
+- 判定：`A_primary_with_C_heterogeneity`。fixed K=2 明显退化，停止 K=3--5；不停止 RACAL，但下一阶段只能登记一次最小 risk-gated K=1→K=2 center activation，不能自动运行。
+- 测试：阶段二专项测试 4/4；后续执行 full unit/integration/smoke、compileall、ruff、git diff --check、data tracking、research state、development log 和 public whitelist verify。

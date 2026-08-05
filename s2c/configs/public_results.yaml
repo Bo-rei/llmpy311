@@ -204,6 +204,41 @@ files:
     source: ../artifacts/s2c/runs/protocol_v2_textoir_v1/r1_geometry_preserving_representation_full/summaries/R1_full_integrity.json
     public: representation/r1_full_integrity.json
 
+  # RACAL-v1 stage 1: StackOverflow K=1 replay and trainable MiniLM summary.
+  # These files contain only aggregate metrics and provenance-safe hashes; no
+  # text, embeddings, checkpoints, or sample-level predictions are exported.
+  - experiment_id: racal_v1_stage1
+    category: representation
+    source: results/diagnostics/racal_v1/RACAL_V1_STAGE1.csv
+    public: diagnostics/racal_v1/RACAL_V1_STAGE1.csv
+  - experiment_id: racal_v1_stage1
+    category: representation
+    source: results/diagnostics/racal_v1/RACAL_V1_STAGE1_MEAN_STD.csv
+    public: diagnostics/racal_v1/RACAL_V1_STAGE1_MEAN_STD.csv
+
+  # RACAL-v1 stage 2: fixed K=1/K=2 attribution under the frozen stage-1 checkpoint.
+  # Only aggregate/diagnostic CSVs and hashed sample IDs are exported; no text or embeddings.
+  - experiment_id: racal_v1_stage2_fixed_k2
+    category: representation
+    source: results/diagnostics/racal_v1/stage2_fixed_k2/RACAL_V1_STAGE2_PER_SEED.csv
+    public: diagnostics/racal_v1/stage2_fixed_k2/RACAL_V1_STAGE2_PER_SEED.csv
+  - experiment_id: racal_v1_stage2_fixed_k2
+    category: representation
+    source: results/diagnostics/racal_v1/stage2_fixed_k2/RACAL_V1_STAGE2_MEAN_STD.csv
+    public: diagnostics/racal_v1/stage2_fixed_k2/RACAL_V1_STAGE2_MEAN_STD.csv
+  - experiment_id: racal_v1_stage2_fixed_k2
+    category: representation
+    source: results/diagnostics/racal_v1/stage2_fixed_k2/RACAL_V1_STAGE2_INTENT_DIAGNOSTICS.csv
+    public: diagnostics/racal_v1/stage2_fixed_k2/RACAL_V1_STAGE2_INTENT_DIAGNOSTICS.csv
+  - experiment_id: racal_v1_stage2_fixed_k2
+    category: representation
+    source: results/diagnostics/racal_v1/stage2_fixed_k2/RACAL_V1_STAGE2_SAMPLE_CATEGORY_COUNTS.csv
+    public: diagnostics/racal_v1/stage2_fixed_k2/RACAL_V1_STAGE2_SAMPLE_CATEGORY_COUNTS.csv
+  - experiment_id: racal_v1_stage2_fixed_k2
+    category: representation
+    source: results/diagnostics/racal_v1/stage2_fixed_k2/RACAL_V1_STAGE2_SAMPLE_AUDIT_HASHES.csv
+    public: diagnostics/racal_v1/stage2_fixed_k2/RACAL_V1_STAGE2_SAMPLE_AUDIT_HASHES.csv
+
   # Robustness and descriptive mechanism summaries.
   - experiment_id: sample_efficiency
     category: robustness

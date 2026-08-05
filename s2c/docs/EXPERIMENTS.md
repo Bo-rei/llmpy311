@@ -73,6 +73,39 @@ cells 完成且无失败、缺失、重复或测试选择泄漏；但 Banking77�
 证据入口：`results/diagnostics/ccsg/` 和
 `../artifacts/s2c/runs/protocol_v2_textoir_v1/ccsg_pilot_v1/`。
 
+## RACAL-v1 Trainable K=1 阶段一
+
+`racal_v1_stage1` 是独立的表示训练控制实验，不重复 E2/E3/R1/URCSG/CCSG/RC-AMBL，也不运行
+多中心。它先对 StackOverflow、KIR=.50、seeds 13/42/87 做 Frozen K=1 的 E2 精确回放，再比较
+Known-only 选择 checkpoint 的 Trainable MiniLM K=1。训练使用 projection warm-up 和最后两层
+解冻，测试 OOS 不参与 epoch、阈值或边界选择。
+
+Frozen 与 Trainable 均完成 3/3。Trainable 的 OOS F1 为 `0.8671±0.0079`，相对 Frozen
+`0.7729±0.0417` 提升 `+9.42pp`；F1-All 提升 `+7.06pp`，Known Recall 变化 `+0.21pp`，
+false acceptance 下降 `15.40pp`。这只证明 K=1 表示适配有效，不证明固定多中心或 RACAL 完整方法
+已经成立；固定 K=2、中心激活、Proxy-OOS 和其他数据集均未启动。
+
+证据入口：`docs/racal_v1/RACAL_V1_REPORT.md`、`docs/racal_v1/RACAL_V1_CLOSEOUT.md`、
+`results/diagnostics/racal_v1/` 和
+`../artifacts/s2c/runs/protocol_v2_textoir_v1/racal_v1/`。
+
+## RACAL-v1 阶段二：Trainable 表示下的固定 K=2 归因
+
+`racal_v1_stage2_fixed_k2` 复用阶段一已经按 Known-only 选定并冻结的 Trainable MiniLM
+checkpoint，不重新训练编码器。范围固定为 StackOverflow、KIR=.50、seeds 13/42/87；在每个
+Known intent 内比较纯 K=1 与 KMeans K=2，距离为对角 Mahalanobis，半径为 mean+1 std，
+阈值为 1。该阶段不使用 proxy-OOS、测试 OOS 选参、风险门、K=3--5 或其他数据集。
+
+3/3 runs 完成且阶段一 K=1 replay 最大指标差为 0。Trainable K=2 相对 K=1 的均值为：OOS F1
+`-19.06pp`、F1-All `-8.85pp`、Known Recall `+9.70pp`、false acceptance `+34.11pp`、
+AUROC `-2.30pp`；三个 seed 的 OOS F1 方向一致下降。新增 OOS 误接收分别为 1169、753、1154，
+恢复 Known 分别为 298、309、285。10 个 intent 的诊断显示存在异质性，但整体并集过覆盖风险占主导，
+因此判定为 `A_primary_with_C_heterogeneity`，停止 K=3--5。
+
+证据入口：`docs/racal_v1/RACAL_V1_STAGE2_REPORT.md`、`docs/racal_v1/RACAL_V1_STAGE2_CLOSEOUT.md`、
+`results/diagnostics/racal_v1/stage2_fixed_k2/` 和
+`../artifacts/s2c/runs/protocol_v2_textoir_v1/racal_v1/stage2_fixed_k2/`。
+
 ## 指标契约
 
 Gate-only 主指标为 OOS F1、AUROC、AUPR-OOS、Known Recall、false acceptance/rejection；
