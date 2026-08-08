@@ -174,6 +174,8 @@ Gate detector
 | RACAL stage1 | Frozen K=1 回放 vs Trainable MiniLM K=1 | 3/3 + 3/3 | 当前最可靠的正收益来自 K=1 表示适配 |
 | RACAL stage2 | 同一 Trainable checkpoint 下纯 K=1 vs 固定 K=2 | 3/3 | K=2 的 OOS 过接受仍然严重，停止 K=3--5 |
 | joint_adaptive_multicenter_v1 | Trainable MiniLM + trainable prototypes；每轮提出一个 PCA split，Known calibration 安全门决定是否接受 | 3/3（repair6） | 真正的共同训练链路可运行，但 3/3 候选均拒绝，最终 `mean K_y=1.0` |
+| joint_adaptive_multicenter_contract_repair_v1 | 冻结 K=1 父边界、guarded compactness、负载/分离约束下的共同训练候选 split | 3/3（repair3） | 3/3 候选均因 calibration Known Recall 下降拒绝，最终 `mean K_y=1.0` |
+| consistency_gate_v1 | Trainable K=1 + 原始/MC-dropout/表面归一化多视图的一致性与证据 margin | 3/3 | 仅有零点几百分点描述性变化；不增加中心，不能称 SOTA |
 
 ### 3.3 训练参与式自适应多中心 pilot：joint_adaptive_multicenter_v1
 
@@ -198,6 +200,45 @@ StackOverflow 表示中，候选局部划分没有在不损害 Known-only 安全
 父边界保护的 K=2 union 平均 OOS F1 只有 `0.6777`、false acceptance `0.4513`；加父边界保护后
 平均 OOS F1 为 `0.8663`、false acceptance `0.1118`，但它仍是诊断，不是自适应正式结果。这个对照
 直接显示：StackOverflow 的风险主要来自多球 union 过覆盖，而不是“没有调用训练代码”。
+
+### 3.4 训练参与式合同修复：joint_adaptive_multicenter_contract_repair_v1
+
+为排除旧 pilot 的评估契约歧义，新阶段固定一次 K=1 父边界，候选子中心只能在该父边界内细化；候选
+compactness 使用同一 parent-guarded score，而不是 unconstrained score；训练损失增加子中心负载平衡和
+中心分离项。候选仍只用 Known train 训练，结构选择只读 Known calibration，测试 OOS 不参与训练或选择。
+
+`repair3` 的 StackOverflow/KIR=.50、seed=13/42/87 三个候选都实际完成了 2 个 epoch 的共同训练，
+但 3/3 均因 calibration Known Recall 下降而拒绝：
+
+| seed | 候选 intent | 子簇负载 | 最小中心分离 | calibration Recall（前→后） | 结论 |
+|---:|---|---|---:|---:|---|
+| 13 | osx | 452/148 | 0.0325 | 0.826→0.770 | reject |
+| 42 | cocoa | 138/462 | 0.0576 | 0.819→0.724 | reject |
+| 87 | osx | 276/324 | 0.0376 | 0.850→0.722 | reject |
+
+最终结果与 RACAL Trainable K=1 相同，说明修复评估合同后结论没有被夸大的数字改变：OOS F1
+`0.8661±0.0091`、F1-All `0.8563±0.0041`、Known Recall `0.8388±0.0037`、false acceptance
+`0.1129±0.0187`、平均 `K_y=1.0`。因此这是真正执行过“中心参与表示训练”的负诊断，而不是成功的自适应多中心方法。
+证据入口：`../artifacts/s2c/runs/protocol_v2_textoir_v1/joint_adaptive_multicenter_contract_repair_v1/repair3/`。
+
+### 3.5 Trainable K=1 + prediction consistency/evidence conflict Gate
+
+在训练参与式多中心仍然全部安全回退后，新增一个不增加中心的单中心拒识 pilot。它复用 RACAL
+Trainable K=1 checkpoint，不重新训练 encoder；对原始输入、两次固定 MC-dropout 和 NFKC/空白归一化
+视图分别编码，计算意图证据 margin 和跨视图冲突数。冲突容忍度和 margin 只由 Known calibration
+选择，test OOS 不参与选择。
+
+StackOverflow/KIR=.50、seed=13/42/87 的汇总：
+
+| Gate | OOS F1 | F1-All | Known Recall | False Acceptance |
+|---|---:|---:|---:|---:|
+| Trainable K=1 | 0.8671 ± 0.0079 | 0.8576 ± 0.0032 | 0.8392 ± 0.0032 | 0.1114 ± 0.0165 |
+| evidence margin | 0.8673 ± 0.0076 | 0.8580 ± 0.0027 | 0.8376 ± 0.0020 | 0.1099 ± 0.0145 |
+| combined consistency | 0.8674 ± 0.0073 | 0.8566 ± 0.0023 | 0.8319 ± 0.0025 | 0.1060 ± 0.0161 |
+
+evidence margin 的 OOS F1 仅提升约 `0.02pp`，Known Recall 下降约 `0.17pp`；combined Gate 虽将
+false acceptance 降低约 `0.54pp`，但 Known Recall 下降约 `0.73pp`。因此该阶段是拒识机制候选，
+不是已验证的新 SOTA 方法。证据入口：`docs/consistency_gate_v1/CONSISTENCY_GATE_REPORT.md`。
 
 ### 3.1 RACAL 阶段一：当前最好的自有结果
 

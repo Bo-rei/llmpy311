@@ -1064,3 +1064,42 @@
   repair6 是当前有效合同（修复 NaN/Inf、父边界陈旧和候选学习率问题）。
 - 决策：训练参与式链路已证实可运行，但当前 StackOverflow/KIR=.50 未证明 `K_y>1` 有益；停止扩大数据集、KIR、
   K=3--5 和新损失，下一步必须先登记新的 split objective/边界契约，再做同规模小 pilot。
+
+## 2026-08-05 — joint_adaptive_multicenter_contract_repair_v1 合同修复 pilot
+
+- Base commit：`a5a96fed4a779afdfb1586dfbe91efeb9565d541`；有效运行 attempt 为 `repair3`，provenance 为
+  `../artifacts/s2c/runs/protocol_v2_textoir_v1/joint_adaptive_multicenter_contract_repair_v1/repair3/JOINT_ADAPTIVE_CONTRACT_REPAIR_PROVENANCE.json`。
+- 目标：排除旧训练参与式 pilot 中父边界重估、unconstrained compactness 和缺少子中心负载/分离约束造成的合同混淆，
+  不扩大数据集、KIR 或 K 值。
+- 新增文件：`src/protocol_v2/experiments/joint_adaptive_contract_repair_v1.py`、对应 CLI、配置和单元测试；
+  旧 `joint_adaptive_multicenter_v1/repair6`、E2/E3/R1/RACAL 产物未修改。
+- 修复合同：K=1 父边界先拟合并冻结；候选 compactness 使用 parent-guarded score；候选训练加入子中心负载平衡
+  和分离项；测试 OOS 不参与训练、选择或阈值。
+- 实验规模：StackOverflow/KIR=.50，seed=13/42/87，候选每 seed 训练 2 epochs；计划 3、完成 3、失败 0，
+  每个候选实际产生 checkpoint，最终 3/3 由 Known calibration Recall 安全门拒绝，`mean K_y=1.0`。
+- 结果：OOS F1 `0.8661±0.0091`、F1-All `0.8563±0.0041`、Known Recall `0.8388±0.0037`、false acceptance
+  `0.1129±0.0187`；与 RACAL Trainable K=1 相比没有安全多中心增益。
+- 验证：contract-repair 单元测试 3/3、compileall、runner、summarize、verify 通过；repair2 汇总器字段错误已在
+  repair3 修复并重新运行，repair2/repair3 均保留，不覆盖旧 artifact。
+- 风险：本结果说明当前 StackOverflow 条件下候选训练仍不能通过 Known-only 安全门，不等于所有训练参与式自适应
+  多中心都不可能；但在登记新目标函数前不得扩展到其他数据集、KIR、K=3--5 或完整 Pipeline。
+- 下一步：停止本方向；如需继续，必须另行登记新的候选目标/分裂契约并保持同规模 pilot，或转向已登记强基线/端到端方法。
+
+## 2026-08-05 — consistency_gate_v1 单中心一致性/证据冲突 pilot
+
+- Base commit：`a5a96fed4a779afdfb1586dfbe91efeb9565d541`；新阶段独立于 E2/E3/R1、RACAL、joint adaptive 和 contract repair。
+- 目标：在训练参与式多中心候选全部回退后，验证 Trainable K=1 是否能通过多视图预测一致性和证据 margin 降低
+  OOS false acceptance；不增加中心、不重新训练 encoder。
+- 新增文件：`src/protocol_v2/experiments/consistency_gate_v1.py`、CLI、配置、单元测试和中文报告；新 artifact 根为
+  `../artifacts/s2c/runs/protocol_v2_textoir_v1/consistency_gate_v1/`。
+- 视图：原始 eval、两次固定种子 MC-dropout、NFKC/空白归一化；中心和半径仍为 RACAL Trainable K=1 的
+  单中心 diagonal-Mahalanobis mean+std；冲突容忍度与 evidence margin 只使用 Known calibration 选择。
+- 实验：StackOverflow/KIR=.50、seed=13/42/87，3/3 完成，失败/缺失/重复/无效为 0；test OOS 不参与选择或训练。
+- 结果：Trainable K=1 OOS F1 `0.8671±0.0079`；evidence-margin `0.8673±0.0076`，F1-All `0.8580±0.0027`，
+  Known Recall `0.8376±0.0020`，false acceptance `0.1099±0.0145`；combined Gate OOS F1 `0.8674±0.0073`，
+  Known Recall `0.8319±0.0025`，false acceptance `0.1060±0.0161`。
+- 判定：一致性/证据冲突是一个安全但收益很小的单中心拒识候选，不能称 SOTA，也不能用来证明多中心有效；不扩展
+  KIR、数据集、更多视图或 K 网格。
+- 测试：专项单元测试 3/3、compileall、3 seed runner、summarize、verify 通过；所有结果和配置哈希独立保存。
+- 下一步：保持 Trainable K=1 为当前骨干，若继续实验先做同协议强基线/端到端对照或预注册更明确的拒识目标，
+  不再无条件扩大多中心结构。

@@ -1,0 +1,4 @@
+seed,intent,before_centers,after_centers,child_load_1,child_load_2,minimum_child_separation,calibration_recall_before,calibration_recall_after,calibration_recall_delta,calibration_score_gain_guarded,accepted,reject_reason
+13,osx,10,11,452,148,0.0325484276,0.826,0.770,-0.056, -55999.9631485429,false,calibration_known_recall_drop
+42,cocoa,10,11,138,462,0.0575741529,0.819,0.724,-0.095, -94999.9396407383,false,calibration_known_recall_drop
+87,osx,10,11,276,324,0.0375655296,0.850,0.722,-0.128, -127999.9176079050,false,calibration_known_recall_drop

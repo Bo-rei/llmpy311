@@ -1,11 +1,10 @@
 # 当前研究状态
 
 这是当前唯一状态入口。活动协议为 `protocol_v2_textoir_v1`；当前基准 commit 为
-`dc2c0b59fa200a9590dcbebaadf6b244f53c84e2`，当前工作分支为
-`main`。当前工作树因 RC-AMBL 代码、轻量结果和文档尚未提交而
-dirty；父仓库没有运行中的实验。`third_party/mogb_official` 仍是独立只读来源 checkout，
-其本地审计元数据保持在子仓库工作树中，不修改第三方源码。GitHub 尚未推送本轮提交或
-本阶段诊断结果。
+`a5a96fed4a779afdfb1586dfbe91efeb9565d541`，当前工作分支为
+`main`。GitHub 已包含该基准 commit；当前工作树因本地 contract-repair 代码、轻量结果和
+文档尚未提交而 dirty，父仓库没有运行中的实验。`third_party/mogb_official` 仍是独立只读来源
+checkout，其本地审计元数据保持在子仓库工作树中，不修改第三方源码。
 
 ## 已完成且不得重复
 
@@ -20,6 +19,8 @@ dirty；父仓库没有运行中的实验。`third_party/mogb_official` 仍是�
 | λ 泄漏与敏感性审计 | complete：9 个 split 审计、216 行评分（18 个唯一中心拟合；论文默认 K 行复用 K=2） | `results/diagnostics/lambda_leakage/`、`results/diagnostics/lambda_sensitivity/` |
 | RC-AMBL adaptive_v1 pilot | complete：StackOverflow/KIR=.50、3 seeds、KnownOnly/ProxyOOS 共 6/6；0 failed/missing/duplicate/invalid；全部分裂安全回退 | `../artifacts/s2c/runs/protocol_v2_textoir_v1/adaptive_v1/contract_repair5/` |
 | joint_adaptive_multicenter_v1 | complete：StackOverflow/KIR=.50、3 seeds；MiniLM、projection 和 intent prototypes 共同训练；3/3 候选 split 由 Known calibration 拒绝，最终 mean `K_y=1.0` | `../artifacts/s2c/runs/protocol_v2_textoir_v1/joint_adaptive_multicenter_v1/repair6/` |
+| joint_adaptive_multicenter_contract_repair_v1 | complete：冻结 K=1 父边界、guarded score、负载/分离约束；3/3 候选实际训练后均被 Known calibration 拒绝，最终 mean `K_y=1.0` | `../artifacts/s2c/runs/protocol_v2_textoir_v1/joint_adaptive_multicenter_contract_repair_v1/repair3/` |
+| consistency_gate_v1 | complete：复用 Trainable K=1 checkpoint；原始、MC-dropout 和表面归一化多视图；3/3；Known-only 选择证据 margin/冲突容忍度 | `../artifacts/s2c/runs/protocol_v2_textoir_v1/consistency_gate_v1/` |
 
 ## 已确认结论
 
@@ -51,6 +52,16 @@ dirty；父仓库没有运行中的实验。`third_party/mogb_official` 仍是�
   均完成，3/3 候选 split 被拒绝，最终 `mean K_y=1.0`。joint adaptive OOS F1 为
   `0.8661±0.0111`，F1-All `0.8563±0.0050`，Known Recall `0.8388±0.0045`，false acceptance
   `0.1129±0.0228`；这是真正的训练链路负诊断，不是 adaptive-K 正结果。
+- `joint_adaptive_multicenter_contract_repair_v1/repair3` 修复了两个契约问题：候选分裂始终继承冻结的
+  K=1 父边界，且 compactness 使用 parent-guarded score；训练损失显式加入子中心负载平衡和中心分离项。
+  StackOverflow/KIR=.50 的 seed 13/42/87 均完成候选训练，3/3 因 Known calibration Recall 下降而拒绝，
+  最终 `mean K_y=1.0`。结果为 OOS F1 `0.8661±0.0091`、F1-All `0.8563±0.0041`、Known Recall
+  `0.8388±0.0037`、false acceptance `0.1129±0.0187`；没有产生安全的 `K_y>1`。这修复了评估合同，
+  但没有改变 StackOverflow 上多中心候选的负结论。
+- `consistency_gate_v1` 在不增加中心、不重新训练 encoder 的前提下复用 Trainable K=1，加入原始、两次
+  MC-dropout 和表面归一化视图的一致性/证据 margin Gate。3/3 seed 完成；evidence-margin 变体 OOS F1
+  `0.8673±0.0076`、F1-All `0.8580±0.0027`、Known Recall `0.8376±0.0020`、false acceptance
+  `0.1099±0.0145`，相对 Trainable K=1 仅为描述性小幅变化，不能称 SOTA。
 
 ## λ 选择与数据泄漏审计（2026-08-02）
 
@@ -89,10 +100,10 @@ dirty；父仓库没有运行中的实验。`third_party/mogb_official` 仍是�
 
 ## 当前唯一下一步
 
-停止 URCSG、CCSG、RC-AMBL、joint_adaptive_multicenter_v1 和固定多中心扩展；保留这些 pilot 作为
+停止 URCSG、CCSG、RC-AMBL、joint_adaptive_multicenter_v1、contract-repair、consistency_gate_v1 和固定多中心扩展；保留这些 pilot 作为
 Known-only 自适应 K 与 StackOverflow union-risk 的负结果证据。训练参与式链路已经验证可运行，但
-当前候选分裂没有通过 Known-only 安全门。下一步只能先登记一个明确的候选目标函数/分裂规则修订，
-并在同一 StackOverflow/KIR=.50/3 seed 小 pilot 上复验；在规则修订前不得自动扩展其他数据集、KIR、
+当前候选分裂没有通过 Known-only 安全门。本次 contract-repair 已完成且仍为负结果；下一步只能在明确登记新的
+目标函数/拒识机制修订后再决定是否做另一个同规模小 pilot，后续不得自动扩展其他数据集、KIR、
 K=3--5、Proxy-OOS、完整 Pipeline 或外部 baseline。
 
 补充定义：当前 s2c 还不能称为“已完成的自适应多中心方法”。E2/E3 是固定 K 的后处理中心，

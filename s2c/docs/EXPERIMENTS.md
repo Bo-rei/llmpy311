@@ -106,6 +106,28 @@ AUROC `-2.30pp`；三个 seed 的 OOS F1 方向一致下降。新增 OOS 误接�
 `results/diagnostics/racal_v1/stage2_fixed_k2/` 和
 `../artifacts/s2c/runs/protocol_v2_textoir_v1/racal_v1/stage2_fixed_k2/`。
 
+## 训练参与式自适应多中心合同修复
+
+`joint_adaptive_multicenter_contract_repair_v1` 是在 StackOverflow/KIR=.50、seeds 13/42/87 上对
+真正共同训练候选中心的独立合同修复。它冻结 K=1 父边界，使用 parent-guarded compactness，并在
+候选训练损失中加入子中心负载平衡和中心分离。3/3 候选均实际训练，但 Known calibration Recall
+明显下降而被拒绝，最终 `mean K_y=1.0`；OOS F1 `0.8661±0.0091`。该阶段证明训练链路真实执行，
+但未证明当前数据上有安全多中心收益。
+
+证据入口：`docs/joint_adaptive_multicenter_contract_repair_v1/CONTRACT_REPAIR_REPORT.md` 和
+`../artifacts/s2c/runs/protocol_v2_textoir_v1/joint_adaptive_multicenter_contract_repair_v1/repair3/`。
+
+## consistency_gate_v1 单中心拒识 pilot
+
+`consistency_gate_v1` 复用 RACAL Trainable K=1 checkpoint，不增加中心、不重新训练 encoder；使用
+原始、两次固定 MC-dropout 和表面归一化视图，Known calibration 选择证据 margin 与冲突容忍度。
+3/3 完成。evidence-margin 的 OOS F1 `0.8673±0.0076`、F1-All `0.8580±0.0027`、Known Recall
+`0.8376±0.0020`、false acceptance `0.1099±0.0145`。收益很小，只能作为单中心拒识候选，
+不能称为 SOTA 或多中心成功。
+
+证据入口：`docs/consistency_gate_v1/CONSISTENCY_GATE_REPORT.md` 和
+`../artifacts/s2c/runs/protocol_v2_textoir_v1/consistency_gate_v1/`。
+
 ## 指标契约
 
 Gate-only 主指标为 OOS F1、AUROC、AUPR-OOS、Known Recall、false acceptance/rejection；
