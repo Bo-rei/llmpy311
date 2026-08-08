@@ -1370,3 +1370,13 @@
 - 测试：文档更新后运行研究状态、开发日志和 git diff 检查。
 - 风险：当前 `../artifacts/s2c/runs` 与 checkpoint 仍缺失，可视化分析基于轻量 CSV，不能替代可重跑训练证据。
 - 下一步：恢复或重新登记冻结的原始产物后，做同合同 Gate/Cascade 工作点对照；不因图表解读而新增 K 或多中心矩阵。
+
+## 2026-08-08 — 更正原始产物状态核查
+
+- Base commit：`a5a96fed4a779afdfb1586dfbe91efeb9565d541`。
+- 发现：重新核对当前 checkout 后，`../artifacts/s2c/runs/`、`../artifacts/s2c/cache/` 以及 E2、RACAL、Trainable control 目录实际存在；此前文档中的“原始产物不存在”提示已过时。
+- 处理：更新 `docs/CURRENT_STATUS.md` 和 `docs/analysis/EXPERIMENTAL_MECHANISM_PACK_V3.md`，改为“目录存在但需逐阶段 provenance/manifest 验证”。
+- 数据/实验影响：无；没有运行训练、没有修改或覆盖任何 artifact。
+- 验证：通过目录/文件检查；后续继续运行 research-state、development-log 和 git diff 检查。
+- 风险：并非所有阶段都已证明 checkpoint、registry 和 manifest 完整，不能仅凭目录存在启动新矩阵。
+- 下一步：先对目标阶段执行 provenance 完整性审计，再决定是否补跑统一工作点实验。

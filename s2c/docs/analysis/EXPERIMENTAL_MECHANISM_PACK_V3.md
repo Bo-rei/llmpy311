@@ -1,6 +1,6 @@
 # 实验机制分析包 V3（现有结果复核）
 
-> 本报告只读取已经提交到 `s2c/results/analysis/` 的轻量 CSV；不读取 checkpoint、embedding 或原始文本，也不重新训练。当前工作区的 `../artifacts/s2c/runs/` 已不在磁盘，因此报告同时标记重产物缺失风险。
+> 本报告只读取已经提交到 `s2c/results/analysis/` 的轻量 CSV；不读取 checkpoint、embedding 或原始文本，也不重新训练。2026-08-08 复核发现 `../artifacts/s2c/runs/` 与缓存当前存在，但它们不属于本报告的输入，原始产物是否可用于后续重跑仍需按阶段 manifest 验证。
 
 ## 1. 数据与证据边界
 
@@ -110,7 +110,7 @@ Pareto 标记同时考虑 OOS F1、F1-All、Known Recall（越高越好）和 fa
 ## 7. 当前实验瓶颈与下一步
 
 1. 现有轻量结果已经足以支持 KIR/K/表示/组件的机制分析；不应继续重复相同矩阵。
-2. 当前工作区缺少原始 run/checkpoint，因此要重新运行新实验，必须先恢复并核对 artifacts provenance，或重新登记一套最小可复现实验。
+2. 当前工作区虽然存在原始 run/checkpoint，但本报告没有读取它们；要重新运行新实验，必须先按阶段核对 artifacts provenance、checkpoint hash 和 registry manifest。
 3. 恢复产物后，最高价值的下一步是同一 Known-only 工作点下复算 Trainable/Frozen Gate、native detectors 和 MOGB 组件；不要再用 test-oracle threshold 做正式选择。
 4. 之后再决定是否把最稳定的 Gate 接入 Cascade；外部基线必须单独标注监督条件。
 

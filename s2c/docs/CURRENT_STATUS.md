@@ -6,9 +6,10 @@
 文档尚未提交而 dirty，父仓库没有运行中的实验。`third_party/mogb_official` 仍是独立只读来源
 checkout，其本地审计元数据保持在子仓库工作树中，不修改第三方源码。
 
-> 当前工作区核查（2026-08-06）：`../artifacts/s2c/runs/` 与 `../artifacts/s2c/cache/` 不存在；下文引用的
-> E2/E3/Trainable 原始运行目录是历史完成记录，不代表这些大型产物仍可在当前 checkout 直接重跑。当前可直接
-> 复核的是 `results/analysis/` 下的轻量 CSV/JSON/图表；重新训练前必须恢复或重新生成并冻结 provenance。
+> 当前工作区复核（2026-08-08）：`../artifacts/s2c/runs/` 与 `../artifacts/s2c/cache/` 当前存在，E2、RACAL、
+> Trainable control 等原始运行目录和部分 checkpoint 可读取；但每个阶段仍必须以自身 `PROVENANCE`、manifest
+> 和完整性检查为准，不能仅凭目录存在就宣称可重跑。`results/analysis/` 下的轻量 CSV/JSON/图表仍是当前报告
+> 的主要阅读入口。
 
 ## 已完成且不得重复
 
@@ -354,5 +355,6 @@ joint_adaptive_multicenter_v1 虽然分别实现了冻结表示风险门和训�
   `results/analysis/experimental_mechanism_pack_v3/` 与 `figures/experimental_mechanism_pack_v3/`。
 - 该分析进一步确认：Trainable K=1 的主要收益是 K=1 分数分离和覆盖—拒识折中；StackOverflow 的 fixed K=2 和
   MOGB 组件没有形成安全的多中心正收益。外部 ADB/DA-ADB/DCLOOS 仍保持监督条件不同的兼容性/历史层。
-- 当前工作区的 `../artifacts/s2c/runs/` 不存在，故原始 run/checkpoint 不能在本地重跑；轻量 CSV 仍可审计，不能将
-  状态文档中的旧 artifact 路径当作当前可复现实验证据。恢复原始产物或重新登记最小实验前，不启动依赖 checkpoint 的新矩阵。
+- 2026-08-08 复核发现 `../artifacts/s2c/runs/`、`../artifacts/s2c/cache/` 和 Trainable/E2 相关目录当前存在；
+  但 V3 本身是基于轻量 CSV 的 analysis-only 结果，没有读取这些原始产物。后续如需重跑或扩展，仍须先逐阶段核对
+  provenance、checkpoint hash 和 registry manifest，不能把目录存在当作完整性证明。
