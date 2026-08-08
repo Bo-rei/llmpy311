@@ -62,12 +62,13 @@ class ExternalBaselineSpec:
     representation: str
     encoder_name: str
     encoder_device: str
+    protocol_version: str = "protocol_v2"
 
     @property
     def run_id(self) -> str:
         return "__".join(
             (
-                "protocol_v2",
+                self.protocol_version,
                 self.dataset,
                 f"kir_{format_kir(self.kir)}",
                 f"seed_{self.seed}",
@@ -162,6 +163,7 @@ def load_external_baseline_matrix(path: Path) -> list[ExternalBaselineSpec]:
             representation=str(defaults.get("representation", "frozen_minilm")),
             encoder_name=str(defaults.get("encoder_name", "all-MiniLM-L6-v2")),
             encoder_device=str(defaults.get("encoder_device", "cuda")),
+            protocol_version=str(payload.get("protocol_version", "protocol_v2")),
         )
         for dataset in _required(payload, "datasets")
         for kir in _required(payload, "kirs")
@@ -257,7 +259,9 @@ def method_availability(method: str) -> MethodAvailability:
 
 
 def _run_dir(paths: ProtocolV2Paths, spec: ExternalBaselineSpec) -> Path:
-    return paths.run_root / "external_baselines" / spec.run_id
+    # ``experiment_name`` is the isolated stage root.  Legacy callers retain
+    # ``external_baselines``; new protocol stages can never collide with it.
+    return paths.run_root / spec.experiment_name / spec.run_id
 
 
 def _display_path(path: Path, project_root: Path) -> str:
@@ -370,6 +374,8 @@ def _export_contract(paths: ProtocolV2Paths, spec: ExternalBaselineSpec, availab
 
 def _config_payload(spec: ExternalBaselineSpec, availability: MethodAvailability) -> dict[str, Any]:
     return {
+        "experiment_name": spec.experiment_name,
+        "protocol_version": spec.protocol_version,
         "dataset": spec.dataset,
         "kir": spec.kir,
         "seed": spec.seed,
@@ -486,6 +492,7 @@ def run_external_baseline(
     batch_size: int = 128,
     resume: bool = True,
     encoder: Any | None = None,
+    precomputed: tuple[GateViews, np.ndarray, np.ndarray, np.ndarray] | None = None,
 ) -> tuple[Path, str]:
     """Execute a native control or write a non-metric blocked manifest.
 
@@ -544,14 +551,20 @@ def run_external_baseline(
     if spec.representation != "frozen_minilm":
         raise NotImplementedError(f"Native E4 controls only support frozen_minilm: {spec.run_id}")
     started = time.perf_counter()
-    views: GateViews = load_gate_views(paths, spec.dataset, spec.seed, spec.kir)
+    if precomputed is None:
+        views: GateViews = load_gate_views(paths, spec.dataset, spec.seed, spec.kir)
+    else:
+        views = precomputed[0]
     if any(int(row["label"]) != 0 for row in views.train + views.calibration):
         raise ValueError(f"Known-only training/calibration violation: {spec.run_id}")
     model_path = _model_path(paths, spec.encoder_name)
-    resolved_encoder = encoder or _load_encoder(model_path, spec.encoder_device)
-    train = _encode(resolved_encoder, views.train, batch_size)
-    calibration = _encode(resolved_encoder, views.calibration, batch_size)
-    test = _encode(resolved_encoder, views.test, batch_size)
+    if precomputed is None:
+        resolved_encoder = encoder or _load_encoder(model_path, spec.encoder_device)
+        train = _encode(resolved_encoder, views.train, batch_size)
+        calibration = _encode(resolved_encoder, views.calibration, batch_size)
+        test = _encode(resolved_encoder, views.test, batch_size)
+    else:
+        _, train, calibration, test = precomputed
     train_labels = np.asarray([str(row["intent"]) for row in views.train], dtype=object)
     calibration_scores, test_scores, _calibration_nearest, test_nearest, method_details = _native_scores(
         spec, train, calibration, test, train_labels
@@ -609,6 +622,7 @@ def run_external_baseline(
                     "calibration": hashlib.sha256(calibration.tobytes(order="C")).hexdigest(),
                     "test": hashlib.sha256(test.tobytes(order="C")).hexdigest(),
                 },
+                "embedding_reused_within_matrix": precomputed is not None,
             },
         )
     return run_dir, "complete"
@@ -628,13 +642,37 @@ def run_matrix(
         for dataset in {spec.dataset for spec in spec_list}:
             paths.require_experiment_admission(dataset)
     summary: dict[str, Any] = {"planned": 0, "complete": [], "blocked": [], "unsupported": [], "failed": [], "dry_run": []}
+    cached_key: tuple[str, float, int, str, str] | None = None
+    cached_payload: tuple[GateViews, np.ndarray, np.ndarray, np.ndarray] | None = None
+    cached_encoder: Any | None = None
     for spec in spec_list:
         summary["planned"] += 1
         try:
             if not execute:
                 summary["dry_run"].append(dry_run(paths, spec))
                 continue
-            run_dir, status = run_external_baseline(paths, spec, batch_size=batch_size, resume=resume)
+            precomputed = None
+            if method_availability(spec.method).state == "available":
+                cache_key = (spec.dataset, spec.kir, spec.seed, spec.encoder_name, spec.encoder_device)
+                if cache_key != cached_key:
+                    # Config generation keeps methods contiguous for one
+                    # dataset/KIR/seed.  Reuse the expensive MiniLM encoding
+                    # across MSP/Energy/kNN/LOF, then release it on the next
+                    # key so a large sweep does not retain every embedding.
+                    views = load_gate_views(paths, spec.dataset, spec.seed, spec.kir)
+                    model_path = _model_path(paths, spec.encoder_name)
+                    cached_encoder = _load_encoder(model_path, spec.encoder_device)
+                    cached_payload = (
+                        views,
+                        _encode(cached_encoder, views.train, batch_size),
+                        _encode(cached_encoder, views.calibration, batch_size),
+                        _encode(cached_encoder, views.test, batch_size),
+                    )
+                    cached_key = cache_key
+                precomputed = cached_payload
+            run_dir, status = run_external_baseline(
+                paths, spec, batch_size=batch_size, resume=resume, precomputed=precomputed
+            )
             summary[status].append(run_dir.relative_to(paths.run_root).as_posix())
         except Exception as exc:  # One upstream adapter must not hide others.
             summary["failed"].append({"run_id": spec.run_id, "error_type": type(exc).__name__, "error": str(exc)})

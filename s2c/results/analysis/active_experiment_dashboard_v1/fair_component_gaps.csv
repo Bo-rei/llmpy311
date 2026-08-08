@@ -1,0 +1,19 @@
+dataset,kir,method,baseline_method,protocol,source,oos_f1_delta_pp,f1_all_delta_pp,known_macro_f1_delta_pp,known_recall_delta_pp,accuracy_delta_pp
+banking77,0.5,Fixed K=2,Single centroid,protocol_v2_fair_mean_over_5_seeds,results/final_baselines/summary.csv,3.033599999999992,1.649999999999996,1.6135999999999928,-2.4606000000000017,2.402599999999999
+banking77,0.5,MOGB-MiniLM,Single centroid,protocol_v2_fair_mean_over_5_seeds,results/final_baselines/summary.csv,2.565699999999993,-25.9131,-26.6625,-51.6053,-5.876599999999998
+banking77,0.5,MOGB partition + s2c boundary,Single centroid,protocol_v2_fair_mean_over_5_seeds,results/final_baselines/summary.csv,6.969499999999995,-9.704199999999997,-10.143000000000002,-32.82899999999999,1.9935000000000036
+banking77,0.5,s2c partition + MOGB boundary,Single centroid,protocol_v2_fair_mean_over_5_seeds,results/final_baselines/summary.csv,6.4315000000000015,-8.835800000000004,-9.2376,-31.7632,1.2207999999999997
+banking77,0.5,Random partition,Single centroid,protocol_v2_fair_mean_over_5_seeds,results/final_baselines/summary.csv,-0.8059000000000038,0.20620000000000083,0.23279999999999967,0.9472999999999954,-0.33769999999999634
+banking77,0.5,Single centroid,Single centroid,protocol_v2_fair_mean_over_5_seeds,results/final_baselines/summary.csv,0.0,0.0,0.0,0.0,0.0
+clinc150,0.5,Fixed K=2,Single centroid,protocol_v2_fair_mean_over_5_seeds,results/final_baselines/summary.csv,0.25729999999999364,-0.17500000000000293,-0.18080000000000318,-3.6178000000000043,0.3403000000000045
+clinc150,0.5,MOGB-MiniLM,Single centroid,protocol_v2_fair_mean_over_5_seeds,results/final_baselines/summary.csv,-7.623800000000003,-35.3155,-35.6848,-47.182300000000005,-12.936899999999996
+clinc150,0.5,MOGB partition + s2c boundary,Single centroid,protocol_v2_fair_mean_over_5_seeds,results/final_baselines/summary.csv,-3.3878999999999992,-15.671100000000004,-15.83500000000001,-25.41340000000001,-5.463200000000001
+clinc150,0.5,s2c partition + MOGB boundary,Single centroid,protocol_v2_fair_mean_over_5_seeds,results/final_baselines/summary.csv,-5.620100000000006,-23.860000000000003,-24.1032,-36.515600000000006,-9.399999999999997
+clinc150,0.5,Random partition,Single centroid,protocol_v2_fair_mean_over_5_seeds,results/final_baselines/summary.csv,0.12579999999999814,0.4813999999999985,0.4860999999999893,0.7199999999999984,0.23859999999999992
+clinc150,0.5,Single centroid,Single centroid,protocol_v2_fair_mean_over_5_seeds,results/final_baselines/summary.csv,0.0,0.0,0.0,0.0,0.0
+stackoverflow,0.5,Fixed K=2,Single centroid,protocol_v2_fair_mean_over_5_seeds,results/final_baselines/summary.csv,-13.02009999999999,-7.2207999999999934,-6.640900000000006,-0.26000000000000467,-9.650000000000002
+stackoverflow,0.5,MOGB-MiniLM,Single centroid,protocol_v2_fair_mean_over_5_seeds,results/final_baselines/summary.csv,-3.6296999999999913,-36.681599999999996,-39.986900000000006,-60.0534,-13.52
+stackoverflow,0.5,MOGB partition + s2c boundary,Single centroid,protocol_v2_fair_mean_over_5_seeds,results/final_baselines/summary.csv,2.6975000000000082,-16.6354,-18.568800000000007,-36.760000000000005,-2.5034
+stackoverflow,0.5,s2c partition + MOGB boundary,Single centroid,protocol_v2_fair_mean_over_5_seeds,results/final_baselines/summary.csv,-3.1973999999999947,-16.39259999999999,-17.712300000000003,-32.6534,-8.223400000000003
+stackoverflow,0.5,Random partition,Single centroid,protocol_v2_fair_mean_over_5_seeds,results/final_baselines/summary.csv,-0.6695999999999924,-0.1754999999999951,-0.12619999999999854,0.4932999999999965,-0.47669999999999657
+stackoverflow,0.5,Single centroid,Single centroid,protocol_v2_fair_mean_over_5_seeds,results/final_baselines/summary.csv,0.0,0.0,0.0,0.0,0.0

@@ -1103,3 +1103,270 @@
 - 测试：专项单元测试 3/3、compileall、3 seed runner、summarize、verify 通过；所有结果和配置哈希独立保存。
 - 下一步：保持 Trainable K=1 为当前骨干，若继续实验先做同协议强基线/端到端对照或预注册更明确的拒识目标，
   不再无条件扩大多中心结构。
+
+## 2026-08-06 — minilm_trainable_control_v1 跨数据集 K=1 控制
+
+- Base commit：运行时记录于 `../artifacts/s2c/runs/protocol_v2_textoir_v1/minilm_trainable_control_v1/PROVENANCE.json`；工作树保持 dirty，未执行 commit/push。
+- 目标：在不重复 E2/E3、不扩展 K 的前提下，验证 Known-only Trainable MiniLM 的 K=1 收益是否跨数据集成立。
+- 新增文件：`configs/experiments/protocol_v2_textoir_v1/minilm_trainable_control_v1.yaml`、
+  `src/protocol_v2/experiments/minilm_trainable_control_v1.py`、CLI、汇总脚本和中文报告；新 artifact 根为
+  `../artifacts/s2c/runs/protocol_v2_textoir_v1/minilm_trainable_control_v1/`。
+- 配置：CLINC150、Banking77 新运行；StackOverflow 复用 RACAL-v1 同协议 K=1；KIR=.50、seeds=13/42/87、
+  Mahalanobis K=1、mean+std 半径；只训练 MiniLM 最后两层和 residual projection。
+- 数据与防泄漏：train/calibration/test 三者无交叠；训练和 checkpoint 选择只访问 Known train/calibration；
+  `test_used_for_selection=false`、`oos_used_for_training=false`；6/6 新单元完成。
+- 结果：Trainable 相对同 seed E2 Frozen 的 OOS F1 为 CLINC `+1.12pp`、Banking `+5.18pp`、
+  StackOverflow `+9.42pp`；Known Recall 为 `-1.33pp`、`-1.95pp`、`+0.21pp`。
+- 结论：K=1 表示适配具有跨数据集正向 OOS 证据，但 CLINC/Banking 存在 Known Recall 代价；不支持无条件替代 Frozen，
+  也不授权继续扩大 K。下一步先做类内距离/半径/校准诊断，再进入同协议基线小矩阵。
+- 验证：317 个 unit tests 通过（3 warnings）、RACAL 相关 4 个 integration/unit tests 通过、ruff、compile、git diff --check、
+  research-state checker 和 6 个 metrics/provenance 自检通过。
+- 证据入口：`docs/analysis/MINILM_TRAINABLE_CONTROL_V1.md`、`results/diagnostics/minilm_trainable_control_v1/`、
+  `figures/active_experiment_dashboard_v1/trainable_cross_dataset.png`。
+
+## 2026-08-06 — minilm_trainable_kir_sweep_v1 跨 KIR 的 Trainable K=1 控制
+
+- Base commit/provenance：运行时记录于 `../artifacts/s2c/runs/protocol_v2_textoir_v1/minilm_trainable_kir_sweep_v1/PROVENANCE.json`；本阶段未执行 commit/push，旧 E0--E3、R1、RACAL 与 baseline artifacts 保持只读。
+- 目标：在同一 `protocol_v2_textoir_v1` 和同一对角马氏 Gate 合同下，检查最后两层 MiniLM+projection 的 Known-only 适配是否随 KIR、数据集变化；不增加 K、不重复旧多中心矩阵。
+- 配置：CLINC150、Banking77、StackOverflow；KIR={.25,.50,.75}；seeds={13,42,87}；Trainable K=1；训练和 checkpoint 选择只使用 Known train/calibration，`test_used_for_selection=false`、`oos_used_for_training=false`。
+- 实验数量：计划 27、完成 27、失败 0、缺失 0、重复 0、无效 0；每个 dataset×KIR 共用独立 stage root，未覆盖旧结果。
+- 结果：相对同距离 Frozen K=1，CLINC150 OOS F1 增量为 `+0.64/+2.41/+3.59pp`（KIR=.25/.50/.75），StackOverflow 为 `+1.19/+7.69/+13.54pp`；Banking77 为 `+0.59/-0.05/-14.02pp`。Banking77 在 KIR=.75 的 Known Recall 下降约 `7.28pp`，说明 OOS F1 不能脱离 Known 指标解释。
+- 判定：Trainable MiniLM 的可重复收益主要属于单中心表示/分数排序；它不是统一 SOTA，也不证明固定多中心安全。StackOverflow 固定 K=2 的 union-risk 仍由既有配对控制和 λ 诊断支持。
+- 新增：`configs/experiments/protocol_v2_textoir_v1/minilm_trainable_kir_sweep_v1.yaml`、`src/protocol_v2/experiments/minilm_trainable_kir_sweep_v1.py`、runner、分析脚本、`docs/analysis/MINILM_TRAINABLE_KIR_SWEEP_V1.md`、`results/analysis/minilm_trainable_kir_sweep_v1/`、`figures/minilm_trainable_kir_sweep_v1/`。
+- 风险：Trainable/Frozen 的 KIR sweep 是同距离 Gate-only 对照，不能直接与 fulltex.tex 历史 Cascade 表或使用不同监督/表示的 MOGB、ADB、DA-ADB、DCLOOS 结果混为公平排名。
+- 下一步：先将本轮结果加入分层总表并完成研究状态/台账校验，再决定是否做正式同协议强 baseline/端到端条件对照；不自动扩展 R1_full、K=2--5 或完整 Pipeline。
+
+## 2026-08-06 — minilm_trainable_k2_control_v1 K=1/K=2 跨数据集配对控制
+
+- Base commit：运行时写入 `../artifacts/s2c/runs/protocol_v2_textoir_v1/minilm_trainable_k2_control_v1/PROVENANCE.json`；工作树保持 dirty，未执行 commit/push。
+- 目标：在同一 Trainable MiniLM checkpoint、同一 split、同一距离/半径/阈值合同下，判断表示适配是否能使固定 K=2 安全；不重新训练、不扩展 KIR、不覆盖历史结果。
+- 新增文件：`configs/experiments/protocol_v2_textoir_v1/minilm_trainable_k2_control_v1.yaml`、`src/protocol_v2/experiments/minilm_trainable_k2_control_v1.py`、`scripts/experiments/run_minilm_trainable_k2_control_v1.py`、`tools/analysis/build_minilm_k_interaction_report.py`；独立 artifact 根为 `../artifacts/s2c/runs/protocol_v2_textoir_v1/minilm_trainable_k2_control_v1/`。
+- 实验：CLINC150/Banking77 × seeds 13/42/87 新增 6/6 个评价单元；StackOverflow 合并既有 RACAL-v1 Stage2 的 3 个只读配对行，最终跨数据集 9 行；每个 seed 的 K=1/K=2 共用同一已冻结 checkpoint。
+- 数据与防泄漏：校验 E2 manifest、registry/canonical hash、train/calibration/test sample-id hash；train/calibration 只含 Known；`test_used_for_selection=false`、`oos_used_for_training=false`；CLINC/Banking 的 K=1 replay 最大差为 0。
+- 结果：K=2−K=1 OOS F1 为 CLINC `-0.28pp`、Banking `+0.13pp`、StackOverflow `-19.06pp`；Known Recall 分别 `-3.26pp`、`-1.95pp`、`+9.70pp`；StackOverflow false acceptance `+34.11pp`。
+- 判定：Trainable MiniLM 的 K=1 收益不能被解释为固定多中心普遍恢复；Banking77 仅呈条件性微小收益，CLINC150 更支持 K=1，StackOverflow 的并集过覆盖仍是结构性失败。
+- 输出：`results/diagnostics/minilm_trainable_k2_control_v1/{per_seed.csv,mean_std.csv,delta_summary.csv}`、`docs/analysis/MINILM_TRAINABLE_K2_CONTROL_V1.md`、`figures/active_experiment_dashboard_v1/trainable_k_interaction_cross_dataset.png`。
+- 验证：新模块 compile、ruff、dry-run、6/6 runner、汇总脚本和图形生成通过；历史 E2/E3/R1/RACAL artifacts 未修改。
+- 下一步：保持 Trainable K=1 为当前可复用表示基线；先做同协议的表示/阈值与强 baseline 对照，不自动扩展固定 K=2 或更大 K。
+
+## 2026-08-06 — minilm_trainable_lambda_control_v1 Known-only λ/K 交互控制
+
+- Base commit/provenance：运行时记录于 `../artifacts/s2c/runs/protocol_v2_textoir_v1/minilm_trainable_lambda_control_v1/PROVENANCE.json`；本阶段不执行 commit/push，历史 E2/E3/R1/RACAL 产物保持只读。
+- 目标：在同一 Trainable MiniLM checkpoint 上只改变 `lambda`，判断 K=2 退化是否仅由 `mean+lambda*std` 的半径系数造成；不得使用 test OOS 选择 λ、K 或 checkpoint。
+- 范围：CLINC150、Banking77、StackOverflow；KIR=.50；seeds=13/42/87；K=1/2；λ={.50,.75,1.00,1.25,1.50,2.00}；Mahalanobis diagonal、mean_std、threshold=1.0；共 108/108 个评价单元完成，失败/缺失/重复/无效为 0。
+- 选择合同：每个 dataset×seed×K 选择 Known calibration false-reject rate≤5% 的最小 λ；若候选网格无可行值则记录 `selection_constraint_met=false` 并保留最大 λ 作为诊断，不把它写成正式最优参数。test OOS 只在选择规则冻结后评价。
+- 结果：Known-only 选择后 K=2−K=1 OOS F1 为 CLINC `+0.79pp`、Banking `+2.08pp`、StackOverflow `-9.51pp`；StackOverflow false acceptance 仍增加 `+11.83pp`。StackOverflow K=2 的退化因此不是 λ=1 单点设置造成；K=1 的 5% Known calibration 约束在三 seed 上也未稳定可行。
+- 新增文件：`src/protocol_v2/experiments/minilm_trainable_lambda_control_v1.py`、CLI、配置、汇总器、`docs/analysis/MINILM_TRAINABLE_LAMBDA_CONTROL_V1.md`、`results/diagnostics/minilm_trainable_lambda_control_v1/` 和 `figures/active_experiment_dashboard_v1/trainable_lambda_k_interaction.png`。
+- 决策：半径 λ 校准不能单独救活 StackOverflow 固定 K=2；停止 lambda-only rescue，保留 Trainable K=1 作为当前表示基线。下一步应做同协议强基线/端到端条件对照或明确新的开放风险目标，不再扩大 K 或新增 MiniLM 损失。
+- 验证：lambda runner 108/108、汇总和图形生成通过；下一步需运行 research-state、development-log、compile/ruff 和结果完整性检查。
+
+## 2026-08-06 — KIR=0.50 方法协议分层分析（analysis-only）
+
+- 目标：把当前 Trainable/Frozen/MOGB fair 组件与 ADB、DA-ADB、BRAK 兼容结果放入同一份可追溯表，但不把不同表示、监督条件和 seed 数混成 SOTA 排名。
+- 输入：`results/final_baselines/summary.csv`、`results/mogb/fair_matrix.csv`、`results/diagnostics/minilm_trainable_k2_control_v1/per_seed.csv`；未读取原始文本、未重跑实验。
+- 输出：`docs/analysis/KIR50_METHOD_COMPARISON_V1.md`、`results/analysis/kir50_method_comparison_v1/{rows.csv,mean_std.csv}`、`figures/active_experiment_dashboard_v1/{kir50_method_layers.png,kir50_method_tradeoff.png}`。
+- 结论：StackOverflow 当前协议 Trainable K=1 为 86.71%，高于 Frozen Single centroid 76.55%、MOGB-MiniLM 72.92% 和 MOGB partition+s2c boundary 79.25%；ADB/DA-ADB 为 89.47%/90.90%，但属于 BERT/不同合同兼容单格，不能直接宣称公平超越或落后。
+- 验证：分析脚本 compile、ruff、图形生成和 dashboard 重建通过；历史 artifacts 未覆盖。
+
+## 2026-08-06 — experiment_evidence_pack_v2 多 KIR/多方法统计与可视化
+
+- 目标：把已完成的 MOGB fair matrix、固定 K 组件和 Trainable K=1 KIR sweep 汇总为可比较但不混协议的实验包；不重跑训练，不修改历史 artifacts。
+- 输入：`results/mogb/fair_matrix.csv`（3 数据集×3 KIR×5 seed×6 frozen-component 方法）、`results/analysis/minilm_trainable_kir_sweep_v1/mean_std.csv`；所有 rows 保留 `scope`/representation/supervision 信息。
+- 分析：以 Single centroid 为 paired reference，计算 OOS F1、F1-All、Known Recall、false acceptance 的均值差、95% paired bootstrap CI（seed=20260725、10,000 次）和 win/tie/loss。
+- 输出：`tools/analysis/build_experiment_evidence_pack_v2.py`、`results/analysis/experiment_evidence_pack_v2/`（54 行 fair summary、180 行 paired effects、manifest）、`figures/experiment_evidence_pack_v2/`（21 张 PNG）、`docs/analysis/EXPERIMENT_EVIDENCE_PACK_V2.md`。
+- 结论：MOGB partition+s2c boundary 在部分 KIR 提高 OOS F1，但通常伴随 25--37pp Known Recall 损失；Trainable K=1 在 CLINC150/StackOverflow 的 KIR 曲线整体更平衡，Banking77 的高 KIR 仍退化。当前自有优势应表述为 Known-only 单中心表示适配的平衡，而不是已证明自适应多中心普遍超过 MOGB。
+- 验证：分析脚本 compile、ruff、运行、图像人工检查、研究状态检查、开发日志检查、数据跟踪检查和 `git diff --check` 均通过；图表使用英文标题避免缺失中文字体，中文解释保存在 Markdown。
+
+## 2026-08-06 — 表示训练与 StackOverflow 按意图机制分析（analysis-only）
+
+- Base commit：沿用当前工作树；未执行 commit、push 或历史 artifact 覆盖。
+- 目标：将已有 Frozen/CE/SupCon 的 K=1/K=2 结果与 RACAL Stage-2 的 StackOverflow intent diagnostics
+  组织成可读的机制证据，解释“表示训练改善 K=1、但固定多中心仍可能误接收 OOS”。
+- 新增：`tools/analysis/build_representation_boundary_pack_v1.py` 的输出说明文档
+  `docs/analysis/REPRESENTATION_BOUNDARY_PACK_V1.md`；新增脚本
+  `tools/analysis/build_stackoverflow_intent_diagnostic_v1.py` 及其结果、报告和 4 张图。
+- 输入与范围：表示包 18 行汇总、36 行 K=2−K=1 效应、已有几何汇总；StackOverflow 诊断包读取 30 个
+  intent-seed 行，仅做聚合和 Spearman 探索性分析，不读取测试文本、不重新训练、不用 test OOS 选参。
+- 结果：StackOverflow CE 的 OOS F1 由 88.13% 降至 73.44%，SupCon 由 89.63% 降至 71.90%，Known
+  Recall 分别上升 8.12pp/9.73pp；诊断样本平均恢复 29.73 个 Known、却新增接受 102.53 个 OOS，
+  平均 ARI 0.91。结论是稳定性不能替代 OOS 风险校准。
+- 验证：脚本运行成功，输出 4 张意图诊断图；随后运行 compile/ruff、CSV 解析、研究状态、开发日志、
+  数据跟踪和 git diff 检查。
+- 风险：intent diagnostics 不是全部 20 个 StackOverflow 意图，near-OOS 分桶仍是机制诊断口径；不能
+  将分析包写成新的 SOTA 结果或自适应 K 成功证据。
+- 下一步：继续在已有结果上补充强基线/表示—边界分层分析，若启动新训练必须先单独登记并避免重复 E2/E3/RACAL。
+
+## 2026-08-06 — 意图级 KIR 稳定性与多中心候选分析（analysis-only）
+
+- 目标：利用已完成的 intent-level K/KIR 审计，分析多中心候选是否集中在特定数据集、KIR、距离或意图，
+  不重新训练、不用 oracle best-K 作为正式选择。
+- 输入：`results/diagnostics/adaptive_k/intent_level.csv`，共 13,580 行；输出 66 个
+  dataset×KIR×distance 汇总、4 张图、4,646 个 intent-group seed 稳定性记录。
+- 结果：oracle 口径下 K>1 候选比例 Banking77 65.3%、CLINC150 45.2%、StackOverflow 34.2%；同时满足
+  OOS F1 正增益且 Known Recall 降幅不超过 1pp 的比例分别为 39.8%、35.7%、24.7%。StackOverflow
+  平均 oracle OOS F1 增益约 0.99pp，远低于 Banking77 的 5.80pp。
+- 风险：这些比例依赖 test-sensitivity/oracle 审计；它们只能说明意图异质性和研究空间，不能作为无泄漏
+  adaptive-K 方法或 SOTA 证据。
+- 验证：分析脚本运行成功，输出文件和图形存在；后续运行 compile、ruff、research-state、devlog、data tracking
+  和 git diff 检查。
+- 下一步：用这些候选区间指导同协议 Known-only 可靠性特征分析，不再根据 oracle 结果直接挑 K。
+
+## 2026-08-06 — MiniLM Trainable K=1 五 seed 公平扩展与报告修正
+
+- Base commit：运行时记录在 `../artifacts/s2c/runs/protocol_v2_textoir_v1/minilm_trainable_kir_sweep_extension_v1/PROVENANCE.json`；工作树保持 dirty，未执行 `git add/commit/push`。
+- 目标：补齐现有 Trainable K=1 KIR sweep 的 seed=100/123，并用同一 E2 Frozen K=1 做逐 seed 配对，回答当前可训练 MiniLM 是否在五个正式 seed 下稳定改善单中心 Gate。
+- 新增/修改：`scripts/experiments/run_minilm_trainable_kir_sweep_extension_v1.py`、扩展配置与 artifact；`tools/analysis/build_minilm_trainable_5seed_fair_report_v1.py`；五 seed 中文报告、CSV 和四张图；研究状态、实验总账与本日志。
+- 实验：新增 18/18 个训练/评价单元；与原有 27 个单元合计 45/45；三个数据集、KIR=.25/.50/.75、seeds=13/42/87/100/123、Trainable K=1、diagonal Mahalanobis、mean+std、threshold=1；失败/缺失/重复/无效为 0。
+- 数据与防泄漏：训练和 checkpoint 选择只使用 Known train/calibration；test OOS 不参与训练、epoch、半径、阈值或 K 选择；Frozen 逐 seed 读取相同 E2 单元；旧 E2/E3/R1/RACAL/MOGB 产物未覆盖。
+- 结果：Trainable−Frozen OOS F1（KIR=.25/.50/.75）为 CLINC150 `+0.45/+1.12/+1.38pp`、Banking77 `+2.47/+4.72/+6.94pp`、StackOverflow `+5.06/+9.55/+10.50pp`；Known Recall 最大下降分别为 1.37pp、2.90pp，StackOverflow 小幅上升。固定 K=2 的安全性未因此改变。
+- 报告修正：发现历史 `fulltex.tex` 参考行被误拼入 paired group mean，已修正为先完成 Trainable/Frozen 配对、再单独写历史参照；修正后的配对 CSV 与报告差值已复核。
+- 验证：扩展 runner 18/18；分析脚本；后续运行 compile、ruff、CSV/ledger 解析、研究状态、开发日志、数据跟踪和 `git diff --check`。
+- 风险：Trainable 是当前 Gate-only K=1 证据，不是 SOTA；MOGB 行是组件/监督条件分层上下文，fulltex 是历史 Cascade 参照，均不得合并为无条件排名。
+- 下一步：完成状态校验后，优先做 Frozen/Trainable 的类内距离、半径分布和 calibration coverage 分析，再决定是否进行同协议强 baseline 小矩阵；不自动扩展 K=3--5 或完整 Pipeline。
+
+## 2026-08-06 — MiniLM 表示—边界 score 诊断（analysis-only）
+
+- Base commit：沿用当前工作树；未执行 commit/push，训练 artifact 与历史结果保持只读。
+- 目标：解释 Trainable K=1 为什么能改善当前协议，而不把这种收益误写成固定多中心或历史 Cascade 的收益。
+- 输入：五 seed Trainable K=1 与同一 E2 Frozen K=1 的 predictions/metrics；范围为三数据集、KIR=.25/.50/.75、seeds=13/42/87/100/123；不重新训练、不选择阈值、checkpoint、λ 或 K。
+- 处理：读取 443,400 条 test score 记录，仅在内存按 Known/OOS 分组，导出 aggregate score quantiles、median score gap、assigned-radius gap、false acceptance/rejection 和 KIR 曲线；不输出原始文本。
+- 结果：KIR=.50 的 median OOS−Known score gap Frozen→Trainable 为 CLINC `0.258→0.438`、Banking `0.259→0.334`、StackOverflow `0.116→0.434`；false acceptance 分别下降 `2.88pp`、`9.14pp`、`15.69pp`。
+- 判定：Trainable 的直接收益是单中心表示/score 排序分离；它没有证明固定 K>1 安全，也没有消除 fulltex 的协议差异。
+- 输出：`docs/analysis/MINILM_BOUNDARY_DIAGNOSTICS_V1.md`、`results/analysis/minilm_boundary_diagnostics_v1/`、`figures/minilm_boundary_diagnostics_v1/`、`tools/analysis/build_minilm_boundary_diagnostics_v1.py`。
+- 验证：脚本运行完成 90 个 run summary、3 张图；ruff（新脚本）、py_compile、CSV 解析、research-state、development-log、data-tracking 和 `git diff --check` 通过。
+- 风险与下一步：该诊断使用 test 结果做事后解释，不能作为新参数选择；下一步优先做 Known calibration coverage/半径稳定性和强基线协议分层，不盲目扩展 K。
+
+## 2026-08-06 — MiniLM 训练动态与选模错位诊断（analysis-only）
+
+- Base commit：沿用当前工作树；未执行 commit/push，既有训练 artifact 保持只读。
+- 目标：检查 Known-only checkpoint 选择目标是否足以解释当前 Trainable 与历史 fulltex 的差距，避免在没有证据时盲目增加 epoch。
+- 输入：45 个 Trainable K=1 run 的 `training_history.tsv`、`training_manifest.json`、`metrics.json`；三数据集、KIR=.25/.50/.75、五 seed。
+- 结果：179 条 epoch 记录，最佳 epoch 主要集中在 3--4；选择目标为 `calibration F1-K + 0.05×Known Recall`。KIR 增大时 Known calibration 仍可稳定选模，但测试 OOS F1 在 Banking77/StackOverflow 下降。
+- 判定：当前瓶颈不是简单训练不足，而是 Known-only 表示目标与 OOS 边界风险不完全对齐；这与 score 分布诊断和固定 K=2 union-risk 结论一致。
+- 输出：`docs/analysis/MINILM_TRAINING_DYNAMICS_V1.md`、`results/analysis/minilm_training_dynamics_v1/`、`figures/minilm_training_dynamics_v1/`、`tools/analysis/build_minilm_training_dynamics_v1.py`。
+- 验证：45 run/179 history 读取完成、3 张图生成；新脚本 ruff、py_compile、CSV 解析和研究状态检查通过。
+- 下一步：优先做 Known calibration coverage/半径稳定性与同协议强 baseline 分层，不用 test OOS 改 epoch 或超参数。
+
+## 2026-08-06 — Trainable 与 MOGB 组件五 seed 配对对比（analysis-only）
+
+- 目标：把“自己的方法更好”拆成可核验的 OOS F1、F1-All、Known Recall 和 false acceptance 权衡，避免只按单一 OOS 指标排名。
+- 输入：45 个 Trainable K=1 行、135 个 Frozen MiniLM MOGB/fixed-K 组件行；按 dataset×KIR×seed 配对；不重训、不改变 MOGB artifact。
+- 结果：KIR=.50 时，Trainable 相对 MOGB partition+s2c boundary 的 OOS F1 提升 CLINC/Banking/StackOverflow `+4.88/+4.17/+8.42pp`，Known Recall 提升 `+21.10/+30.03/+33.51pp`，但 false acceptance 更高；MOGB 组件更保守，代价是大量 Known false rejection。
+- 输出：`docs/analysis/TRAINABLE_VS_MOGB_COMPONENT_V1.md`、`results/analysis/trainable_vs_mogb_component_v1/`、`figures/trainable_vs_mogb_component_v1/`、`tools/analysis/build_trainable_vs_mogb_component_v1.py`。
+- 统计：每个 dataset×KIR×baseline×metric 使用固定 RNG=20260725 的 10,000 次 paired bootstrap，并记录 win/tie/loss 和 effect size。
+- 风险：MOGB 行是 Frozen MiniLM 组件适配，不是官方 BERT 完整复现；结果只证明工作点差异，不能写成无条件 SOTA。
+- 验证：新脚本 ruff、运行、CSV 解析、三张图生成、research-state/devlog/data-tracking/git diff 检查通过。
+
+## 2026-08-06 — 中文实验结果统一索引
+
+- 目标：把当前大量实验、方法定义、基线协议差异和可视化证据集中到一个读者入口，避免后续将 Gate-only、完整 Cascade、MOGB 组件和 DCLOOS 外部 OOS 监督混成排名。
+- 新增：`docs/analysis/EXPERIMENTAL_EVIDENCE_INDEX_V1.md`；并在 `CURRENT_STATUS.md`、`EXPERIMENTS.md` 增加入口。
+- 内容：E2/E3、RACAL/Trainable、score/训练动态诊断、MOGB 组件配对、官方 MOGB/ADB/DA-ADB/DCLOOS 状态、fulltex 历史差异和全部主要图表路径。
+- 约束：索引是组织证据的文档，不新增经验结果、不改变 artifact、不执行训练。
+
+## 2026-08-06 — Trainable calibration coverage transfer 补充诊断
+
+- 在训练动态诊断中增加 calibration Known Recall→test Known Recall 图，仍只读取现有 history/metrics，不重训、不改选模。
+- KIR=.50 的平均转移差异为 CLINC150 `-0.64pp`、Banking77 `-0.21pp`、StackOverflow `+0.33pp`；因此高 KIR 的 OOS F1 下降不能简单归因为 Known coverage 崩溃。
+- 新增图：`figures/minilm_training_dynamics_v1/calibration_vs_test_known_recall.png`；报告与 CSV 入口不变。
+
+## 2026-08-06 — MiniLM score 标度与半径稳定性诊断（analysis-only）
+
+- Base commit：沿用当前工作树；未执行 git add/commit/push，已有训练和历史 artifact 保持只读。
+- 目标：解释 Trainable K=1 与 `fulltex.tex` 历史 Cascade 的差距是否主要来自 score 标度、固定 threshold 或半径估计，而不是继续训练或新增多中心。
+- 新增：`tools/analysis/build_threshold_radius_stability_v1.py`；输出 `docs/analysis/THRESHOLD_RADIUS_STABILITY_V1.md`、
+  `results/analysis/threshold_radius_stability_v1/` 和 `figures/threshold_radius_stability_v1/`。
+- 处理：读取 45 个 Trainable 与 45 个 Frozen K=1 run，生成 810 条阈值敏感性行和 90 条半径稳定性行；阈值网格只作 test score 的事后诊断，不用于选择正式阈值、不修改 run。
+- 结果：KIR=.50 的诊断性最佳 threshold（Frozen/Trainable）为 CLINC150 `1.00/1.05`、Banking77 `0.90/0.95`、StackOverflow `0.95/0.95`；半径 CV 约为 0.02--0.04，未显示 K=1 半径完全失稳。
+- 判定：Trainable 已改善 K=1 score 分离，但仍是 Gate-only、固定 threshold=1、Known-only 选模；fulltex 是包含 Router/Expert、不同表示、K=2 和历史 OOS 校准合同的 Cascade，不能直接比较或归因于 MiniLM 训练不足。
+- 验证：新脚本 ruff、运行、输出数量、图形生成和 CSV 解析通过；后续将运行 research-state、development-log、data-tracking 与 git diff 检查。
+- 风险：诊断性 threshold 不能写成正式调参结果；未启动新训练、外部 baseline 或完整 Pipeline。
+- 下一步：在保持正式 threshold=1 和协议冻结的前提下，优先把 score/边界差距与 Gate-only/Cascade/MOGB supervision 条件分层记录，不用 test oracle 追求历史数字。
+
+## 2026-08-06 — 同协议方法权衡与可视化（analysis-only）
+
+- Base commit：沿用当前工作树；未执行 git add/commit/push，已有训练和历史 artifact 保持只读。
+- 目标：用统一的覆盖—拒识视角解释 Trainable K=1 为什么在当前协议下通常比 Frozen/MOGB 组件更平衡，而不是只看 OOS F1 排名。
+- 新增：`tools/analysis/build_cross_protocol_tradeoff_v1.py`；输出 `docs/analysis/CROSS_PROTOCOL_TRADEOFF_V1.md`、
+  `results/analysis/cross_protocol_tradeoff_v1/` 和 `figures/cross_protocol_tradeoff_v1/`。
+- 处理：读取 315 个已完成五 seed 行，规范化 `known_recall/id_recall` 字段，生成 63 个 summary、486 个 paired bootstrap effects（RNG=20260725，10000 次）和 4 张图；历史 fulltex、官方 BERT MOGB 和 DCLOOS 外部 OOS 监督不进入 fair CSV。
+- 结果：MOGB 风格组件通常具有更低 false acceptance，但伴随大量 Known false rejection；Trainable K=1 保留更高 Known Recall/F1-All。StackOverflow 固定 K=2 同时出现低 OOS F1 与高 false acceptance，支持 union-risk 解释。
+- 验证：脚本 ruff、运行、图像人工检查、CSV 解析通过；后续将运行研究状态、开发日志、数据跟踪和 git diff 检查。
+- 风险：`all_methods_per_seed.csv` 中 Frozen 组件使用 Euclidean/mean-radius，不能与 E2 Mahalanobis Frozen 结果混称；报告已明确标注该协议差异。
+- 下一步：继续按监督条件和系统层级整理强基线小矩阵，不把 fair component 结果升级为官方 MOGB 或 DCLOOS SOTA 结论。
+
+## 2026-08-06 — Gate→Cascade 桥接与误差分解（analysis-only）
+
+- Base commit：沿用当前工作树；未执行 git add/commit/push，已有训练和历史 artifact 保持只读。
+- 目标：验证当前 Trainable Gate-only 与系统级 Cascade 的差异是否来自 Router/Expert 和拒识错误传播，而不是把 fulltex 差距归因于一个 MiniLM checkpoint。
+- 新增：`tools/analysis/build_gate_cascade_bridge_v1.py`；输出 `docs/analysis/GATE_CASCADE_BRIDGE_V1.md`、
+  `results/analysis/gate_cascade_bridge_v1/` 和 `figures/gate_cascade_bridge_v1/`。
+- 处理：读取当前 protocol 的 3-seed Cascade 变体和 3-seed Trainable K=1 Gate-only，共 45 行；只直接比较共享 OOS/ID 指标，Cascade 的 Accuracy/F1-K 保留为系统内部指标。
+- 结果：KIR=.50 时，Trainable Gate-only OOS F1 为 CLINC/Banking/StackOverflow `90.43/84.77/86.71`，CE-Recon selected-K Cascade 为 `90.00/89.48/87.62`；误差图显示后续 Expert error 与 Gate false-reject/accept 会共同改变端到端结果。
+- 验证：脚本 ruff、运行、输出数量和图形生成通过；后续运行研究状态、开发日志、数据跟踪和 git diff 检查。
+- 风险：3-seed 当前 Cascade 不是历史 fulltex 主表，不能混成 SOTA 排名；该阶段只用于机制桥接。
+- 下一步：继续补充统一监督/系统层级的强基线小矩阵，优先用误差分解而不是再加未注册的模型损失。
+
+## 2026-08-06 — 原生 Frozen MiniLM baseline 矩阵（analysis/controlled baseline）
+
+- Base commit：沿用当前工作树；未执行 git add/commit/push，历史 E2/E3/R1 artifact 只读。
+- 目标：在同一 `protocol_v2_textoir_v1`、registry、Known-only calibration 和冻结 MiniLM 下补齐 MSP、Energy、kNN、LOF 原生控制，区分表示排序与阈值工作点。
+- 配置：`configs/experiments/protocol_v2_textoir_v1/native_baselines_v1.yaml`；运行根为 `../artifacts/s2c/runs/protocol_v2_textoir_v1/native_baselines_v1/`。
+- 数量：180/180，0 failed/blocked/unsupported；同一 dataset×KIR×seed 的方法复用一份 embedding。
+- 结果：`docs/analysis/NATIVE_BASELINES_V1.md`、`results/analysis/native_baselines_v1/`；原生方法默认 α=.05 保持约95% Known Recall，Trainable 的阈值工作点更激进，故同时生成 matched-recall 诊断而不修改正式结果。
+- 验证：外部 baseline 单测 5 passed，脚本 ruff/compile、dry-run、manifest 完整性和图形生成通过。
+- 风险：这些方法不是官方 ADB/DA-ADB/MOGB/DCLOOS；不能与历史 fulltex 系统级数字直接排名。
+
+## 2026-08-06 — matched Known Recall 工作点诊断（analysis-only）
+
+- 目标：检验 Trainable 的 OOS F1 增益是否仅来自较低 Known Recall，而非 score ranking 改善。
+- 输出：`docs/analysis/OPERATING_POINT_DIAGNOSTIC_V1.md`、`results/analysis/operating_point_diagnostic_v1/`、`figures/operating_point_diagnostic_v1/`；900 个回顾性 target-recall 行、3 张图。
+- 处理：仅在诊断中用 test labels 对齐目标 Known Recall；不改正式 threshold，不重跑训练，不覆盖任何 baseline artifact。
+- 结论：KIR=.50、名义 Known Recall=.85 时，Trainable OOS F1 仍高于可用原生 controls；但这是 post-hoc 工作点证据，不能当作无泄漏主结果。
+- 下一步：继续把监督条件、工作点和历史 Cascade 分层，之后再决定是否需要统一协议的端到端闭环。
+
+## 2026-08-06 — Trainable 与 MOGB 组件归因（analysis-only）
+
+- Base commit：沿用当前工作树；不修改、不覆盖既有 MOGB 或 Trainable 运行。
+- 目标：用相同 dataset×KIR×seed 配对，分离 MOGB 动态粒球、距离函数和半径规则的贡献，并解释 Trainable K=1 的覆盖—拒识优势。
+- 输入：45 个五 seed Trainable K=1 行和 180 个 MOGB frozen-MiniLM boundary component 行。
+- 输出：`docs/analysis/TRAINABLE_VS_MOGB_ABLATION_V1.md`、`results/analysis/trainable_vs_mogb_ablation_v1/`、`figures/trainable_vs_mogb_ablation_v1/`。
+- 结果：324 个 paired bootstrap effects、180 个机制归因行、3 张图；KIR=.50 时 Trainable 相对 MOGB partition+s2c boundary 的 OOS F1 增量为 `+4.88/+4.17/+8.42pp`，Known Recall 增量为 `+21.10/+30.03/+33.51pp`（CLINC/Banking/StackOverflow）。
+- 验证：脚本 ruff、compile 和图形生成通过；没有训练、没有 test 选择、没有官方 MOGB 复现声明。
+- 下一步：继续维护同协议对比和误差分解，不把该组件分析改写为完整 MOGB 或无条件 SOTA。
+
+## 2026-08-06 — Trainable 表示上的原生 detector 归因
+
+- Base commit：沿用当前工作树；未执行 git add/commit/push，E2/E3/R1、Frozen native 和 MOGB artifact 只读。
+- 目标：区分 Trainable MiniLM 的表示收益与当前单中心 Gate 几何/校准收益。
+- 新增：`src/protocol_v2/experiments/trainable_native_baselines_v1.py`、`configs/experiments/protocol_v2_textoir_v1/native_baselines_trainable_v1.yaml`、`...native_baselines_trainable_kir50_v1.yaml`。
+- 运行：StackOverflow smoke 后完成 3 数据集×KIR=.50×3 seeds×4 native detectors，共 36/36；复用每个 dataset×seed 的 Trainable checkpoint，没有新增训练。
+- 输出：`../artifacts/s2c/runs/protocol_v2_textoir_v1/native_baselines_trainable_v1/`、`results/analysis/native_baselines_trainable_v1/`、`figures/native_baselines_trainable_v1/`、`docs/analysis/NATIVE_BASELINES_TRAINABLE_V1.md`。
+- 统计：生成 72 个 paired effect 行（Trainable native vs Gate、Trainable native vs Frozen native），bootstrap RNG=20260725、10000 次；测试 OOS 只用于最终指标。
+- 验证：ruff、compileall、smoke、36 单元、聚合脚本和图表生成通过；待补 research-state、development-log、data-tracking、registry audit、git diff check。
+- 风险：该阶段仍是 KIR=.50/3 seed 归因实验，不代表完整 KIR/5 seed；native detector 不是官方 ADB/DA-ADB/MOGB/DCLOOS。
+- 下一步：把该结果接入统一 evidence index，并继续以同一工作点/错误分解比较当前方法和外部基线。
+
+## 2026-08-06 — 现有结果机制分析包 V3
+
+- Base commit：`a5a96fed4a779afdfb1586dfbe91efeb9565d541`；未执行 git add/commit/push。
+- 目标：在不重新训练、不读取大型 artifact 的前提下，用已落盘的五 seed 轻量 CSV 继续做大量对比、配对统计和可视化，集中回答“Trainable 的优势来自哪里、为什么多中心仍失败”。
+- 新增：`tools/analysis/build_experimental_mechanism_pack_v3.py`、`results/analysis/experimental_mechanism_pack_v3/`、`figures/experimental_mechanism_pack_v3/`、`docs/analysis/EXPERIMENTAL_MECHANISM_PACK_V3.md`。
+- 输入：`all_methods_per_seed.csv` 315 行；Trainable K=1、Frozen 单/双中心、random partition 和三种 MOGB 组件按 dataset×KIR×seed 配对。
+- 输出：63 个均值/标准差单元、324 个 paired bootstrap effects、63 个 Pareto 标记、4 张图；bootstrap seed=20260806、10000 次；不使用 test OOS 选参数。
+- 结果：Trainable K=1 在当前同协议中通常提高 OOS F1 和/或降低 false acceptance；StackOverflow 的 fixed K>1/MOGB 组件仍显示覆盖区域组合风险，不能据此宣称自适应多中心成功。
+- 验证：脚本运行成功，315/315 输入行和 7 种方法校验通过；ruff、compileall 和图像人工检查通过。
+- 数据影响：无 canonical、registry、view、export 或模型数据修改；无原始文本、embedding、checkpoint 写入 Git。
+- 风险：当前工作区已不存在 `../artifacts/s2c/runs/`，故本轮是轻量结果复核，不是可重跑的新训练；状态文档已明确此风险。
+- 下一步：恢复并审计原始 run/checkpoint 后，才运行同 Known-only 工作点的新实验证据；外部基线继续按监督条件分层。
+
+## 2026-08-08 — 补充实验机制包 V3 的可视化解读
+
+- Base commit：`a5a96fed4a779afdfb1586dfbe91efeb9565d541`；未执行 git add/commit/push。
+- 目标：补充已有四张 V3 图的研究解释，区分“生成图表”和“完成可视化分析”。
+- 修改：`docs/analysis/EXPERIMENTAL_MECHANISM_PACK_V3.md`、本日志。
+- 数据影响：无；只读取既有 315 行轻量五 seed CSV，不读取原始文本、embedding 或 checkpoint。
+- 关键解读：Trainable K=1 的收益主要表现为 KIR×数据集上的分数分离和覆盖—拒识平衡；固定 K=2 在 StackOverflow 的低 OOS F1/高 false acceptance 可由权衡图直接观察；MOGB 组件更保守但 Known Recall 明显较低；fulltex 对照图仅为协议不匹配的描述性参照。
+- 测试：文档更新后运行研究状态、开发日志和 git diff 检查。
+- 风险：当前 `../artifacts/s2c/runs` 与 checkpoint 仍缺失，可视化分析基于轻量 CSV，不能替代可重跑训练证据。
+- 下一步：恢复或重新登记冻结的原始产物后，做同合同 Gate/Cascade 工作点对照；不因图表解读而新增 K 或多中心矩阵。

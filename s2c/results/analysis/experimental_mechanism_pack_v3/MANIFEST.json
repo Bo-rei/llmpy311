@@ -1,0 +1,22 @@
+{
+  "stage": "experimental_mechanism_pack_v3",
+  "protocol_version": "protocol_v2_textoir_v1",
+  "input": "results/analysis/minilm_trainable_5seed_fair_v1/all_methods_per_seed.csv",
+  "input_sha256": "c981f5f887c49ed2360d51a6ad0bfb061fb60a79b42f95fda13ca4485cfb9a3d",
+  "input_rows": 315,
+  "methods": [
+    "fixed_k2",
+    "mogb_minilm",
+    "mogb_partition_ours_boundary",
+    "ours_partition_mogb_boundary",
+    "random_partition",
+    "single_centroid",
+    "trainable_k1"
+  ],
+  "native_trainable_rows": 36,
+  "bootstrap_seed": 20260806,
+  "bootstrap_samples": 10000,
+  "test_used_for_selection": false,
+  "uses_raw_text": false,
+  "uses_checkpoints": false
+}

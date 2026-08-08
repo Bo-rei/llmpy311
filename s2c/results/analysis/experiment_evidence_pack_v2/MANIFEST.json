@@ -1,0 +1,11 @@
+{
+  "source_fair_matrix": "results/mogb/fair_matrix.csv",
+  "source_trainable": "results/analysis/minilm_trainable_kir_sweep_v1/mean_std.csv",
+  "bootstrap_seed": 20260725,
+  "bootstrap_resamples": 10000,
+  "notes": [
+    "Fair rows use same protocol, split and seed pairing across methods.",
+    "Trainable rows are context only: 3 seeds and a different representation regime.",
+    "No test result is used to select a method or parameter."
+  ]
+}

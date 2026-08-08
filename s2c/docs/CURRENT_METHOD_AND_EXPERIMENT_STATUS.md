@@ -1,11 +1,20 @@
 # s2c 当前方法、实验进展与基线差异
 
-更新时间：2026-08-05  
+更新时间：2026-08-06
 活动协议：`protocol_v2_textoir_v1`
 
 本文是面向研究讨论的中文入口，回答四个问题：当前 s2c 到底实现了什么、已经做了哪些实验、
 当前最好的结果是什么、为什么不能把这些结果直接写成“SOTA 排名”。原始逐样本结果、模型和
 完整运行产物仍只保存在本地 artifact 中；本文只引用轻量统计和哈希证据。
+
+2026-08-06 新增的两个 analysis-only 证据包进一步把“表示改善”和“多中心边界风险”分开：
+`docs/analysis/REPRESENTATION_BOUNDARY_PACK_V1.md` 汇总 Frozen/CE/SupCon 的 K=1/K=2 交互，
+`docs/analysis/STACKOVERFLOW_INTENT_MULTI_CENTER_DIAGNOSTIC_V1.md` 汇总 StackOverflow 按意图的
+新增 OOS 接受与恢复 Known 样本代价。它们不构成新方法结果，也不改变既有实验状态。
+
+此外，`docs/analysis/INTENT_KIR_STABILITY_PACK_V1.md` 将已有 13,580 条 intent-level K/KIR 审计
+按数据集、KIR、距离和 seed 稳定性重新汇总，显示 Banking77 的 oracle 多中心候选率明显高于
+StackOverflow；该结果只用于解释意图异质性，不能代替 Known-only 的正式选择规则。
 
 ## 1. 先给结论
 
@@ -24,6 +33,12 @@
 - 本轮的训练参与式自适应 pilot 没有产生 `K_y>1`，所以不能宣称已经得到自适应多中心收益；
 - 当前不能宣称超过 MOGB 论文或 DCLOOS，也不能宣称已达到 SOTA；
 - MOGB、ADB、DA-ADB、DCLOOS 的现有结果中，有些是同协议组件比较，有些是不同 BERT/OOS 监督条件下的兼容性结果，必须分开报告。
+
+2026-08-06 新增的 `minilm_trainable_kir_sweep_v1` 完成了 3 数据集×3 KIR×3 seed 的 Trainable K=1
+控制（27/27）。相对同距离 Frozen K=1，CLINC150 和 StackOverflow 在三个 KIR 都有 OOS F1 正增量，
+Banking77 仅在低 KIR 有收益且在 KIR=.75 明显退化。该结果强化了“训练表示改善单中心排序，但不自动
+解决固定多中心”的判断。详细结果见 `docs/analysis/MINILM_TRAINABLE_KIR_SWEEP_V1.md`；与历史
+`fulltex.tex` Cascade 和外部 baseline 的协议分层见 `docs/analysis/MINILM_TRAINABLE_VS_FULLTEX_AND_BASELINES_V1.md`。
 
 ## 2. 当前代码实现的方法是什么
 
@@ -176,6 +191,7 @@ Gate detector
 | joint_adaptive_multicenter_v1 | Trainable MiniLM + trainable prototypes；每轮提出一个 PCA split，Known calibration 安全门决定是否接受 | 3/3（repair6） | 真正的共同训练链路可运行，但 3/3 候选均拒绝，最终 `mean K_y=1.0` |
 | joint_adaptive_multicenter_contract_repair_v1 | 冻结 K=1 父边界、guarded compactness、负载/分离约束下的共同训练候选 split | 3/3（repair3） | 3/3 候选均因 calibration Known Recall 下降拒绝，最终 `mean K_y=1.0` |
 | consistency_gate_v1 | Trainable K=1 + 原始/MC-dropout/表面归一化多视图的一致性与证据 margin | 3/3 | 仅有零点几百分点描述性变化；不增加中心，不能称 SOTA |
+| minilm_trainable_kir_sweep_v1 | Trainable K=1 在 3 数据集×3 KIR×3 seed 下的 Known-only 控制 | 27/27 | CLINC/StackOverflow 三个 KIR 均优于同距离 Frozen；Banking77 仅低 KIR 有利，KIR=.75 退化 |
 
 ### 3.3 训练参与式自适应多中心 pilot：joint_adaptive_multicenter_v1
 
@@ -376,20 +392,91 @@ DCLOOS 是端到端方法，训练中使用特征级伪 OOS 和外部开放域 O
 
 ## 7. 当前唯一下一步
 
-当前不应再跑 K=3--5，也不应继续增加新的损失项。若坚持验证自适应多中心，只允许登记一个
-最小实验：
+跨数据集 Trainable K=1 控制已经完成：CLINC150、Banking77、StackOverflow 的 OOS F1 相对同 seed
+Frozen 分别为 `+1.12pp`、`+5.18pp`、`+9.42pp`，但前两个数据集 Known Recall 分别下降
+`1.33pp` 和 `1.95pp`。因此当前不应再跑 K=3--5，也不应继续增加新的损失项。
 
-```text
-StackOverflow / KIR=.50 / seed=13,42,87
-Trainable MiniLM checkpoint 固定
-每个 intent 只允许 K=1 或 K=2
-激活规则只使用 train + Known calibration
-其余 intent 保持 K=1
-```
+Trainable K=1 的跨 KIR 扫描也已完成 27/27：CLINC150 在 KIR=.25/.50/.75 的 OOS F1 增量为
+`+0.64/+2.41/+3.59pp`，StackOverflow 为 `+1.19/+7.69/+13.54pp`，Banking77 为
+`+0.59/-0.05/-14.02pp`。这解释了为什么当前训练结果看起来仍低于历史表：它改善的是当前
+Gate-only 单中心排序，而不是恢复旧 Cascade 的 Router/Expert、旧 split 和历史调参合同。
 
-它只回答“Known-only 风险门能否识别少数安全的 K=2 intent”。不能使用阶段二 test OOS 结果调规则。
-如果该实验仍然无法同时保持 OOS F1、F1-All 和 false acceptance，则应停止当前固定球形多中心路线，
-把 Trainable K=1 作为当前自有最佳 Gate，并转向统一协议的强基线覆盖或新的边界几何设计。
+在同一 Trainable checkpoint 上补做的 K=1/K=2 跨数据集配对控制已经完成：K=2−K=1 的 OOS F1
+在 CLINC150、Banking77、StackOverflow 分别为 `-0.28pp`、`+0.13pp`、`-19.06pp`，Known Recall
+分别为 `-3.26pp`、`-1.95pp`、`+9.70pp`。Frozen/Trainable 的类内距离、半径分布、Known calibration
+覆盖、训练动态和阈值稳定性诊断已经完成：半径 CV 约为 0.02--0.04，KIR=.50 的诊断性最佳 threshold
+（Frozen/Trainable）为 CLINC150 `1.00/1.05`、Banking77 `0.90/0.95`、StackOverflow `0.95/0.95`。
+这说明当前差距主要是 score 工作点、监督/系统层级和历史 Cascade 合同差异，不能把 Trainable 表示的
+K=1 收益误写成多中心恢复。下一步应在相同 KIR、Known 列表、seed 和监督条件下整理外部 baseline 小矩阵；
+完整 Cascade 对照放在 Gate 候选冻结之后。当前仍不授权自适应 K 扩展或新的多中心实验。
+
+### 五 seed 收口补充（2026-08-06）
+
+Trainable K=1 的 KIR sweep 已补齐五个正式 seed：新增 18/18，合计 45/45。与精确匹配的 E2
+Frozen K=1 配对后，CLINC150、Banking77、StackOverflow 在 KIR=.25/.50/.75 的 OOS F1 增量分别为
+`+0.45/+1.12/+1.38pp`、`+2.47/+4.72/+6.94pp`、`+5.06/+9.55/+10.50pp`。对应 Known Recall
+最大下降为 `1.37pp`、`2.90pp`，StackOverflow 三个 KIR 均小幅上升。
+
+因此当前方法最可靠的可训练版本是“Known-only Trainable MiniLM + K=1 Gate”，而不是训练后固定
+多中心。完整五 seed 对比、MOGB 组件上下文和历史 fulltex 参照见
+`docs/analysis/MINILM_TRAINABLE_5SEED_FAIR_COMPARISON_V1.md`；后者明确标记了协议不一致，不能直接
+用于 SOTA 排名。
+
+### 表示—边界诊断补充
+
+在相同 E2 Frozen K=1 合同下，KIR=.50 的 median normalized score gap（OOS−Known）由 Frozen 到
+Trainable 分别为：CLINC150 `0.258→0.438`、Banking77 `0.259→0.334`、StackOverflow
+`0.116→0.434`；对应 false acceptance 下降 `2.88pp/9.14pp/15.69pp`。因此 Trainable 的直接
+收益是把 Known 与 OOS 的 score 分布拉开，并非通过增加中心实现边界收益。该诊断只使用已完成 test
+预测进行事后解释，未用于任何调参。
+
+详见 `docs/analysis/MINILM_BOUNDARY_DIAGNOSTICS_V1.md` 和
+`results/analysis/minilm_boundary_diagnostics_v1/`。
+
+训练动态诊断进一步显示：45 个 Trainable K=1 run 的最佳 epoch 主要为 3--4，Known calibration
+选择目标本身没有明显失控；但 KIR 增大时，测试 OOS F1 仍在 Banking77 和 StackOverflow 下降。
+因此当前瓶颈不是简单的“epoch 不够”，而是 Known-only 表示训练目标与开放空间边界风险之间存在错位。
+详见 `docs/analysis/MINILM_TRAINING_DYNAMICS_V1.md`。
+其中 KIR=.50 的 calibration→test Known Recall 转移差异仅为 CLINC150 `-0.64pp`、Banking77
+`-0.21pp`、StackOverflow `+0.33pp`，进一步排除了“当前差距主要由 Known 覆盖失效造成”的简单解释。
+
+与 MOGB 组件的五 seed 配对分析显示，Trainable K=1 在 KIR=.50 的 OOS F1 高于
+`MOGB partition + s2c boundary`（CLINC/Banking/StackOverflow 分别 `+4.88/+4.17/+8.42pp`），
+同时 Known Recall 高 `+21.10/+30.03/+33.51pp`；但 MOGB 的 false acceptance 更低。因此当前更准确的
+优势表述是“保留 Known 覆盖的平衡工作点”，不是“已无条件超过完整 MOGB”。详见
+`docs/analysis/TRAINABLE_VS_MOGB_COMPONENT_V1.md`。
+
+### 为什么可训练 MiniLM 仍低于 fulltex 历史结果
+
+最新 threshold/radius 诊断没有发现“训练 MiniLM 无效”或“K=1 半径完全失稳”。相反，KIR=.50 时
+Trainable 的 K=1 score gap 和 OOS F1 均改善；但其 `threshold=1` 仍只是当前协议固定工作点，和 Frozen
+或历史 Cascade 并非同一 score 标度。事后网格仅显示 CLINC150、Banking77、StackOverflow 的诊断性最佳
+threshold 分别落在 `1.00/1.05`、`0.90/0.95`、`0.95/0.95`（Frozen/Trainable），不能用于正式结果。
+
+与 `fulltex.tex` 的差距是协议和系统层级差异叠加，而非单一的 MiniLM 训练问题：
+
+1. `fulltex.tex` 的高值来自完整 Gate→Router→Expert Cascade，当前 Trainable 结果是 Gate-only；
+2. 历史 Cascade 使用不同表示/路由器/专家训练、K=2 和历史超参数合同，当前 Trainable 是最后两层
+   MiniLM+projection、K=1、Known-only calibration 选模；
+3. 历史记录明确使用过 OOS validation 学习 lambda，而当前协议禁止 test OOS 参与选择；
+4. 当前固定 threshold=1 未经过独立 Known-only 校准，因此即使表示的 OOS/Known score gap 变大，绝对
+   工作点仍可能偏移；
+5. 训练动态诊断表明最佳 epoch 已集中在 3--4，继续盲目增加 epoch 不能解决这一层级/校准差异。
+
+证据入口：`docs/analysis/THRESHOLD_RADIUS_STABILITY_V1.md`、
+`docs/analysis/MINILM_TRAINABLE_5SEED_FAIR_COMPARISON_V1.md`、
+`docs/analysis/MINILM_TRAINING_DYNAMICS_V1.md`。这些结果支持“Trainable K=1 是当前 Gate 的有效表示适配”，
+但不支持“已经复现 fulltex 或达到 SOTA”。
+
+### 同协议可视化的补充解释
+
+`cross_protocol_tradeoff_v1` 将当前五 seed 方法放在 OOS F1—Known Recall 平面和 false acceptance—false
+rejection 误差图上。可视化显示 MOGB 组件大多落在保守拒识区域，Trainable K=1 更接近覆盖—拒识平衡区域；
+这解释了为什么 Trainable 在 F1-All、Known Recall 和总体工作点上更稳，但不等于它的 OOS F1 在所有配置都最高。
+该分析使用 MOGB fair matrix 的 Frozen Euclidean/mean-radius 组件，和 E2 Mahalanobis Frozen K=1 分开报告。
+
+证据入口：`docs/analysis/CROSS_PROTOCOL_TRADEOFF_V1.md`、
+`results/analysis/cross_protocol_tradeoff_v1/`、`figures/cross_protocol_tradeoff_v1/`。
 
 ## 8. 证据文件索引
 
@@ -401,6 +488,12 @@ Trainable MiniLM checkpoint 固定
 | MOGB/DCLOOS 中文对比 | `docs/对比实验/MOGB_DCLOOS_对比结果报告.md` |
 | RACAL 阶段一 | `docs/racal_v1/RACAL_V1_REPORT.md`、`RACAL_V1_CLOSEOUT.md` |
 | RACAL 阶段二 | `docs/racal_v1/RACAL_V1_STAGE2_REPORT.md`、`RACAL_V1_STAGE2_CLOSEOUT.md` |
+| Trainable 跨数据集控制 | `docs/analysis/MINILM_TRAINABLE_CONTROL_V1.md`、`results/diagnostics/minilm_trainable_control_v1/` |
+| Trainable K=1/K=2 配对控制 | `docs/analysis/MINILM_TRAINABLE_K2_CONTROL_V1.md`、`results/diagnostics/minilm_trainable_k2_control_v1/` |
+| Trainable λ/K 交互控制 | `docs/analysis/MINILM_TRAINABLE_LAMBDA_CONTROL_V1.md`、`results/diagnostics/minilm_trainable_lambda_control_v1/` |
+| Trainable KIR sweep | `docs/analysis/MINILM_TRAINABLE_KIR_SWEEP_V1.md`、`results/analysis/minilm_trainable_kir_sweep_v1/` |
+| Trainable 与 fulltex/基线分层解释 | `docs/analysis/MINILM_TRAINABLE_VS_FULLTEX_AND_BASELINES_V1.md`、`results/analysis/unified_layered_summary_v1/all_layers.csv` |
+| KIR=0.50 方法协议分层对比 | `docs/analysis/KIR50_METHOD_COMPARISON_V1.md`、`results/analysis/kir50_method_comparison_v1/` |
 | 同协议基线 CSV | `results/final_baselines/summary.csv`、`results/mogb/fair_matrix.csv` |
 | MOGB 复现审计 | `results/diagnostics/mogb_diff/`、`results/mogb_exact_reproduction*/` |
 | DCLOOS 审计 | `docs/archive/external_baselines/dcloos/DCLOOS_REPRODUCTION_REPORT.md` |

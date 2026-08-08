@@ -1,0 +1,17 @@
+{
+  "datasets": [
+    "clinc150",
+    "banking77",
+    "stackoverflow"
+  ],
+  "kir": 0.5,
+  "seeds": [
+    13,
+    42,
+    87
+  ],
+  "analysis_only": true,
+  "trainable_rows": 9,
+  "cascade_rows": 36,
+  "scope": "protocol_v2_textoir_v1"
+}

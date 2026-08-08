@@ -1,0 +1,11 @@
+name: native_baselines_v1
+protocol_version: protocol_v2_textoir_v1
+datasets: [clinc150, banking77, stackoverflow]
+kirs: [0.25, 0.50, 0.75]
+seeds: [13, 42, 87, 100, 123]
+methods: [msp, energy, knn, lof]
+defaults:
+  source: protocol_v2_exports
+  representation: frozen_minilm
+  encoder_name: all-MiniLM-L6-v2
+  encoder_device: cuda

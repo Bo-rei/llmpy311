@@ -1,0 +1,14 @@
+name: native_baselines_trainable_kir50_v1
+stage: native_baselines_trainable_v1
+protocol_version: protocol_v2_textoir_v1
+datasets: [clinc150, banking77, stackoverflow]
+kirs: [0.50]
+seeds: [13, 42, 87]
+methods: [msp, energy, knn, lof]
+device: auto
+batch_size: 256
+max_length: 256
+representation: trainable_minilm_last2_projection
+selection: known_only_conformal_alpha_0.05
+test_used_for_selection: false
+oos_used_for_training: false

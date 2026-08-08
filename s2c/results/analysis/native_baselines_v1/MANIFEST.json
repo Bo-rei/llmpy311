@@ -1,0 +1,33 @@
+{
+  "stage": "native_baselines_v1",
+  "protocol_version": "protocol_v2_textoir_v1",
+  "planned_units": 180,
+  "completed_units": 180,
+  "failed_units": 0,
+  "datasets": [
+    "banking77",
+    "clinc150",
+    "stackoverflow"
+  ],
+  "kirs": [
+    0.25,
+    0.5,
+    0.75
+  ],
+  "seeds": [
+    13,
+    42,
+    87,
+    100,
+    123
+  ],
+  "methods": [
+    "energy",
+    "knn",
+    "lof",
+    "msp"
+  ],
+  "bootstrap_seed": 20260725,
+  "bootstrap_samples": 10000,
+  "source_runner_summary_sha256": "a92adb93ccf22ee958e72649033b99035cb96b7e0a33b99e872e5a2ee6154032"
+}

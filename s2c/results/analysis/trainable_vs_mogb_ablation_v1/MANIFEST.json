@@ -1,0 +1,17 @@
+{
+  "analysis": "trainable_vs_mogb_ablation_v1",
+  "protocol_version": "protocol_v2_textoir_v1",
+  "trainable_source": "results/analysis/minilm_trainable_5seed_fair_v1/trainable_per_seed.csv",
+  "mogb_source": "../artifacts/s2c/runs/protocol_v2_textoir_v1/mogb_ablation_v1/summary/boundary_component_runs.csv",
+  "trainable_source_sha256": "c32a327d1b42e74813da3c081c2c21c2a09af6ac1b60e08c19e2f0428117688d",
+  "mogb_source_sha256": "2784a13d28ee6ac6f53c5f9723c7f501e04f1ad688f7f9c5759961a6ba71cc0f",
+  "trainable_rows": 45,
+  "mogb_rows": 180,
+  "summary_rows": 45,
+  "paired_effect_rows": 324,
+  "mechanism_rows": 180,
+  "bootstrap_seed": 20260725,
+  "bootstrap_samples": 10000,
+  "test_used_for_selection": false,
+  "training_started": false
+}

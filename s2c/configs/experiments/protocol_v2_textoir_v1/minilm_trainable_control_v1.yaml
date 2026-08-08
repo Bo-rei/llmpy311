@@ -1,0 +1,25 @@
+stage: minilm_trainable_control_v1
+protocol_version: protocol_v2_textoir_v1
+datasets: [clinc150, banking77]
+kir: 0.50
+seeds: [13, 42, 87]
+model_path: ../assets/models/all-MiniLM-L6-v2
+representation_mode: last2_minilm_plus_projection
+projection_hidden_dim: 256
+warmup_epochs: 1
+finetune_epochs: 3
+patience: 1
+batch_size: 64
+max_length: 256
+projection_lr: 0.0002
+backbone_lr: 0.00002
+temperature: 0.07
+classification_weight: 1.0
+intra_weight: 0.1
+inter_weight: 0.1
+inter_margin: 0.20
+threshold: 1.0
+device: auto
+selection: known_calibration_only
+test_used_for_selection: false
+oos_used_for_training: false

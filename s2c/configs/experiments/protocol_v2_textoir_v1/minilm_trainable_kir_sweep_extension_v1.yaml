@@ -1,0 +1,11 @@
+stage: minilm_trainable_kir_sweep_extension_v1
+protocol_version: protocol_v2_textoir_v1
+datasets: [clinc150, banking77, stackoverflow]
+kirs: [0.25, 0.50, 0.75]
+seeds: [100, 123]
+base_config: configs/experiments/protocol_v2_textoir_v1/minilm_trainable_control_v1.yaml
+parent_stage: minilm_trainable_kir_sweep_v1
+device: auto
+selection: known_calibration_only
+test_used_for_selection: false
+oos_used_for_training: false

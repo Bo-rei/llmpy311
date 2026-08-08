@@ -1,0 +1,28 @@
+{
+  "input": "/home/bo/bo01/llmpy311/s2c/results/analysis/minilm_trainable_5seed_fair_v1/all_methods_per_seed.csv",
+  "datasets": [
+    "clinc150",
+    "banking77",
+    "stackoverflow"
+  ],
+  "kirs": [
+    0.25,
+    0.5,
+    0.75
+  ],
+  "methods": [
+    "trainable_k1",
+    "single_centroid",
+    "fixed_k2",
+    "random_partition",
+    "mogb_partition_ours_boundary",
+    "ours_partition_mogb_boundary",
+    "mogb_minilm"
+  ],
+  "seed_count": 5,
+  "bootstrap_seed": 20260725,
+  "bootstrap_replicates": 10000,
+  "analysis_only": true,
+  "historical_fulltex_included": false,
+  "external_oos_supervision_included": false
+}

@@ -1,0 +1,34 @@
+{
+  "existing_results_only": true,
+  "figures": [
+    "figures/active_experiment_dashboard_v1/k_sweep_oos_f1.png",
+    "figures/active_experiment_dashboard_v1/trainable_k1_k2_tradeoff.png",
+    "figures/active_experiment_dashboard_v1/representation_k_interaction.png",
+    "figures/active_experiment_dashboard_v1/stackoverflow_baseline_layers.png",
+    "figures/active_experiment_dashboard_v1/stackoverflow_known_oos_tradeoff.png",
+    "figures/active_experiment_dashboard_v1/current_cascade_gate_comparison.png",
+    "figures/active_experiment_dashboard_v1/k_selection_tradeoff.png",
+    "figures/active_experiment_dashboard_v1/fair_component_gaps.png",
+    "figures/active_experiment_dashboard_v1/trainable_lambda_k_interaction.png",
+    "figures/active_experiment_dashboard_v1/kir50_method_layers.png",
+    "figures/active_experiment_dashboard_v1/kir50_method_tradeoff.png",
+    "figures/active_experiment_dashboard_v1/adaptive_decision_summary.png"
+  ],
+  "schema": "s2c.active_experiment_dashboard_v1",
+  "sources": {
+    "../artifacts/s2c/outputs/experiments/cascade_full/gpu_kir50/cascade_summary.csv": "36f1d39f4ff8b6982358f805617b1486d245c928b0dd7d20e502eb5f9c089219",
+    "../artifacts/s2c/outputs/paper_results/ablation_summary.csv": "0831d0b4dfba6f5edf9b6c872eb0876f2175f2184b125471429ad99b354bee82",
+    "../artifacts/s2c/outputs/paper_results/stackoverflow/kir50_seed42/full_anchor/eval_results.json": "61ce9beb7fdfa699daf7488aa620c3af0766a8dcf90afffc9965f72297228768",
+    "results/analysis/kir50_method_comparison_v1/rows.csv": "bb552c5619de543363770658ddb7c0387e0d95ac8185ace0a5cacca1453d785b",
+    "results/diagnostics/consistency_gate_v1/summary.csv": "d85db025c1dd0853deb2a9cd5dd90fd158d7275664e1a6d8faaf0c010f321009",
+    "results/diagnostics/joint_adaptive_multicenter_contract_repair_v1/summary.csv": "e0ab35e10c01d7bdff11c3cf49b5af213d3f8859d3fa5b9dac267375c4c4df28",
+    "results/diagnostics/joint_adaptive_multicenter_v1/pilot_summary.csv": "57313759170e48eb3ba7f623bf5389a1f1e9d49e0d6675fd431b28829617ab68",
+    "results/diagnostics/minilm_trainable_lambda_control_v1/k_delta_by_lambda.csv": "d833a9f6784fbd7400253c96c275131d8d5ff7bc06d071bb32477d25348ac96c",
+    "results/diagnostics/racal_v1/RACAL_V1_STAGE1_MEAN_STD.csv": "4ce48f7752817553502adc1070ea659f22c4d2c8ad4f18fe25d4632753ae6b37",
+    "results/diagnostics/racal_v1/stage2_fixed_k2/RACAL_V1_STAGE2_MEAN_STD.csv": "080c9e1a7e26aad321943bbe27e065f1cf9f995afb15d492ff2b01b1b77b23d4",
+    "results/final_baselines/summary.csv": "64b860ab7e1fb0f0fa1badf15b53ed9759f0ea80f60b127b3e386a946dfdeb98",
+    "results/gate_only/kir_k_fixed_mean_std.csv": "eee1b5c7c1e2aefdb7a41e45693acd36963e2ae296e297d0623ab640a5a0f512",
+    "results/mogb/fair_matrix.csv": "22d309c54ef6cdbef84254ef653d92d337514335d81c9a4c47788b08cc8544e4",
+    "results/representation/representation_fixed_results.csv": "edc29d2e45c9ff7eb105b176f71a624eae8002ec314877dc88e4874ffbd42800"
+  }
+}

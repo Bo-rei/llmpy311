@@ -1,0 +1,22 @@
+stage: minilm_trainable_k2_control_v1
+protocol_version: protocol_v2_textoir_v1
+datasets:
+  - clinc150
+  - banking77
+kir: 0.50
+seeds:
+  - 13
+  - 42
+  - 87
+model_path: ../assets/models/all-MiniLM-L6-v2
+projection_hidden_dim: 256
+batch_size: 64
+max_length: 256
+distance: mahalanobis_diag
+radius_method: mean_std
+radius_lambda: 1.0
+threshold: 1.0
+device: auto
+source_stage: minilm_trainable_control_v1
+test_used_for_selection: false
+oos_used_for_training: false
