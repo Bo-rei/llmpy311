@@ -2513,3 +2513,12 @@
 - 归档：将不完整的 ADB 三 seed 结果/图移至 `results/analysis/archive/adb_kir_sensitivity_incomplete_v1/` 和 `figures/archive/adb_kir_sensitivity_incomplete_v1/`；将其派生的三 seed KIR 合同图移至对应 `archive/`；早期 `EXPERIMENT_VISUAL_EVIDENCE_BUNDLE_V1.md` 移至 `docs/archive/progress/`。台账、当前入口、视觉索引和来源路径已同步，旧数值不改写。
 - 提交边界：只提交可复用迁移代码、测试、活跃注册表和本日志；归档的过渡性结果、图和旧报告保留在本地工作树，不进入 main。
 - 验证：历史迁移测试、registry/asset-catalog 测试、`compileall`、迁移文件 Ruff、临时目录的五 seed KIR atlas 重建、registry audit、asset catalog audit 和 `git diff --check` 通过。
+
+## 2026-08-11：接入 HERO Anti-OverDefense
+
+- Base commit：`0270920f6670558087030f4dd3d2b5c99d796953`。
+- 修改：按上游仓库的 Codex host 约定，将 `RULES.md` 的中文范围约束块加入项目根 `AGENTS.md`；该仓库没有 `SKILL.md`，不创建伪 skill 包。
+- 目的：减少哈希、无依据边界防御、机械复核和过度脚手架，把验证限定到当前项目真实可达的失败。
+- 数据与 artifact：未修改研究代码、数据、结果、图、原始 artifact 或第三方 checkout。
+- 验证：确认 `AGENTS.md` 含完整 HERO 规则块，`git diff --check` 通过；本批仅为配置文本变更，不重复运行代码测试。
+- 风险与下一步：规则作用域为当前 `s2c` 项目；上游案例库保留在外部仓库，不放入每轮自动加载的项目指令。
