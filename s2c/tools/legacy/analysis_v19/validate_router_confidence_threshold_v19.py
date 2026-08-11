@@ -24,12 +24,12 @@ from typing import Any, Dict, List, Optional, Tuple
 
 import numpy as np
 
-PROJECT_ROOT = Path(__file__).resolve().parents[2]
+PROJECT_ROOT = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(PROJECT_ROOT))
 
 from tools.eval.eval_system_pipeline_v19 import OOS_LABEL, _evaluate  # noqa: E402
 from legacy.runtime import WorkspacePaths  # noqa: E402
-from tools.analysis.threshold_selection_v19 import (  # noqa: E402
+from tools.legacy.analysis_v19.threshold_selection_v19 import (  # noqa: E402
     balanced_known_oos_score,
     select_main_table_constrained_threshold,
 )

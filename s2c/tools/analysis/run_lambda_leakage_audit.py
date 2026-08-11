@@ -301,7 +301,7 @@ def _lambda_usage_rows() -> list[dict[str, Any]]:
         ),
         (
             "historical_true_lambda_artifact_reference",
-            "tools/analysis/run_prototype_gate_frozen_baseline_v19.py",
+            "tools/legacy/analysis_v19/run_prototype_gate_frozen_baseline_v19.py",
             "legacy prototype points to a pre-existing true_lambda_1p6 artifact; this is not a new selection run",
             "1.6 artifact reference",
             "historical_artifact_reference",

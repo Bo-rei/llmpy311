@@ -12,8 +12,8 @@ PROJECT_ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(PROJECT_ROOT))
 
 from scripts.data.active.rebuild_multi_dataset_v19 import STACKOVERFLOW_INTENTS
-from tools.analysis.historical_best_pipeline_v19 import HISTORICAL_BEST_PIPELINE
-from tools.analysis.run_multi_dataset_benchmark_v19 import (
+from tools.legacy.analysis_v19.historical_best_pipeline_v19 import HISTORICAL_BEST_PIPELINE
+from tools.legacy.analysis_v19.run_multi_dataset_benchmark_v19 import (
     _apply_benchmark_profile_defaults,
     _resolve_effective_eval_config,
 )
@@ -174,7 +174,7 @@ def test_benchmark_cli_records_requested_eval_config_in_summary(tmp_path: Path):
     cmd = [
         sys.executable,
         "-m",
-        "tools.analysis.run_multi_dataset_benchmark_v19",
+        "tools.legacy.analysis_v19.run_multi_dataset_benchmark_v19",
         "--datasets",
         "BANKING77-OOS",
         "--kir_values",
@@ -223,7 +223,7 @@ def test_benchmark_cli_records_effective_eval_config_for_stackoverflow(tmp_path:
     cmd = [
         sys.executable,
         "-m",
-        "tools.analysis.run_multi_dataset_benchmark_v19",
+        "tools.legacy.analysis_v19.run_multi_dataset_benchmark_v19",
         "--datasets",
         "STACKOVERFLOW",
         "--kir_values",

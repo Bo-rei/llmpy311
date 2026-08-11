@@ -31,8 +31,8 @@ DEFAULT_EXTERNAL_ROOTS = [
     ROOT.parent / "artifacts/s2c/external/adb_gpu_runtime_v3",
 ]
 DEFAULT_FAIR = ROOT / "results/analysis/cross_protocol_tradeoff_v1/per_seed.csv"
-DEFAULT_OUTPUT = ROOT / "results/analysis/adb_kir_sensitivity_v1"
-DEFAULT_FIGURES = ROOT / "figures/adb_kir_sensitivity_v1"
+DEFAULT_OUTPUT = ROOT / "results/analysis/adb_kir_sensitivity_v2"
+DEFAULT_FIGURES = ROOT / "figures/adb_kir_sensitivity_v2"
 DATASET_MAP = {"banking": "banking77", "oos": "clinc150", "stackoverflow": "stackoverflow"}
 METRICS = (
     "oos_f1",
@@ -256,7 +256,7 @@ def plot(summary: list[dict[str, object]], pair_summary: list[dict[str, object]]
         ax.grid(alpha=0.2)
         ax.set_title(f"ADB {ylabel}")
     axes[-1].legend(fontsize=7)
-    fig.suptitle("ADB BERT/TextOIR：跨数据集 KIR 敏感性（3 seeds）")
+    fig.suptitle("ADB BERT/TextOIR：跨数据集 KIR 敏感性")
     fig.tight_layout()
     fig.savefig(figures / "adb_kir_curves.png", dpi=180)
     plt.close(fig)
@@ -351,7 +351,7 @@ def main() -> None:
     valid_count = sum(bool(row.get("valid_semantic_metrics")) for row in rows)
     manifest = {
         "schema_version": 1,
-        "analysis": "adb_kir_sensitivity_v1",
+        "analysis": "adb_kir_sensitivity_v2",
         "protocol_version": "protocol_v2_textoir_v1",
         "external_roots": [str(p) for p in roots],
         "fair_source": str(args.fair.resolve()),

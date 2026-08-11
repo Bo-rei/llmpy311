@@ -9,18 +9,18 @@ import sys
 from pathlib import Path
 from typing import Dict, List
 
-PROJECT_ROOT = Path(__file__).resolve().parents[2]
+PROJECT_ROOT = Path(__file__).resolve().parents[3]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from tools.analysis.historical_best_pipeline_v19 import HISTORICAL_BEST_PIPELINE
+from tools.legacy.analysis_v19.historical_best_pipeline_v19 import HISTORICAL_BEST_PIPELINE
 
 
 VERIFIED_MAINCHAIN = {
-    "tools/analysis/run_prototype_gate_frozen_baseline_v19.py",
+    "tools/legacy/analysis_v19/run_prototype_gate_frozen_baseline_v19.py",
     "tools/eval/eval_system_pipeline_v19.py",
-    "tools/analysis/historical_best_pipeline_v19.py",
-    "tools/analysis/replay_historical_chain_v19.py",
+    "tools/legacy/analysis_v19/historical_best_pipeline_v19.py",
+    "tools/legacy/analysis_v19/replay_historical_chain_v19.py",
 }
 
 FROZEN_DEPENDENCY = {
@@ -55,10 +55,10 @@ def build_bundle_summary(replay_root: Path) -> Dict[str, object]:
         replay_manifest = _load_json(replay_manifest_path)
 
     tracked_items: List[str] = [
-        "tools/analysis/run_prototype_gate_frozen_baseline_v19.py",
+        "tools/legacy/analysis_v19/run_prototype_gate_frozen_baseline_v19.py",
         "tools/eval/eval_system_pipeline_v19.py",
-        "tools/analysis/historical_best_pipeline_v19.py",
-        "tools/analysis/replay_historical_chain_v19.py",
+        "tools/legacy/analysis_v19/historical_best_pipeline_v19.py",
+        "tools/legacy/analysis_v19/replay_historical_chain_v19.py",
         strict["reference_eval_results"],
         strict["frozen_detector_path"],
     ]

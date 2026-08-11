@@ -7,7 +7,7 @@ from pathlib import Path
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(PROJECT_ROOT))
 
-from tools.analysis import audit_ablation_outputs_v19 as audit
+from tools.legacy.analysis_v19 import audit_ablation_outputs_v19 as audit
 
 
 def _write_prediction_rows(path: Path, rows: list[dict]) -> None:

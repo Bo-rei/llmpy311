@@ -68,3 +68,18 @@ def test_registry_audit_reports_csv_count_and_missing_errors(tmp_path: Path, mon
 
     assert bad_report["status"] == "fail"
     assert any("unit count mismatch" in error for error in bad_report["errors"])
+
+
+def test_script_classification_keeps_legacy_tools_out_of_unreferenced(tmp_path: Path, monkeypatch) -> None:
+    import tools.analysis.audit_experiment_registry as module
+
+    legacy_script = tmp_path / "tools" / "legacy" / "analysis_v19" / "replay_v19.py"
+    legacy_script.parent.mkdir(parents=True)
+    legacy_script.write_text("# historical fixture\n", encoding="utf-8")
+    monkeypatch.setattr(module, "PROJECT_ROOT", tmp_path)
+
+    report = module._classify_scripts({"experiments": {}})
+
+    relative = "tools/legacy/analysis_v19/replay_v19.py"
+    assert relative in report["historical_moved_to_tools/legacy"]
+    assert relative not in report["unreferenced_report_only"]

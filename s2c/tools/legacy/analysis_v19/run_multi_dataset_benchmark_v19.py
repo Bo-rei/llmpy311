@@ -27,10 +27,13 @@ import sys
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
-from tools.analysis.historical_best_pipeline_v19 import HISTORICAL_BEST_PIPELINE
+PROJECT_ROOT = Path(__file__).resolve().parents[3]
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+
+from tools.legacy.analysis_v19.historical_best_pipeline_v19 import HISTORICAL_BEST_PIPELINE
 from legacy.runtime import WorkspacePaths
 
-PROJECT_ROOT = Path(__file__).resolve().parents[2]
 PATHS = WorkspacePaths.discover(PROJECT_ROOT)
 REBUILD_SCRIPT = PROJECT_ROOT / "scripts" / "data" / "active" / "rebuild_multi_dataset_v19.py"
 EVAL_SCRIPT = PROJECT_ROOT / "tools" / "eval" / "eval_system_pipeline_v19.py"

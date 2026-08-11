@@ -9,7 +9,7 @@ if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
 from tools.eval.eval_system_pipeline_v19 import _evaluate
-from tools.analysis.operating_point_analysis_v19 import rank_operating_points
+from tools.legacy.analysis_v19.operating_point_analysis_v19 import rank_operating_points
 
 
 def test_evaluate_reports_oos_breakdown_by_source_group():

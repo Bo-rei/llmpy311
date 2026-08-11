@@ -2504,3 +2504,12 @@
 - 目的：统一要求先给结果、保持实现最小、删除无效免责声明，不把普通不确定性扩写成 blocker。
 - 数据与 artifact：未修改研究代码、数据、结果、图、原始 artifact 或第三方 checkout。
 - 验证：skill `quick_validate.py` 通过，`git diff --check` 通过。
+
+## 2026-08-11：分析资产物理归位与旧入口收口
+
+- Base commit：`c47b991`；本批不训练、不重评分、不修改 `data/`、`../assets/`、`../artifacts/` 或第三方 checkout。
+- 历史代码：将 25 个 v19 分析/复现脚本从 `tools/analysis/` 移至 `tools/legacy/analysis_v19/`，同步修复模块导入、项目根解析、CLI、评估入口、v19 配置和历史回归测试；审计器将该目录单列为 `historical_moved_to_tools/legacy`，不再报作活跃或未引用代码。
+- 活跃代码：将仍用于五 seed ADB/KIR 汇总的 builder 规范为 `build_adb_kir_sensitivity.py` 与 `build_cross_kir_contract_atlas.py`，默认输入/输出指向当前 v2；统一比较 builder 改读 v2 ADB 摘要。
+- 归档：将不完整的 ADB 三 seed 结果/图移至 `results/analysis/archive/adb_kir_sensitivity_incomplete_v1/` 和 `figures/archive/adb_kir_sensitivity_incomplete_v1/`；将其派生的三 seed KIR 合同图移至对应 `archive/`；早期 `EXPERIMENT_VISUAL_EVIDENCE_BUNDLE_V1.md` 移至 `docs/archive/progress/`。台账、当前入口、视觉索引和来源路径已同步，旧数值不改写。
+- 提交边界：只提交可复用迁移代码、测试、活跃注册表和本日志；归档的过渡性结果、图和旧报告保留在本地工作树，不进入 main。
+- 验证：历史迁移测试、registry/asset-catalog 测试、`compileall`、迁移文件 Ruff、临时目录的五 seed KIR atlas 重建、registry audit、asset catalog audit 和 `git diff --check` 通过。

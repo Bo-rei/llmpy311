@@ -21,7 +21,7 @@ from matplotlib.lines import Line2D
 from PIL import Image
 
 
-PROJECT_ROOT = Path(__file__).resolve().parents[2]
+PROJECT_ROOT = Path(__file__).resolve().parents[3]
 PAPER_DIR = PROJECT_ROOT / "figures" / "paper_v19"
 SOURCE = PAPER_DIR / "clinc150_clean_umap_3panel.png"
 OUTPUT = PAPER_DIR / "clinc150_clean_umap_singlepanel_readable.png"

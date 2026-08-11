@@ -44,7 +44,7 @@ def _build_plan(args: argparse.Namespace, paths: WorkspacePaths) -> WorkflowPlan
     elif args.action == "train":
         command = (
             *base,
-            "tools.analysis.run_multi_dataset_training_v19",
+            "tools.legacy.analysis_v19.run_multi_dataset_training_v19",
             *common,
             "--data_root_base",
             str(paths.prepared_data_root / "multidataset" / "v19"),
@@ -58,7 +58,7 @@ def _build_plan(args: argparse.Namespace, paths: WorkspacePaths) -> WorkflowPlan
     elif args.action == "evaluate":
         command = (
             *base,
-            "tools.analysis.run_multi_dataset_benchmark_v19",
+            "tools.legacy.analysis_v19.run_multi_dataset_benchmark_v19",
             *common,
             "--data_root_base",
             str(paths.prepared_data_root / "multidataset" / "v19"),
@@ -74,7 +74,7 @@ def _build_plan(args: argparse.Namespace, paths: WorkspacePaths) -> WorkflowPlan
         registry.require_runnable(args.anchor)
         command = (
             *base,
-            "tools.analysis.run_structure_backbone_ablation_v19",
+            "tools.legacy.analysis_v19.run_structure_backbone_ablation_v19",
             "--datasets",
             profile.dataset,
             "--kir_values",

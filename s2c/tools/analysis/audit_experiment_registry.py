@@ -237,27 +237,34 @@ def _classify_scripts(registry: dict[str, Any]) -> dict[str, Any]:
         "tools/train/run_cascade_components.py",
         "tools/analysis/export_cascade_repair_summary.py",
     }
+    script_paths = {_relative(path) for path in scripts}
+    legacy_tools = {
+        relative for relative in script_paths if relative.startswith("tools/legacy/")
+    }
     historical = set()
     for path in scripts:
         relative = _relative(path)
         name = path.name.lower()
-        if any(token in name for token in ("historical", "replay")):
+        if relative not in legacy_tools and any(
+            token in name for token in ("historical", "replay")
+        ):
             historical.add(relative)
 
     active = sorted(declared)
-    wrapper = sorted(wrappers & {_relative(path) for path in scripts})
+    wrapper = sorted(wrappers & script_paths)
     historical_retained = sorted(historical - set(active) - set(wrapper))
     unreferenced = sorted(
-        {_relative(path) for path in scripts}
+        script_paths
         - set(active)
         - set(wrapper)
         - set(historical_retained)
+        - legacy_tools
     )
     return {
         "active": active,
         "wrapper": wrapper,
         "historical_retained_for_compatibility": historical_retained,
-        "historical_moved_to_tools/legacy": [],
+        "historical_moved_to_tools/legacy": sorted(legacy_tools),
         "unreferenced_report_only": unreferenced,
         "generated": [],
         "policy": "unreferenced scripts are reported only; no bulk deletion or autoresearch switch",

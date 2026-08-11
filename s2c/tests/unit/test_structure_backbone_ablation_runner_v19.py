@@ -7,7 +7,7 @@ from pathlib import Path
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(PROJECT_ROOT))
 
-from tools.analysis import run_structure_backbone_ablation_v19 as runner
+from tools.legacy.analysis_v19 import run_structure_backbone_ablation_v19 as runner
 
 
 def _write_eval(path: Path, metrics: dict) -> None:

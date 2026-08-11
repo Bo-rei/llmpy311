@@ -51,11 +51,11 @@
     "prototype_alias_path": "outputs/multi_prototypes_v19/prototypes.json"
   },
   "source_code": {
-    "historical_profile_module": "tools/analysis/historical_best_pipeline_v19.py",
-    "frozen_repro_runner": "tools/analysis/run_prototype_gate_frozen_baseline_v19.py",
+    "historical_profile_module": "tools/legacy/analysis_v19/historical_best_pipeline_v19.py",
+    "frozen_repro_runner": "tools/legacy/analysis_v19/run_prototype_gate_frozen_baseline_v19.py",
     "evaluation_runner": "tools/eval/eval_system_pipeline_v19.py",
     "data_rebuild_runner": "scripts/data/active/rebuild_multi_dataset_v19.py",
-    "multi_dataset_training_runner": "tools/analysis/run_multi_dataset_training_v19.py",
-    "multi_dataset_benchmark_runner": "tools/analysis/run_multi_dataset_benchmark_v19.py"
+    "multi_dataset_training_runner": "tools/legacy/analysis_v19/run_multi_dataset_training_v19.py",
+    "multi_dataset_benchmark_runner": "tools/legacy/analysis_v19/run_multi_dataset_benchmark_v19.py"
   }
 }

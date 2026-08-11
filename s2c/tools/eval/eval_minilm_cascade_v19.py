@@ -27,7 +27,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(PROJECT_ROOT))
 
 from protocol_v2.gate.multi_sphere_oos_detector import MultiSphereOOSDetector
-from tools.analysis.threshold_selection_v19 import select_main_table_constrained_threshold
+from tools.legacy.analysis_v19.threshold_selection_v19 import select_main_table_constrained_threshold
 
 OOS_LABEL = "__oos__"
 

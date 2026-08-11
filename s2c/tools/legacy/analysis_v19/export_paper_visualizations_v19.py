@@ -26,7 +26,7 @@ import numpy as np
 from matplotlib.lines import Line2D
 from sklearn.decomposition import PCA
 
-PROJECT_ROOT = Path(__file__).resolve().parents[2]
+PROJECT_ROOT = Path(__file__).resolve().parents[3]
 if str(PROJECT_ROOT) not in sys.path:
     # 保留 ``python tools/analysis/<script>.py`` 的历史调用方式。包内导入之前
     # 先注册项目根，否则 Python 只会把 tools/analysis 视为 import root。

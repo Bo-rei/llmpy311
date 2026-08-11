@@ -20,16 +20,16 @@ import sys
 from pathlib import Path
 from typing import List, Optional
 
-PROJECT_ROOT = Path(__file__).resolve().parents[2]
+PROJECT_ROOT = Path(__file__).resolve().parents[3]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from tools.analysis.component_path_utils import (
+from tools.legacy.analysis_v19.component_path_utils import (
     resolve_frozen_experts_root,
     resolve_frozen_router_ckpt,
 )
-from tools.analysis.prototype_path_utils import resolve_multi_prototype_path
-from tools.analysis.historical_best_pipeline_v19 import HISTORICAL_BEST_PIPELINE
+from tools.legacy.analysis_v19.prototype_path_utils import resolve_multi_prototype_path
+from tools.legacy.analysis_v19.historical_best_pipeline_v19 import HISTORICAL_BEST_PIPELINE
 
 
 FROZEN_REFERENCE_EVAL = PROJECT_ROOT / (

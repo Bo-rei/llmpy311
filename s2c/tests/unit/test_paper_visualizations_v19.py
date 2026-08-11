@@ -7,7 +7,7 @@ from pathlib import Path
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(PROJECT_ROOT))
 
-from tools.analysis import export_paper_visualizations_v19 as viz
+from tools.legacy.analysis_v19 import export_paper_visualizations_v19 as viz
 
 
 def test_sample_kind_splits_known_heldout_and_native_oos():

@@ -16,7 +16,7 @@ from pathlib import Path
 from typing import Dict, List
 
 
-PROJECT_ROOT = Path(__file__).resolve().parents[2]
+PROJECT_ROOT = Path(__file__).resolve().parents[3]
 
 HISTORICAL_BEST_CHAIN: List[str] = [
     "configs/v19/clinc150_historical_best_reference.json",
@@ -26,11 +26,11 @@ HISTORICAL_BEST_CHAIN: List[str] = [
     "tools/train/train_all_experts_v19.py",
     "tools/train/train_expert_v19.py",
     "tools/train/train_semantic_verifier_v19.py",
-    "tools/analysis/historical_best_pipeline_v19.py",
-    "tools/analysis/validate_historical_best_chain_v19.py",
-    "tools/analysis/run_prototype_gate_frozen_baseline_v19.py",
-    "tools/analysis/prototype_path_utils.py",
-    "tools/analysis/component_path_utils.py",
+    "tools/legacy/analysis_v19/historical_best_pipeline_v19.py",
+    "tools/legacy/analysis_v19/validate_historical_best_chain_v19.py",
+    "tools/legacy/analysis_v19/run_prototype_gate_frozen_baseline_v19.py",
+    "tools/legacy/analysis_v19/prototype_path_utils.py",
+    "tools/legacy/analysis_v19/component_path_utils.py",
     "tools/eval/eval_system_pipeline_v19.py",
     "src/legacy/pipeline/system_pipeline.py",
     "src/legacy/gate/multi_sphere_oos_detector.py",

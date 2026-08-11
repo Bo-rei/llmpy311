@@ -8,7 +8,7 @@ from pathlib import Path
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(PROJECT_ROOT))
 
-from tools.analysis import export_ablation_table_v19 as exporter
+from tools.legacy.analysis_v19 import export_ablation_table_v19 as exporter
 
 
 def test_export_mainline_table_filters_and_renames_variants(tmp_path: Path):

@@ -16,11 +16,11 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Optional, Sequence
 
-PROJECT_ROOT = Path(__file__).resolve().parents[2]
+PROJECT_ROOT = Path(__file__).resolve().parents[3]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from tools.analysis.historical_best_pipeline_v19 import HISTORICAL_BEST_PIPELINE
+from tools.legacy.analysis_v19.historical_best_pipeline_v19 import HISTORICAL_BEST_PIPELINE
 REFERENCE_CONFIG_PATH = PROJECT_ROOT / "configs/v19/clinc150_historical_best_reference.json"
 REFERENCE_EVAL_PATH = PROJECT_ROOT / (
     "outputs/experiments/archive/sweeps/2026-03-23/pipeline_phase3_proto_eval/"
@@ -111,7 +111,7 @@ CALL_CHAIN: List[Dict[str, Any]] = [
     },
     {
         "stage": "frozen_baseline_wrapper",
-        "owner": "tools/analysis/run_prototype_gate_frozen_baseline_v19.py",
+        "owner": "tools/legacy/analysis_v19/run_prototype_gate_frozen_baseline_v19.py",
         "role": "Resolve frozen paths and launch the archived historical-best evaluation.",
         "fixed_vs_variable": "fixed(profile); runtime seed/device explicit",
         "inputs": [
@@ -140,15 +140,15 @@ CALL_CHAIN: List[Dict[str, Any]] = [
 
 SUPPORTING_CODE: List[Dict[str, str]] = [
     {
-        "path": "tools/analysis/historical_best_pipeline_v19.py",
+        "path": "tools/legacy/analysis_v19/historical_best_pipeline_v19.py",
         "role": "Canonical profile object; holds the stable historical-best parameters.",
     },
     {
-        "path": "tools/analysis/prototype_path_utils.py",
+        "path": "tools/legacy/analysis_v19/prototype_path_utils.py",
         "role": "Resolves prototype payloads for the frozen historical run.",
     },
     {
-        "path": "tools/analysis/component_path_utils.py",
+        "path": "tools/legacy/analysis_v19/component_path_utils.py",
         "role": "Resolves frozen router and experts paths.",
     },
     {
@@ -218,19 +218,19 @@ PARAMETER_CHAIN: List[Dict[str, str]] = [
         "dimension": "gate_profile",
         "value": "historical_best",
         "classification": "fixed profile constant",
-        "evidence": "tools/analysis/historical_best_pipeline_v19.py",
+        "evidence": "tools/legacy/analysis_v19/historical_best_pipeline_v19.py",
     },
     {
         "dimension": "semantic_gate_mode",
         "value": "prototype",
         "classification": "fixed profile constant",
-        "evidence": "tools/analysis/historical_best_pipeline_v19.py",
+        "evidence": "tools/legacy/analysis_v19/historical_best_pipeline_v19.py",
     },
     {
         "dimension": "semantic_gate_threshold",
         "value": "0.85",
         "classification": "fixed profile constant",
-        "evidence": "tools/analysis/historical_best_pipeline_v19.py",
+        "evidence": "tools/legacy/analysis_v19/historical_best_pipeline_v19.py",
     },
     {
         "dimension": "multi_proto_id_threshold",
@@ -342,10 +342,10 @@ def build_report() -> Dict[str, Any]:
         PROJECT_ROOT / "tools/train/train_all_experts_v19.py",
         PROJECT_ROOT / "tools/train/train_expert_v19.py",
         PROJECT_ROOT / "tools/train/train_semantic_verifier_v19.py",
-        PROJECT_ROOT / "tools/analysis/historical_best_pipeline_v19.py",
-        PROJECT_ROOT / "tools/analysis/run_prototype_gate_frozen_baseline_v19.py",
-        PROJECT_ROOT / "tools/analysis/prototype_path_utils.py",
-        PROJECT_ROOT / "tools/analysis/component_path_utils.py",
+        PROJECT_ROOT / "tools/legacy/analysis_v19/historical_best_pipeline_v19.py",
+        PROJECT_ROOT / "tools/legacy/analysis_v19/run_prototype_gate_frozen_baseline_v19.py",
+        PROJECT_ROOT / "tools/legacy/analysis_v19/prototype_path_utils.py",
+        PROJECT_ROOT / "tools/legacy/analysis_v19/component_path_utils.py",
         PROJECT_ROOT / "tools/eval/eval_system_pipeline_v19.py",
         PROJECT_ROOT / "src/legacy/pipeline/system_pipeline.py",
         PROJECT_ROOT / "src/legacy/gate/multi_sphere_oos_detector.py",
@@ -521,7 +521,7 @@ def render_markdown(report: Dict[str, Any]) -> str:
     lines.append("## Reproduction Command")
     lines.append("")
     lines.append("```bash")
-    lines.append("python3 tools/analysis/validate_historical_best_chain_v19.py")
+    lines.append("python3 tools/legacy/analysis_v19/validate_historical_best_chain_v19.py")
     lines.append("```")
     lines.append("")
 

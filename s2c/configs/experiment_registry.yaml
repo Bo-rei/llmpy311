@@ -580,7 +580,7 @@ analysis_bundles:
     question: "ADB 在其可审计 BERT 外部合同下与当前 S2C 的差异是什么？"
     source_experiments:
       - external_validation.adb_compat_stackoverflow_kir50_seed0_v2
-    builder: tools/analysis/build_adb_kir_sensitivity_v1.py
+    builder: tools/analysis/build_adb_kir_sensitivity.py
     result_dir: results/analysis/adb_kir_sensitivity_v2
     figure_dir: figures/adb_kir_sensitivity_v2
     report: docs/analysis/ADB_TRAINABLE_KIR_ANALYSIS_V1.md
@@ -588,7 +588,8 @@ analysis_bundles:
     aliases:
       - adb_kir_sensitivity_v2
       - adb_trainable_bert_reference
-    supersedes: []
+    supersedes:
+      - adb_kir_sensitivity_v1
     selected_for_main_report: true
     commit_policy: closed_evidence
 

@@ -78,3 +78,14 @@ def test_asset_catalog_rejects_bad_id_and_missing_manifest_source(tmp_path: Path
     assert report["status"] == "fail"
     assert any("lower_snake_case" in error for error in report["errors"])
     assert any("manifest figures reference is missing" in error for error in report["errors"])
+
+
+def test_asset_catalog_does_not_report_explicit_archive_roots_as_orphans(tmp_path: Path) -> None:
+    registry = _write_catalog(tmp_path)
+    (tmp_path / "results" / "analysis" / "archive" / "retained_v1").mkdir(parents=True)
+    (tmp_path / "figures" / "archive" / "retained_v1").mkdir(parents=True)
+
+    report = audit_catalog(project_root=tmp_path, registry_path=registry)
+
+    assert "results/analysis/archive" not in report["orphan_result_dirs"]
+    assert "figures/archive" not in report["orphan_figure_dirs"]

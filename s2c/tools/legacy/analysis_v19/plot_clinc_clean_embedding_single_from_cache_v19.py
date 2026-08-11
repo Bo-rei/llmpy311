@@ -18,11 +18,11 @@ import torch
 from matplotlib.lines import Line2D
 from sklearn.decomposition import PCA
 
-PROJECT_ROOT = Path(__file__).resolve().parents[2]
+PROJECT_ROOT = Path(__file__).resolve().parents[3]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from tools.analysis.export_paper_visualizations_v19 import (
+from tools.legacy.analysis_v19.export_paper_visualizations_v19 import (
     DEFAULT_ROOT,
     KIND_COLORS,
     _filter_clean_clinc_predictions,

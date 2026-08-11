@@ -122,23 +122,18 @@ ADB 三数据集 KIR=.50 外部参照图：
 - `figures/adb_cross_dataset_v1/adb_vs_trainable_paired_oos_delta.png`：同 seed 配对 OOS F1 差值，展示数据集依赖；
 - `results/analysis/adb_cross_dataset_v1/ADB_CROSS_DATASET_REPORT.md`：逐 seed、配对摘要和合同边界。
 
-ADB 跨 KIR 扩展（五 seed 已完成 45/45；三 seed v1 历史保留）：
+ADB 跨 KIR 扩展（五 seed 完整入口）：
 
-- `tools/analysis/build_adb_kir_sensitivity_v1.py`：读取 KIR=.25/.50/.75 的三数据集外部运行并与 Trainable-K1 配对；
-- `figures/adb_kir_sensitivity_v1/adb_kir_curves.png`：完成后展示 ADB 的 OOS F1、F1-All 和 Known Recall 随 KIR 变化；
-- `figures/adb_kir_sensitivity_v1/trainable_minus_adb_oos_f1_heatmap.png`：完成后展示 S2C Trainable-K1 相对 ADB 的逐数据集/KIR差值；
-- `results/analysis/adb_kir_sensitivity_v1/ADB_KIR_SENSITIVITY_REPORT.md`：运行合同、逐 seed 结果和配对摘要。
+- `tools/analysis/build_adb_kir_sensitivity.py`：读取 KIR=.25/.50/.75 的三数据集外部运行并与 Trainable-K1 配对；
 - `figures/adb_kir_sensitivity_v2/adb_kir_curves.png`：五 seed ADB 的 OOS F1、F1-All 和 Known Recall 随 KIR 变化；
 - `figures/adb_kir_sensitivity_v2/trainable_minus_adb_oos_f1_heatmap.png`：五 seed S2C Trainable-K1 相对 ADB 的逐数据集/KIR差值；
-- `results/analysis/adb_kir_sensitivity_v2/ADB_KIR_SENSITIVITY_REPORT.md`：45/45 外部单元、五 seed 摘要和配对差异。
+- `results/analysis/adb_kir_sensitivity_v2/ADB_KIR_SENSITIVITY_REPORT.md`：45/45 外部单元、五 seed 摘要和配对差异。三 seed v1 已归档，不作为当前入口。
 
-跨 KIR 合同可视化总览（已完成 27/27 派生行）：
+跨 KIR 合同可视化总览（五 seed 当前入口）：
 
-- `figures/cross_kir_contract_atlas_v1/cross_kir_contract_atlas.png`：按数据集并列展示 S2C Trainable-K1、MOGB-MiniLM-Fair 与 ADB 的 OOS F1、F1-All 和 Known Recall；每个图例保留 backbone、监督合同和 seed 数；
-- `results/analysis/cross_kir_contract_atlas_v1/CROSS_KIR_CONTRACT_ATLAS_REPORT.md`：解释为什么该图是合同感知的工作点对照，而不是跨骨干 SOTA 排名；
-- `results/analysis/cross_kir_contract_atlas_v1/rows.csv` 与 `CROSS_KIR_CONTRACT_ATLAS_MANIFEST.json`：保存输入摘要、源报告、哈希和绘图数据。
-- `figures/cross_kir_contract_atlas_v2/cross_kir_contract_atlas.png`：使用五 seed ADB 输入的更新版跨 KIR 合同图；
-- `results/analysis/cross_kir_contract_atlas_v2/CROSS_KIR_CONTRACT_ATLAS_REPORT.md` 与 `rows.csv`：保留源哈希、合同说明和机器可读行。
+- `tools/analysis/build_cross_kir_contract_atlas.py`：由冻结 fair 汇总和五 seed ADB 摘要生成合同分层图；
+- `figures/cross_kir_contract_atlas_v2/cross_kir_contract_atlas.png`：按数据集并列展示 S2C Trainable-K1、MOGB-MiniLM-Fair 与 ADB 的 OOS F1、F1-All 和 Known Recall；每个图例保留 backbone、监督合同和 seed 数；
+- `results/analysis/cross_kir_contract_atlas_v2/CROSS_KIR_CONTRACT_ATLAS_REPORT.md` 与 `rows.csv`：保留源哈希、合同说明和机器可读行。三 seed v1 已归档，不作为当前入口。
 
 ADB 五 seed 配对推断（已完成 36/36 指标格）：
 

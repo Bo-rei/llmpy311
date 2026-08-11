@@ -13,7 +13,7 @@ gate-nearest-intent postprocess preserved the full gate decision and collapsed
 to the same result as Full on CLINC, so it is not a fair structural ablation.
 
 This script is not the canonical paper-facing ablation entrypoint. Use
-``tools/analysis/run_structure_backbone_ablation_v19.py`` for the official
+``tools/legacy/analysis_v19/run_structure_backbone_ablation_v19.py`` for the official
 latest-strongest structure/backbone suite.
 """
 
@@ -29,7 +29,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Dict, List, Sequence
 
-PROJECT_ROOT = Path(__file__).resolve().parents[2]
+PROJECT_ROOT = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(PROJECT_ROOT))
 
 from legacy.runtime import WorkspacePaths  # noqa: E402

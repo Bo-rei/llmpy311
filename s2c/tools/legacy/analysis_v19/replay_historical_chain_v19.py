@@ -10,11 +10,11 @@ import sys
 from pathlib import Path
 from typing import Dict, List
 
-PROJECT_ROOT = Path(__file__).resolve().parents[2]
+PROJECT_ROOT = Path(__file__).resolve().parents[3]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from tools.analysis.historical_best_pipeline_v19 import HISTORICAL_BEST_PIPELINE
+from tools.legacy.analysis_v19.historical_best_pipeline_v19 import HISTORICAL_BEST_PIPELINE
 
 
 def build_strict_eval_command(output_dir: str) -> List[str]:
@@ -63,7 +63,7 @@ def build_replay_manifest(output_root: Path, device: str = "cuda") -> Dict[str, 
                     sys.executable,
                     str(
                         PROJECT_ROOT
-                        / "tools/analysis/run_prototype_gate_frozen_baseline_v19.py"
+                        / "tools/legacy/analysis_v19/run_prototype_gate_frozen_baseline_v19.py"
                     ),
                     "--data_root",
                     str(strict["data_root"]),

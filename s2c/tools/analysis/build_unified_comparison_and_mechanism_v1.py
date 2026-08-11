@@ -170,7 +170,7 @@ def native_summary_rows() -> list[dict[str, Any]]:
 
 
 def adb_summary_rows() -> list[dict[str, Any]]:
-    path = ROOT / "results" / "analysis" / "adb_kir_sensitivity_v1" / "adb_summary.csv"
+    path = ROOT / "results" / "analysis" / "adb_kir_sensitivity_v2" / "adb_summary.csv"
     rows = []
     for source in read_csv(path):
         rows.append(

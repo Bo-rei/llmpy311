@@ -23,7 +23,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Sequence, Tuple
 
-PROJECT_ROOT = Path(__file__).resolve().parents[2]
+PROJECT_ROOT = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(PROJECT_ROOT))
 
 from legacy.runtime import WorkspacePaths
@@ -37,7 +37,7 @@ CASCADE_MINILM = PROJECT_ROOT / "tools" / "eval" / "eval_minilm_cascade_v19.py"
 CASCADE_SMOLLM = PROJECT_ROOT / "tools" / "eval" / "eval_smollm_cascade_v19.py"
 ROUTER_THRESHOLD = PROJECT_ROOT / "tools" / "analysis" / "validate_router_confidence_threshold_v19.py"
 
-from tools.analysis.threshold_selection_v19 import (  # noqa: E402
+from tools.legacy.analysis_v19.threshold_selection_v19 import (  # noqa: E402
     MAIN_TABLE_FULL_PIPELINE_METRICS,
     select_main_table_constrained_threshold,
 )

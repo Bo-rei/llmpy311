@@ -25,7 +25,7 @@ import numpy as np
 from matplotlib.lines import Line2D
 from sklearn.manifold import TSNE
 
-PROJECT_ROOT = Path(__file__).resolve().parents[2]
+PROJECT_ROOT = Path(__file__).resolve().parents[3]
 DEFAULT_RUN_DIR = (
     PROJECT_ROOT
     / "outputs"

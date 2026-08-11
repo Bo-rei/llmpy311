@@ -19,7 +19,7 @@ import numpy as np
 from PIL import Image
 from scipy import ndimage
 
-PROJECT_ROOT = Path(__file__).resolve().parents[2]
+PROJECT_ROOT = Path(__file__).resolve().parents[3]
 FIGURE_DIR = PROJECT_ROOT / "figures" / "paper_v19"
 SOURCE = FIGURE_DIR / "clinc150_clean_umap_3panel_legacy_3panel.png"
 PNG_OUT = FIGURE_DIR / "clinc150_clean_umap_3panel.png"

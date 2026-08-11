@@ -9,7 +9,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[2]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from tools.analysis.historical_best_pipeline_v19 import HISTORICAL_BEST_PIPELINE
+from tools.legacy.analysis_v19.historical_best_pipeline_v19 import HISTORICAL_BEST_PIPELINE
 
 
 def test_profile_exposes_strict_historical_data_root():
@@ -62,7 +62,7 @@ def test_historical_gate_test_split_counts_are_stable():
 
 
 def test_replay_eval_command_uses_historical_protocol():
-    from tools.analysis.replay_historical_chain_v19 import build_strict_eval_command
+    from tools.legacy.analysis_v19.replay_historical_chain_v19 import build_strict_eval_command
 
     cmd = build_strict_eval_command(output_dir="outputs/tmp/historical_replay_eval")
     joined = " ".join(cmd)
@@ -72,15 +72,15 @@ def test_replay_eval_command_uses_historical_protocol():
 
 
 def test_bundle_classifies_frozen_baseline_wrapper_as_mainchain():
-    from tools.analysis.build_historical_repro_bundle_v19 import classify_file_status
+    from tools.legacy.analysis_v19.build_historical_repro_bundle_v19 import classify_file_status
 
     assert classify_file_status(
-        "tools/analysis/run_prototype_gate_frozen_baseline_v19.py"
+        "tools/legacy/analysis_v19/run_prototype_gate_frozen_baseline_v19.py"
     ) in {"VERIFIED_MAINCHAIN", "FROZEN_DEPENDENCY"}
 
 
 def test_replay_manifest_uses_stage_order_for_historical_recovery():
-    from tools.analysis.replay_historical_chain_v19 import build_replay_manifest
+    from tools.legacy.analysis_v19.replay_historical_chain_v19 import build_replay_manifest
 
     manifest = build_replay_manifest(Path("outputs/reports/historical_replay_test"))
     stage_names = [stage["name"] for stage in manifest["stages"]]
@@ -96,7 +96,7 @@ def test_replay_manifest_uses_stage_order_for_historical_recovery():
 
 
 def test_bundle_render_mentions_replay_stage_status():
-    from tools.analysis.build_historical_repro_bundle_v19 import render_index
+    from tools.legacy.analysis_v19.build_historical_repro_bundle_v19 import render_index
 
     summary = {
         "strict_replay": HISTORICAL_BEST_PIPELINE.strict_replay_defaults(),
@@ -114,7 +114,7 @@ def test_bundle_render_mentions_replay_stage_status():
 
 
 def test_multi_dataset_training_uses_gate_encoder_for_gate_stage(tmp_path):
-    from tools.analysis.run_multi_dataset_training_v19 import build_stage_specs
+    from tools.legacy.analysis_v19.run_multi_dataset_training_v19 import build_stage_specs
 
     data_root_base = tmp_path / "data"
     data_root = data_root_base / "clinc150" / "kir25_seed42"
@@ -140,7 +140,7 @@ def test_multi_dataset_training_uses_gate_encoder_for_gate_stage(tmp_path):
 
 
 def test_multi_dataset_benchmark_defaults_to_historical_gate_encoder():
-    from tools.analysis.run_multi_dataset_benchmark_v19 import _resolve_gate_encoder_path
+    from tools.legacy.analysis_v19.run_multi_dataset_benchmark_v19 import _resolve_gate_encoder_path
 
     resolved = _resolve_gate_encoder_path(
         requested_gate_encoder_path=None,

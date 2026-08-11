@@ -293,7 +293,7 @@ def _orphan_directories(root: Path, registered: set[str], directory: str) -> lis
         return []
     orphans: list[str] = []
     for item in sorted(base.iterdir()):
-        if not item.is_dir():
+        if not item.is_dir() or item.name == "archive":
             continue
         relative = _relative(item, root)
         if relative not in registered:

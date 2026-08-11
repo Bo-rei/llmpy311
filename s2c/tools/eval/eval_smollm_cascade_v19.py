@@ -30,7 +30,7 @@ sys.path.insert(0, str(PROJECT_ROOT))
 
 from legacy.router import SmolLMRouter  # noqa: E402
 from tools.eval.eval_system_pipeline_v19 import OOS_LABEL, _evaluate  # noqa: E402
-from tools.analysis.threshold_selection_v19 import select_main_table_constrained_threshold  # noqa: E402
+from tools.legacy.analysis_v19.threshold_selection_v19 import select_main_table_constrained_threshold  # noqa: E402
 
 
 def _load_json(path: Path) -> Any:
