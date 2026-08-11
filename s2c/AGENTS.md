@@ -6,6 +6,10 @@
 文档和轻量公开结果均在 `s2c/`；本地原始产物在 `../artifacts/s2c/`，数据和基础模型
 在 `../assets/`，独立 TextOIR 仓库在 `../textoir/`。
 
+每次回复、写代码、审查或报告状态前，先加载并执行
+`/home/bo/.codex/skills/response-discipline/SKILL.md`。它是本项目的通用表达与实现约束：
+先给结果，保持改动最小，不为假设中的问题增加防御性说明或代码。
+
 当前文档入口只有：
 
 - `README.md`

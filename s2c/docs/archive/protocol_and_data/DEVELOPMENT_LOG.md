@@ -2496,3 +2496,11 @@
 - 结果：资产审计 `9 bundles + 2 archives` 通过；当前保留 `78` 个未登记结果目录和 `71` 个未登记图目录作为历史 orphan warning，不批量判错或删除。原有实验登记审计也通过。
 - 验证：新增相关单元 `3 passed`；全量 unit `358 passed`、integration `13 passed`、smoke `3 passed`；`compileall`、`check_research_state.py`、`check_data_tracking.py` 和 `git diff --check` 通过。新增审计器和测试自身未触发 Ruff 错误，但全仓 Ruff 仍被既有 `scripts/experiments` 与 `src/protocol_v2/experiments` 的 15 条问题阻断；public-results verify 仍因工作树中已有未列入 whitelist 的结果文件失败，未扩大本批范围。
 - 风险与下一步：当前仍不能把所有历史 orphan 视作可提交证据；下一步按 bundle/ledger 引用逐项关闭或归档，单独形成闭合 evidence bundle 后再决定 Git 提交边界。
+
+## 2026-08-11：接入通用 response discipline skill
+
+- Base commit：`3a295cb318c952ad4eb9658ddcce51bcd8c4fa93`。
+- 修改：新增全局 skill `/home/bo/.codex/skills/response-discipline/SKILL.md`，并在 `AGENTS.md` 规定每次回复、写代码、审查和状态汇报前加载它。
+- 目的：统一要求先给结果、保持实现最小、删除无效免责声明，不把普通不确定性扩写成 blocker。
+- 数据与 artifact：未修改研究代码、数据、结果、图、原始 artifact 或第三方 checkout。
+- 验证：skill `quick_validate.py` 通过，`git diff --check` 通过。
