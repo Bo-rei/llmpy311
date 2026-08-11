@@ -29,7 +29,7 @@
 
 这说明当前 Trainable 表示的收益能传递到下游，而不是只在 Gate-only 指标中出现；StackOverflow 的桥接不是
 孤立现象。但它仍然不证明超过完整 MOGB、DCLOOS 或历史 fulltex。逐样本错误预算和每个 seed 的结果见
-`docs/analysis/CASCADE_BRIDGE_CROSS_DATASET_V1.md`。
+`docs/archive/analysis/CASCADE_BRIDGE_CROSS_DATASET_V1.md`。
 
 ## 3. 当前 MOGB 对比应该怎么读
 

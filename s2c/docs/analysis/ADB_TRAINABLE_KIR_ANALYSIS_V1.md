@@ -32,6 +32,6 @@
 
 ## 产物
 
-- 机器可读结果：`results/analysis/trainable_vs_adb_kir_v1/`
-- 图表目录：`figures/trainable_vs_adb_kir_v1`
+- 机器可读结果：`results/analysis/archive/analysis/trainable_vs_adb_kir_v1/`
+- 图表目录：`figures/archive/analysis/trainable_vs_adb_kir_v1`
 - 源文件哈希：`{"adb": "0a287bf154bdb0d2db06ec916cfbb4aea40c8b536fabf419942f684e587e1223", "fair": "31ccdd433b38b86ec92b0cd81b460114a7fe1e7f12b94d4a5d031aab7d703145"}`

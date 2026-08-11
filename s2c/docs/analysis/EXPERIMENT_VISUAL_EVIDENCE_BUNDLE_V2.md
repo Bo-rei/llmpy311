@@ -8,7 +8,7 @@
 历史 `fulltex.tex` 完整 Cascade 与当前 Trainable-K1 的逐格合同差距见
 `docs/analysis/CROSS_CONTRACT_GAP_V1.md`；该报告只做描述性对齐，不改变本文件的 fair matrix 主结论。
 
-机器可读图索引和统一合同见 [`UNIFIED_COMPARISON_AND_MECHANISM_REPORT_V1.md`](UNIFIED_COMPARISON_AND_MECHANISM_REPORT_V1.md) 及 `results/analysis/unified_comparison_v1/figure_manifest.json`。
+机器可读图索引和统一合同见 [`UNIFIED_COMPARISON_AND_MECHANISM_REPORT_V1.md`](UNIFIED_COMPARISON_AND_MECHANISM_REPORT_V1.md) 及 `results/analysis/archive/analysis/unified_comparison_v1/figure_manifest.json`。
 
 ## 1. 当前主要比较对象
 
@@ -34,10 +34,10 @@
 
 主图：
 
-- `figures/experiment_analysis_master_v1/oos_f1_heatmap.png`
-- `figures/experiment_analysis_master_v1/f1_all_heatmap.png`
-- `figures/experiment_analysis_master_v1/pareto_oos_f1_f1_all_kir050.png`
-- `figures/statistical_stability_v1/paired_oos_f1_forest.png`
+- `figures/archive/analysis/experiment_analysis_master_v1/oos_f1_heatmap.png`
+- `figures/archive/analysis/experiment_analysis_master_v1/f1_all_heatmap.png`
+- `figures/archive/analysis/experiment_analysis_master_v1/pareto_oos_f1_f1_all_kir050.png`
+- `figures/archive/analysis/statistical_stability_v1/paired_oos_f1_forest.png`
 
 ## 3. 为什么当前方法优于 MOGB-Fair
 
@@ -60,8 +60,8 @@
 
 - `figures/s2c_vs_mogb_mechanism_dashboard_v1/error_budget_arrows.png`
 - `figures/s2c_vs_mogb_mechanism_dashboard_v1/oos_precision_recall_decomposition.png`
-- `figures/trainable_mogb_open_intent_transitions_v1/paired_correctness_gain_decomposition.png`
-- `figures/s2c_mogb_operating_curve_attribution_v1/matched_known_recall_frontier.png`
+- `figures/archive/analysis/trainable_mogb_open_intent_transitions_v1/paired_correctness_gain_decomposition.png`
+- `figures/archive/analysis/s2c_mogb_operating_curve_attribution_v1/matched_known_recall_frontier.png`
 
 ## 4. StackOverflow 的具体失败结构
 
@@ -78,10 +78,10 @@ KIR=.50 五 seed 结果：
 
 对应图：
 
-- `figures/stackoverflow_error_attribution_v2/stackoverflow_error_source_waterfall.png`
-- `figures/stackoverflow_error_attribution_v2/stackoverflow_intent_oos_acceptor_heatmap.png`
-- `figures/cross_dataset_intent_risk_visuals_v1/fixed_k2_oos_acceptor_rank_curve.png`
-- `figures/mechanism_closure_v1/mogb_risk_workpoints.png`
+- `figures/archive/analysis/stackoverflow_error_attribution_v2/stackoverflow_error_source_waterfall.png`
+- `figures/archive/analysis/stackoverflow_error_attribution_v2/stackoverflow_intent_oos_acceptor_heatmap.png`
+- `figures/archive/analysis/cross_dataset_intent_risk_visuals_v1/fixed_k2_oos_acceptor_rank_curve.png`
+- `figures/archive/analysis/mechanism_closure_v1/mogb_risk_workpoints.png`
 
 ## 5. MOGB 论文复现差距
 
@@ -105,11 +105,11 @@ StackOverflow/KIR=.50/seed=0 的官方逻辑现代兼容运行：
 
 对应图：
 
-- `figures/mogb_reproduction_gap_analysis_v2/paper_gap_metrics.png`
-- `figures/mogb_reproduction_gap_analysis_v2/ce_vs_subcentroid_loss.png`
-- `figures/mogb_reproduction_gap_analysis_v2/dev_accuracy_vs_known_recall.png`
-- `figures/mogb_known_calibration_attribution_v1/subcentroid_loss_signal.png`
-- `figures/mogb_corrected_radius_coverage_v1/radius_workpoints.png`
+- `figures/archive/analysis/mogb_reproduction_gap_analysis_v2/paper_gap_metrics.png`
+- `figures/archive/analysis/mogb_reproduction_gap_analysis_v2/ce_vs_subcentroid_loss.png`
+- `figures/archive/analysis/mogb_reproduction_gap_analysis_v2/dev_accuracy_vs_known_recall.png`
+- `figures/archive/analysis/mogb_known_calibration_attribution_v1/subcentroid_loss_signal.png`
+- `figures/archive/analysis/mogb_corrected_radius_coverage_v1/radius_workpoints.png`
 
 ## 6. 当前协议 Cascade bridge
 
@@ -121,7 +121,7 @@ StackOverflow/KIR=.50/seed=0 的官方逻辑现代兼容运行：
 | Banking77 | +5.18pp | +3.13pp | −1.95pp | −10.00pp |
 | StackOverflow | +9.42pp | +6.70pp | +0.21pp | −15.40pp |
 
-图：`figures/cascade_bridge_cross_dataset_v1/` 下的三张 Cascade 图。
+图：`figures/archive/analysis/cascade_bridge_cross_dataset_v1/` 下的三张 Cascade 图。
 
 ## 7. 外部方法合同边界
 
@@ -148,14 +148,14 @@ Trainable MiniLM 表示 + Known-only 几何 Gate
 
 而不是“微调后任何 detector 都自动变好”。
 
-图：`figures/detector_mechanism_v1/`；详细报告：`docs/analysis/DETECTOR_MECHANISM_ANALYSIS_V1.md`。
+图：`figures/archive/analysis/detector_mechanism_v1/`；详细报告：`docs/archive/analysis/DETECTOR_MECHANISM_ANALYSIS_V1.md`。
 
 ## 9. 权威数据与报告
 
-- `docs/analysis/EXPERIMENT_ANALYSIS_MASTER_V1.md`
+- `docs/archive/analysis/EXPERIMENT_ANALYSIS_MASTER_V1.md`
 - `docs/analysis/COMPARISON_ATLAS_V2.md`
-- `docs/analysis/MECHANISM_CLOSURE_V1.md`
-- `docs/analysis/MOGB_REPRODUCTION_GAP_ANALYSIS_V2.md`
+- `docs/archive/analysis/MECHANISM_CLOSURE_V1.md`
+- `docs/archive/analysis/MOGB_REPRODUCTION_GAP_ANALYSIS_V2.md`
 - `docs/analysis/BASELINE_EXECUTION_STATUS_V1.md`
 - `results/analysis/cross_protocol_tradeoff_v1/`
 - `results/analysis/s2c_vs_mogb_mechanism_dashboard_v1/`
@@ -180,6 +180,6 @@ DA-ADB 当前 protocol_v2 的 StackOverflow/KIR=.50 三个 seed 已完成，均�
 运行保留 BERT、pseudo-OOS 与外部 SQuAD 监督，但约 3530 秒后没有生成最终 metrics；中间预测不进入
 任何图表。现阶段只展示既有 reduced 结果的合同标签，不绘制伪造的当前协议 DCLOOS 点。
 
-- 阻塞说明：`docs/analysis/DCLOOS_CURRENT_PROTOCOL_BLOCKER_V1.md`
+- 阻塞说明：`docs/archive/analysis/DCLOOS_CURRENT_PROTOCOL_BLOCKER_V1.md`
 - 运行 manifest：`../artifacts/s2c/external/dcloos_stackoverflow_kir050_seed42_fixed_registry_v1/run_manifest.json`
-- reduced 外部参照仍见 `figures/experiment_comparison_overview_v2/external_supervision_reference.png`
+- reduced 外部参照仍见 `figures/archive/analysis/experiment_comparison_overview_v2/external_supervision_reference.png`

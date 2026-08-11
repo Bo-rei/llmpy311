@@ -23,7 +23,7 @@
 
 本收口把表示控制和边界控制分开：native MiniLM MSP/Energy/kNN/LOF 是同一 trainable representation 上的检测器控制；MOGB-MiniLM 与 partition/boundary swap 是同协议组件归因；S2C-Trainable-K1 是 Known-only 适配后的单中心 Gate。它们不与 BERT 外部方法混为一个排名。
 
-MOGB 的逐样本 ball 字段来自 `balls.jsonl` 和 `ball_statistics.json`。selected ball 缺类、tiny-ball、radius/purity 风险继续由现有 MOGB 机制图和 `docs/analysis/MOGB_OPERATING_POINT_VISUALS_V1.md` 解释，本阶段不复制或覆盖 MOGB 原始 artifact。
+MOGB 的逐样本 ball 字段来自 `balls.jsonl` 和 `ball_statistics.json`。selected ball 缺类、tiny-ball、radius/purity 风险继续由现有 MOGB 机制图和 `docs/archive/analysis/MOGB_OPERATING_POINT_VISUALS_V1.md` 解释，本阶段不复制或覆盖 MOGB 原始 artifact。
 
 ## 5. 监督差异与阻塞项
 
@@ -37,9 +37,9 @@ KNNCL、OpenMax、DOC、DeepUnk 等传统 TextOIR 路线若只有历史 fulltex 
 
 ## 7. 机器可读入口
 
-- 汇总：`results/analysis/unified_comparison_v1/method_summary.csv`、`results/analysis/unified_comparison_v1/paired_statistics.csv`。
-- 合同：`results/analysis/unified_comparison_v1/contract_summary.csv`、`results/analysis/unified_comparison_v1/prediction_schema_manifest.json`。
-- 图索引：`results/analysis/unified_comparison_v1/figure_manifest.json`；图状态统计：{'generated': 3, 'reused': 14}。
+- 汇总：`results/analysis/archive/analysis/unified_comparison_v1/method_summary.csv`、`results/analysis/archive/analysis/unified_comparison_v1/paired_statistics.csv`。
+- 合同：`results/analysis/archive/analysis/unified_comparison_v1/contract_summary.csv`、`results/analysis/archive/analysis/unified_comparison_v1/prediction_schema_manifest.json`。
+- 图索引：`results/analysis/archive/analysis/unified_comparison_v1/figure_manifest.json`；图状态统计：{'generated': 3, 'reused': 14}。
 - 对齐：`results/analysis/unified_prediction_contract_v1/alignment.csv`、`results/analysis/unified_prediction_contract_v1/failed_alignment.csv`。
 - 现有证据入口：`docs/analysis/EXPERIMENT_COMPARISON_OVERVIEW_V2.md`、`docs/analysis/EXPERIMENT_VISUAL_EVIDENCE_BUNDLE_V2.md`、`docs/analysis/VISUAL_ANALYSIS_INDEX_V1.md`、`docs/对比实验/MOGB_DCLOOS_对比结果报告.md`。
 - 计划差距审计：`docs/analysis/PLAN_ALIGNMENT_AUDIT_V1.md`；补充执行计划：`docs/analysis/UNIFIED_COMPARISON_SUPPLEMENT_PLAN_V1.md`。

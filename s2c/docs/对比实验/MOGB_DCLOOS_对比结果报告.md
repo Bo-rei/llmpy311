@@ -193,7 +193,7 @@ Trainable K=1 Gate。结果为：
 | StackOverflow | +9.42pp | +6.70pp | +0.21pp | −15.40pp |
 
 这说明 Trainable K=1 的 Gate 改善可以传递到同协议 Cascade；它仍不是历史 `fulltex.tex` Cascade，
-也不是与完整 MOGB/DCLOOS 的公平排名。逐样本误差预算见 `docs/analysis/CASCADE_BRIDGE_CROSS_DATASET_V1.md`。
+也不是与完整 MOGB/DCLOOS 的公平排名。逐样本误差预算见 `docs/archive/analysis/CASCADE_BRIDGE_CROSS_DATASET_V1.md`。
 
 ### 5.4 MSP 最新状态
 

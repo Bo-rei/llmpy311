@@ -36,18 +36,18 @@
 
 已经生成，但此前分散。主要入口：
 
-- `figures/historical_sota_comparison_v1/`：历史 Ours 与七个基线的热力图和逐格优势；
-- `figures/experiment_analysis_master_v1/`：当前 protocol_v2 的方法总览；
-- `figures/mogb_reproduction_gap_analysis_v2/`：MOGB 训练、论文差距和粒球分布；
-- `figures/mogb_operating_point_visuals_v1/`：MOGB Known/OOS 工作点；
+- `figures/archive/analysis/historical_sota_comparison_v1/`：历史 Ours 与七个基线的热力图和逐格优势；
+- `figures/archive/analysis/experiment_analysis_master_v1/`：当前 protocol_v2 的方法总览；
+- `figures/archive/analysis/mogb_reproduction_gap_analysis_v2/`：MOGB 训练、论文差距和粒球分布；
+- `figures/archive/analysis/mogb_operating_point_visuals_v1/`：MOGB Known/OOS 工作点；
 - `figures/s2c_baseline_mogb_overview_v1/`：本报告新增的统一对照图。
 - `figures/s2c_vs_mogb_mechanism_dashboard_v1/`：当前 S2C-Trainable-K1 与
   MOGB-MiniLM-Fair 的 45 单元严格配对、误差预算和组件桥；对应中文报告为
   `docs/analysis/S2C_VS_MOGB_MECHANISM_DASHBOARD_V1.md`。
-- `figures/s2c_mogb_operating_curve_attribution_v1/`：阈值无关排序、事后最优阈值和相同Known覆盖前沿；
-  对应中文报告为 `docs/analysis/S2C_MOGB_OPERATING_CURVE_ATTRIBUTION_V1.md`。
-- `figures/s2c_mogb_intent_structure_bridge_v1/`：逐 intent Known 恢复、粒球数、恢复集中度和 OOS
-  代价；对应中文报告为 `docs/analysis/S2C_MOGB_INTENT_STRUCTURE_BRIDGE_V1.md`。
+- `figures/archive/analysis/s2c_mogb_operating_curve_attribution_v1/`：阈值无关排序、事后最优阈值和相同Known覆盖前沿；
+  对应中文报告为 `docs/archive/analysis/S2C_MOGB_OPERATING_CURVE_ATTRIBUTION_V1.md`。
+- `figures/archive/analysis/s2c_mogb_intent_structure_bridge_v1/`：逐 intent Known 恢复、粒球数、恢复集中度和 OOS
+  代价；对应中文报告为 `docs/archive/analysis/S2C_MOGB_INTENT_STRUCTURE_BRIDGE_V1.md`。
 
 ## 3. MOGB 当前到底复现了什么
 
@@ -87,7 +87,7 @@ ball identity 与源 artifact 不一致，默认指标最大绝对差为1.87pp�
 这进一步缩小了原因范围：默认平均半径确实过窄，但将 Known 覆盖恢复到高水平会快速吞入 OOS，无法恢复
 论文的 `F1-U=89.71/F1-All=87.49` 工作点。因此当前差距至少同时包含损失动态范围、边界排序/校准、
 粒球随机状态不可重放和作者数据/split未恢复，而不是一个半径常数的问题。完整证据见
-`docs/analysis/MOGB_CORRECTED_RADIUS_COVERAGE_V1.md`。
+`docs/archive/analysis/MOGB_CORRECTED_RADIUS_COVERAGE_V1.md`。
 
 ## 6. 当前能否说 S2C 超过 MOGB
 
@@ -118,7 +118,7 @@ BERT/TextOIR 兼容单元。该结果用于外部合同与工作点分析，不�
 | StackOverflow | 87.36±1.61% | 85.66±1.59% | 80.78±1.44% | +0.85 pp | +1.03 pp |
 
 因此不能把当前 Trainable-K1 概括为“综合上全面超过 ADB”：CLINC150 的 F1-All 和 Known Recall 仍落后。
-逐 seed 重算、配对差值和 manifest 见 `results/analysis/adb_cross_dataset_v1/ADB_CROSS_DATASET_REPORT.md`。
+逐 seed 重算、配对差值和 manifest 见 `results/analysis/archive/analysis/adb_cross_dataset_v1/ADB_CROSS_DATASET_REPORT.md`。
 
 逐 intent 结构桥接进一步排除了“差距只是少数异常类别或缺球造成”的解释：九个 dataset×KIR 组中，
 正向 Known 恢复 intent 的比例均为 100%，平均逐 intent Known 拒绝率降低 `46.70pp`；MOGB 完全缺少
@@ -140,19 +140,19 @@ Gate；StackOverflow 使用已完成的同协议桥接。三数据集的 18 个 
 
 这说明 Trainable K=1 的下游优势并非 StackOverflow 单一现象；但它仍然不是对 MOGB 论文 BERT
 结果或 DCLOOS 外部 OOS 监督结果的公平排名。完整三数据集表、逐样本 Gate→Cascade 错误预算和图见
-`docs/analysis/CASCADE_BRIDGE_CROSS_DATASET_V1.md`。
+`docs/archive/analysis/CASCADE_BRIDGE_CROSS_DATASET_V1.md`。
 
 ## 7. 本次证据文件
 
-- `results/analysis/s2c_baseline_mogb_overview_v1/method_comparison.csv`
+- `results/analysis/archive/analysis/s2c_baseline_mogb_overview_v1/method_comparison.csv`
 - `loss_contract_deltas.csv`
 - `ball_level_comparison.csv`
 - `figures/s2c_baseline_mogb_overview_v1/mogb_published_local_corrected_metrics.png`
 - `mogb_error_budget.png`
 - `mogb_training_contract_curves.png`
 - `mogb_ball_distribution_comparison.png`
-- `docs/analysis/S2C_MOGB_INTENT_STRUCTURE_BRIDGE_V1.md`
-- `figures/s2c_mogb_intent_structure_bridge_v1/`
+- `docs/archive/analysis/S2C_MOGB_INTENT_STRUCTURE_BRIDGE_V1.md`
+- `figures/archive/analysis/s2c_mogb_intent_structure_bridge_v1/`
 
 ## 8. 当前下一步
 

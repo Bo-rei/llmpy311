@@ -1,9 +1,0 @@
-dataset,local_kir,metric,local_exact,published_reference,gap_pp,contract_note
-stackoverflow,0.5,Accuracy,75.1667,88.67,-13.503299999999996,论文 StackOverflow KIR=0.50 公开参考；原始样本 ID 和 Known 列表未恢复。
-stackoverflow,0.5,F1-All,68.3502,87.49,-19.139799999999994,论文 StackOverflow KIR=0.50 公开参考；原始样本 ID 和 Known 列表未恢复。
-stackoverflow,0.5,F1-U,79.9676,89.71,-9.74239999999999,论文 StackOverflow KIR=0.50 公开参考；原始样本 ID 和 Known 列表未恢复。
-stackoverflow,0.5,F1-K,67.1884,87.27,-20.081599999999995,论文 StackOverflow KIR=0.50 公开参考；原始样本 ID 和 Known 列表未恢复。
-banking77,0.75,Accuracy,57.0779,80.58,-23.5021,仅作论文公开参考；本地 Banking 单格为 KIR=0.75，公开数字的精确 split/KIR 合同尚未闭合。
-banking77,0.75,F1-All,59.1627,81.52,-22.357299999999995,仅作论文公开参考；本地 Banking 单格为 KIR=0.75，公开数字的精确 split/KIR 合同尚未闭合。
-banking77,0.75,F1-U,53.1049,81.04,-27.935100000000006,仅作论文公开参考；本地 Banking 单格为 KIR=0.75，公开数字的精确 split/KIR 合同尚未闭合。
-banking77,0.75,F1-K,59.2671,81.53,-22.262900000000002,仅作论文公开参考；本地 Banking 单格为 KIR=0.75，公开数字的精确 split/KIR 合同尚未闭合。

@@ -2514,6 +2514,13 @@
 - 提交边界：只提交可复用迁移代码、测试、活跃注册表和本日志；归档的过渡性结果、图和旧报告保留在本地工作树，不进入 main。
 - 验证：历史迁移测试、registry/asset-catalog 测试、`compileall`、迁移文件 Ruff、临时目录的五 seed KIR atlas 重建、registry audit、asset catalog audit 和 `git diff --check` 通过。
 
+## 2026-08-11：跨方法可视化机制分析 V1
+
+- 目标：基于现有图像和冻结结果，按 OOS F1 对 S2C-Trainable-K1 与 ADB、DA-ADB、MOGB-Fair、KNNCL、DCLOOS 和历史 fulltex Ours 做机制归因；不训练、不重评分、不改阈值。
+- 修改：新增 `docs/analysis/CROSS_METHOD_VISUAL_MECHANISM_ANALYSIS_V1.md`；实际查看并引用 score、error-budget、same-sample transition、matched Known Recall、MOGB risk、external supervision 和 historical contract 图。
+- 结论边界：ADB/DA-ADB 保留 BERT/TextOIR 外部合同；MOGB 结论只针对当前 MiniLM fair component；KNNCL、DCLOOS 和历史 Ours 的机制缺口明确列出；未把 OOS F1 下降用 Accuracy/Known 指标掩盖。
+- 验证：待执行 `tools/maintenance/check_research_state.py`；本批没有实验结果或原始 artifact 改动。
+
 ## 2026-08-11：接入 HERO Anti-OverDefense
 
 - Base commit：`0270920f6670558087030f4dd3d2b5c99d796953`。
@@ -2522,3 +2529,12 @@
 - 数据与 artifact：未修改研究代码、数据、结果、图、原始 artifact 或第三方 checkout。
 - 验证：确认 `AGENTS.md` 含完整 HERO 规则块，`git diff --check` 通过；本批仅为配置文本变更，不重复运行代码测试。
 - 风险与下一步：规则作用域为当前 `s2c` 项目；上游案例库保留在外部仓库，不放入每轮自动加载的项目指令。
+
+## 2026-08-11：分析输出目录物理收口
+
+- Base commit：`c7d788ef405bba648f32482da54a977119b55660`；本批不训练、不重评分、不修改 `data/`、`../assets/`、`../artifacts/` 或第三方 checkout。
+- 活动入口：保留 16 个当前读者报告、8 个已登记/当前使用的 figure bundle 和 8 个已登记/当前使用的 analysis result bundle；补登记 `cross_kir_contract_atlas`，其结果是合同感知可视化，不进入跨 backbone 主排名。
+- 物理归档：将 77 个非当前 `docs/analysis` 报告移至 `docs/archive/analysis/`；将 68 个非当前 figure 目录移至 `figures/archive/analysis/`；将 75 个非当前 `results/analysis` 目录移至 `results/analysis/archive/analysis/`；将 adaptive、consistency-gate、joint-adaptive 和 RACAL 文档移至 `docs/archive/experiments/`。
+- 引用：同步更新活动文档、台账、配置、工具和测试中的旧路径；历史 `docs/archive/` 内容不重写。归档操作均为可恢复移动，不删除证据。
+- 数据与 artifact：只改变轻量文档、图、CSV/JSON 结果的目录位置；不改变结果内容、模型、原始 artifact 或第三方代码。
+- 验证计划：检查活动目录数量、旧路径不存在、registry/asset-catalog、research-state、development-log、data-tracking 和 `git diff --check`；代码测试仅在发现代码引用受影响时运行。

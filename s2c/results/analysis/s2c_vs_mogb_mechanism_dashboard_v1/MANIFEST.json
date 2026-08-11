@@ -1,0 +1,33 @@
+{
+  "analysis_id": "s2c_vs_mogb_mechanism_dashboard_v1",
+  "bootstrap_samples": 10000,
+  "bootstrap_seed": 20260725,
+  "datasets": [
+    "clinc150",
+    "banking77",
+    "stackoverflow"
+  ],
+  "kirs": [
+    0.25,
+    0.5,
+    0.75
+  ],
+  "methods": [
+    "mogb_minilm",
+    "mogb_partition_ours_boundary",
+    "trainable_k1"
+  ],
+  "mogb_source_sha256": "4909efe812e7db9559d0b70d3fc7baa4d77f52648aadda5a3c92d864e50db37c",
+  "paired_cells": 45,
+  "protocol_version": "protocol_v2_textoir_v1",
+  "script_sha256": "1db057595bddd8bd53646b85c642fecbf83d6ee9363e28314aa2b8a27dfac5f7",
+  "seeds": [
+    13,
+    42,
+    87,
+    100,
+    123
+  ],
+  "selection": "analysis-only; no model, threshold, K, radius, or checkpoint selection",
+  "trainable_source_sha256": "c32a327d1b42e74813da3c081c2c21c2a09af6ac1b60e08c19e2f0428117688d"
+}

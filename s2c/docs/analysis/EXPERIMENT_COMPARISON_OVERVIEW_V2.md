@@ -57,12 +57,12 @@ Known-only SmolLM Expert，并用 `calibration_known` 选 checkpoint；同一 Ex
 Trainable 相对 Frozen 的配对差值为 OOS F1 `+9.42pp`、F1-All `+6.70pp`、Known Recall `+0.21pp`、
 false acceptance `-15.40pp`。这只说明当前 Trainable Gate 的收益能传递到同协议下游，不能替代
 `fulltex.tex` 的历史 Cascade，也不能直接证明超过官方 BERT MOGB 或 DCLOOS。
-证据：`docs/analysis/CASCADE_BRIDGE_V1.md`、`results/analysis/cascade_bridge_v1/`、
-`figures/cascade_bridge_v1/`。
+证据：`docs/archive/analysis/CASCADE_BRIDGE_V1.md`、`results/analysis/archive/analysis/cascade_bridge_v1/`、
+`figures/archive/analysis/cascade_bridge_v1/`。
 
 ## 3. StackOverflow/KIR=.50 的外部参照
 
-来源：`results/analysis/comparison_atlas_v1/STACKOVERFLOW_EXTERNAL_COMPARISON_V1.md`。
+来源：`results/analysis/archive/analysis/comparison_atlas_v1/STACKOVERFLOW_EXTERNAL_COMPARISON_V1.md`。
 
 | 方法 | OOS F1 | F1-All | Known Recall | FA | 证据状态 |
 |---|---:|---:|---:|---:|---|
@@ -99,7 +99,7 @@ BERT/TextOIR 外部参照，不是与 MiniLM 的同骨干排名：
 这组结果修正了“Trainable 在所有外部基线上都更好”的过度概括：它在 OOS F1 上三数据集均接近或高于
 ADB，但在 CLINC150 的综合 F1-All 和 Known Recall 上明显落后；差异同时包含 BERT/MiniLM backbone、训练目标、
 边界学习和监督合同。逐 seed 结果、配对差值和重算来源见
-`results/analysis/adb_cross_dataset_v1/ADB_CROSS_DATASET_REPORT.md`。
+`results/analysis/archive/analysis/adb_cross_dataset_v1/ADB_CROSS_DATASET_REPORT.md`。
 
 ### 3.3 ADB 跨 KIR 机制结果
 
@@ -142,7 +142,7 @@ DCLOOS 的官方数据来源已经定位：作者 README 指向的 Drive `squad.
 为排除 Known 类别重新抽样造成的混淆，已新增运行时 `--known-labels-file` 适配，并在当前
 StackOverflow/KIR=.50/seed=42 registry 上启动 DCLOOS。该单格保留 BERT、pseudo-OOS 和外部
 SQuAD 监督，运行约 3530 秒后未生成最终 `metrics.json`，只有中间预测，因此不进入任何数值表或图。
-本次状态和资源阻塞证据见 `docs/analysis/DCLOOS_CURRENT_PROTOCOL_BLOCKER_V1.md`；它不能被解释为
+本次状态和资源阻塞证据见 `docs/archive/analysis/DCLOOS_CURRENT_PROTOCOL_BLOCKER_V1.md`；它不能被解释为
 DCLOOS 的算法成绩，也不能用来替换已有 reduced 结果。
 
 随后又进行了一个 `max_epochs=10, patient=3` 的 fixed-registry reduced 尝试；该运行约 1,246 秒后
@@ -179,7 +179,7 @@ MOGB 当前已经完成的是“作者公开逻辑的现代兼容单格”，不
 
 ## 7. 已生成的可视化入口
 
-本轮新增的四张总览图位于 `figures/experiment_comparison_overview_v2/`：
+本轮新增的四张总览图位于 `figures/archive/analysis/experiment_comparison_overview_v2/`：
 
 1. `current_fair_matrix_mean.png`：当前 7 行 fair Gate 的 OOS F1/F1-All 均值；
 2. `stackoverflow_kir50_contract_layers.png`：StackOverflow/KIR=.50 的 Trainable、MOGB 组件和 ADB 外部参照；DA-ADB 最新有效单格单独标注为外部合同；
@@ -187,7 +187,7 @@ MOGB 当前已经完成的是“作者公开逻辑的现代兼容单格”，不
 4. `historical_fulltex_margin.png`：历史 Cascade 相对表内最佳基线的 OOS F1 优势。
 5. `external_supervision_reference.png`：S2C、ADB 与 DCLOOS reduced 的监督、KIR、骨干和预算差异；不作为统一排名。
 
-机器可读结果和源哈希在 `results/analysis/experiment_comparison_overview_v2/MANIFEST.json`。
+机器可读结果和源哈希在 `results/analysis/archive/analysis/experiment_comparison_overview_v2/MANIFEST.json`。
 
 ## 8. 当前仍未完成的证据
 
@@ -208,8 +208,8 @@ MOGB 当前已经完成的是“作者公开逻辑的现代兼容单格”，不
 
 ## 证据入口
 
-- 当前方法地图：`docs/analysis/METHOD_COMPARISON_MAP_V1.md`
-- 当前综合分析：`docs/analysis/EXPERIMENT_ANALYSIS_MASTER_V1.md`
-- MOGB 复现差距：`docs/analysis/MOGB_REPRODUCTION_GAP_ANALYSIS_V2.md`
-- 外部单格审计：`results/analysis/comparison_atlas_v1/STACKOVERFLOW_EXTERNAL_COMPARISON_V1.md`
+- 当前方法地图：`docs/archive/analysis/METHOD_COMPARISON_MAP_V1.md`
+- 当前综合分析：`docs/archive/analysis/EXPERIMENT_ANALYSIS_MASTER_V1.md`
+- MOGB 复现差距：`docs/archive/analysis/MOGB_REPRODUCTION_GAP_ANALYSIS_V2.md`
+- 外部单格审计：`results/analysis/archive/analysis/comparison_atlas_v1/STACKOVERFLOW_EXTERNAL_COMPARISON_V1.md`
 - 可视化索引：`docs/analysis/VISUAL_ANALYSIS_INDEX_V1.md`

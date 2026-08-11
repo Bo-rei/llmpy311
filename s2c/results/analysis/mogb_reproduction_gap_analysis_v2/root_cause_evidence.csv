@@ -1,6 +1,0 @@
-hypothesis,status,evidence
-训练没有收敛,not_supported_as_primary_cause,CE loss 2.3070->0.1199 / 4.0635->0.1260; best dev accuracy 91.60% / 91.84%.
-没有生成自适应粒球,refuted,最终产生 28 / 99 个粒球，覆盖 10 / 58 个 Known 类。
-公开子中心损失的动态范围过窄,strongly_supported_by_code_and_trajectory,myloss.py 先对非负类别距离做 L1 归一化，再 softmax(-distance)。理论上 true-class probability 最多仅从 0.1000 到 0.1105（10类），以及 0.0172 到 0.0175（58类）。
-最终边界过度拒绝 Known,strongly_supported,OOS Recall 为 98.80% / 97.89%，但 Known Recall 仅 51.53% / 43.71%；Known->OOS 为 1449 / 1298。
-本地结果可直接否定 MOGB 论文,not_supported,作者原始数据、完整旧依赖环境和逐样本 Known/split 合同未恢复；现代兼容层还修复了 stale-graph 训练路径。

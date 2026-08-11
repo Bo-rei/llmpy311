@@ -21,7 +21,7 @@ DeepUnk 合同，DA-ADB 的完整矩阵，DCLOOS 的收敛监督前沿，S2C-BER
 控制，error-aware UMAP，固定 near-OOS 全方法分桶，low-resource 和统一 performance-cost
 Pareto。相关状态均保留为缺失或阻塞，没有用历史表格或中间预测填空。
 
-机器可读审计矩阵见 [`requirement_matrix.csv`](../../results/analysis/plan_alignment_audit_v1/requirement_matrix.csv)，
+机器可读审计矩阵见 [`requirement_matrix.csv`](../../results/analysis/archive/analysis/plan_alignment_audit_v1/requirement_matrix.csv)，
 补充执行计划见 [`UNIFIED_COMPARISON_SUPPLEMENT_PLAN_V1.md`](UNIFIED_COMPARISON_SUPPLEMENT_PLAN_V1.md)。
 
 ## 审计口径

@@ -45,4 +45,4 @@ S2C Trainable K=1 分别为
 - `results/analysis/da_adb_current_protocol_summary_v1/paired_deltas.csv`
 - `figures/da_adb_current_protocol_summary_v1/current_protocol_seed_metrics.png`
 - `figures/da_adb_current_protocol_summary_v1/current_protocol_tradeoff.png`
-- 旧/新合同拆分：`docs/analysis/DA_ADB_CONTRACT_COMPARISON_V1.md`
+- 旧/新合同拆分：`docs/archive/analysis/DA_ADB_CONTRACT_COMPARISON_V1.md`

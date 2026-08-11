@@ -42,7 +42,7 @@ ADB 已有 45 个同源数据、同 Known-list 合同的有效外部兼容单元
 3. 只有在合同差异、Known-list、seed 和评估器对齐后，才允许把 DA-ADB 提升为更强的外部比较层；
 4. 在外部基线未闭合前，继续使用当前 fair 矩阵和逐样本错误/工作点图做实验分析，不重复 E2/E3/K 网格。
 
-详细执行记录：`results/analysis/baseline_execution_status_v1/attempt_status.csv`、`protocol_data_hashes.csv`、`MANIFEST.json`。
+详细执行记录：`results/analysis/archive/analysis/baseline_execution_status_v1/attempt_status.csv`、`protocol_data_hashes.csv`、`MANIFEST.json`。
 
 ## Runtime follow-up（2026-08-08）
 
@@ -109,7 +109,7 @@ same-protocol ADB/DA-ADB metrics: unavailable
   该数字只说明链路完整，预算远低于收敛训练，不进入任何性能排名。
 - 期间定位并在运行时 overlay 记录了三个上游兼容问题：Python 标量 `.item()`、epoch 从 1 开始导致
   `annealing_kl` 越界、旧 Transformers tokenizer/AdamW/本地 BERT 路径；没有修改第三方源码。
-- 详细合同说明、5 个隔离 artifact 及“不得混排”规则见 `docs/analysis/DCLOOS_CONTRACT_STATUS_V1.md`。
+- 详细合同说明、5 个隔离 artifact 及“不得混排”规则见 `docs/archive/analysis/DCLOOS_CONTRACT_STATUS_V1.md`。
 
 因此 DCLOOS 当前仍为 `adapted_smoke_complete_but_not_comparable`；要得到可比较数字，下一步必须
 先实现固定 `known_labels_file` adapter，再运行一个收敛单格，之后才考虑多 seed。
@@ -149,7 +149,7 @@ Python/PyTorch runtime，而不是 MSP 的语义指标或 StackOverflow 数据�
 | DA-ADB | StackOverflow/KIR=0.50/seed=42 clamp30 适配 | `invalid_metrics_all_class_prediction` | 逐样本预测审计 |
 
 ADB seed=42/87/100 的统一重算结果已经写入
-`results/analysis/comparison_atlas_v1/stackoverflow_kir50_external_and_fair_cells.csv`。
+`results/analysis/archive/analysis/comparison_atlas_v1/stackoverflow_kir50_external_and_fair_cells.csv`。
 ADB 三个有效单元的 OOS F1 分别为 86.30%、86.99% 和 89.13%，F1-All 分别为
 84.30%、85.32% 和 87.40%；这些数字仍然是 BERT/TextOIR 兼容合同，不得与 MiniLM
 fair Gate 行伪装成同一训练条件。
@@ -159,7 +159,7 @@ DA-ADB 的进程返回码为 0 不能视为成功：训练日志出现 NaN，最
 因此该单元保留为 invalid，不进入有效排名。
 
 最新机器可读收口：
-`results/analysis/comparison_atlas_v1/STACKOVERFLOW_EXTERNAL_COMPARISON_V1.md`、
+`results/analysis/archive/analysis/comparison_atlas_v1/STACKOVERFLOW_EXTERNAL_COMPARISON_V1.md`、
 `external_same_protocol_cells.csv`、`external_invalid_semantic_runs.csv`。
 
 ## Runtime follow-up（2026-08-10：本机解释器穷举探针）
@@ -182,8 +182,8 @@ PyTorch `2.9.1+cu128`、Transformers `4.46.3`、RTX 5070。随后在新的独立
 
 这组三 seed 的 y_true/y_pred 重算均值为：OOS F1=`87.36±1.61%`、F1-All=`85.66±1.59%`、
 Known Recall=`80.78±1.44%`、false acceptance=`7.52±1.97%`。完整报告见
-`docs/analysis/ADB_GPU_RUNTIME_THREE_SEED_V1.md`，机器可读审计见
-`results/analysis/external_gpu_runtime_comparison_v1/`。
+`docs/archive/analysis/ADB_GPU_RUNTIME_THREE_SEED_V1.md`，机器可读审计见
+`results/analysis/archive/analysis/external_gpu_runtime_comparison_v1/`。
 
 该结果替代此前同 seed 的旧兼容运行数值作为最新 ADB 外部参照，但仍保持
 `BERT/TextOIR external contract` 标记；不能与 MiniLM fair Gate 合并排名，也不能推断
@@ -207,5 +207,5 @@ valid_external_cell_pending_replication
 ```
 
 它证明了兼容层可以产生可审计 DA-ADB 输出，但不证明当前实现达到论文结果。新单格的 OOS F1 明显低于旧 seed=0 兼容单格 `90.90%`，差异可能来自 Known list、seed、数据快照、环境或兼容配置；在完成逐项对齐前不能挑选高值，也不能把它纳入 MiniLM fair 排名。机器可读证据：
-`results/analysis/da_adb_gpu_runtime_v1/`；详细报告：
-`docs/analysis/DA_ADB_GPU_RUNTIME_SINGLE_CELL_V1.md`。
+`results/analysis/archive/analysis/da_adb_gpu_runtime_v1/`；详细报告：
+`docs/archive/analysis/DA_ADB_GPU_RUNTIME_SINGLE_CELL_V1.md`。

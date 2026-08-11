@@ -64,12 +64,19 @@ src/legacy/runtime/   历史 WorkspacePaths 和 artifact 约定
 tools/                训练、评价、分析、兼容和维护入口
 tools/legacy/analysis_v19/
                       v19 历史分析与复现脚本，不是活动分析入口
+docs/analysis/        当前注册 bundle 报告和少量读者入口
+docs/archive/analysis/
+                      已完成或过渡性的分析报告归档，不作为当前入口
 configs/              运行配置、实验登记和公开导出白名单
 tests/                单元、协议和回归测试
 results/              GitHub 可提交的轻量 CSV/JSON 快照
 results/analysis/archive/
                       已被明确替代的轻量分析结果；保留可审计历史但不作为当前入口
+results/analysis/archive/analysis/
+                      未登记或已收口的分析结果归档
 figures/archive/      与归档结果对应的历史图，不作为当前主图入口
+figures/archive/analysis/
+                      未登记或已收口的分析图归档
 ```
 
 完整放置规则见 `docs/METHOD.md`。禁止重新创建 `src/s2c/`，也禁止从 `src`

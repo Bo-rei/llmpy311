@@ -1,4 +1,0 @@
-method,method_label,dataset,kir,seed_scope,supervision,backbone,budget,oos_f1,f1_all,known_recall,accuracy
-trainable_k1,S2C Trainable K=1,stackoverflow,0.5,13|42|87|100|123,Known-only,MiniLM,formal_five_seed,87.67066651336371,86.55077750537566,83.89333333333333,86.81333333333333
-ADB,ADB,stackoverflow,0.5,42|87|100,Known-only,BERT/TextOIR,compatibility_three_cell,87.47369425124396,85.67214699615485,80.66666666666666,86.4388888888889
-DCLOOS_reduced,DCLOOS reduced,stackoverflow,0.75,888,pseudo-OOS + external SQuAD OOS,BERT,reduced_compatibility,87.0527000650618,90.2629176297492,92.14285714285714,88.68421052631578
