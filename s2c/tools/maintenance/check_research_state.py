@@ -43,6 +43,51 @@ def read_ledger(path: Path = LEDGER_PATH) -> list[dict[str, str]]:
         return list(csv.DictReader(handle))
 
 
+def validate_ledger_schema(path: Path = LEDGER_PATH) -> list[str]:
+    """Catch silent CSV column shifts before they corrupt experiment status.
+
+    A missing field in a wide CSV row still leaves a parseable 26-field row,
+    so checking only ``DictReader`` output is insufficient.  In particular,
+    a missing ``distances`` value can make ``complete`` look like a distance
+    and a unit count look like a status.  The lightweight checks below are
+    intentionally contract-oriented and do not restrict the project's
+    historical status vocabulary.
+    """
+
+    errors: list[str] = []
+    if not path.is_file():
+        return [f"missing_ledger:{path}"]
+    with path.open(encoding="utf-8", newline="") as handle:
+        reader = csv.reader(handle)
+        try:
+            header = next(reader)
+        except StopIteration:
+            return ["empty_experiment_ledger"]
+        expected = [
+            "experiment_id", "stage", "protocol_version", "experiment_family",
+            "research_question", "hypothesis", "datasets", "kirs", "seeds",
+            "representations", "k_values", "distances", "status", "planned_units",
+            "completed_units", "failed_units", "start_time", "end_time",
+            "provenance_sha256", "config_sha256", "summary_path", "main_result",
+            "decision", "repeat_policy", "supersedes", "notes",
+        ]
+        if header != expected:
+            errors.append("ledger_header_mismatch")
+        for line_number, row in enumerate(reader, start=2):
+            if len(row) != len(expected):
+                errors.append(f"ledger_column_count:{line_number}:{len(row)}")
+                continue
+            record = dict(zip(header, row))
+            if record.get("status", "").isdigit():
+                errors.append(f"ledger_numeric_status:{line_number}")
+            if record.get("distances", "").strip().lower() in {"complete", "planned", "running", "blocked", "invalid"}:
+                errors.append(f"ledger_status_in_distances:{line_number}")
+            for field in ("planned_units", "completed_units", "failed_units"):
+                if record.get(field, "").strip() and not record[field].strip().isdigit():
+                    errors.append(f"ledger_non_integer_{field}:{line_number}")
+    return errors
+
+
 def _norm(value: Any) -> str:
     if value is None:
         return ""
@@ -104,6 +149,9 @@ def check_state() -> list[str]:
     errors: list[str] = []
     required = (STATUS_PATH, LEDGER_PATH, DECISION_PATH, CLAIM_PATH)
     errors.extend(f"missing_research_state:{path}" for path in required if not path.is_file())
+    if errors:
+        return errors
+    errors.extend(validate_ledger_schema())
     if errors:
         return errors
     ledger = read_ledger()

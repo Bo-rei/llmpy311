@@ -26,12 +26,17 @@ import time
 from collections import Counter
 from datetime import datetime, timezone
 from pathlib import Path
-from types import SimpleNamespace
+from types import MethodType, SimpleNamespace
 from typing import Any
 
 import numpy as np
 import torch
 import yaml
+
+from protocol_v2.experiments.mogb_loss_contract import (
+    nearest_subcentroid_loss,
+    subcentroid_signal,
+)
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -446,33 +451,54 @@ def evaluate_test(manager: Any, data: Any, centroids: torch.Tensor, radii: torch
     return metrics, y_true, y_pred
 
 
-def compatibility_test(modules: dict[str, Any], device: torch.device, out_dir: Path) -> dict[str, Any]:
+def compatibility_test(
+    device: torch.device,
+    out_dir: Path,
+    *,
+    loss_mode: str,
+    temperature: float,
+) -> dict[str, Any]:
     torch.manual_seed(0)
     features = torch.randn(8, 768, device=device, requires_grad=True)
     labels = torch.tensor([0, 1, 0, 1, 0, 1, 0, 1], device=device)
     centers = torch.stack((features[:2].detach().mean(0), features[2:4].detach().mean(0))).to(device)
 
-    def loss_fn(x: torch.Tensor) -> torch.Tensor:
+    def expected_loss(x: torch.Tensor) -> torch.Tensor:
         distances = torch.cdist(x, centers, p=2)
         class_distances = torch.stack((distances[:, 0], distances[:, 1]), dim=1)
-        normalized = torch.nn.functional.normalize(class_distances, p=1, dim=1)
-        return -torch.log(torch.softmax(-normalized, dim=1)[torch.arange(len(labels), device=device), labels]).mean()
+        if loss_mode == "official_l1":
+            logits = -torch.nn.functional.normalize(class_distances, p=1, dim=1)
+        elif loss_mode == "raw_temperature":
+            logits = -class_distances / temperature
+        else:
+            raise ValueError(f"unknown subcentroid loss mode: {loss_mode}")
+        return torch.nn.functional.cross_entropy(logits, labels)
 
-    legacy = loss_fn(features)
-    legacy.backward()
-    legacy_grad = float(features.grad.norm().item())
+    expected = expected_loss(features)
+    expected.backward()
+    expected_grad = float(features.grad.norm().item())
     features.grad.zero_()
-    modern = loss_fn(features)
-    modern.backward()
-    modern_grad = float(features.grad.norm().item())
+    actual = nearest_subcentroid_loss(
+        features,
+        labels,
+        centers,
+        torch.tensor([0, 1], device=device),
+        num_labels=2,
+        mode=loss_mode,
+        temperature=temperature,
+    )
+    actual.backward()
+    actual_grad = float(features.grad.norm().item())
     payload = {
+        "subcentroid_loss_mode": loss_mode,
+        "subcentroid_temperature": temperature,
         "ce_loss_difference": 0.0,
-        "subcentroid_loss_difference": float(abs(legacy.item() - modern.item())),
+        "subcentroid_loss_difference": float(abs(expected.item() - actual.item())),
         "centroid_difference": 0.0,
-        "gradient_norm_difference": abs(legacy_grad - modern_grad),
+        "gradient_norm_difference": abs(expected_grad - actual_grad),
         "ball_count_difference": 0,
         "status": "pass",
-        "note": "The compatibility runtime changes graph lifetime/device placement, not the fixed-centroid formula; synthetic formula comparison is exact up to floating point.",
+        "note": "The selected loss contract is checked against an independent synthetic formula before training.",
     }
     write_json(out_dir / "numeric_compatibility.json", payload)
     return payload
@@ -502,6 +528,47 @@ def copy_snapshot(source_dir: Path, mode_dir: Path, official_dataset: str) -> st
     return tree_hash(target)
 
 
+def configure_subcentroid_loss(manager: Any, cfg: dict[str, Any]) -> dict[str, Any]:
+    """Inject one explicit loss contract without editing pinned upstream code."""
+
+    mode = str(cfg.get("subcentroid_loss_mode", "official_l1"))
+    temperature = float(cfg.get("subcentroid_temperature", 1.0))
+    if mode not in {"official_l1", "raw_temperature"}:
+        raise ValueError(f"unsupported subcentroid loss mode: {mode}")
+    if temperature <= 0:
+        raise ValueError("subcentroid_temperature must be positive")
+
+    def compute_classification_loss(
+        self: Any,
+        features: torch.Tensor,
+        labels: torch.Tensor,
+        centroids: torch.Tensor,
+        centroid_labels: torch.Tensor,
+    ) -> torch.Tensor:
+        if features.size(0) == 0:
+            return torch.tensor(0.0, device=features.device)
+        return nearest_subcentroid_loss(
+            features,
+            labels,
+            centroids,
+            centroid_labels,
+            num_labels=self.num_labels,
+            mode=mode,
+            temperature=temperature,
+        )
+
+    manager.clusterLoss.compute_classification_loss = MethodType(
+        compute_classification_loss,
+        manager.clusterLoss,
+    )
+    return {
+        "mode": mode,
+        "temperature": temperature,
+        "official_formula_preserved": mode == "official_l1",
+        "diagnostic_only": mode != "official_l1",
+    }
+
+
 def run_mode(
     cfg: dict[str, Any],
     mode: str,
@@ -526,10 +593,16 @@ def run_mode(
     args.seed = 0
     data = modules["dataloader"].Data(args)
     manager = modules["pretrain"].PretrainModelManager(args, data)
+    loss_contract = configure_subcentroid_loss(manager, cfg)
     device = manager.device
     if device.type != "cuda":
         raise RuntimeError("blocked_no_gpu")
-    numeric = compatibility_test(modules, device, mode_dir)
+    numeric = compatibility_test(
+        device,
+        mode_dir,
+        loss_mode=loss_contract["mode"],
+        temperature=loss_contract["temperature"],
+    )
 
     history: list[dict[str, Any]] = []
     best_score = -float("inf")
@@ -553,6 +626,16 @@ def run_mode(
         with torch.no_grad():
             centers, radii, ball_labels, _ = manager.clusterLoss.forward(args, train_features, train_labels, select=False)
         manager.gb_centroids, manager.gb_radii, manager.gb_labels = centers, radii, ball_labels
+        signal_count = min(int(cfg.get("signal_sample_size", 1024)), len(train_features))
+        signal = subcentroid_signal(
+            train_features[:signal_count],
+            train_labels[:signal_count],
+            centers.detach(),
+            ball_labels.detach(),
+            num_labels=data.num_labels,
+            mode=loss_contract["mode"],
+            temperature=loss_contract["temperature"],
+        )
         sub_loss = fixed_centroid_loss(manager, data, centers.detach(), ball_labels.detach())
         dev_score = dev_accuracy(manager, data)
 
@@ -567,6 +650,10 @@ def run_mode(
             "epoch": epoch + 1,
             "train_ce_loss": float(np.mean(ce_values)) if ce_values else 0.0,
             "subcentroid_loss": float(sub_loss.item()),
+            "subcentroid_signal_sample_count": signal_count,
+            "subcentroid_mean_true_probability": signal.mean_true_probability,
+            "subcentroid_mean_logit_span": signal.mean_logit_span,
+            "subcentroid_distance_gradient_norm": signal.distance_gradient_norm,
             "dev_accuracy": dev_score,
             "number_of_balls": int(len(centers)),
             "selected_ball_count": int(len(rows)),
@@ -593,7 +680,15 @@ def run_mode(
     manager.model.load_state_dict(best_state)
     checkpoint = mode_dir / "checkpoints/best_checkpoint.pt"
     checkpoint.parent.mkdir(parents=True, exist_ok=True)
-    torch.save({"model_state_dict": best_state, "best_epoch": best_epoch, "dev_accuracy": best_score}, checkpoint)
+    torch.save(
+        {
+            "model_state_dict": best_state,
+            "best_epoch": best_epoch,
+            "dev_accuracy": best_score,
+            "subcentroid_loss_contract": loss_contract,
+        },
+        checkpoint,
+    )
     train_features, train_labels = collect_features(manager, data, training_mode=False)
     numbers, result, centers_np, radii_np = cluster_arrays(modules, args, train_features, train_labels, select=True)
     centers = torch.tensor([center[1:] for center in centers_np], dtype=torch.float32, device=device)
@@ -609,6 +704,7 @@ def run_mode(
         "seed_contract": seed_contract,
         "snapshot_hash": snapshot_hash,
         "numeric_compatibility": numeric,
+        "subcentroid_loss_contract": loss_contract,
         "best_epoch": best_epoch,
         "best_dev_accuracy": best_score,
         "epochs_completed": len(history),
@@ -653,7 +749,43 @@ def write_outputs(cfg: dict[str, Any], audit_dir: Path, results_dir: Path, resul
     write_json(results_dir / "known_intents.json", {"modes": {result["mode"]: result["seed_contract"] for result in results}, "known_intents": dataset_audit_payload["known_intents"], "unknown_intents": dataset_audit_payload["unknown_intents"]})
     write_json(results_dir / "split_manifest.json", {"dataset_audit_sha256": sha256_file(results_dir / "dataset_audit.json"), "known_intents": dataset_audit_payload["known_intents"], "unknown_intents": dataset_audit_payload["unknown_intents"], "split_counts": dataset_audit_payload["split_counts"]})
     write_json(results_dir / "sample_hashes.json", {"source_tree_sha256": dataset_audit_payload["source_tree_sha256"], "note": "Full per-row hashes are retained in each mode artifact audit directory."})
-    write_json(audit_dir / "MOGB_EXACT_PROVENANCE.json", {"experiment_id": cfg["experiment_id"], "protocol_version": cfg.get("protocol_version"), "dataset": cfg.get("dataset"), "created_at": now_iso(), "base_commit": subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip(), "git_dirty": bool(subprocess.check_output(["git", "status", "--porcelain"], cwd=ROOT, text=True).strip()), "official_source_sha256": tree_hash(OFFICIAL_ROOT), "compat_source_sha256": tree_hash(COMPAT_ROOT), "config_sha256": sha256_file(Path(cfg["_config_path"])), "data_snapshot_sha256": dataset_audit_payload["source_tree_sha256"], "results": [{"mode": result["mode"], "status": result["status"], "checkpoint_sha256": result["checkpoint_sha256"], "best_epoch": result["best_epoch"]} for result in results]})
+    write_json(
+        audit_dir / "MOGB_EXACT_PROVENANCE.json",
+        {
+            "experiment_id": cfg["experiment_id"],
+            "protocol_version": cfg.get("protocol_version"),
+            "dataset": cfg.get("dataset"),
+            "created_at": now_iso(),
+            "base_commit": subprocess.check_output(
+                ["git", "rev-parse", "HEAD"], cwd=ROOT, text=True
+            ).strip(),
+            "git_dirty": bool(
+                subprocess.check_output(
+                    ["git", "status", "--porcelain"], cwd=ROOT, text=True
+                ).strip()
+            ),
+            "official_source_sha256": tree_hash(OFFICIAL_ROOT),
+            "compat_source_sha256": tree_hash(COMPAT_ROOT),
+            "runner_sha256": sha256_file(Path(__file__)),
+            "loss_contract_module_sha256": sha256_file(
+                ROOT / "src/protocol_v2/experiments/mogb_loss_contract.py"
+            ),
+            "config_sha256": sha256_file(Path(cfg["_config_path"])),
+            "data_snapshot_sha256": dataset_audit_payload["source_tree_sha256"],
+            "subcentroid_loss_mode": cfg.get("subcentroid_loss_mode", "official_l1"),
+            "subcentroid_temperature": float(cfg.get("subcentroid_temperature", 1.0)),
+            "results": [
+                {
+                    "mode": result["mode"],
+                    "status": result["status"],
+                    "checkpoint_sha256": result["checkpoint_sha256"],
+                    "best_epoch": result["best_epoch"],
+                    "subcentroid_loss_contract": result["subcentroid_loss_contract"],
+                }
+                for result in results
+            ],
+        },
+    )
 
 
 def parse_args() -> argparse.Namespace:

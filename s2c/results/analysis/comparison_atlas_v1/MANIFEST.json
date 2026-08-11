@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "tool": "build_comparison_atlas_v1.py",
+  "sources": {
+    "fair_summary": "results/analysis/cross_protocol_tradeoff_v1/summary_mean_std.csv",
+    "fair_per_seed": "results/analysis/cross_protocol_tradeoff_v1/per_seed.csv",
+    "historical": "results/analysis/historical_sota_comparison_v1/fulltex_main_results.csv",
+    "historical_margin": "results/analysis/historical_sota_comparison_v1/ours_minus_best_baseline.csv",
+    "contract_matrix": "results/analysis/baseline_contract_visuals_v1/contract_matrix.csv",
+    "mogb_exact": "results/analysis/mogb_reproduction_gap_analysis_v2/exact_run_summary.csv"
+  },
+  "fair_rows": 63,
+  "fair_per_seed_rows": 315,
+  "historical_rows": 72,
+  "contract_rows": 10,
+  "mogb_exact_rows": 2,
+  "output_tables": [
+    "component_decomposition.csv",
+    "contract_aware_comparison_matrix.csv",
+    "external_contract_reference.csv",
+    "external_invalid_semantic_runs.csv",
+    "external_same_protocol_cells.csv",
+    "fair_method_summary.csv",
+    "fixed_k2_risk_attribution.csv",
+    "historical_ours_margin.csv",
+    "mogb_exact_local_reference.csv",
+    "seed_stability_aggregate.csv",
+    "stackoverflow_kir50_external_and_fair_cells.csv",
+    "stackoverflow_kir50_external_summary.csv",
+    "trainable_vs_all_fair_effects.csv",
+    "trainable_vs_all_fair_effects_mean.csv"
+  ],
+  "output_figures": [
+    "fair_f1_all_heatmap.png",
+    "fair_oos_f1_heatmap.png",
+    "fair_pareto_oos_known_recall.png",
+    "fixed_k2_risk_attribution.png",
+    "mogb_component_tradeoff.png",
+    "seed_stability_oos_f1.png",
+    "stackoverflow_external_single_cell_comparison.png",
+    "trainable_minus_frozen_delta_heatmap.png"
+  ],
+  "direct_ranking_layers": [
+    "current_protocol_v2_fair_gate"
+  ],
+  "non_comparable_layers": [
+    "historical_fulltex_cascade",
+    "legacy_external_compatibility",
+    "mogb_official_modern_compatibility"
+  ]
+}

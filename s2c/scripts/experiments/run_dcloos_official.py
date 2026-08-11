@@ -120,9 +120,23 @@ def build_overlay(root: Path) -> tuple[Path, list[dict[str, Any]]]:
     )
     patch_text(
         overlay / "dataloader.py",
+        "import os\nimport numpy as np\n",
+        "import os\nimport json\nimport numpy as np\n",
+        "json import for fixed Known-label adapter",
+        patches,
+    )
+    patch_text(
+        overlay / "dataloader.py",
         "tokenizer = BertTokenizer.from_pretrained('bert-base-uncased', do_lower_case=True)",
         "tokenizer = BertTokenizer.from_pretrained(os.environ.get('DCLOOS_BERT_MODEL', 'bert-base-uncased'), do_lower_case=True)",
         "local tokenizer path",
+        patches,
+    )
+    patch_text(
+        overlay / "dataloader.py",
+        "        self.n_known_cls = round(len(self.all_label_list_pos) * args.known_cls_ratio)\n        self.known_label_list = list(\n            np.random.choice(np.array(self.all_label_list_pos), self.n_known_cls, replace=False))\n\n        self.num_labels = len(self.known_label_list)\n",
+        "        known_labels_file = os.environ.get('DCLOOS_KNOWN_LABELS_FILE')\n        if known_labels_file:\n            with open(known_labels_file, 'r', encoding='utf-8') as handle:\n                requested_known = json.load(handle)\n            requested_known = list(requested_known)\n            missing = [label for label in requested_known if label not in set(self.all_label_list_pos)]\n            if missing:\n                raise ValueError(f'known labels absent from positive train labels: {missing}')\n            if len(set(requested_known)) != len(requested_known):\n                raise ValueError('known labels file contains duplicates')\n            self.known_label_list = requested_known\n            self.n_known_cls = len(self.known_label_list)\n        else:\n            self.n_known_cls = round(len(self.all_label_list_pos) * args.known_cls_ratio)\n            self.known_label_list = list(\n                np.random.choice(np.array(self.all_label_list_pos), self.n_known_cls, replace=False))\n\n        self.num_labels = len(self.known_label_list)\n",
+        "fixed registry Known-label adapter",
         patches,
     )
     patch_text(
@@ -156,9 +170,37 @@ def build_overlay(root: Path) -> tuple[Path, list[dict[str, Any]]]:
     )
     patch_text(
         main,
+        "                                                                                             val_acc.item(),\n                                                                                             val_oos_acc.item()))",
+        "                                                                                             float(val_acc),\n                                                                                             float(val_oos_acc)))",
+        "scalar validation metric compatibility",
+        patches,
+    )
+    patch_text(
+        main,
+        "                                                                                                  test_acc.item(),\n                                                                                                  test_oos_acc.item()))",
+        "                                                                                                  float(test_acc),\n                                                                                                  float(test_oos_acc)))",
+        "scalar test metric compatibility",
+        patches,
+    )
+    patch_text(
+        main,
         "    # save the last model\n    # save_file = os.path.join(\n    #     opt.save_folder, 'last.pth')\n    # save_model(model, optimizer_bert, opt, opt.epochs, save_file)\n",
         "    metrics_path = os.environ.get('DCLOOS_METRICS_PATH')\n    if metrics_path:\n        # The upstream loop only evaluates test data when validation improves.\n        # A run can therefore finish without defining test-local variables;\n        # perform one final test pass so metrics/predictions are always emitted.\n        if 'f1_scores' not in locals():\n            test_acc, test_oos_acc, f1_scores = evaluation(opt, model, dataset, mode='test')\n        metrics = {\n            'accuracy': float(test_acc.item()),\n            'oos_recall': float(test_oos_acc.item()),\n            'f1_all': float(np.mean(f1_scores) * 100.0),\n            'f1_u': float(f1_scores[-1] * 100.0),\n            'f1_k': float(np.mean(f1_scores[:-1]) * 100.0),\n            'best_epoch': int(epoch),\n            'known_class_count': int(dataset.num_labels),\n            'test_sample_count': int(len(dataset.test_examples)),\n        }\n        with open(metrics_path, 'w', encoding='utf-8') as metric_handle:\n            json.dump(metrics, metric_handle, indent=2, sort_keys=True)\n            metric_handle.write('\\n')\n\n    # save the last model\n    # save_file = os.path.join(\n    #     opt.save_folder, 'last.pth')\n    # save_model(model, optimizer_bert, opt, opt.epochs, save_file)\n",
         "explicit metric serialization",
+        patches,
+    )
+    patch_text(
+        main,
+        "            'accuracy': float(test_acc.item()),\n            'oos_recall': float(test_oos_acc.item()),\n",
+        "            'accuracy': float(test_acc),\n            'oos_recall': float(test_oos_acc),\n",
+        "scalar serialized metric compatibility",
+        patches,
+    )
+    patch_text(
+        main,
+        "    annealing_kl = frange_cycle_linear(total_steps)\n",
+        "    # The upstream loop starts epoch numbering at one and indexes one full\n    # epoch beyond total_steps. Preserve its optimizer schedule while avoiding\n    # an out-of-bounds access in the modern runtime.\n    annealing_kl = frange_cycle_linear(total_steps + opt.steps_per_epoch)\n",
+        "annealing schedule off-by-one compatibility",
         patches,
     )
     (overlay / "tensorboard_logger.py").write_text(
@@ -211,6 +253,8 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         raise FileNotFoundError(args.positive_dir)
     if not Path(args.negative_tsv).is_file():
         raise FileNotFoundError(args.negative_tsv)
+    if args.known_labels_file is not None and not Path(args.known_labels_file).is_file():
+        raise FileNotFoundError(args.known_labels_file)
     if not torch_cuda_available():
         raise RuntimeError("DCLOOS official run requires CUDA; CPU fallback is not a faithful contract")
     artifact = Path(args.output_dir).resolve()
@@ -265,6 +309,8 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         "DCLOOS_PREDICTIONS_PATH": str(predictions_path),
         "CUDA_VISIBLE_DEVICES": str(args.gpu_id),
     })
+    if args.known_labels_file is not None:
+        env["DCLOOS_KNOWN_LABELS_FILE"] = str(Path(args.known_labels_file).resolve())
     try:
         completed = subprocess.run(command, cwd=overlay, env=env, capture_output=True, text=True, check=False)
     except KeyboardInterrupt:
@@ -303,6 +349,8 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         "dataset_pos": args.dataset_pos,
         "dataset_neg": "squad",
         "known_cls_ratio": args.known_cls_ratio,
+        "known_labels_file": str(Path(args.known_labels_file).resolve()) if args.known_labels_file else None,
+        "known_labels_contract": "fixed_registry_file" if args.known_labels_file else "upstream_random_choice",
         "seed": args.seed,
         "official_source_repo": "https://github.com/fanolabs/out-of-scope-intent-detection",
         "official_source_commit": git(SOURCE_ROOT, "rev-parse", "HEAD"),
@@ -337,6 +385,7 @@ def main() -> int:
     parser.add_argument("--output-dir", type=Path, default=DEFAULT_ARTIFACT_ROOT)
     parser.add_argument("--bert-model", type=Path, default=ROOT.parent / "assets" / "models" / "bert-base-uncased")
     parser.add_argument("--known-cls-ratio", type=float, default=0.75)
+    parser.add_argument("--known-labels-file", type=Path, help="Optional JSON list of protocol Known labels; avoids upstream random re-selection.")
     parser.add_argument("--seed", type=int, default=888)
     parser.add_argument("--max-epochs", type=int, default=1000)
     parser.add_argument("--patient", type=int, default=100)

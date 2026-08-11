@@ -1,0 +1,21 @@
+{
+  "bootstrap_resamples": 20000,
+  "bootstrap_seed": 20260810,
+  "dataset": "stackoverflow",
+  "experiment": "da_adb_current_protocol_summary_v1",
+  "kir": 0.5,
+  "ranking_policy": "paired descriptive comparison only; no cross-contract SOTA ranking",
+  "schema_version": 1,
+  "seeds": [
+    42,
+    87,
+    100
+  ],
+  "source_da_runs": [
+    "/home/bo/bo01/llmpy311/artifacts/s2c/external/da_adb_gpu_runtime_v1/stackoverflow/DA-ADB/kir_0.50/seed_42/run_manifest.json",
+    "/home/bo/bo01/llmpy311/artifacts/s2c/external/da_adb_gpu_runtime_v1/stackoverflow/DA-ADB/kir_0.50/seed_87/run_manifest.json",
+    "/home/bo/bo01/llmpy311/artifacts/s2c/external/da_adb_gpu_runtime_v1/stackoverflow/DA-ADB/kir_0.50/seed_100/run_manifest.json"
+  ],
+  "source_s2c_per_seed": "/home/bo/bo01/llmpy311/s2c/results/analysis/cross_protocol_tradeoff_v1/per_seed.csv",
+  "source_s2c_per_seed_sha256": "31ccdd433b38b86ec92b0cd81b460114a7fe1e7f12b94d4a5d031aab7d703145"
+}

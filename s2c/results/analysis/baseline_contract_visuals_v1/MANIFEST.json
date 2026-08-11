@@ -1,0 +1,17 @@
+{
+  "analysis": "baseline_contract_visuals_v1",
+  "protocol_version": "protocol_v2_textoir_v1",
+  "analysis_only": true,
+  "selection_used_test_oos": false,
+  "external_rows_isolated": true,
+  "inputs": {
+    "fair_summary": "4842d66a066ae43494be5b643ba77106c7d9075b48832b717d0d4ab11713a42b",
+    "baseline_summary": "64b860ab7e1fb0f0fa1badf15b53ed9759f0ea80f60b127b3e386a946dfdeb98",
+    "adb_external_summary": "bf92a85f8a30bcfdd10875c9b679a789c8009c656729f7176401b7b126510183"
+  },
+  "output": "/home/bo/bo01/llmpy311/s2c/results/analysis/baseline_contract_visuals_v1/contract_matrix.csv",
+  "figures": [
+    "/home/bo/bo01/llmpy311/s2c/figures/baseline_contract_visuals_v1/stackoverflow_baseline_pareto_contract.png",
+    "/home/bo/bo01/llmpy311/s2c/figures/baseline_contract_visuals_v1/baseline_contract_table.png"
+  ]
+}

@@ -380,6 +380,25 @@ experiments:
       expected_unit_count: 1
       count_source: none
 
+    mogb_corrected_subcentroid_loss_v1:
+      id: external_validation.mogb_corrected_subcentroid_loss_v1
+      research_question: "只修正 MOGB 公开子中心损失的距离归一化，能否关闭 StackOverflow 论文复现差距？"
+      status: complete_not_reproduced
+      entrypoints:
+        - scripts/experiments/run_mogb_exact_reproduction.py
+        - src/protocol_v2/experiments/mogb_loss_contract.py
+      protocol: mogb_official_corrected_loss_stackoverflow_v1
+      artifact_root: ../../external/mogb_corrected_subcentroid_loss_v1
+      manifest:
+        - audit/MOGB_EXACT_PROVENANCE.json
+        - audit/split_manifest.json
+        - audit/official_fixed/mode_manifest.json
+      summary:
+        - audit/official_fixed/mode_manifest.json
+        - audit/MOGB_EXACT_PROVENANCE.json
+      expected_unit_count: 1
+      count_source: none
+
     brak_mogb_representation_v1:
       id: external_validation.brak_mogb_representation_v1
       research_question: "Known-only BRAK 在 MOGB 初始和训练后 BERT 表示上是否选择出可靠的多中心结构？"

@@ -195,6 +195,36 @@ def test_adb_overlay_moves_only_diagnostic_delta_history_to_cpu(tmp_path: Path) 
     assert adb_patch["reason"] == "move ADB diagnostic delta history to CPU before np.save"
 
 
+def test_da_adb_overlay_guards_reachability_and_cosnorm_zero_division(tmp_path: Path) -> None:
+    textoir_root = default_textoir_root()
+    if not textoir_root.is_dir():
+        pytest.skip("Migrated TEXTOIR clone is not available")
+    model = tmp_path / "local-bert"
+    model.mkdir()
+
+    overlay, provenance = runner.prepare_runtime_overlay(
+        textoir_root, tmp_path / "run", "DA-ADB", model.resolve()
+    )
+
+    source = textoir_root / "open_intent_detection" / "backbones" / "bert.py"
+    source_text = source.read_text(encoding="utf-8")
+    patched_text = (overlay / "backbones" / "bert.py").read_text(encoding="utf-8")
+
+    assert "torch.clamp(dist_info, min=-30.0, max=30.0)" in patched_text
+    assert "torch.norm(input, 2, 1, keepdim=True).clamp_min(1e-12)" in patched_text
+    assert "torch.norm(self.weight, 2, 1, keepdim=True).clamp_min(1e-12)" in patched_text
+    assert "clamp_min(1e-12)" not in source_text
+    assert source.read_text(encoding="utf-8") == source_text
+    assert "backbones/bert.py" in provenance["compatibility_changed_files"]
+    da_patches = [
+        patch
+        for patch in provenance["compatibility_patches"]
+        if patch["file"] == "backbones/bert.py"
+    ]
+    assert any("reachability" in patch["reason"] for patch in da_patches)
+    assert any("CosNorm" in patch["reason"] for patch in da_patches)
+
+
 def test_external_artifact_audit_requires_predictions_and_results(tmp_path: Path) -> None:
     run_dir = tmp_path / "attempt"
     prediction_dir = (

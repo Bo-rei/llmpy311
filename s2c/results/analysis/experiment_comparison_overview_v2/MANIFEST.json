@@ -1,0 +1,22 @@
+{
+  "external_sources": {
+    "artifacts/s2c/external/dcloos_official_oos_kir75_seed888_reduced_v2/recovery_metrics.json": "05640ff4d5e5e5812be00a6c60a32276aa804188c3a67e835f7dcc6ee0801d9d"
+  },
+  "figures": [
+    "current_fair_matrix_mean.png",
+    "stackoverflow_kir50_contract_layers.png",
+    "mogb_paper_vs_local_exact.png",
+    "historical_fulltex_margin.png",
+    "external_supervision_reference.png"
+  ],
+  "no_test_selection": true,
+  "schema_version": 3,
+  "scope": "analysis_only_contract_aware_comparison",
+  "sources": {
+    "results/analysis/comparison_atlas_v1/stackoverflow_kir50_external_summary.csv": "4ac3979a2d7274984cf40b8aa831730ef440f5af0b6e06b864fceb4f62e88879",
+    "results/analysis/cross_protocol_tradeoff_v1/summary_mean_std.csv": "c3f5b5cb9701bfd2e111da85575226393e3baf9c8bcace7df6fc39eb2d396ae8",
+    "results/analysis/historical_sota_comparison_v1/ours_minus_best_baseline.csv": "999e3b2eb2556b4ac6e932a73786f171fd2fbfac5fd85769fa0882a64d92d877",
+    "results/analysis/mogb_reproduction_gap_analysis_v2/exact_run_summary.csv": "f6d7fcc89d2dcce92ef2098b4050b828c5ae620cd65c1b1a2f2b7038c2690aba",
+    "results/analysis/mogb_reproduction_gap_analysis_v2/paper_gap.csv": "909b6ca1d58044d143c91d242d9f64c4bd3506c9322467a81c0355d9ae26393b"
+  }
+}

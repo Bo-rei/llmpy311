@@ -1,0 +1,32 @@
+{
+  "dataset_audit_sha256": "b0a883ac57b4199c96ed4e3967da88e456554d907b1934b0abb8d8f7f0bf88c2",
+  "known_intents": [
+    "visual-studio",
+    "apache",
+    "wordpress",
+    "linq",
+    "matlab",
+    "svn",
+    "haskell",
+    "qt",
+    "drupal",
+    "bash"
+  ],
+  "split_counts": {
+    "dev": 2000,
+    "test": 6000,
+    "train": 12000
+  },
+  "unknown_intents": [
+    "ajax",
+    "cocoa",
+    "excel",
+    "hibernate",
+    "magento",
+    "oracle",
+    "osx",
+    "scala",
+    "sharepoint",
+    "spring"
+  ]
+}

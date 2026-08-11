@@ -20,8 +20,6 @@ import subprocess
 import sys
 from pathlib import Path
 
-import numpy as np
-
 try:
     from ._common import (
         DATASETS,
@@ -223,12 +221,33 @@ print(json.dumps({
     return payload
 
 
-def select_known_labels(textoir_root: Path, dataset: str, ratio: float, seed: int) -> list[str]:
+def select_known_labels(
+    textoir_root: Path,
+    dataset: str,
+    ratio: float,
+    seed: int,
+    known_labels_file: Path | None = None,
+) -> list[str]:
     """精确复制 TextOIR 基于 NumPy RandomState 的 known-label 抽样顺序。
 
     这是 TextOIR 第二协议，不会强行对齐 s2c 按 domain 平衡的 known-intent 选择。
     两套协议结果必须分表报告。
     """
+
+    # Delay NumPy import until after the isolated torch/CUDA probe.  Importing
+    # NumPy in the parent interpreter can load MKL/OpenMP before the probe's
+    # subprocess is spawned; on this host that combination intermittently
+    # deadlocks CUDA initialization in the child.  The baseline's selection
+    # semantics are unchanged because the same NumPy RandomState is used.
+    import numpy as np
+
+    if known_labels_file is not None:
+        payload = json.loads(known_labels_file.read_text(encoding="utf-8"))
+        if not isinstance(payload, list) or not all(isinstance(item, str) for item in payload):
+            raise ValueError(
+                f"Known-label file must contain a JSON string list: {known_labels_file}"
+            )
+        return payload
 
     labels = benchmark_labels(textoir_root, dataset)
     count = round(len(labels) * ratio)
@@ -356,6 +375,12 @@ def prepare_runtime_overlay(
     new_adamw_import = (
         "from torch.optim import AdamW as _TorchAdamW\n"
         "from transformers import get_linear_schedule_with_warmup, BertTokenizer\n\n"
+        "try:\n"
+        "    from transformers import BertPreTrainedModel\n"
+        "    if not hasattr(BertPreTrainedModel, 'all_tied_weights_keys'):\n"
+        "        BertPreTrainedModel.all_tied_weights_keys = {}\n"
+        "except ImportError:\n"
+        "    pass\n\n"
         "class AdamW(_TorchAdamW):\n"
         "    def __init__(self, params, *args, correct_bias=True, **kwargs):\n"
         "        super().__init__(params, *args, **kwargs)\n"
@@ -367,7 +392,7 @@ def prepare_runtime_overlay(
     compatibility_patches.append(
         {
             "file": base_relative.as_posix(),
-            "reason": "adapt removed Transformers AdamW export to torch.optim.AdamW",
+            "reason": "adapt removed Transformers AdamW export and tied-weight API to current transformers",
             "source_sha256": sha256_file(base_source),
             "overlay_sha256": sha256_file(base_overlay),
             "correct_bias": "accepted for API compatibility; torch optimizer semantics apply",
@@ -457,6 +482,59 @@ def prepare_runtime_overlay(
             }
         )
 
+    if config_name == "DA-ADB":
+        # The disaware branch exponentiates the gap between the nearest and
+        # second-nearest centroid.  With current torch/transformers this can
+        # overflow before CrossEntropyLoss sees the logits, producing a
+        # successful process exit with an all-one-class predictor.  Clamp only
+        # this exponential input in the isolated overlay; keep the official
+        # run available as a separate invalid diagnostic.
+        disaware_relative = Path("backbones/bert.py")
+        disaware_source = source_root / disaware_relative
+        disaware_overlay = overlay_root / disaware_relative
+        disaware_text = disaware_overlay.read_text(encoding="utf-8")
+        old_exp = "        dist_info = torch.exp(dist_info)"
+        new_exp = "        dist_info = torch.exp(torch.clamp(dist_info, min=-30.0, max=30.0))"
+        if disaware_text.count(old_exp) != 1:
+            raise ValueError(f"Expected one disaware exp call in {disaware_source}")
+        disaware_overlay.write_text(disaware_text.replace(old_exp, new_exp), encoding="utf-8")
+        method_compatibility_files.append(disaware_relative.as_posix())
+        compatibility_patches.append(
+            {
+                "file": disaware_relative.as_posix(),
+                "reason": "stabilize DA-ADB disaware reachability exp gap in isolated adapted run",
+                "source_sha256": sha256_file(disaware_source),
+                "overlay_sha256": sha256_file(disaware_overlay),
+                "clamp": [-30.0, 30.0],
+                "status": "adapted_not_official",
+            }
+        )
+        # ``CosNorm_Classifier`` divides by both the feature norm and the
+        # classifier-row norm.  ReLU can produce an all-zero pooled vector in
+        # the disaware branch, so the upstream expression creates 0/0 and
+        # poisons the first optimizer step even when the reachability exp is
+        # clamped.  Keep this as an isolated numerical-safety overlay; it does
+        # not change the upstream checkout or claim an official reproduction.
+        cosnorm_source_text = disaware_overlay.read_text(encoding="utf-8")
+        old_norm_x = "        norm_x = torch.norm(input, 2, 1, keepdim=True)"
+        new_norm_x = "        norm_x = torch.norm(input, 2, 1, keepdim=True).clamp_min(1e-12)"
+        old_norm_w = "        ew = self.weight / torch.norm(self.weight, 2, 1, keepdim=True)"
+        new_norm_w = "        ew = self.weight / torch.norm(self.weight, 2, 1, keepdim=True).clamp_min(1e-12)"
+        if cosnorm_source_text.count(old_norm_x) != 1 or cosnorm_source_text.count(old_norm_w) != 1:
+            raise ValueError(f"Expected one CosNorm norm guard target in {disaware_source}")
+        cosnorm_patched = cosnorm_source_text.replace(old_norm_x, new_norm_x).replace(old_norm_w, new_norm_w)
+        disaware_overlay.write_text(cosnorm_patched, encoding="utf-8")
+        compatibility_patches.append(
+            {
+                "file": disaware_relative.as_posix(),
+                "reason": "guard CosNorm feature and weight norms against 0/0 in isolated DA-ADB adapted run",
+                "source_sha256": sha256_file(disaware_source),
+                "overlay_sha256": sha256_file(disaware_overlay),
+                "clamp_min": 1e-12,
+                "status": "adapted_not_official",
+            }
+        )
+
     source_files = {
         path.relative_to(source_root).as_posix(): sha256_file(path)
         for path in source_root.rglob("*")
@@ -508,6 +586,7 @@ def build_command(
     """将显式方法契约转换为上游 CLI，所有输出定向到当前 run_dir。"""
 
     method = METHODS[args.method]
+    data_root = (args.data_root or (args.textoir_root / "data")).resolve()
     command = [
         args.python_executable,
         str(detection_root / "run.py"),
@@ -520,7 +599,7 @@ def build_command(
         "--config_file_name", method["config"],
         "--loss_fct", method["loss"],
         "--gpu_id", args.gpu_id,
-        "--data_dir", str((args.textoir_root / "data").resolve()),
+        "--data_dir", str(data_root),
         "--output_dir", str((run_dir / "textoir_outputs").resolve()),
         "--log_dir", str((run_dir / "logs").resolve()),
         "--result_dir", str((run_dir / "results").resolve()),
@@ -538,6 +617,22 @@ def build_command(
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--textoir-root", type=Path, default=default_textoir_root())
+    parser.add_argument(
+        "--data-root",
+        type=Path,
+        default=None,
+        help=(
+            "Optional isolated dataset root containing <dataset>/{train,dev,test}.tsv. "
+            "Use this to run an external baseline against protocol_v2 exports without "
+            "reading textoir/data."
+        ),
+    )
+    parser.add_argument(
+        "--known-labels-file",
+        type=Path,
+        default=None,
+        help="Optional JSON list fixing the protocol Known-intent order.",
+    )
     destination = parser.add_mutually_exclusive_group(required=True)
     destination.add_argument(
         "--output-root",
@@ -552,7 +647,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--dataset", choices=DATASETS, required=True)
     parser.add_argument("--method", choices=tuple(METHODS), required=True)
     parser.add_argument("--known-cls-ratio", type=float, choices=(0.25, 0.5, 0.75), required=True)
-    parser.add_argument("--seed", type=int, choices=(0, 1, 2), required=True)
+    parser.add_argument("--seed", type=int, required=True)
     parser.add_argument("--gpu-id", default="0")
     parser.add_argument(
         "--bert-model",
@@ -570,11 +665,27 @@ def main() -> int:
 
     args = parse_args()
     args.textoir_root = args.textoir_root.resolve()
+    if args.data_root is not None:
+        args.data_root = args.data_root.resolve()
+    if args.known_labels_file is not None:
+        args.known_labels_file = args.known_labels_file.resolve()
     if not (args.textoir_root / "open_intent_detection" / "run.py").is_file():
         raise FileNotFoundError(f"Invalid TEXTOIR repository: {args.textoir_root}")
     upstream_status = git_output(args.textoir_root, "status", "--porcelain")
     require_clean_worktree(upstream_status, dry_run=args.dry_run)
     bert_model = resolve_bert_model(args.bert_model, dry_run=args.dry_run)
+    data_root = (args.data_root or (args.textoir_root / "data")).resolve()
+    dataset_root = data_root / args.dataset
+    missing_data = [
+        split for split in SPLITS if not (dataset_root / f"{split}.tsv").is_file()
+    ]
+    if missing_data:
+        raise FileNotFoundError(
+            f"External baseline data root is missing {args.dataset} splits: "
+            f"{', '.join(missing_data)} under {data_root}"
+        )
+    if args.known_labels_file is not None and not args.known_labels_file.is_file():
+        raise FileNotFoundError(f"Known-label file not found: {args.known_labels_file}")
 
     run_dir = (
         args.run_dir.resolve()
@@ -616,7 +727,11 @@ def main() -> int:
         )
     command = build_command(args, run_dir, detection_root)
     known_labels = select_known_labels(
-        args.textoir_root, args.dataset, args.known_cls_ratio, args.seed
+        args.textoir_root,
+        args.dataset,
+        args.known_cls_ratio,
+        args.seed,
+        args.known_labels_file,
     )
     environment_provenance = None
     method_preflight = None
@@ -639,6 +754,10 @@ def main() -> int:
         "upstream_remote": git_output(args.textoir_root, "remote", "get-url", "origin"),
         "upstream_clean_before_run": not bool(upstream_status),
         "bert_model": str(bert_model) if bert_model is not None else None,
+        "data_root": str(data_root),
+        "known_labels_file": (
+            str(args.known_labels_file) if args.known_labels_file is not None else None
+        ),
         "runtime_overlay": overlay_provenance,
         "dataset": args.dataset,
         "method": args.method,
@@ -649,7 +768,7 @@ def main() -> int:
         "unknown_label": "oos" if args.dataset == "oos" else "<UNK>",
         "unknown_label_id": len(known_labels),
         "split_sha256": {
-            split: sha256_file(args.textoir_root / "data" / args.dataset / f"{split}.tsv")
+            split: sha256_file(data_root / args.dataset / f"{split}.tsv")
             for split in SPLITS
         },
         "command": command,

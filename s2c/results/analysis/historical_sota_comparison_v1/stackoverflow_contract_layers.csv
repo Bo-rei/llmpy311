@@ -1,0 +1,9 @@
+method,oos_f1,accuracy,known_f1,contract
+ADB,87.7,86.49,85.32,Historical full Cascade/BERT baseline
+DA-ADB,88.86,87.78,86.71,Historical full Cascade/BERT baseline
+Ours,89.71,85.54,75.48,Historical full Cascade/BERT baseline
+S2C-Frozen-K2,63.52945072329976,,,Current protocol_v2 five-seed Gate/component
+MOGB-Fair,72.9199427573284,,,Current protocol_v2 five-seed Gate/component
+MOGB partition + S2C boundary,79.24706249591658,,,Current protocol_v2 five-seed Gate/component
+S2C-Frozen-K1,76.54959559609912,,,Current protocol_v2 five-seed Gate/component
+S2C-Trainable-K1,87.67066651336371,,,Current protocol_v2 five-seed Gate/component

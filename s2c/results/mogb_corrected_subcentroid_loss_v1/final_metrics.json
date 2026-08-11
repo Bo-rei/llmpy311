@@ -1,0 +1,51 @@
+{
+  "official_fixed": {
+    "best_dev_accuracy": 92.1,
+    "best_epoch": 51,
+    "checkpoint_sha256": "127bd347fe9912f81b771630ae8f5d70bd91348567fb8bfd3b2c418da68dfc22",
+    "dataset": "stackoverflow",
+    "epochs_completed": 61,
+    "kir": 0.5,
+    "metrics": {
+      "Accuracy": 77.25,
+      "F1-All": 72.6392,
+      "F1-K": 71.8074,
+      "F1-U": 80.9571,
+      "Known Recall": 59.2,
+      "Known->OOS": 1204,
+      "OOS Precision": 70.3667,
+      "OOS Recall": 95.3,
+      "OOS->Known": 141
+    },
+    "mode": "official_fixed",
+    "numeric_compatibility": {
+      "ball_count_difference": 0,
+      "ce_loss_difference": 0.0,
+      "centroid_difference": 0.0,
+      "gradient_norm_difference": 0.0,
+      "note": "The selected loss contract is checked against an independent synthetic formula before training.",
+      "status": "pass",
+      "subcentroid_loss_difference": 0.0,
+      "subcentroid_loss_mode": "raw_temperature",
+      "subcentroid_temperature": 1.0
+    },
+    "official_dataset": "stackoverflow",
+    "run_dir": "/home/bo/bo01/llmpy311/artifacts/s2c/external/mogb_corrected_subcentroid_loss_v1/audit/official_fixed",
+    "seed_contract": {
+      "class_split_seed": 0,
+      "dataloader_seed": 0,
+      "granular_ball_seed": 0,
+      "model_seed": 0,
+      "note": "MOGB.py seeds 100 before Data; Data.set_seed(args.seed=0) resets all effective sources.",
+      "official_pre_data_seed": 100
+    },
+    "snapshot_hash": "b8410dbc8677d4c57a578d68343b9b8ae9dda54fee9ee8eba3f0a142acd9b397",
+    "status": "complete",
+    "subcentroid_loss_contract": {
+      "diagnostic_only": true,
+      "mode": "raw_temperature",
+      "official_formula_preserved": false,
+      "temperature": 1.0
+    }
+  }
+}

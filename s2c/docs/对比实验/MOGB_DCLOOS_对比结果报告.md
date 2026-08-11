@@ -1,7 +1,9 @@
 # s2c 与 MOGB、DCLOOS 对比结果报告
 
-更新时间：2026-08-04
+更新时间：2026-08-10
 活动协议：`protocol_v2_textoir_v1`
+
+本报告的统一逐样本合同、MOGB ball 字段审计和 DCLOOS 阻塞状态已汇总到 [`../analysis/UNIFIED_COMPARISON_AND_MECHANISM_REPORT_V1.md`](../analysis/UNIFIED_COMPARISON_AND_MECHANISM_REPORT_V1.md)。
 
 ## 先说结论
 
@@ -13,6 +15,23 @@
 
 因此，目前不能宣称“s2c 已经超过 MOGB 或 DCLOOS”，也不能宣称“s2c 达到 SOTA”。目前最可靠的结论是：**s2c 的单中心在统一 MiniLM 协议下综合质量最稳；MOGB 风格粒球有时提高 OOS F1，但明显牺牲 Known Recall 和 F1-All；DCLOOS 的恢复结果数值更高，但使用了额外的伪 OOS 和外部 OOS 监督，尚未完成公平比较。**
 
+### 2026-08-09 最新补充
+
+当前项目中最可靠的“自己的方法”已不再是下面旧表的 Frozen 单中心，而是 **S2C Trainable MiniLM K=1 Gate**：只用 Known train/calibration 训练 MiniLM 最后两层和 residual projection，再使用单中心对角马氏边界。它仍是 Gate-only，不是历史 `fulltex.tex` 的完整 Cascade，也不是真正完成的自适应多中心方法。
+
+新完成的 `mogb_known_calibration_attribution_v1` 在 3 数据集×3 KIR×5 seed 上重拟合 45 个 MOGB-Fair 单元，45/45 与冻结参考 score/指标等价；并用 Known calibration 预注册 80%–95% 覆盖工作点。即使采用较温和的 cal-80，Trainable K=1 在 OOS F1 和 F1-All 上仍为 45/45 配对胜出。KIR=.50 的核心结果是：
+
+| 数据集 | 方法 | OOS F1 | F1-All | Known Recall | False acceptance |
+|---|---|---:|---:|---:|---:|
+| CLINC150 | S2C Trainable K=1 | 90.44 | 81.82 | 74.44 | 3.69 |
+| CLINC150 | MOGB-Fair cal-80 | 83.70 | 76.38 | 80.69 | 18.92 |
+| Banking77 | S2C Trainable K=1 | 83.56 | 81.67 | 82.21 | 15.74 |
+| Banking77 | MOGB-Fair cal-80 | 70.39 | 72.10 | 82.03 | 36.10 |
+| StackOverflow | S2C Trainable K=1 | 87.67 | 86.55 | 83.89 | 9.34 |
+| StackOverflow | MOGB-Fair cal-80 | 74.64 | 73.15 | 80.28 | 27.74 |
+
+该结果说明本地 MOGB-Fair 的问题不只是默认 mean radius 过窄。官方子中心损失在实际距离表上的平均真类概率/梯度范数只有 `0.0601/0.0502`，而 raw-distance/tau=.10 为 `0.6389/3.8283`；粒球筛选还会让部分 Known 类没有 selected ball。完整归因与 5 张图见 [`MOGB_KNOWN_CALIBRATION_ATTRIBUTION_V1.md`](../analysis/MOGB_KNOWN_CALIBRATION_ATTRIBUTION_V1.md)。这些仍是适配组件证据，不能写成已经超过论文中的完整 BERT MOGB。
+
 ## 1. 方法和证据边界
 
 ### 1.1 本报告中的“s2c 方法”
@@ -20,6 +39,7 @@
 | 名称                     | 表示          | 中心/边界                                         | 监督条件                       |
 | ------------------------ | ------------- | ------------------------------------------------- | ------------------------------ |
 | s2c 单中心               | Frozen MiniLM | 每个意图一个中心                                  | Known-only                     |
+| S2C Trainable K=1（当前候选） | Trainable MiniLM | 每个意图一个对角马氏中心                     | Known-only train/calibration   |
 | s2c 固定多中心           | Frozen MiniLM | 每个意图固定 K=2 的 KMeans 中心                   | Known-only                     |
 | MOGB 风格粒球 + s2c 边界 | Frozen MiniLM | 自适应粒球划分；使用 s2c 的距离和`μ+λσ` 半径 | Known-only                     |
 | MOGB-MiniLM              | Frozen MiniLM | 自适应粒球划分；MOGB 欧氏距离和平均半径           | Known-only                     |
@@ -64,6 +84,20 @@
 - 与单中心相比，MOGB 风格粒球的 OOS F1 在 Banking77 和 StackOverflow 分别高约 6.97 和 2.70 个百分点，但 F1-All 分别低约 9.71 和 16.64 个百分点。
 
 这说明 **MOGB 风格粒球的 OOS F1 提升主要伴随更强的 Known 拒绝**，而不是综合分类能力全面提升。若同时考虑 Known 和 OOS，当前同协议结果中 s2c 单中心最稳。
+
+### 2.5 当前 Trainable K=1 与 ADB 的三数据集外部参照
+
+为避免只看 StackOverflow，已补齐 ADB BERT/TextOIR 兼容运行：同一 protocol_v2 导出 split、KIR=.50、
+seed=`13,42,87,100,123`，共 `15/15` 个可审计单元（跨 KIR 的完整五 seed 参照为 `45/45`）。它仍不是 MiniLM 同骨干 fair 排名：
+
+| 数据集 | ADB OOS F1 | ADB F1-All | ADB Known Recall | Trainable−ADB OOS F1 | Trainable−ADB F1-All |
+|---|---:|---:|---:|---:|---:|
+| CLINC150 | 89.39±0.91% | 85.49±0.77% | 90.84±0.61% | +1.05 pp | −3.67 pp |
+| Banking77 | 74.97±1.92% | 78.79±1.53% | 89.14±0.67% | +8.60 pp | +2.89 pp |
+| StackOverflow | 87.21±1.17% | 85.81±1.15% | 81.37±1.33% | +0.46 pp | +0.75 pp |
+
+因此当前不能说 Trainable K=1 在所有综合指标上超过 ADB：CLINC150 的 Known Recall 和 F1-All 仍明显落后。
+逐 seed 结果与原始 `y_true/y_pred` 重算见 `results/analysis/adb_kir_sensitivity_v2/ADB_KIR_SENSITIVITY_REPORT.md`。
 
 ## 3. MOGB 官方 BERT 复现结果
 
@@ -146,6 +180,27 @@ DCLOOS 的正式方法使用：
 - **描述性结果：**reduced DCLOOS 的 F1-All=90.26、OOS F1=87.05，高于当前 Frozen MiniLM s2c 单中心的相应结果，但它使用了伪 OOS 和外部 OOS，监督条件更强。
 - **论文表述：**只能写成“兼容性恢复结果显示 DCLOOS 在额外 OOS 监督下具有更高指标”，不能写成统一协议下的 SOTA 排名。
 
+### 5.3 当前协议 Cascade bridge
+
+为避免只比较 Gate-only，本项目又在同一 `protocol_v2_textoir_v1` views 上训练了 Known-only
+SmolLM Expert，并在 CLINC150、Banking77、StackOverflow 各 3 个 seed 上配对比较 Frozen K=1 与
+Trainable K=1 Gate。结果为：
+
+| 数据集 | Trainable−Frozen 的 OOS F1 | F1-All | Known Recall | false acceptance |
+|---|---:|---:|---:|---:|
+| CLINC150 | +1.12pp | +1.52pp | −1.33pp | −2.86pp |
+| Banking77 | +5.18pp | +3.13pp | −1.95pp | −10.00pp |
+| StackOverflow | +9.42pp | +6.70pp | +0.21pp | −15.40pp |
+
+这说明 Trainable K=1 的 Gate 改善可以传递到同协议 Cascade；它仍不是历史 `fulltex.tex` Cascade，
+也不是与完整 MOGB/DCLOOS 的公平排名。逐样本误差预算见 `docs/analysis/CASCADE_BRIDGE_CROSS_DATASET_V1.md`。
+
+### 5.4 MSP 最新状态
+
+MSP 只完成了 StackOverflow/KIR=.50/seed=42 的数据合同 dry-run；实际运行在外部 runtime 环境探针阶段
+超时，未生成指标。该单元标记为 `runtime_blocked_no_metrics`，不进入比较表。外部基线状态统一见
+`docs/analysis/BASELINE_EXECUTION_STATUS_V1.md`。
+
 ## 6. 现有文档入口
 
 本报告是当前面向研究汇报的中文入口。原始机器结果和审计证据仍保留在：
@@ -169,7 +224,7 @@ DCLOOS 的正式方法使用：
 | ------------------------ | -------------------------------------------------------------------------------------- |
 | 与 MOGB 直接相关方法比较 | 已完成 Frozen MiniLM 组件级同协议比较；官方 BERT 只完成负复现，不可作为公平排名        |
 | 与端到端 DCLOOS 比较     | 已完成来源、监督条件和运行审计；完整官方单元超时，只有 reduced-budget 兼容结果         |
-| 多 seed 统计             | s2c/MOGB Frozen 组件矩阵已覆盖 5 个 seed；ADB、DA-ADB、DCLOOS 尚未形成同协议多 seed 表 |
+| 多 seed 统计             | s2c/MOGB Frozen 组件矩阵已覆盖 5 个 seed；ADB 已补齐三数据集各 3 seed 的外部合同参照；DA-ADB、DCLOOS 仍未形成同协议多 seed 主表 |
 | K 消融                   | 已完成 E2 和固定 K/MOGB 组件消融                                                       |
 | λ 敏感性和泄漏审计      | 已完成 Known-only 选择边界与样本不重叠审计                                             |
 

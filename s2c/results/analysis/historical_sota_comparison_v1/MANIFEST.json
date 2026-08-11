@@ -1,0 +1,21 @@
+{
+  "stage": "historical_sota_comparison_v1",
+  "protocol": "historical_full_cascade_vs_protocol_v2_layered",
+  "source": "fulltex.tex",
+  "source_sha256": "83322d7dff65ba22e489c67aaa2bfe70a8afb8ef8526e0a53294dfaf4557a61e",
+  "historical_rows": 72,
+  "current_rows_used": 63,
+  "outputs": [
+    "results/analysis/historical_sota_comparison_v1/MANIFEST.json",
+    "results/analysis/historical_sota_comparison_v1/fulltex_main_results.csv",
+    "results/analysis/historical_sota_comparison_v1/ours_minus_best_baseline.csv",
+    "results/analysis/historical_sota_comparison_v1/stackoverflow_contract_layers.csv"
+  ],
+  "figures": [
+    "figures/historical_sota_comparison_v1/historical_known_f1_heatmap.png",
+    "figures/historical_sota_comparison_v1/historical_oos_f1_heatmap.png",
+    "figures/historical_sota_comparison_v1/ours_minus_best_baseline.png",
+    "figures/historical_sota_comparison_v1/stackoverflow_contract_layers.png"
+  ],
+  "contract_warning": "Historical full Cascade and current Gate-only rows must not be merged into one SOTA ranking."
+}

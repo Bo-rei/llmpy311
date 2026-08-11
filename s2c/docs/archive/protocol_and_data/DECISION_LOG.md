@@ -358,3 +358,86 @@
 - 决策：将 URCSG 归为 Known-only risk proxy 的负结果，不启动 full matrix，不重复 E2/E3/BRAK，
   也不宣称已经得到 adaptive-K 方法。后续若继续自适应 K，必须更换并单独登记选择信号或转向
   表示/边界机制；当前唯一事实入口为 `docs/CURRENT_STATUS.md` 和 `results/diagnostics/urcsg/`。
+
+## D35：MOGB selected-ball 缺类只作为归因，不升级为修复方法（2026-08-09）
+
+- 证据：`mogb_selected_class_rescue_v1` 在45个 dataset×KIR×seed 单元中发现16个存在注册 Known 类没有 selected ball；29个无缺类单元加入回补逻辑后指标严格零变化。
+- 回补规则：仅为遗漏类用 `train_known` 建立一个欧氏平均半径单中心球；cal-80 只使用 `calibration_known`，test Known/OOS 只评价，不选择结构或阈值。
+- 结果：默认阈值下StackOverflow受影响单元 Known Recall `+8.40pp`，但 false acceptance `+6.23pp`、AUROC `-13.87pp`；cal-80 下 OOS F1 `-15.66pp`、false acceptance `+18.61pp`。S2C Trainable K1 对回补版 MOGB cal-80 的 OOS F1/F1-All 仍为45/45胜出。
+- 决策：确认缺类是MOGB-Fair的Known覆盖缺陷，但简单补球会放大开放空间风险，不能作为官方MOGB修复、论文新方法或S2C优势的唯一解释；阶段标记 complete/do_not_repeat。
+
+## D36：MOGB 粒球纯度和 tiny-cluster 不作为开放风险选择器（2026-08-09）
+
+- 证据：`mogb_ball_risk_attribution_v1` 对 90/90 个冻结方法单元、8,930 条 selected-ball 记录完成逐样本反向归因，两种共享分区方法的 ball ID、标签、支持量、深度和纯度完全一致，重算错误计数与源 artifact 完全一致。
+- 结果：每单元最高风险10%粒球承担约89%--98%的 OOS false acceptance，但 tiny ball 占比虽高（36%--51%），主要错误预算却更多落在支持量较大的 Q3/Q4 粒球；selected-ball 的 Known 纯度几乎全为1。支持量和半径对 Known false rejection 的解释力也高于对 OOS false acceptance 的解释力。
+- 决策：不按 test OOS 风险、Known 纯度、支持量或半径直接删除粒球；这些量只保留为机制解释。当前 S2C--MOGB-Fair 差距记为表示排序、分区与边界的联合失配，不启动基于事后风险的自适应粒球搜索；阶段 complete/do_not_repeat。
+
+## D37：S2C 与 MOGB-Fair 的主差距记为 Known 边界覆盖（2026-08-09）
+
+- 证据：`trainable_mogb_open_intent_transitions_v1` 对45个同split配对单元、443,400条预测完成五状态开放意图转移审计，F1-All重放最大误差为0。
+- 结果：S2C在Banking77/CLINC150/StackOverflow每单元平均净增正确Known `734.87/958.73/1734.93`，但净OOS正确拒绝为 `-192.20/-96.13/-169.80`；KIR=.50时绝大多数Known增益来自“S2C正确、MOGB拒绝”，而非修正MOGB的Known错类。
+- 决策：当前同协议解释固定为“Trainable K1提供更平衡的Known覆盖—OOS拒识工作点”，不得写成S2C在所有风险指标上均优于MOGB；MOGB-Fair的首要缺陷是平均半径边界过窄，官方BERT MOGB仍需保持合同隔离。阶段complete/do_not_repeat。
+
+## D38：MOGB 公开子中心损失是复现差距的一项来源，但不是充分解释（2026-08-09）
+
+- 证据：`mogb_corrected_subcentroid_loss_v1` 只将公开实现的 L1-normalized 类别距离替换为
+  `raw_distance/temperature=1.0`；BERT、数据、粒球、mean radius、early stopping 和推理均固定。
+- 结果：F1-All `68.35→72.64`、F1-K `67.19→71.81`、Known Recall `51.53→59.20`，同时
+  OOS Recall `98.80→95.30`；修正后 F1-All 仍比论文公开参考低14.85pp。
+- 决策：将官方损失动态范围压缩登记为已验证的 reproduction-gap contributor；不得把 corrected-loss
+  行称为 MOGB-official、论文复现或新的 S2C 方法。该单格 `do_not_repeat`。
+- 唯一后续归因：在 corrected checkpoint 上固定表示和粒球，只用 Known calibration 比较官方 mean
+  radius 与 coverage-calibrated radius；完成前不扩 seed、KIR、数据集或新的 adaptive-K 训练。
+
+## D39：历史 Cascade、当前 S2C Gate 与 MOGB 合同必须分层比较（2026-08-09）
+
+- 证据：`s2c_vs_mogb_mechanism_dashboard_v1` 完成 45 个 dataset×KIR×seed 严格配对单元和 198 行
+  配对效应。S2C-Trainable-K1 相对 MOGB-MiniLM-Fair 的 OOS F1 为 44胜1负、F1-All 为45胜0负；
+  平均 Known Recall `+49.01pp`、OOS Precision `+20.58pp`，但 OOS Recall `-7.83pp`。
+- 组件归因：共享 MOGB 粒球分区并换成 S2C mean-std 边界能恢复部分 Known 覆盖和 F1-All，但仍未达到
+  Trainable K1，说明当前优势不能只归因于半径，也不能只归因于表示。
+- 决策：旧论文 `Ours` 继续定义为完整 Gate→Router→Expert Cascade；当前自有公平候选定义为
+  `S2C-Trainable-K1`；`MOGB-MiniLM-Fair` 只表示冻结 MiniLM 组件桥；本地 BERT exact/corrected 单格
+  只用于复现差距。四者不得混排为一个 SOTA 表。
+- 后续：公平组件机制分析已收口并设为 `do_not_repeat`。下一项外部训练证据必须保持作者数据、训练、边界和
+  指标合同可追踪；在该条件满足前，只能报告 published reference、local exact、adapted diagnostic 和 fair
+  component 四层结果。
+
+## D40：当前 S2C--MOGB-Fair 差距不能只归因于默认半径或阈值（2026-08-09）
+
+- 证据：`s2c_mogb_operating_curve_attribution_v1` 对 45 个同 split 单元逐样本重放默认阈值，并计算
+  AUROC、AUPR、事后最优 OOS F1 和同 Known coverage 前沿。默认阈值重放90/90完全一致。
+- 结果：S2C 的 AUROC 45/45胜出，平均 `+7.93pp`；AUPR-OOS平均 `+12.00pp`。即使两方法分别使用
+  test-defined 最优阈值，S2C的OOS F1上限仍平均 `+6.43pp`；80% Known coverage处的OOS F1为
+  `86.05% vs 74.94%`。
+- 决策：当前公平组件差距登记为“表示排序质量 + 默认工作点校准”的共同作用，不能再只写成 MOGB
+  mean-radius 太窄。oracle 和 matched-coverage 行严格标记为 post-hoc diagnostic，不得用于选模型、阈值、
+  自适应粒球或正式主表。
+- 边界：该证据不扩展到完整 BERT MOGB、历史 Cascade 或跨监督 DCLOOS；阶段设为
+  `complete/do_not_repeat`。
+
+## D41：S2C--MOGB-Fair 差距是广泛 Known 覆盖恢复，不是少数异常 intent 主导（2026-08-09）
+
+- 证据：`s2c_mogb_intent_structure_bridge_v1` 联合 1,850 条 intent×seed 错误记录与 MOGB selected-ball
+  结构；三个数据集、三个 KIR 的正向 Known 恢复 intent 比例均为 100%，平均逐 intent Known 拒绝率降低
+  `46.70pp`。
+- 结构诊断：selected-ball 完全遗漏注册 Known intent 的行仅占 `1.41%`；它是确定的覆盖缺陷，但不足以
+  解释全局差距。恢复贡献的 Gini 约为 `0.10--0.21`，Top 20% intent 仅承担约 `27%--31%` 的恢复，
+  说明收益不是由少数类别制造。
+- 粒球数量：九个 dataset×KIR 的 ball-count/known-recovery Spearman rho 在 `-0.382` 到 `+0.445`
+  之间；StackOverflow 平均每 intent 约 `6.44--7.48` 个 selected balls，却仍有最大的 Known 覆盖恢复。
+- 决策：不得再把“更多自适应粒球”直接解释为更好的开放集结构，也不得用 test-defined intent 风险删球或
+  选择 K。该桥接只支持当前 S2C-Trainable-K1 与 MOGB-Fair 的事后机制解释，不扩展为完整 BERT MOGB
+  或 SOTA 结论；阶段 `complete/do_not_repeat`。
+
+## D42：corrected-loss MOGB 的剩余差距不能用半径放大单独关闭（2026-08-09）
+
+- 证据：`mogb_corrected_radius_coverage_v1` 固定 corrected-loss BERT checkpoint，只用 Known dev
+  预注册80%/85%/90%/95%覆盖工作点；test OOS仅评价，不重训、不改球结构选择目标。
+- 结果：default→cal-80 的 Known Recall 为58.63%→77.00%，F1-U为79.76%→73.45%；cal-95
+  Known Recall达87.17%，但F1-U降到35.68，OOS误接受由197增至2311。
+- 复现限制：源运行没有保存最终粒球Python RNG、中心和成员，因此当前33球是固定checkpoint下的确定性
+  best-effort重建；ball identity不等价、默认指标最大差1.87pp，禁止称为原artifact严格重放。
+- 决策：mean radius过窄是已验证的gap contributor，但放大半径会产生open-space误接受，不能复现论文
+  工作点；不再扩大半径或replay-seed搜索。下一步只收口作者数据/Known列表/旧环境/最终球状态合同，材料
+  不足时继续标记`official_code_not_reproduced_under_available_materials`。

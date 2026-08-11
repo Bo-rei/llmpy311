@@ -145,8 +145,46 @@ def trainable_row(path: Path, row: pd.Series, scope: str) -> dict[str, object]:
     return {"dataset": "stackoverflow", "kir": 0.50, "method": str(row.get("method", row.get("variant", "unknown"))), "scope": scope, "protocol": "protocol_v2_textoir_v1", "n": get("n_seeds", "seed_count"), "source": str(path.relative_to(ROOT)), "oos_f1": get("oos_f1_mean"), "oos_f1_std": get("oos_f1_std"), "f1_all": get("f1_all_mean"), "f1_all_std": get("f1_all_std"), "f1_k": get("f1_k_mean"), "f1_k_std": get("f1_k_std"), "accuracy": get("accuracy_mean"), "accuracy_std": get("accuracy_std"), "known_recall": get("known_recall_mean"), "known_recall_std": get("known_recall_std"), "false_accept_rate": get("false_acceptance_mean", "false_accept_rate_mean"), "false_accept_rate_std": get("false_acceptance_std", "false_accept_rate_std"), "false_reject_rate": get("false_reject_rate_mean"), "false_reject_rate_std": get("false_reject_rate_std"), "auroc": get("auroc_mean"), "auroc_std": get("auroc_std"), "aupr_oos": get("aupr_oos_mean"), "aupr_oos_std": get("aupr_oos_std")}
 
 
+def current_fair_trainable_rows() -> pd.DataFrame:
+    """Use the authoritative five-seed fair matrix for current trainable bars.
+
+    Older RACAL summaries are retained below for adaptive-pilot provenance, but
+    they must not silently replace the current protocol_v2 fair rows.
+    """
+    path = ROOT / "results/analysis/cross_protocol_tradeoff_v1/summary_mean_std.csv"
+    frame = read_csv(path)
+    if frame.empty:
+        return pd.DataFrame()
+    methods = {
+        "single_centroid": "frozen_k1",
+        "trainable_k1": "trainable_k1",
+        "fixed_k2": "frozen_k2",
+    }
+    frame = frame.loc[
+        frame["dataset"].eq("stackoverflow")
+        & np.isclose(frame["kir"].astype(float), 0.50)
+        & frame["method"].isin(methods)
+    ].copy()
+    if frame.empty:
+        return frame
+    frame["method"] = frame["method"].map(methods)
+    frame["scope"] = "current_protocol_fair_matrix_5seed"
+    frame["protocol"] = "protocol_v2_textoir_v1"
+    frame["source"] = str(path.relative_to(ROOT))
+    frame = frame.rename(columns={"n_seeds": "n", "f1_k": "f1_k", "known_recall": "known_recall"})
+    keep = [
+        "dataset", "kir", "method", "scope", "protocol", "n", "source",
+        "oos_f1", "oos_f1_std", "f1_all", "f1_all_std", "f1_k", "f1_k_std",
+        "accuracy", "accuracy_std", "known_recall", "known_recall_std",
+        "false_accept_rate", "false_accept_rate_std", "false_reject_rate",
+        "false_reject_rate_std", "auroc", "auroc_std", "aupr_oos", "aupr_oos_std",
+    ]
+    return frame[keep].sort_values(["method"]).reset_index(drop=True)
+
+
 def build_trainable() -> pd.DataFrame:
-    rows: list[dict[str, object]] = []
+    current = current_fair_trainable_rows()
+    rows: list[dict[str, object]] = current.to_dict(orient="records")
     inputs = [(ROOT / "results/diagnostics/racal_v1/RACAL_V1_STAGE1_MEAN_STD.csv", "gate_only_trainable_minilm"), (ROOT / "results/diagnostics/racal_v1/stage2_fixed_k2/RACAL_V1_STAGE2_MEAN_STD.csv", "gate_only_trainable_minilm"), (ROOT / "results/diagnostics/joint_adaptive_multicenter_v1/pilot_summary.csv", "diagnostic_pilot"), (ROOT / "results/diagnostics/joint_adaptive_multicenter_contract_repair_v1/summary.csv", "diagnostic_pilot"), (ROOT / "results/diagnostics/consistency_gate_v1/summary.csv", "diagnostic_pilot")]
     for path, scope in inputs:
         frame = read_csv(path)
@@ -154,6 +192,11 @@ def build_trainable() -> pd.DataFrame:
             item = trainable_row(path, row, scope)
             if "variant" in frame.columns:
                 item["method"] = "consistency_" + str(row["variant"])
+            # These rows are superseded by the current five-seed fair matrix.
+            # Keep adaptive/consistency diagnostics, but do not let legacy
+            # trainable K=1/K=2 rows win a duplicate-based plot selection.
+            if item["method"] in {"frozen_k1", "trainable_k1", "frozen_k2", "trainable_fixed_k1"}:
+                continue
             rows.append(item)
     return pd.DataFrame(rows)
 
@@ -334,8 +377,8 @@ def plot_k_sweep(raw: pd.DataFrame) -> str:
 
 
 def plot_trainable(frame: pd.DataFrame) -> str:
-    names = ["frozen_k1", "trainable_k1", "trainable_fixed_k2"]
-    labels = ["Frozen K=1", "Trainable K=1", "Trainable K=2"]
+    names = ["frozen_k1", "trainable_k1", "frozen_k2"]
+    labels = ["Frozen K=1", "Trainable K=1", "Frozen K=2"]
     metrics = [("oos_f1", "OOS F1 (%)", "oos_f1_std"), ("f1_all", "F1-All (%)", "f1_all_std"), ("known_recall", "Known Recall (%)", "known_recall_std"), ("false_accept_rate", "False acceptance (%)", "false_accept_rate_std")]
     sub = frame.drop_duplicates("method").set_index("method").reindex(names)
     fig, axes = plt.subplots(1, 4, figsize=(15, 4.3))
@@ -344,7 +387,7 @@ def plot_trainable(frame: pd.DataFrame) -> str:
         ax.set_xticks(np.arange(3), labels, rotation=25, ha="right")
         ax.set_title(title)
         ax.grid(axis="y", alpha=0.25)
-    fig.suptitle("StackOverflow KIR=0.50：表示训练改善 K=1，但固定 K=2 失效", fontsize=14)
+    fig.suptitle("StackOverflow KIR=0.50：Trainable K=1 改善，但 Frozen K=2 失效", fontsize=14)
     fig.tight_layout()
     path = FIG / "trainable_k1_k2_tradeoff.png"
     fig.savefig(path, dpi=220, bbox_inches="tight")
@@ -418,7 +461,7 @@ def plot_stackoverflow_tradeoff(baselines: pd.DataFrame, trainable: pd.DataFrame
             "known_f1": float(row["known_macro_f1"]),
             "layer": "当前/兼容结果",
         })
-    for _, row in trainable[trainable["method"].isin(["frozen_k1", "trainable_k1", "trainable_fixed_k2"])].drop_duplicates("method").iterrows():
+    for _, row in trainable[trainable["method"].isin(["frozen_k1", "trainable_k1", "frozen_k2"])].drop_duplicates("method").iterrows():
         rows.append({
             "method": str(row["method"]),
             "oos_f1": float(row["oos_f1"]),
@@ -571,7 +614,15 @@ def fmt(value: object) -> str:
 
 
 def build_report(trainable: pd.DataFrame, figures: list[str], lambda_deltas: pd.DataFrame) -> str:
-    names = ["frozen_k1", "trainable_k1", "trainable_fixed_k2"]
+    names = ["frozen_k1", "trainable_k1", "frozen_k2"]
+    current = trainable.loc[trainable["method"].isin(names)].drop_duplicates("method").set_index("method")
+    def current_pct(method: str, column: str) -> str:
+        if method not in current.index or column not in current.columns or pd.isna(current.loc[method, column]):
+            return "未记录"
+        return f"{float(current.loc[method, column]) * 100:.2f}%"
+    trainable_gain = "未记录"
+    if {"frozen_k1", "trainable_k1"}.issubset(current.index):
+        trainable_gain = f"{(float(current.loc['trainable_k1', 'oos_f1']) - float(current.loc['frozen_k1', 'oos_f1'])) * 100:+.2f} 个百分点"
     lines = [
         "# 当前 s2c 实验证据总览（active_experiment_dashboard_v1）",
         "",
@@ -602,7 +653,7 @@ def build_report(trainable: pd.DataFrame, figures: list[str], lambda_deltas: pd.
         lines.append(f"| {name} | {fmt(row['oos_f1'])} | {fmt(row['f1_all'])} | {fmt(row['known_recall'])} | {fmt(row['false_accept_rate'])} | 当前 Gate |")
     lines += [
         "",
-        "Trainable K=1 相对 Frozen K=1 的 OOS F1 提升约 9.42 个百分点，说明表示适配本身有效；Trainable K=2 的 OOS F1 大幅下降并伴随 false acceptance 上升，说明当前瓶颈是多球接受区域组合，而不是单纯缺少训练。",
+        f"当前 5-seed fair matrix 中，Trainable K=1 相对 Frozen K=1 的 OOS F1 变化为 {trainable_gain}（{current_pct('frozen_k1', 'oos_f1')} → {current_pct('trainable_k1', 'oos_f1')}），说明表示适配本身有效；Frozen K=2 为 {current_pct('frozen_k2', 'oos_f1')}，并伴随 false acceptance 上升，说明当前瓶颈是多球接受区域组合，而不是单纯缺少训练。旧 Trainable K=2 仅属于 3-seed 诊断，不进入这张 5-seed fair 主图。",
         "",
         "## 3. K/KIR 与数据集差异",
         "",
@@ -627,7 +678,7 @@ def build_report(trainable: pd.DataFrame, figures: list[str], lambda_deltas: pd.
         "",
         "## 6. KIR=0.50 方法分层对照",
         "",
-        "`KIR50_METHOD_COMPARISON_V1.md` 将 Trainable K=1/K=2、冻结 MiniLM 组件和 ADB/DA-ADB/BRAK 兼容结果放在同一张分层表中。StackOverflow 的 Trainable K=1 为 86.71%，高于同协议 Frozen Single centroid 76.55%、MOGB-MiniLM 72.92% 和 MOGB partition+s2c boundary 79.25%；ADB/DA-ADB 分别为 89.47%/90.90%，但属于 BERT/不同训练合同的兼容单格，不能直接视为公平超越或落后。",
+        f"`KIR50_METHOD_COMPARISON_V1.md` 将 Trainable K=1、Frozen K=1/K=2、MOGB 组件和 ADB/DA-ADB/BRAK 兼容结果放在同一张分层表中。当前 5-seed fair matrix 的 StackOverflow Trainable K=1 为 {current_pct('trainable_k1', 'oos_f1')}，Frozen Single centroid 为 {current_pct('frozen_k1', 'oos_f1')}，Frozen fixed K=2 为 {current_pct('frozen_k2', 'oos_f1')}；ADB/DA-ADB 仍分别为 89.47%/90.90%，但属于 BERT/不同训练合同的兼容单格，不能直接视为公平超越或落后。",
         "详见 `docs/analysis/KIR50_METHOD_COMPARISON_V1.md`、`kir50_method_layers.png` 和 `kir50_method_tradeoff.png`。",
         "",
         "## 7. Trainable MiniLM 的 λ/K 受控分析",
@@ -723,7 +774,7 @@ def main() -> None:
         if comparison_figure.is_file():
             figures.append(str(comparison_figure.relative_to(ROOT)))
     figures.append(plot_adaptive())
-    source_paths = ["results/gate_only/kir_k_fixed_mean_std.csv", "results/representation/representation_fixed_results.csv", "results/mogb/fair_matrix.csv", "results/final_baselines/summary.csv", "results/analysis/kir50_method_comparison_v1/rows.csv", "results/diagnostics/racal_v1/RACAL_V1_STAGE1_MEAN_STD.csv", "results/diagnostics/racal_v1/stage2_fixed_k2/RACAL_V1_STAGE2_MEAN_STD.csv", "results/diagnostics/joint_adaptive_multicenter_v1/pilot_summary.csv", "results/diagnostics/joint_adaptive_multicenter_contract_repair_v1/summary.csv", "results/diagnostics/consistency_gate_v1/summary.csv", "results/diagnostics/minilm_trainable_lambda_control_v1/k_delta_by_lambda.csv", "../artifacts/s2c/outputs/paper_results/stackoverflow/kir50_seed42/full_anchor/eval_results.json", "../artifacts/s2c/outputs/paper_results/ablation_summary.csv", "../artifacts/s2c/outputs/experiments/cascade_full/gpu_kir50/cascade_summary.csv"]
+    source_paths = ["results/gate_only/kir_k_fixed_mean_std.csv", "results/representation/representation_fixed_results.csv", "results/mogb/fair_matrix.csv", "results/final_baselines/summary.csv", "results/analysis/cross_protocol_tradeoff_v1/summary_mean_std.csv", "results/analysis/kir50_method_comparison_v1/rows.csv", "results/diagnostics/racal_v1/RACAL_V1_STAGE1_MEAN_STD.csv", "results/diagnostics/racal_v1/stage2_fixed_k2/RACAL_V1_STAGE2_MEAN_STD.csv", "results/diagnostics/joint_adaptive_multicenter_v1/pilot_summary.csv", "results/diagnostics/joint_adaptive_multicenter_contract_repair_v1/summary.csv", "results/diagnostics/consistency_gate_v1/summary.csv", "results/diagnostics/minilm_trainable_lambda_control_v1/k_delta_by_lambda.csv", "../artifacts/s2c/outputs/paper_results/stackoverflow/kir50_seed42/full_anchor/eval_results.json", "../artifacts/s2c/outputs/paper_results/ablation_summary.csv", "../artifacts/s2c/outputs/experiments/cascade_full/gpu_kir50/cascade_summary.csv"]
     sources = {p: sha256(ROOT / p) for p in source_paths if (ROOT / p).is_file()}
     manifest = {"schema": "s2c.active_experiment_dashboard_v1", "existing_results_only": True, "sources": sources, "figures": figures}
     atomic_text(json.dumps(manifest, ensure_ascii=False, indent=2, sort_keys=True), OUT / "DASHBOARD_MANIFEST.json")
