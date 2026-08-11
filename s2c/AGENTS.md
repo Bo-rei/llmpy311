@@ -51,6 +51,13 @@ results/              GitHub 可提交的轻量 CSV/JSON 快照
 - 不把 Gate-only 的 Frozen/CE/SupCon 结果写成完整 Pipeline 结果。
 - 不提交模型、checkpoint、embedding、Parquet、逐样本 scores 或运行日志。
 - 新实验入口使用功能命名；历史 `_v19/_v20/_v21` 文件保留为兼容入口，不再扩展同类版本号。
+- 分析资产统一登记在 `configs/experiment_registry.yaml` 的 `analysis_bundles`；结果、图、报告、
+  manifest 和 builder 必须从 bundle 关系可追溯。新资产只使用 lower_snake_case，不再用新增的
+  `V2/V3` 平行文件夹表达迭代；历史文件通过 `aliases`/`supersedes` 保留。
+- `tools/maintenance/audit_asset_catalog.py` 是资产关系审计入口。它只读检查并报告 orphan 目录，
+  不自动删除或移动结果；归档必须是显式、可恢复、逐项登记的操作。
+- 分析代码按职责放置：`scripts/experiments/` 负责运行，`tools/analysis/` 负责已有结果的后处理，
+  `tools/maintenance/` 负责审计；不要为同一张表重复创建新的入口脚本。
 - 涉及实验、指标、数据协议或论文论断的任务，开始前必须读取
   `docs/CURRENT_STATUS.md`、`EXPERIMENT_LEDGER.csv` 和 `docs/archive/protocol_and_data/DECISION_LOG.md`，结束前运行
   `python tools/maintenance/check_research_state.py` 并追加状态台账、开发日志和阶段 closeout。

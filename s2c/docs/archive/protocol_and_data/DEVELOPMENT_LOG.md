@@ -2485,3 +2485,14 @@
 - 提交策略：只提交外部适配/统一 prediction contract/MOGB loss contract 的可复用代码、测试、当前状态记录和聚合证据；不提交模型、checkpoint、embedding、逐样本/逐意图/逐粒球大表、运行日志、重复分析脚本、过渡图和第三方 checkout。
 - 风险：未提交的 analysis-only 文件继续保留在本地工作树，当前报告中的历史/本地 artifact 路径不代表公开轻量结果；后续若需发布某一分析包，必须单独通过 manifest、来源 CSV 和 claim audit。
 - 验证计划：提交前运行选定单元测试、compileall、Ruff、research-state、development-log、data-tracking 和 `git diff --check`；提交后复核 `git show --stat`、分支和剩余未提交文件。
+
+## 2026-08-11：分析资产目录治理与可恢复归档
+
+- Base commit：`4a8742f9af53d6face95afece48fb55e97445575`；本批未执行 `git add`、`git commit` 或 `git push`。
+- 目标：停止继续增加平行分析 Markdown、版本文件夹和一次性入口；把结果、图、报告、manifest、builder 及合同层关系收束到现有 `configs/experiment_registry.yaml` 的 `analysis_bundles`。
+- 修改：扩展 `configs/experiment_registry.yaml`，登记 9 个 canonical bundle 和 2 个可恢复 archive 记录；新增 `tools/maintenance/audit_asset_catalog.py` 及 `tests/unit/test_asset_catalog.py`；同步 `README.md`、`AGENTS.md`、`docs/CURRENT_STATUS.md`、`docs/EXPERIMENTS.md`、`docs/REPRODUCIBILITY.md` 的资产治理入口。
+- 归档：仅将经引用审计确认未被当前代码、测试或文档直接引用的两个一次性 builder 移至 `tools/analysis/archive/`；没有移动结果、图、数据、原始 artifact 或第三方 checkout。
+- 数据与 artifact：不训练、不重评分、不改阈值、不改 `data/`、`../assets/`、`../artifacts/` 或 `third_party/mogb_official`；新增审计器只读本地轻量结果关系。
+- 结果：资产审计 `9 bundles + 2 archives` 通过；当前保留 `78` 个未登记结果目录和 `71` 个未登记图目录作为历史 orphan warning，不批量判错或删除。原有实验登记审计也通过。
+- 验证：新增相关单元 `3 passed`；全量 unit `358 passed`、integration `13 passed`、smoke `3 passed`；`compileall`、`check_research_state.py`、`check_data_tracking.py` 和 `git diff --check` 通过。新增审计器和测试自身未触发 Ruff 错误，但全仓 Ruff 仍被既有 `scripts/experiments` 与 `src/protocol_v2/experiments` 的 15 条问题阻断；public-results verify 仍因工作树中已有未列入 whitelist 的结果文件失败，未扩大本批范围。
+- 风险与下一步：当前仍不能把所有历史 orphan 视作可提交证据；下一步按 bundle/ledger 引用逐项关闭或归档，单独形成闭合 evidence bundle 后再决定 Git 提交边界。

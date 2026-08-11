@@ -11,6 +11,22 @@ checkout，其本地审计元数据保持在子仓库工作树中，不修改第
 > 和完整性检查为准，不能仅凭目录存在就宣称可重跑。`results/analysis/` 下的轻量 CSV/JSON/图表仍是当前报告
 > 的主要阅读入口。
 
+## 分析资产治理入口（2026-08-11）
+
+当前不再把新增 Markdown、`V2/V3` 文件夹或一次性脚本视为新的事实入口。结果、图、报告、manifest、
+构建器以及协议/监督层的关系统一登记在
+[`configs/experiment_registry.yaml`](../configs/experiment_registry.yaml) 的 `analysis_bundles` 中；
+登记表是资产目录，不能替代各 bundle 的 provenance 和原始 artifact。只读审计命令为：
+
+```bash
+python tools/maintenance/audit_asset_catalog.py
+```
+
+审计当前会区分已登记 bundle 与尚未归档的历史目录；后者只报告、不删除。主报告只引用
+`selected_for_main_report: true` 且已通过审计的 bundle，`blocked`、`reference` 和
+`superseded` 不得进入同协议主排名。当前仍未闭合的基线和分析缺口以本页前述合同审计为准，
+不能因目录或中间预测存在而改写成完成结果。
+
 ## 数据源与 TextOIR baseline 范围校正（2026-08-11）
 
 StackOverflow、Banking77，以及当前 S2C 名为 `clinc150` 的 OOS 数据，已与独立

@@ -20,6 +20,7 @@ E0/E1/E2/E3 以及历史 R1、MOGB、ADB/DA-ADB/DCLOOS 单元均有独立 artifa
 
 ```bash
 cd /home/bo/bo01/llmpy311/s2c
+python tools/maintenance/audit_asset_catalog.py
 python tools/analysis/audit_adaptive_k.py
 python tools/analysis/diagnose_mogb_diff.py
 python scripts/experiments/run_adaptive_split_merge.py --dry-run
@@ -27,7 +28,9 @@ python tools/analysis/audit_experiment_registry.py
 python tools/maintenance/check_data_tracking.py
 ```
 
-上述命令不训练模型；adaptive-K 和 MOGB 输出分别写入
+`audit_asset_catalog.py` 只检查 registry 中的分析 bundle 与结果、图、报告、manifest 的关系，
+未登记目录只作为待归档 warning，不会自动移动或删除。上述其余命令不训练模型；adaptive-K 和
+MOGB 输出分别写入
 `results/diagnostics/adaptive_k/`、`results/diagnostics/mogb_diff/`。
 
 ## 代码与环境

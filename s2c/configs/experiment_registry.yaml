@@ -512,3 +512,213 @@ experiments:
       expected_unit_count: 1
       count_source: csv_rows
       count_summary: stackoverflow/DA-ADB/kir50/seed0/results/results.csv
+
+# 分析资产目录（结果、图、报告和 manifest 的唯一关系表）。
+#
+# ``experiments`` 登记可复现实验入口与原始 artifact；``analysis_bundles`` 登记
+# 已经从这些实验生成的可阅读证据包。历史文件名不批量改名，新资产只使用
+# lower_snake_case；状态和 ``supersedes`` 用来表达版本演进，不再新建 V2/V3
+# 平行入口。未闭合或不同监督合同的结果不得进入主报告。
+analysis_catalog_version: 1
+analysis_catalog_policy:
+  canonical_registry: configs/experiment_registry.yaml
+  active_entrypoint: README.md
+  result_root: results/analysis
+  figure_root: figures
+  report_root: docs/analysis
+  archive_root: docs/archive/analysis
+  reusable_code_root: src/protocol_v2
+  frozen_legacy_code_root: src/legacy
+  experiment_runner_root: scripts/experiments
+  posthoc_analysis_root: tools/analysis
+  maintenance_root: tools/maintenance
+  new_asset_slug: lower_snake_case
+  versioning: "registry revision and supersedes; no parallel V2/V3 names"
+  deletion_policy: "archive first; never delete research evidence during cleanup"
+  git_policy: "commit only closed evidence bundles and their reproducible source"
+
+analysis_bundles:
+  fair_trainable_vs_components:
+    status: active
+    contract_layer: same_protocol_fair
+    question: "在统一 protocol_v2_textoir_v1 下，Trainable K1 相对组件和原生检测器的性能差异是什么？"
+    source_experiments:
+      - gate_mechanism.minilm_training_stackoverflow_repair
+      - gate_mechanism.multicenter_boundary_attribution
+    builder: tools/analysis/build_cross_protocol_tradeoff_v1.py
+    result_dir: results/analysis/cross_protocol_tradeoff_v1
+    figure_dir: figures/cross_protocol_tradeoff_v1
+    report: docs/analysis/UNIFIED_COMPARISON_AND_MECHANISM_REPORT_V1.md
+    manifest: results/analysis/cross_protocol_tradeoff_v1/MANIFEST.json
+    aliases:
+      - cross_protocol_tradeoff_v1
+      - trainable_k1_fair_matrix
+    supersedes: []
+    selected_for_main_report: true
+    commit_policy: closed_evidence
+
+  baseline_native_detectors:
+    status: closed
+    contract_layer: same_protocol_fair
+    question: "在相同数据、split、KIR 和评价器下，MSP、Energy、kNN、LOF 与 S2C 的差异是什么？"
+    source_experiments:
+      - gate_mechanism.minilm_training_stackoverflow_repair
+    builder: tools/analysis/build_native_baselines_v1.py
+    result_dir: results/analysis/native_baselines_v1
+    figure_dir: figures/native_baselines_v1
+    report: docs/analysis/NATIVE_BASELINES_V1.md
+    manifest: results/analysis/native_baselines_v1/MANIFEST.json
+    aliases:
+      - native_baselines_v1
+    supersedes: []
+    selected_for_main_report: true
+    commit_policy: closed_evidence
+
+  baseline_adb_bert:
+    status: closed
+    contract_layer: native_backbone_reference
+    question: "ADB 在其可审计 BERT 外部合同下与当前 S2C 的差异是什么？"
+    source_experiments:
+      - external_validation.adb_compat_stackoverflow_kir50_seed0_v2
+    builder: tools/analysis/build_adb_kir_sensitivity_v1.py
+    result_dir: results/analysis/adb_kir_sensitivity_v2
+    figure_dir: figures/adb_kir_sensitivity_v2
+    report: docs/analysis/ADB_TRAINABLE_KIR_ANALYSIS_V1.md
+    manifest: results/analysis/adb_kir_sensitivity_v2/ADB_KIR_SENSITIVITY_MANIFEST.json
+    aliases:
+      - adb_kir_sensitivity_v2
+      - adb_trainable_bert_reference
+    supersedes: []
+    selected_for_main_report: true
+    commit_policy: closed_evidence
+
+  baseline_da_adb_external:
+    status: closed
+    contract_layer: external_backbone_reference
+    question: "DA-ADB 的当前可审计 StackOverflow 单元与同数据 S2C 的差异是什么？"
+    source_experiments:
+      - external_validation.da_adb_compat_stackoverflow_kir50_seed0_v3
+    builder: tools/analysis/build_da_adb_current_protocol_summary_v1.py
+    result_dir: results/analysis/da_adb_current_protocol_summary_v1
+    figure_dir: figures/da_adb_current_protocol_summary_v1
+    report: docs/analysis/DA_ADB_CURRENT_PROTOCOL_SUMMARY_V1.md
+    manifest: results/analysis/da_adb_current_protocol_summary_v1/MANIFEST.json
+    aliases:
+      - da_adb_current_protocol_summary_v1
+    supersedes: []
+    selected_for_main_report: true
+    commit_policy: closed_evidence
+
+  baseline_mogb_fair:
+    status: closed
+    contract_layer: same_protocol_fair
+    question: "MOGB 表示和分区组件在同一评价协议下贡献了多少性能差异？"
+    source_experiments:
+      - external_validation.mogb
+      - external_validation.mogb_official_converged
+    builder: tools/analysis/build_s2c_baseline_mogb_overview_v1.py
+    result_dir: results/analysis/cross_protocol_tradeoff_v1
+    figure_dir: figures/s2c_baseline_mogb_overview_v1
+    report: docs/analysis/S2C_BASELINE_MOGB_COMPARISON_OVERVIEW_V1.md
+    manifest: results/analysis/cross_protocol_tradeoff_v1/MANIFEST.json
+    aliases:
+      - mogb_fair_component_rows
+      - s2c_baseline_mogb_overview_v1
+    supersedes: []
+    selected_for_main_report: true
+    commit_policy: closed_evidence
+
+  mechanism_s2c_mogb:
+    status: closed
+    contract_layer: same_protocol_fair
+    question: "S2C 与 MOGB 的差距来自表示、分区、半径、边界规则还是 Known coverage 工作点？"
+    source_experiments:
+      - gate_mechanism.multicenter_boundary_attribution
+      - external_validation.mogb
+    builder: tools/analysis/build_s2c_vs_mogb_mechanism_dashboard_v1.py
+    result_dir: results/analysis/s2c_vs_mogb_mechanism_dashboard_v1
+    figure_dir: figures/s2c_vs_mogb_mechanism_dashboard_v1
+    report: docs/analysis/S2C_VS_MOGB_MECHANISM_DASHBOARD_V1.md
+    manifest: results/analysis/s2c_vs_mogb_mechanism_dashboard_v1/MANIFEST.json
+    aliases:
+      - s2c_vs_mogb_mechanism_dashboard_v1
+      - mogb_component_swap_analysis
+    supersedes: []
+    selected_for_main_report: true
+    commit_policy: closed_evidence
+
+  audit_unified_prediction_contract:
+    status: active
+    contract_layer: contract_audit
+    question: "各方法的逐样本预测、split、Known list 和监督合同能否被统一审计？"
+    source_experiments:
+      - gate_mechanism.minilm_training_stackoverflow_repair
+      - external_validation.adb_compat_stackoverflow_kir50_seed0_v2
+      - external_validation.da_adb_compat_stackoverflow_kir50_seed0_v3
+      - external_validation.dcloos
+    builder: tools/analysis/unified_prediction_contract_v1.py
+    result_dir: results/analysis/unified_prediction_contract_v1
+    figure_dir: null
+    report: results/analysis/unified_prediction_contract_v1/contract_report.md
+    manifest: results/analysis/unified_prediction_contract_v1/schema_manifest.json
+    aliases:
+      - unified_prediction_contract_v1
+      - prediction_alignment_audit
+    supersedes: []
+    selected_for_main_report: true
+    commit_policy: closed_evidence
+
+  reference_historical_cascade:
+    status: reference
+    contract_layer: historical_different_system_level
+    question: "历史 Cascade、MOGB 和外部结果能否作为机制背景，而不是同合同主排名？"
+    source_experiments:
+      - pipeline.cascade_full_kir50
+      - external_validation.mogb_official_converged
+    builder: tools/analysis/build_comparison_atlas_v2.py
+    result_dir: results/analysis/comparison_atlas_v2
+    figure_dir: figures/comparison_atlas_v2
+    report: docs/analysis/COMPARISON_ATLAS_V2.md
+    manifest: results/analysis/comparison_atlas_v2/MANIFEST.json
+    aliases:
+      - comparison_atlas_v2
+      - historical_cascade_reference
+    supersedes:
+      - comparison_atlas_v1
+    selected_for_main_report: false
+    commit_policy: reference_only
+
+  blocked_external_baselines:
+    status: blocked
+    contract_layer: different_supervision_or_incomplete
+    question: "KNNCL、OpenMax、DOC、DeepUnk、DCLOOS 和完整 DA-ADB 是否已有足够证据进入统一比较？"
+    source_experiments:
+      - external_validation.dcloos
+      - external_validation.dcloos_official_oos_kir75_seed888_v1
+      - external_validation.dcloos_official_oos_kir75_seed888_reduced_v2
+      - external_validation.da_adb_compat_stackoverflow_kir50_seed0_v3
+    builder: tools/analysis/build_baseline_execution_status_v1.py
+    result_dir: results/analysis/unified_prediction_contract_v1
+    figure_dir: null
+    report: docs/analysis/BASELINE_EXECUTION_STATUS_V1.md
+    manifest: results/analysis/unified_prediction_contract_v1/blocked_methods.csv
+    aliases:
+      - blocked_external_methods
+      - dcloos_reduced_reference
+    supersedes: []
+    selected_for_main_report: false
+    commit_policy: do_not_commit_as_main_evidence
+
+analysis_archives:
+  cross_kir_matched_frontier_builder:
+    original_path: tools/analysis/build_cross_kir_matched_frontier_v1.py
+    archived_path: tools/analysis/archive/cross_kir_matched_frontier_v1/build_cross_kir_matched_frontier_v1.py
+    output_bundle: cross_kir_matched_frontier_v1
+    reason: "一次性分析 builder 未被当前代码、测试或文档直接引用；输出结果仍保留。"
+    reversible: true
+  da_adb_contract_comparison_builder:
+    original_path: tools/analysis/build_da_adb_contract_comparison_v1.py
+    archived_path: tools/analysis/archive/da_adb_contract_comparison_v1/build_da_adb_contract_comparison_v1.py
+    output_bundle: da_adb_contract_comparison_v1
+    reason: "一次性跨合同诊断 builder 未被当前代码、测试或文档直接引用；输出结果仍保留。"
+    reversible: true

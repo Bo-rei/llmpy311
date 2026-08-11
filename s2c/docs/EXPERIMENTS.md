@@ -3,6 +3,21 @@
 这里只列当前论文可引用的实验家族和证据边界；原始输出永远以
 `../artifacts/s2c/` 下的 manifest 为准。
 
+## 资产目录与生命周期
+
+结果、图、报告和构建脚本的对应关系以
+[`configs/experiment_registry.yaml`](../configs/experiment_registry.yaml) 的
+`analysis_bundles` 为唯一登记表。阅读顺序是：先看 bundle 的 `status`、`contract_layer` 和
+`selected_for_main_report`，再打开其 `result_dir`、`figure_dir`、`report` 和 `manifest`。
+未登记目录是待审计的历史资产，不是自动可引用的新结果。新分析只扩展已有 bundle 或登记一个
+明确的问题，不再创建平行的版本号 Markdown 和结果文件夹；归档先移动、保留原始证据，不删除。
+
+资产关系检查：
+
+```bash
+python tools/maintenance/audit_asset_catalog.py
+```
+
 ## 主协议结果
 
 | 家族 | 覆盖 | 证据与解释 |
