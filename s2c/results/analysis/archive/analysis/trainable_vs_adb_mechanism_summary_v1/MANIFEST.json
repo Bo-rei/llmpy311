@@ -1,0 +1,15 @@
+{
+  "schema_version": "trainable_vs_adb_mechanism_summary_v1",
+  "protocol_version": "protocol_v2_textoir_v1",
+  "scope": "read_only_metric_and_sample_aligned_error_budget_join",
+  "dataset_count": 3,
+  "kir_count": 3,
+  "cells": 9,
+  "source_hashes": {
+    "metrics": "3b0ae26ec6f83140f437ff5f81f763e464429a987e8df8e1ac0182d8455d6d74",
+    "errors": "ba83df8365327597a93569270ed4eb83b0beb3cb791681944270a58ec84c0eac"
+  },
+  "raw_text_exported": false,
+  "sample_level_predictions_exported": false,
+  "selection_used_test_oos": false
+}

@@ -1,0 +1,11 @@
+file,line_range,behavior,impact,evidence_status
+myloss.py,61-78,L1-normalize class distances before softmax,compresses subcentroid training signal,verified
+cluster.py,44-60,device object plus hard-coded cuda:0,breaks portable runtime,verified
+cluster3.py,83-103,purity and minimum-support recursive split,dynamic balls without explicit K,verified
+cluster3.py,142-204,random candidate centers and distance reassignment,ball identity depends on RNG,verified
+cluster3.py,234-248,random initial center then recursive split,seed/state contract sensitive,verified
+cluster3.py,265-279,minimum-support and purity selected-ball filter,can omit registered Known classes,verified
+cluster3.py,51-55,mean radius from ball distances,undercoverage of Known is possible,verified
+gb_test.py,91-110,nearest ball and radius acceptance,local boundaries define open-space risk,verified
+init_parameter.py,70-75,purity argparse type int with fractional defaults,legacy CLI parsing risk,verified
+run.sh,1-11,legacy shell syntax and malformed seed command,not a direct modern entrypoint,verified

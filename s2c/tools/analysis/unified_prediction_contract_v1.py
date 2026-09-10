@@ -868,7 +868,7 @@ def blocked_method_rows(root: Path, artifacts: Path) -> list[dict[str, Any]]:
             "kir": "all",
             "seed": "all",
             "reason": "Historical fulltex comparison is retained as historical evidence, not a current row-level contract.",
-            "source": "docs/analysis/MINILM_TRAINABLE_VS_FULLTEX_AND_BASELINES_V1.md",
+            "source": "docs/archive/analysis/MINILM_TRAINABLE_VS_FULLTEX_AND_BASELINES_V1.md",
             "final_metrics_available": False,
             "include_in_unified_rows": False,
         },

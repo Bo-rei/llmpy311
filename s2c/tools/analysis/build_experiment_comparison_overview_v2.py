@@ -24,16 +24,16 @@ import pandas as pd
 
 ROOT = Path(__file__).resolve().parents[2]
 FAIR = ROOT / "results/analysis/cross_protocol_tradeoff_v1/summary_mean_std.csv"
-EXTERNAL = ROOT / "results/analysis/comparison_atlas_v1/stackoverflow_kir50_external_summary.csv"
-HISTORICAL = ROOT / "results/analysis/historical_sota_comparison_v1/ours_minus_best_baseline.csv"
-MOGB_EXACT = ROOT / "results/analysis/mogb_reproduction_gap_analysis_v2/exact_run_summary.csv"
-MOGB_PAPER_GAP = ROOT / "results/analysis/mogb_reproduction_gap_analysis_v2/paper_gap.csv"
+EXTERNAL = ROOT / "results/analysis/archive/analysis/comparison_atlas_v1/stackoverflow_kir50_external_summary.csv"
+HISTORICAL = ROOT / "results/analysis/archive/analysis/historical_sota_comparison_v1/ours_minus_best_baseline.csv"
+MOGB_EXACT = ROOT / "results/analysis/archive/analysis/mogb_reproduction_gap_analysis_v2/exact_run_summary.csv"
+MOGB_PAPER_GAP = ROOT / "results/analysis/archive/analysis/mogb_reproduction_gap_analysis_v2/paper_gap.csv"
 BASELINE_SUMMARY = ROOT / "results/final_baselines/summary.csv"
 DCLOOS_RECOVERY = ROOT.parent / "artifacts/s2c/external/dcloos_official_oos_kir75_seed888_reduced_v2/recovery_metrics.json"
 
-OUT = ROOT / "results/analysis/experiment_comparison_overview_v2"
-FIG = ROOT / "figures/experiment_comparison_overview_v2"
-REPORT = ROOT / "docs/analysis/EXPERIMENT_COMPARISON_OVERVIEW_V2.md"
+OUT = ROOT / "results/analysis/archive/analysis/experiment_comparison_overview_v2"
+FIG = ROOT / "figures/archive/analysis/experiment_comparison_overview_v2"
+REPORT = ROOT / "docs/archive/analysis/EXPERIMENT_COMPARISON_OVERVIEW_V2.md"
 
 _FONT = Path("/usr/share/fonts/truetype/wqy/wqy-zenhei.ttc")
 if _FONT.is_file():

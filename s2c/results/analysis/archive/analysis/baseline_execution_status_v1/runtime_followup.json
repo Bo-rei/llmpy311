@@ -1,0 +1,26 @@
+{
+  "schema_version": "baseline_runtime_followup_v1",
+  "protocol_version": "protocol_v2_textoir_v1",
+  "scope": "external baseline runtime preflight only",
+  "training_started": false,
+  "interpreters_checked": [
+    "/home/bo/anaconda3/bin/python",
+    "/home/bo/anaconda3/envs/bo/bin/python",
+    "/home/bo/anaconda3/envs/implicit_intent/bin/python",
+    "/home/bo/anaconda3/envs/textoir-py39/bin/python",
+    "/usr/bin/python3"
+  ],
+  "cpu_only_attempted": true,
+  "minimal_torch_import": "timeout_or_unavailable",
+  "cuda_probe": "timeout_or_unavailable",
+  "historical_native_signal": "signal_6_and_D_state_observed",
+  "nvidia_smi_gpu_visible": true,
+  "usable_same_protocol_metrics": 0,
+  "conclusion": "runtime_blocker_not_algorithm_or_data_result",
+  "next_gate": [
+    "torch import smoke",
+    "BERT forward smoke",
+    "CPU or GPU execution smoke",
+    "then StackOverflow seed42 ADB/DA-ADB"
+  ]
+}

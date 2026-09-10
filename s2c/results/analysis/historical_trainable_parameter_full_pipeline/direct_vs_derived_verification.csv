@@ -1,0 +1,10 @@
+dataset,seed,configuration,direct_prediction_count,oos_f1_abs_delta,f1_all_abs_delta,known_macro_f1_abs_delta,overall_accuracy_abs_delta,known_recall_abs_delta,false_accept_rate_abs_delta,false_reject_rate_abs_delta,router_error_rate_abs_delta,expert_error_rate_abs_delta,max_abs_delta
+clinc150,13,"K=2,lambda=2.0,threshold=0.95,normalized_union",5500,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+clinc150,42,"K=2,lambda=2.0,threshold=0.95,normalized_union",5500,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+clinc150,87,"K=2,lambda=2.0,threshold=0.95,normalized_union",5500,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+stackoverflow,13,"K=1,lambda=1.0,threshold=0.95,nearest_sphere",5990,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+stackoverflow,42,"K=1,lambda=1.0,threshold=0.95,nearest_sphere",5990,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+stackoverflow,87,"K=1,lambda=1.0,threshold=0.95,nearest_sphere",5990,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+banking77_oos,13,"K=1,lambda=0.75,threshold=0.95,normalized_union",4080,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+banking77_oos,42,"K=1,lambda=0.75,threshold=0.95,normalized_union",4080,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+banking77_oos,87,"K=1,lambda=0.75,threshold=0.95,normalized_union",4080,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0

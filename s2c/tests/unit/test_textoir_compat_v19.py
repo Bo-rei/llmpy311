@@ -168,7 +168,6 @@ def test_bert_overlay_applies_only_documented_compatibility_routes(tmp_path: Pat
         for patch in provenance["compatibility_patches"]
     )
 
-
 def test_adb_overlay_moves_only_diagnostic_delta_history_to_cpu(tmp_path: Path) -> None:
     textoir_root = default_textoir_root()
     if not textoir_root.is_dir():
@@ -187,12 +186,17 @@ def test_adb_overlay_moves_only_diagnostic_delta_history_to_cpu(tmp_path: Path) 
     assert "point.detach().cpu().numpy()" not in source_before
     assert source.read_text(encoding="utf-8") == source_before
     assert "methods/ADB/manager.py" in provenance["compatibility_changed_files"]
+    assert "run.py" in provenance["compatibility_changed_files"]
     adb_patch = next(
         patch
         for patch in provenance["compatibility_patches"]
         if patch["file"] == "methods/ADB/manager.py"
     )
     assert adb_patch["reason"] == "move ADB diagnostic delta history to CPU before np.save"
+    assert any(
+        patch["file"] == "run.py" and patch["status"] == "s2c_analysis_hook"
+        for patch in provenance["compatibility_patches"]
+    )
 
 
 def test_da_adb_overlay_guards_reachability_and_cosnorm_zero_division(tmp_path: Path) -> None:
@@ -223,6 +227,34 @@ def test_da_adb_overlay_guards_reachability_and_cosnorm_zero_division(tmp_path: 
     ]
     assert any("reachability" in patch["reason"] for patch in da_patches)
     assert any("CosNorm" in patch["reason"] for patch in da_patches)
+
+
+def test_knncl_overlay_repairs_only_upstream_label_alias(tmp_path: Path) -> None:
+    textoir_root = default_textoir_root()
+    if not textoir_root.is_dir():
+        pytest.skip("Migrated TEXTOIR clone is not available")
+    model = tmp_path / "local-bert"
+    model.mkdir()
+
+    source = textoir_root / "open_intent_detection" / "backbones" / "bert.py"
+    source_text = source.read_text(encoding="utf-8")
+    overlay, provenance = runner.prepare_runtime_overlay(
+        textoir_root, tmp_path / "run", "KNNCL", model.resolve()
+    )
+    patched_text = (overlay / "backbones" / "bert.py").read_text(encoding="utf-8")
+
+    assert "self.number_labels = args.num_labels" in patched_text
+    assert "self.number_labels = args.anum_labels" in source_text
+    assert "self.number_labels = args.anum_labels" not in patched_text
+    assert source.read_text(encoding="utf-8") == source_text
+    assert "backbones/bert.py" in provenance["compatibility_changed_files"]
+    patch = next(
+        item
+        for item in provenance["compatibility_patches"]
+        if item["file"] == "backbones/bert.py"
+        and item["status"] == "reachability_compatibility"
+    )
+    assert "anum_labels" in patch["reason"]
 
 
 def test_external_artifact_audit_requires_predictions_and_results(tmp_path: Path) -> None:

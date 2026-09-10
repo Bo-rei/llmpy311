@@ -1,0 +1,8 @@
+method,pareto_cells,total_cells,pareto_rate,method_label
+mogb_minilm,9,9,1.0,MOGB-MiniLM
+mogb_partition_ours_boundary,9,9,1.0,MOGB part. + S2C bound.
+random_partition,9,9,1.0,Random K=2
+trainable_k1,9,9,1.0,Trainable K=1
+single_centroid,9,9,1.0,Frozen K=1
+fixed_k2,6,9,0.6666666666666666,Frozen K=2
+ours_partition_mogb_boundary,5,9,0.5555555555555556,S2C part. + MOGB bound.

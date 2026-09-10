@@ -1,0 +1,7 @@
+dataset,kir,source,candidate_count,all_metric_winners,baseline_known,baseline_oos,baseline_acc,max_test_known,test_search
+clinc150,0.5,results/analysis/historical_trainable_parameter_full_pipeline,252,0,85.58,90.1,87.93,80.61993984894399,posthoc_diagnostic_not_model_selection
+stackoverflow,0.5,results/analysis/historical_trainable_parameter_full_pipeline,252,0,86.71,88.86,87.78,83.10827899236976,posthoc_diagnostic_not_model_selection
+banking77_oos,0.5,results/analysis/historical_trainable_parameter_full_pipeline,252,0,82.54,79.93,81.51,67.79126508923461,posthoc_diagnostic_not_model_selection
+banking77_oos,0.25,results/analysis/historical_trainable_oos_priority_search/kir25,960,0,73.05,86.57,81.19,66.44081268767617,posthoc_diagnostic_not_model_selection
+banking77_oos,0.5,results/analysis/historical_trainable_oos_priority_search/kir50,960,0,82.54,79.93,81.51,67.8557494689458,posthoc_diagnostic_not_model_selection
+banking77_oos,0.75,results/analysis/historical_trainable_oos_priority_search/kir75,960,0,86.44,69.37,81.39,70.60849547264267,posthoc_diagnostic_not_model_selection

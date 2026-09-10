@@ -214,7 +214,7 @@ def main() -> int:
 3. 只有单格通过完整 artifact audit 后，才扩展 seed=87、100；
 4. 同协议结果达到 3 seed 后，才加入既有性能热图和 Pareto 图。
 
-详细执行记录：`results/analysis/baseline_execution_status_v1/attempt_status.csv`、`protocol_data_hashes.csv`、`MANIFEST.json`。
+详细执行记录：`results/analysis/archive/analysis/baseline_execution_status_v1/attempt_status.csv`、`protocol_data_hashes.csv`、`MANIFEST.json`。
 """,
         encoding="utf-8",
     )

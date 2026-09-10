@@ -1,0 +1,56 @@
+{
+  "schema_version": "s2c.analysis_bundle.v1",
+  "bundle": "full_pipeline_visual_explanation",
+  "created_at_utc": "2026-09-01T07:07:09.759465+00:00",
+  "contract_layer": "historical_controlled_gate_to_router_to_expert_H1",
+  "question": "How does the Trainable H1 Gate change the final Gate-to-Router-to-Expert outcome?",
+  "source_experiment": "historical_protocol_reconciliation_20260826",
+  "source_cached_cascade": "/home/bo/bo01/llmpy311/artifacts/s2c/outputs/experiments/cascade_full/gpu_kir50",
+  "source_current_trainable": "/home/bo/bo01/llmpy311/s2c/results/analysis/historical_trainable_full_pipeline",
+  "builder": "tools/analysis/build_full_pipeline_visual_explanation.py",
+  "builder_sha256": "c991c7f5aa2ab0748b2a8293519c32791a186edd706d645aa4c14f77d2a75be1",
+  "report": "docs/analysis/RECENT_MECHANISM_ANALYSIS_PRESENTATION_V1.md",
+  "result_files": [
+    {
+      "path": "results/analysis/full_pipeline_visual_explanation/analysis_summary.json",
+      "sha256": "70a4a685d16d175d5a090d47a1fd121692b97e158261968ab63d72ead64c540d"
+    },
+    {
+      "path": "results/analysis/full_pipeline_visual_explanation/full_pipeline_error_paths.csv",
+      "sha256": "71481884dee237f9e07a6614e24fe474afe832e45ae5f61de89836f5d4ea92d3"
+    },
+    {
+      "path": "results/analysis/full_pipeline_visual_explanation/full_pipeline_paired_effects.csv",
+      "sha256": "9e4e98eb84746ed33b04d5e6b8e67870b54bfef23f3625472e9dbfdadfe54b95"
+    },
+    {
+      "path": "results/analysis/full_pipeline_visual_explanation/full_pipeline_performance.csv",
+      "sha256": "244e2b08301b32e090ff34cf625c3cfcd62de4d959f62f3f08cacb3acb84cbe4"
+    }
+  ],
+  "figure_files": [
+    "figures/full_pipeline_visual_explanation/full_pipeline_workpoint.png",
+    "figures/full_pipeline_visual_explanation/full_pipeline_workpoint.tiff",
+    "figures/full_pipeline_visual_explanation/full_pipeline_workpoint.pdf",
+    "figures/full_pipeline_visual_explanation/full_pipeline_workpoint.svg",
+    "figures/full_pipeline_visual_explanation/full_pipeline_error_paths.png",
+    "figures/full_pipeline_visual_explanation/full_pipeline_error_paths.tiff",
+    "figures/full_pipeline_visual_explanation/full_pipeline_error_paths.pdf",
+    "figures/full_pipeline_visual_explanation/full_pipeline_error_paths.svg",
+    "figures/full_pipeline_visual_explanation/full_pipeline_gate_to_pipeline.png",
+    "figures/full_pipeline_visual_explanation/full_pipeline_gate_to_pipeline.tiff",
+    "figures/full_pipeline_visual_explanation/full_pipeline_gate_to_pipeline.pdf",
+    "figures/full_pipeline_visual_explanation/full_pipeline_gate_to_pipeline.svg",
+    "figures/full_pipeline_visual_explanation/full_pipeline_gate_variants.png",
+    "figures/full_pipeline_visual_explanation/full_pipeline_gate_variants.tiff",
+    "figures/full_pipeline_visual_explanation/full_pipeline_gate_variants.pdf",
+    "figures/full_pipeline_visual_explanation/full_pipeline_gate_variants.svg"
+  ],
+  "guardrails": {
+    "new_training": false,
+    "threshold_changed": false,
+    "test_used_for_selection": false,
+    "oos_used_for_training": false,
+    "raw_predictions_written": false
+  }
+}

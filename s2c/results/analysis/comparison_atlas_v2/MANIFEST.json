@@ -8,11 +8,11 @@
   "rows": 10,
   "scope": "stackoverflow_kir050_contract_layers",
   "sources": {
-    "results/analysis/cascade_bridge_v1/summary_mean_std.csv": "3a4c9367553faae187655b3b20f8b470d4abf77b522ca33c05c62e4e274e193c",
-    "results/analysis/comparison_atlas_v1/stackoverflow_kir50_external_summary.csv": "4ac3979a2d7274984cf40b8aa831730ef440f5af0b6e06b864fceb4f62e88879",
+    "results/analysis/archive/analysis/cascade_bridge_v1/summary_mean_std.csv": "3a4c9367553faae187655b3b20f8b470d4abf77b522ca33c05c62e4e274e193c",
+    "results/analysis/archive/analysis/comparison_atlas_v1/stackoverflow_kir50_external_summary.csv": "4ac3979a2d7274984cf40b8aa831730ef440f5af0b6e06b864fceb4f62e88879",
     "results/analysis/cross_protocol_tradeoff_v1/summary_mean_std.csv": "c3f5b5cb9701bfd2e111da85575226393e3baf9c8bcace7df6fc39eb2d396ae8",
-    "results/analysis/mogb_reproduction_gap_analysis_v2/exact_run_summary.csv": "f6d7fcc89d2dcce92ef2098b4050b828c5ae620cd65c1b1a2f2b7038c2690aba",
-    "results/analysis/mogb_reproduction_gap_analysis_v2/paper_gap.csv": "909b6ca1d58044d143c91d242d9f64c4bd3506c9322467a81c0355d9ae26393b"
+    "results/analysis/archive/analysis/mogb_reproduction_gap_analysis_v2/exact_run_summary.csv": "f6d7fcc89d2dcce92ef2098b4050b828c5ae620cd65c1b1a2f2b7038c2690aba",
+    "results/analysis/archive/analysis/mogb_reproduction_gap_analysis_v2/paper_gap.csv": "909b6ca1d58044d143c91d242d9f64c4bd3506c9322467a81c0355d9ae26393b"
   },
   "stage": "comparison_atlas_v2",
   "test_used_for_selection": false

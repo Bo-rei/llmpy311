@@ -1,0 +1,10 @@
+{
+  "schema_version": "trainable_vs_adb_oos_decomposition_v1",
+  "protocol_version": "protocol_v2_textoir_v1",
+  "cells": 45,
+  "paired_rows": 45,
+  "source_sha256": "4ce790f6df804c67c7636c621520ac9345395b1fbd83e0fc115df79ba3d182fc",
+  "raw_text_exported": false,
+  "sample_level_predictions_exported": false,
+  "selection_used_test_oos": false
+}

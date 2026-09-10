@@ -1,0 +1,410 @@
+{
+  "source": "train_known_only",
+  "rankings": [
+    {
+      "intent": "apache",
+      "n_train": 600,
+      "mean_distance": 0.5205177295836783,
+      "variance": 0.286945609950788,
+      "sse_reduction": 0.06178114795444823
+    },
+    {
+      "intent": "cocoa",
+      "n_train": 599,
+      "mean_distance": 0.5648244281225638,
+      "variance": 0.33985259729996553,
+      "sse_reduction": 0.06887144437580649
+    },
+    {
+      "intent": "drupal",
+      "n_train": 599,
+      "mean_distance": 0.47243607676902694,
+      "variance": 0.2456550240457135,
+      "sse_reduction": 0.07957178671817035
+    },
+    {
+      "intent": "hibernate",
+      "n_train": 600,
+      "mean_distance": 0.42074586400871644,
+      "variance": 0.19725375634929324,
+      "sse_reduction": 0.0783852698448895
+    },
+    {
+      "intent": "linq",
+      "n_train": 600,
+      "mean_distance": 0.43480297942010687,
+      "variance": 0.21328513263965548,
+      "sse_reduction": 0.08352307681180593
+    },
+    {
+      "intent": "oracle",
+      "n_train": 600,
+      "mean_distance": 0.52428019022858,
+      "variance": 0.29403471262372843,
+      "sse_reduction": 0.07751479806496595
+    },
+    {
+      "intent": "osx",
+      "n_train": 600,
+      "mean_distance": 0.5784608945354777,
+      "variance": 0.34958351160974926,
+      "sse_reduction": 0.039395970438213294
+    },
+    {
+      "intent": "spring",
+      "n_train": 599,
+      "mean_distance": 0.4571331963349408,
+      "variance": 0.2297778248949968,
+      "sse_reduction": 0.08036966956314731
+    },
+    {
+      "intent": "svn",
+      "n_train": 600,
+      "mean_distance": 0.4551167744371628,
+      "variance": 0.22443987189470932,
+      "sse_reduction": 0.07083033467629576
+    },
+    {
+      "intent": "wordpress",
+      "n_train": 598,
+      "mean_distance": 0.4319699050972262,
+      "variance": 0.20183227237936796,
+      "sse_reduction": 0.05411501890331336
+    }
+  ],
+  "strategies": {
+    "fixed_k1": {
+      "apache": 1,
+      "cocoa": 1,
+      "drupal": 1,
+      "hibernate": 1,
+      "linq": 1,
+      "oracle": 1,
+      "osx": 1,
+      "spring": 1,
+      "svn": 1,
+      "wordpress": 1
+    },
+    "fixed_k2": {
+      "apache": 2,
+      "cocoa": 2,
+      "drupal": 2,
+      "hibernate": 2,
+      "linq": 2,
+      "oracle": 2,
+      "osx": 2,
+      "spring": 2,
+      "svn": 2,
+      "wordpress": 2
+    },
+    "fixed_k3": {
+      "apache": 3,
+      "cocoa": 3,
+      "drupal": 3,
+      "hibernate": 3,
+      "linq": 3,
+      "oracle": 3,
+      "osx": 3,
+      "spring": 3,
+      "svn": 3,
+      "wordpress": 3
+    },
+    "mean_distance_top10_k2": {
+      "apache": 1,
+      "cocoa": 1,
+      "drupal": 1,
+      "hibernate": 1,
+      "linq": 1,
+      "oracle": 1,
+      "osx": 2,
+      "spring": 1,
+      "svn": 1,
+      "wordpress": 1
+    },
+    "mean_distance_top10_k3": {
+      "apache": 1,
+      "cocoa": 1,
+      "drupal": 1,
+      "hibernate": 1,
+      "linq": 1,
+      "oracle": 1,
+      "osx": 3,
+      "spring": 1,
+      "svn": 1,
+      "wordpress": 1
+    },
+    "mean_distance_top25_k2": {
+      "apache": 1,
+      "cocoa": 2,
+      "drupal": 1,
+      "hibernate": 1,
+      "linq": 1,
+      "oracle": 2,
+      "osx": 2,
+      "spring": 1,
+      "svn": 1,
+      "wordpress": 1
+    },
+    "mean_distance_top25_k3": {
+      "apache": 1,
+      "cocoa": 3,
+      "drupal": 1,
+      "hibernate": 1,
+      "linq": 1,
+      "oracle": 3,
+      "osx": 3,
+      "spring": 1,
+      "svn": 1,
+      "wordpress": 1
+    },
+    "mean_distance_top50_k2": {
+      "apache": 2,
+      "cocoa": 2,
+      "drupal": 2,
+      "hibernate": 1,
+      "linq": 1,
+      "oracle": 2,
+      "osx": 2,
+      "spring": 1,
+      "svn": 1,
+      "wordpress": 1
+    },
+    "mean_distance_top50_k3": {
+      "apache": 3,
+      "cocoa": 3,
+      "drupal": 3,
+      "hibernate": 1,
+      "linq": 1,
+      "oracle": 3,
+      "osx": 3,
+      "spring": 1,
+      "svn": 1,
+      "wordpress": 1
+    },
+    "mean_distance_top75_k2": {
+      "apache": 2,
+      "cocoa": 2,
+      "drupal": 2,
+      "hibernate": 1,
+      "linq": 2,
+      "oracle": 2,
+      "osx": 2,
+      "spring": 2,
+      "svn": 2,
+      "wordpress": 1
+    },
+    "mean_distance_top75_k3": {
+      "apache": 3,
+      "cocoa": 3,
+      "drupal": 3,
+      "hibernate": 1,
+      "linq": 3,
+      "oracle": 3,
+      "osx": 3,
+      "spring": 3,
+      "svn": 3,
+      "wordpress": 1
+    },
+    "variance_top10_k2": {
+      "apache": 1,
+      "cocoa": 1,
+      "drupal": 1,
+      "hibernate": 1,
+      "linq": 1,
+      "oracle": 1,
+      "osx": 2,
+      "spring": 1,
+      "svn": 1,
+      "wordpress": 1
+    },
+    "variance_top10_k3": {
+      "apache": 1,
+      "cocoa": 1,
+      "drupal": 1,
+      "hibernate": 1,
+      "linq": 1,
+      "oracle": 1,
+      "osx": 3,
+      "spring": 1,
+      "svn": 1,
+      "wordpress": 1
+    },
+    "variance_top25_k2": {
+      "apache": 1,
+      "cocoa": 2,
+      "drupal": 1,
+      "hibernate": 1,
+      "linq": 1,
+      "oracle": 2,
+      "osx": 2,
+      "spring": 1,
+      "svn": 1,
+      "wordpress": 1
+    },
+    "variance_top25_k3": {
+      "apache": 1,
+      "cocoa": 3,
+      "drupal": 1,
+      "hibernate": 1,
+      "linq": 1,
+      "oracle": 3,
+      "osx": 3,
+      "spring": 1,
+      "svn": 1,
+      "wordpress": 1
+    },
+    "variance_top50_k2": {
+      "apache": 2,
+      "cocoa": 2,
+      "drupal": 2,
+      "hibernate": 1,
+      "linq": 1,
+      "oracle": 2,
+      "osx": 2,
+      "spring": 1,
+      "svn": 1,
+      "wordpress": 1
+    },
+    "variance_top50_k3": {
+      "apache": 3,
+      "cocoa": 3,
+      "drupal": 3,
+      "hibernate": 1,
+      "linq": 1,
+      "oracle": 3,
+      "osx": 3,
+      "spring": 1,
+      "svn": 1,
+      "wordpress": 1
+    },
+    "variance_top75_k2": {
+      "apache": 2,
+      "cocoa": 2,
+      "drupal": 2,
+      "hibernate": 1,
+      "linq": 2,
+      "oracle": 2,
+      "osx": 2,
+      "spring": 2,
+      "svn": 2,
+      "wordpress": 1
+    },
+    "variance_top75_k3": {
+      "apache": 3,
+      "cocoa": 3,
+      "drupal": 3,
+      "hibernate": 1,
+      "linq": 3,
+      "oracle": 3,
+      "osx": 3,
+      "spring": 3,
+      "svn": 3,
+      "wordpress": 1
+    },
+    "sse_reduction_top10_k2": {
+      "apache": 1,
+      "cocoa": 1,
+      "drupal": 1,
+      "hibernate": 1,
+      "linq": 2,
+      "oracle": 1,
+      "osx": 1,
+      "spring": 1,
+      "svn": 1,
+      "wordpress": 1
+    },
+    "sse_reduction_top10_k3": {
+      "apache": 1,
+      "cocoa": 1,
+      "drupal": 1,
+      "hibernate": 1,
+      "linq": 3,
+      "oracle": 1,
+      "osx": 1,
+      "spring": 1,
+      "svn": 1,
+      "wordpress": 1
+    },
+    "sse_reduction_top25_k2": {
+      "apache": 1,
+      "cocoa": 1,
+      "drupal": 2,
+      "hibernate": 1,
+      "linq": 2,
+      "oracle": 1,
+      "osx": 1,
+      "spring": 2,
+      "svn": 1,
+      "wordpress": 1
+    },
+    "sse_reduction_top25_k3": {
+      "apache": 1,
+      "cocoa": 1,
+      "drupal": 3,
+      "hibernate": 1,
+      "linq": 3,
+      "oracle": 1,
+      "osx": 1,
+      "spring": 3,
+      "svn": 1,
+      "wordpress": 1
+    },
+    "sse_reduction_top50_k2": {
+      "apache": 1,
+      "cocoa": 1,
+      "drupal": 2,
+      "hibernate": 2,
+      "linq": 2,
+      "oracle": 2,
+      "osx": 1,
+      "spring": 2,
+      "svn": 1,
+      "wordpress": 1
+    },
+    "sse_reduction_top50_k3": {
+      "apache": 1,
+      "cocoa": 1,
+      "drupal": 3,
+      "hibernate": 3,
+      "linq": 3,
+      "oracle": 3,
+      "osx": 1,
+      "spring": 3,
+      "svn": 1,
+      "wordpress": 1
+    },
+    "sse_reduction_top75_k2": {
+      "apache": 2,
+      "cocoa": 2,
+      "drupal": 2,
+      "hibernate": 2,
+      "linq": 2,
+      "oracle": 2,
+      "osx": 1,
+      "spring": 2,
+      "svn": 2,
+      "wordpress": 1
+    },
+    "sse_reduction_top75_k3": {
+      "apache": 3,
+      "cocoa": 3,
+      "drupal": 3,
+      "hibernate": 3,
+      "linq": 3,
+      "oracle": 3,
+      "osx": 1,
+      "spring": 3,
+      "svn": 3,
+      "wordpress": 1
+    }
+  },
+  "aliases": {
+    "mean_distance_top100_k2": "fixed_k2",
+    "mean_distance_top100_k3": "fixed_k3",
+    "variance_top100_k2": "fixed_k2",
+    "variance_top100_k3": "fixed_k3",
+    "sse_reduction_top100_k2": "fixed_k2",
+    "sse_reduction_top100_k3": "fixed_k3"
+  },
+  "rounding": "ceil; descending rank; intent lexical ties"
+}

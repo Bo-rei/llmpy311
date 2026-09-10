@@ -1,0 +1,15 @@
+{
+  "completed_units": 36,
+  "expected_units": 36,
+  "device": "cuda",
+  "seed": 42,
+  "variants": [
+    "Ours",
+    "Without Gate",
+    "Cascade-MiniLM",
+    "Cascade-SmolLM"
+  ],
+  "protocol": "current H1 matched four-variant ablation",
+  "test_used_for_selection": false,
+  "new_evaluation": true
+}

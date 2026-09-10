@@ -1,5 +1,5 @@
 {
-  "input": "/home/bo/bo01/llmpy311/s2c/results/analysis/minilm_trainable_5seed_fair_v1/all_methods_per_seed.csv",
+  "input": "/home/bo/bo01/llmpy311/s2c/results/analysis/archive/analysis/minilm_trainable_5seed_fair_v1/all_methods_per_seed.csv",
   "datasets": [
     "clinc150",
     "banking77",

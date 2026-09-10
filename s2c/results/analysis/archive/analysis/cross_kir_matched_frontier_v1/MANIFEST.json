@@ -1,0 +1,27 @@
+{
+  "analysis_only": true,
+  "datasets": [
+    "clinc150",
+    "banking77",
+    "stackoverflow"
+  ],
+  "experiment": "cross_kir_matched_frontier_v1",
+  "interpretation": "post_hoc matched-coverage diagnostic; not a parameter-selection rule",
+  "kirs": [
+    0.25,
+    0.5,
+    0.75
+  ],
+  "methods": [
+    "s2c_trainable_k1",
+    "mogb_minilm_fair"
+  ],
+  "selection_used_test_labels": false,
+  "source": "/home/bo/bo01/llmpy311/s2c/results/analysis/archive/analysis/s2c_mogb_operating_curve_attribution_v1/matched_known_recall.csv",
+  "source_sha256": "bbccc3389ede2bbe55c7d4059283981127b4ab5d345ee14f6157cca0d8804fe3",
+  "target_known_recall": [
+    0.8,
+    0.9,
+    0.95
+  ]
+}

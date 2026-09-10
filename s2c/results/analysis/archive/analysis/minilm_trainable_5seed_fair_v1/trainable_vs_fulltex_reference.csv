@@ -1,0 +1,10 @@
+dataset,kir,trainable_oos_f1_mean,fulltex_oos_f1,descriptive_delta_pp,source
+banking77,0.25,0.9165382964914104,0.9399,-2.33617035085895,protocol_mismatch_reference_only
+banking77,0.5,0.8356406184886493,0.8823000000000001,-4.665938151135066,protocol_mismatch_reference_only
+banking77,0.75,0.6865343253584566,0.8649,-17.836567464154328,protocol_mismatch_reference_only
+clinc150,0.25,0.9516427437131567,0.9501000000000001,0.15427437131566535,protocol_mismatch_reference_only
+clinc150,0.5,0.9043941395821135,0.9196,-1.520586041788647,protocol_mismatch_reference_only
+clinc150,0.75,0.828493223497581,0.871,-4.250677650241897,protocol_mismatch_reference_only
+stackoverflow,0.25,0.9547969095009252,0.9447,1.0096909500925193,protocol_mismatch_reference_only
+stackoverflow,0.5,0.8767066651336372,0.8970999999999999,-2.0393334866362807,protocol_mismatch_reference_only
+stackoverflow,0.75,0.7630378449085173,0.7556999999999999,0.7337844908517468,protocol_mismatch_reference_only

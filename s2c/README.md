@@ -6,13 +6,19 @@ s2c 是一个开放世界意图识别系统：
 文本 → Gate（Known/OOS）→ Router（domain）→ Expert（intent）
 ```
 
-当前系统和研究代码统一位于本目录。当前事实入口只有以下文档，分析结果与资产关系以
-`configs/experiment_registry.yaml` 的 `analysis_bundles` 为准：
+后续新实验默认使用与 `fulltex.tex` 对齐的历史 `multidataset/v19` 协议；已有
+`protocol_v2_textoir_v1` 结果只作为冻结参考。协议定义和历史数据入口见
+[`docs/REPRODUCIBILITY.md`](docs/REPRODUCIBILITY.md)。
 
-- [METHOD.md](docs/METHOD.md)：当前 Gate、公式和 split–merge 原型边界。
-- [CURRENT_STATUS.md](docs/CURRENT_STATUS.md)：唯一研究状态、阻断和下一步。
-- [EXPERIMENTS.md](docs/EXPERIMENTS.md)：主表、消融、基线和证据边界。
-- [REPRODUCIBILITY.md](docs/REPRODUCIBILITY.md)：数据、hash、命令和 artifact 规则。
+当前系统和研究代码统一位于本目录。不要从所有 Markdown 逐个开始读，最短阅读路径只有三步：
+
+1. [CURRENT_STATUS.md](docs/CURRENT_STATUS.md)：当前进展、结论和下一步。
+2. [统一对比与机制报告](docs/analysis/UNIFIED_COMPARISON_AND_MECHANISM_REPORT_V1.md)：具体结果和机制解释。
+3. [关键图索引](docs/analysis/VISUAL_ANALYSIS_INDEX_V1.md)：图、表和准确路径。
+
+需要查协议或复现细节时，再看 [METHOD.md](docs/METHOD.md)、[EXPERIMENTS.md](docs/EXPERIMENTS.md)
+和 [REPRODUCIBILITY.md](docs/REPRODUCIBILITY.md)。分析结果与资产关系以
+`configs/experiment_registry.yaml` 的 `analysis_bundles` 为准。
 
 分析资产不再通过不断新增平行 Markdown、`V2/V3` 文件夹或一次性入口管理。结果目录、图目录、
 报告、manifest、构建脚本和监督/协议层都必须登记在上述 registry；新资产使用 lower_snake_case，
@@ -26,9 +32,10 @@ python tools/maintenance/audit_asset_catalog.py
 
 ## 分析资产怎么找
 
-- `docs/analysis/`：当前登记 bundle 的报告和少量总入口；先看
-  `EXPERIMENT_COMPARISON_OVERVIEW_V2.md`、`EXPERIMENT_DECISION_DASHBOARD_V1.md`
-  和 `VISUAL_ANALYSIS_INDEX_V1.md`。
+- `docs/analysis/`：当前只保留两份分析入口；先看
+  `UNIFIED_COMPARISON_AND_MECHANISM_REPORT_V1.md`，再看
+  `VISUAL_ANALYSIS_INDEX_V1.md`。旧版性能总览已归档到
+  `docs/archive/analysis/EXPERIMENT_COMPARISON_OVERVIEW_V2.md`。
 - `figures/`：当前 bundle 的图；历史或一次性图在 `figures/archive/analysis/`。
 - `results/analysis/`：当前 bundle 的轻量 CSV/JSON/manifest；历史或一次性结果在
   `results/analysis/archive/analysis/`。

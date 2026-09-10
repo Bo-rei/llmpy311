@@ -1,0 +1,24 @@
+{
+  "experiment": "historical_trainable_gate_search",
+  "protocol": "historical_v19_paper_main",
+  "evidence_level": "H1 controlled",
+  "dataset": "clinc150",
+  "kir": 0.5,
+  "seeds": [
+    13,
+    42,
+    87
+  ],
+  "representations": [
+    "existing_last2",
+    "last2_long",
+    "projection_only",
+    "lora_long"
+  ],
+  "geometry_count": 10,
+  "validation_only_selection": true,
+  "test_used_for_selection": false,
+  "device": "cuda",
+  "completed_units": 3,
+  "status": "complete"
+}

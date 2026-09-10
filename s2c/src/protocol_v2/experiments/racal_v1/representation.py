@@ -8,6 +8,7 @@ from typing import Any, Mapping, Sequence
 
 import numpy as np
 import torch
+from peft import LoraConfig, TaskType, get_peft_model
 from transformers import AutoModel
 
 from protocol_v2.experiments.geometry_preserving import mean_pool
@@ -78,6 +79,83 @@ class RacalMiniLM(torch.nn.Module):
         }
 
 
+class LoraRacalMiniLM(torch.nn.Module):
+    """LoRA-adapted MiniLM with the same residual Gate interface."""
+
+    def __init__(self, model_path: Path, projection_hidden_dim: int) -> None:
+        super().__init__()
+        base = AutoModel.from_pretrained(model_path, local_files_only=True)
+        self.encoder = get_peft_model(
+            base,
+            LoraConfig(
+                task_type=TaskType.FEATURE_EXTRACTION,
+                target_modules="all-linear",
+                r=8,
+                lora_alpha=16,
+                lora_dropout=0.1,
+                bias="none",
+            ),
+        )
+        dim = int(self.encoder.config.hidden_size)
+        if dim != 384:
+            raise ValueError(f"RACAL requires a 384D MiniLM output, got {dim}")
+        self.projection = ResidualProjection(dim, int(projection_hidden_dim))
+        self.mode = "lora_minilm_plus_projection"
+
+    def forward(self, tokens: Mapping[str, torch.Tensor]) -> torch.Tensor:
+        pooled = mean_pool(self.encoder(**tokens).last_hidden_state, tokens["attention_mask"])
+        return torch.nn.functional.normalize(self.projection(pooled), dim=-1)
+
+    def trainable_parameter_names(self) -> list[str]:
+        return [name for name, parameter in self.named_parameters() if parameter.requires_grad]
+
+    def trainable_parameter_count(self) -> int:
+        return int(sum(parameter.numel() for parameter in self.parameters() if parameter.requires_grad))
+
+    def freeze_report(self) -> dict[str, Any]:
+        names = self.trainable_parameter_names()
+        base_parameters = [
+            (name, parameter)
+            for name, parameter in self.named_parameters()
+            if "lora_" not in name and not name.startswith("projection.")
+        ]
+        lora_parameters = [
+            parameter for name, parameter in self.named_parameters() if "lora_" in name
+        ]
+        projection_parameters = [
+            parameter for name, parameter in self.named_parameters() if name.startswith("projection.")
+        ]
+        return {
+            "mode": self.mode,
+            "hidden_size": int(self.encoder.config.hidden_size),
+            "num_hidden_layers": int(self.encoder.config.num_hidden_layers),
+            "trainable_parameter_count": self.trainable_parameter_count(),
+            "trainable_parameter_names": names,
+            "base_parameter_count": int(sum(parameter.numel() for _, parameter in base_parameters)),
+            "base_trainable_parameter_count": int(sum(parameter.numel() for _, parameter in base_parameters if parameter.requires_grad)),
+            "lora_parameter_count": int(sum(parameter.numel() for parameter in lora_parameters)),
+            "projection_parameter_count": int(sum(parameter.numel() for parameter in projection_parameters)),
+            "lora_config": {
+                "target_modules": "all-linear",
+                "r": 8,
+                "lora_alpha": 16,
+                "lora_dropout": 0.1,
+                "bias": "none",
+                "task_type": "FEATURE_EXTRACTION",
+            },
+            "requires_grad": {name: bool(parameter.requires_grad) for name, parameter in self.named_parameters()},
+        }
+
+
+def build_racal_model(model_path: Path, mode: str, projection_hidden_dim: int) -> torch.nn.Module:
+    """Build one supported RACAL representation without changing old modes."""
+    if mode in {"trainable_projection_only", "last2_minilm_plus_projection"}:
+        return RacalMiniLM(model_path, mode, projection_hidden_dim)
+    if mode == "lora_minilm_plus_projection":
+        return LoraRacalMiniLM(model_path, projection_hidden_dim)
+    raise ValueError(f"Unsupported RACAL representation mode: {mode}")
+
+
 def set_seed(seed: int) -> None:
     random.seed(seed)
     np.random.seed(seed)
@@ -97,7 +175,7 @@ def choose_device(requested: str) -> torch.device:
 
 
 def encode_rows(
-    model: RacalMiniLM,
+    model: torch.nn.Module,
     tokenizer: Any,
     rows: Sequence[Mapping[str, Any]],
     device: torch.device,

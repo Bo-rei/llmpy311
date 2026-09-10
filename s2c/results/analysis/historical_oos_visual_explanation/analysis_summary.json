@@ -1,0 +1,91 @@
+{
+  "schema_version": "s2c.h1_historical_oos_visual_explanation.v1",
+  "protocol": "historical_v19_paper_main__H1_controlled_gate_only",
+  "not_protocols": [
+    "strict_H0_full_Cascade",
+    "protocol_v2_textoir_v1"
+  ],
+  "datasets": [
+    "clinc150",
+    "stackoverflow",
+    "banking77_oos"
+  ],
+  "kirs": [
+    0.25,
+    0.5,
+    0.75
+  ],
+  "seeds": [
+    13,
+    42,
+    87
+  ],
+  "kir50_positive_dataset_means": 3,
+  "all_kir_positive_group_means": 9,
+  "all_kir_group_count": 9,
+  "positive_seed_runs": 26,
+  "seed_run_count": 27,
+  "transition_counts": {
+    "both_correct": 22483,
+    "both_wrong": 2097,
+    "frozen_only": 506,
+    "trainable_only": 2891
+  },
+  "decomposition_max_closure_error": 5.551115123125783e-17,
+  "geometry": {
+    "dataset": "stackoverflow",
+    "kir": 0.5,
+    "seed": 42,
+    "selection_rule": "Frozen OOS false-accept nearest cluster with largest count; smallest cluster id breaks ties; display uses fixed Frozen score band [0.90,1.10]",
+    "selected_frozen_cluster": 2,
+    "selected_known_intent": "drupal",
+    "frozen_score_band_low": 0.9,
+    "frozen_score_band_high": 1.1,
+    "frozen_false_accepts_at_selected_cluster": 361,
+    "known_train_points": 599,
+    "validation_unknown_points_not_plotted": 937,
+    "test_oos_points": 2806,
+    "corrected_oos_points": 349,
+    "projection_scope": "separate local PCA per method; descriptive only",
+    "three_d": {
+      "dataset": "stackoverflow",
+      "kir": 0.5,
+      "seed": 42,
+      "selected_frozen_cluster": 2,
+      "selected_known_intent": "drupal",
+      "oos_cohort_count": 2806,
+      "frozen_true_384d_accept_count": 361,
+      "frozen_true_384d_reject_count": 2445,
+      "trainable_true_384d_accept_count": 27,
+      "trainable_true_384d_reject_count": 2779,
+      "trainable_repairs_from_frozen_false_accept": 349,
+      "projection_scope": "radial schematic: PCA direction and exact 384-D local normalized distance; sphere inclusion equals selected-center inclusion, not necessarily full Gate decision",
+      "frozen_local_inside": 361,
+      "trainable_local_inside": 5,
+      "coordinate_transform": "u=(z-center)*sqrt(inv_diag_cov)/radius; each method has its own local coordinate system",
+      "display_transform": "radial display clips normalized distances above 1.28 for readability while preserving inside/outside status and direction"
+    }
+  },
+  "reencoding_verification": [
+    {
+      "method": "frozen_k1",
+      "test_rows": 5990,
+      "score_max_abs_delta": 2.259556122208295e-07,
+      "decision_mismatch_count": 0,
+      "nearest_cluster_mismatch_count": 0
+    },
+    {
+      "method": "trainable_k1",
+      "test_rows": 5990,
+      "score_max_abs_delta": 4.3361082890935876e-07,
+      "decision_mismatch_count": 0,
+      "nearest_cluster_mismatch_count": 0
+    }
+  ],
+  "selection_and_display_notes": {
+    "local_geometry": "Frozen OOS false-accept nearest cluster with largest count; smallest cluster id breaks ties; display uses fixed Frozen score band [0.90,1.10]",
+    "density_smoothing": "fixed histogram bins followed by [1,2,3,2,1]/9 convolution",
+    "display_tail": "values at or above the per-figure 99.5th-percentile cap are retained in the final bin/edge",
+    "sample_export": "aggregate only; no raw embeddings, text, sample ids, or per-sample scores written"
+  }
+}

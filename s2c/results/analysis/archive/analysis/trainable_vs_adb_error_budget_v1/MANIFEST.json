@@ -1,0 +1,65 @@
+{
+  "alignment": [
+    {
+      "adb_contract": "BERT/TextOIR compatibility",
+      "adb_run_manifest_sha256": "d4c358a1cb3e568561484a109c3ed4043ce6b45a88e7d64ac5c274e2966cb778",
+      "adb_test_sha256": "a488d555cf47920ad8a41ffa5df37dcbf4cb92862bbcbe6f907191a7a6e94c12",
+      "aligned": true,
+      "count": 6000,
+      "protocol_view_sha256": "80b602db560e7fb8ab590edfc4abee492813c7b0f1c4ee3e31c0849712097740",
+      "seed": 42,
+      "test_sample_ids_sha256": "ed50cc34f4a8e69711527e7db4d5bed877b2e768861d442975d1a7b4907b16c6",
+      "trainable_contract": "last2_minilm_plus_projection",
+      "trainable_metrics_sha256": "ddcf63b33e7b9edbeccc7fec4226adc7abca92b680e84789521b982d6f2e9b9a",
+      "trainable_predictions_sha256": "ad323a5f22ded65c409110c514a4bfd50411f1139390730ea0234e4fa0587597"
+    },
+    {
+      "adb_contract": "BERT/TextOIR compatibility",
+      "adb_run_manifest_sha256": "3cd0f9ee73b912af114749785c3bac25a54e95a8065407cbe16063f97047c568",
+      "adb_test_sha256": "1fb9ad644d1b42f1167c453ec84c9c98426988315f1f84d26c80d0c4a9e6f7b6",
+      "aligned": true,
+      "count": 6000,
+      "protocol_view_sha256": "dfe1cb7dc5a20c5ca45d9a4abcf746abc9200a61665d2888c4d989c6476d5f62",
+      "seed": 87,
+      "test_sample_ids_sha256": "53f65be0e59d34bf1a888b93bca28cd91c57b620e14840d33339b37230b27f1f",
+      "trainable_contract": "last2_minilm_plus_projection",
+      "trainable_metrics_sha256": "1844d81c90711251521ea15e1a0fc1b32d07f8f63b4162d5a3e2d4185b982448",
+      "trainable_predictions_sha256": "f73641feb4760ff75996411d48bd8875b89235f6e7c0e5b6db4420b9e0ea0f94"
+    },
+    {
+      "adb_contract": "BERT/TextOIR compatibility",
+      "adb_run_manifest_sha256": "78a018efd0eec3c8cda37d6aaf8c8dde9dd0ee15f05f758197d9fab29ace3fde",
+      "adb_test_sha256": "c213abf7a6bd1da6fcf26587fa4555761babbe8fa942cb4c9b6fe9caaa60f200",
+      "aligned": true,
+      "count": 6000,
+      "protocol_view_sha256": "bfedaefef1860bb1633dc28a863c62c8381f71fb8074236c2c47d6e16a64f88b",
+      "seed": 100,
+      "test_sample_ids_sha256": "d3314a896b71cb10edb01ba43bef7ace11f1de7e30f9f7352aeae33c2a87e025",
+      "trainable_contract": "last2_minilm_plus_projection",
+      "trainable_metrics_sha256": "811b203da67337c6ceb1c2f478ebba24ad2ea6edbabe3ab0dbade494a0d3b1b0",
+      "trainable_predictions_sha256": "26a88a21ce724998ea24e7de9ec98b6afcf0cd0dca1aa586251348bb1962a9f5"
+    }
+  ],
+  "analysis": "trainable_vs_adb_error_budget_v1",
+  "n_aligned_rows": 18000,
+  "protocol_version": "protocol_v2_textoir_v1",
+  "raw_text_exported": false,
+  "sample_level_predictions_exported": false,
+  "schema_version": 1,
+  "scope": {
+    "dataset": "stackoverflow",
+    "kir": 0.5,
+    "seeds": [
+      42,
+      87,
+      100
+    ]
+  },
+  "state_order": [
+    "known_correct",
+    "known_wrong",
+    "known_rejected",
+    "oos_correct_rejected",
+    "oos_false_accept"
+  ]
+}

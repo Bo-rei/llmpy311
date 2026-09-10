@@ -185,12 +185,12 @@ def write_report(df: pd.DataFrame, summ: pd.DataFrame, stable: pd.DataFrame) -> 
 ## 证据文件
 
 - [`intent_level.csv`](../../results/diagnostics/adaptive_k/intent_level.csv)
-- [`intent_kir_summary.csv`](../../results/analysis/intent_kir_stability_pack_v1/intent_kir_summary.csv)
-- [`intent_kir_seed_stability.csv`](../../results/analysis/intent_kir_stability_pack_v1/intent_kir_seed_stability.csv)
-- [`oracle_multicenter_rate_heatmap.png`](../../figures/intent_kir_stability_pack_v1/oracle_multicenter_rate_heatmap.png)
-- [`oracle_gain_by_kir.png`](../../figures/intent_kir_stability_pack_v1/oracle_gain_by_kir.png)
-- [`oracle_oos_known_tradeoff.png`](../../figures/intent_kir_stability_pack_v1/oracle_oos_known_tradeoff.png)
-- [`oracle_multicenter_seed_stability.png`](../../figures/intent_kir_stability_pack_v1/oracle_multicenter_seed_stability.png)
+- [`intent_kir_summary.csv`](../../results/analysis/archive/analysis/intent_kir_stability_pack_v1/intent_kir_summary.csv)
+- [`intent_kir_seed_stability.csv`](../../results/analysis/archive/analysis/intent_kir_stability_pack_v1/intent_kir_seed_stability.csv)
+- [`oracle_multicenter_rate_heatmap.png`](../../figures/archive/analysis/intent_kir_stability_pack_v1/oracle_multicenter_rate_heatmap.png)
+- [`oracle_gain_by_kir.png`](../../figures/archive/analysis/intent_kir_stability_pack_v1/oracle_gain_by_kir.png)
+- [`oracle_oos_known_tradeoff.png`](../../figures/archive/analysis/intent_kir_stability_pack_v1/oracle_oos_known_tradeoff.png)
+- [`oracle_multicenter_seed_stability.png`](../../figures/archive/analysis/intent_kir_stability_pack_v1/oracle_multicenter_seed_stability.png)
 """
     REPORT.parent.mkdir(parents=True, exist_ok=True)
     REPORT.write_text(text, encoding="utf-8")

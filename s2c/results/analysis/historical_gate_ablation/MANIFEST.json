@@ -1,0 +1,30 @@
+{
+  "schema_version": "s2c.historical_gate_ablation.v1",
+  "stage": "historical_gate_ablation_full_pipeline_v1",
+  "protocol": "historical_v19_paper_main__H1_controlled_gate_to_router_to_expert",
+  "datasets": [
+    "clinc150",
+    "stackoverflow",
+    "banking77_oos"
+  ],
+  "kirs": [
+    0.25,
+    0.5,
+    0.75
+  ],
+  "seeds": [
+    13,
+    42,
+    87
+  ],
+  "gate_variants": [
+    "frozen_k1",
+    "trainable_k1"
+  ],
+  "completed_units": 54,
+  "test_used_for_selection": false,
+  "oos_used_for_training": false,
+  "summary": "results/analysis/historical_gate_ablation/summary.csv",
+  "paired_delta": "results/analysis/historical_gate_ablation/paired_delta.csv",
+  "report": "docs/analysis/historical_gate_ablation_report.md"
+}

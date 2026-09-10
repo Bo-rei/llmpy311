@@ -1,0 +1,13 @@
+adb_state,s2c_state,count,fraction_of_test
+known_correct,known_correct,2278,0.37966666666666665
+known_correct,known_rejected,69,0.0115
+known_correct,known_wrong,3,0.0005
+known_rejected,known_correct,190,0.03166666666666667
+known_rejected,known_rejected,418,0.06966666666666667
+known_rejected,known_wrong,22,0.0036666666666666666
+known_wrong,known_rejected,8,0.0013333333333333333
+known_wrong,known_wrong,12,0.002
+oos_correct_rejected,oos_correct_rejected,2583,0.4305
+oos_correct_rejected,oos_false_accept,172,0.028666666666666667
+oos_false_accept,oos_correct_rejected,138,0.023
+oos_false_accept,oos_false_accept,107,0.017833333333333333

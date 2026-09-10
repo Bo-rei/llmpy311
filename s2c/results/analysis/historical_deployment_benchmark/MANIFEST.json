@@ -1,0 +1,21 @@
+{
+  "schema_version": "s2c.historical_deployment_benchmark.v2",
+  "datasets": [
+    "clinc150",
+    "stackoverflow",
+    "banking77_oos"
+  ],
+  "kir": 0.5,
+  "seed": 42,
+  "variants": [
+    "frozen_k1",
+    "trainable_k1"
+  ],
+  "device": "cuda",
+  "raw_predictions_written": false,
+  "measurement_scope": [
+    "gate_only",
+    "full_cascade"
+  ],
+  "summary": "results/analysis/historical_deployment_benchmark/summary.csv"
+}

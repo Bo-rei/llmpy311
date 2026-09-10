@@ -1,0 +1,33 @@
+{
+  "analysis_stage": "visual_evidence_chain_v1",
+  "protocol_version": "protocol_v2_textoir_v1",
+  "same_protocol_scope": "five_seed_light_fair_component_summary",
+  "fixed_k_scope": "three_seed_light_sweep",
+  "test_oos_used_for_selection": false,
+  "analysis_uses_test_labels_post_hoc": true,
+  "raw_text_exported": false,
+  "sources": {
+    "results/analysis/archive/analysis/experimental_mechanism_pack_v3/method_summary.csv": "4842d66a066ae43494be5b643ba77106c7d9075b48832b717d0d4ab11713a42b",
+    "results/gate_only/kir_k_fixed_mean_std.csv": "eee1b5c7c1e2aefdb7a41e45693acd36963e2ae296e297d0623ab640a5a0f512",
+    "results/analysis/archive/analysis/stackoverflow_intent_diagnostic_v1/intent_diagnostic_summary.csv": "b3ae981e8e344217b5f67aabfefebe1f5295d4e4ca5521de0d6d0eae53b77d27",
+    "results/final_baselines/summary.csv": "64b860ab7e1fb0f0fa1badf15b53ed9759f0ea80f60b127b3e386a946dfdeb98"
+  },
+  "outputs": [
+    "MANIFEST.json",
+    "external_baselines_isolated.csv",
+    "fixed_k_sweep.csv",
+    "method_rankings.csv",
+    "performance_long.csv",
+    "relative_trainable_effects.csv",
+    "stackoverflow_intent_mechanism.csv"
+  ],
+  "figures": [
+    "intent_risk_scatter.png",
+    "k_sweep_tradeoff.png",
+    "kir_curves.png",
+    "method_rank_heatmap.png",
+    "pareto_tradeoff.png",
+    "performance_heatmap.png",
+    "relative_trainable_heatmap.png"
+  ]
+}

@@ -1,0 +1,50 @@
+[
+  {
+    "dataset": "banking77_oos",
+    "kir": 0.75,
+    "seed": 42,
+    "variant": "Ours",
+    "known_f1": 70.22055701619288,
+    "oos_f1": 88.48934922806332,
+    "overall_accuracy": 81.47058823529412,
+    "f1_all": 70.68898758572803,
+    "known_recall": 80.72368421052632,
+    "false_accept_rate": 11.5625
+  },
+  {
+    "dataset": "banking77_oos",
+    "kir": 0.75,
+    "seed": 42,
+    "variant": "Without Gate",
+    "known_f1": 67.47059121070167,
+    "oos_f1": 82.31919688588404,
+    "overall_accuracy": 76.00490196078431,
+    "f1_all": 67.85132468955251,
+    "known_recall": 79.47368421052632,
+    "false_accept_rate": 21.5234375
+  },
+  {
+    "dataset": "banking77_oos",
+    "kir": 0.75,
+    "seed": 42,
+    "variant": "Cascade-MiniLM",
+    "known_f1": 73.77491146593142,
+    "oos_f1": 88.48934922806332,
+    "overall_accuracy": 82.69607843137254,
+    "f1_all": 74.15220474188352,
+    "known_recall": 80.72368421052632,
+    "false_accept_rate": 11.5625
+  },
+  {
+    "dataset": "banking77_oos",
+    "kir": 0.75,
+    "seed": 42,
+    "variant": "Cascade-SmolLM",
+    "known_f1": 51.306853931214334,
+    "oos_f1": 42.07119741100323,
+    "overall_accuracy": 45.88235294117647,
+    "f1_all": 51.07004222556789,
+    "known_recall": 91.84210526315789,
+    "false_accept_rate": 72.0703125
+  }
+]

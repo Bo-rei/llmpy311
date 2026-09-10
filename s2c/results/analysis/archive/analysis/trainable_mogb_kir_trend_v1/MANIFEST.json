@@ -1,0 +1,11 @@
+{
+  "stage": "trainable_mogb_kir_trend_v1",
+  "source": "results/analysis/cross_protocol_tradeoff_v1/summary_mean_std.csv",
+  "source_sha256": "c3f5b5cb9701bfd2e111da85575226393e3baf9c8bcace7df6fc39eb2d396ae8",
+  "rows": 9,
+  "outputs": [
+    "results/analysis/archive/analysis/trainable_mogb_kir_trend_v1/kir_trend.csv",
+    "figures/archive/analysis/trainable_mogb_kir_trend_v1/kir_trend.svg",
+    "docs/archive/analysis/TRAINABLE_MOGB_KIR_TREND_V1.md"
+  ]
+}

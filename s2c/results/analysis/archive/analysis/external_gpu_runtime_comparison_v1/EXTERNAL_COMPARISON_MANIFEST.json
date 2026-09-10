@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "tool": "build_external_single_cell_comparison_v1.py",
+  "external_root": "/home/bo/bo01/llmpy311/artifacts/s2c/external/adb_gpu_runtime_v1/stackoverflow",
+  "external_rows": 3,
+  "fair_rows": 35,
+  "valid_rows": 38,
+  "invalid_rows": 0,
+  "invalid_methods": [],
+  "metric_source": "y_true.npy/y_pred.npy; external results.csv is not trusted when inconsistent",
+  "auroc_and_aupr": "not available from hard predictions; recorded as NaN",
+  "paired_effect_rows": 30
+}

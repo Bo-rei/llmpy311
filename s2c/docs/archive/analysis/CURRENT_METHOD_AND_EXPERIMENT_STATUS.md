@@ -1,0 +1,586 @@
+# s2c 当前方法、实验进展与基线差异
+
+更新时间：2026-08-10
+活动协议：`protocol_v2_textoir_v1`
+
+本文是面向研究讨论的中文入口，回答四个问题：当前 s2c 到底实现了什么、已经做了哪些实验、
+当前最好的结果是什么、为什么不能把这些结果直接写成“SOTA 排名”。原始逐样本结果、模型和
+完整运行产物仍只保存在本地 artifact 中；本文只引用轻量统计和哈希证据。
+
+针对“`fulltex.tex` 中哪个方法超过旧基线、MOGB 为什么没有复现以及图在哪里”的集中说明，现以
+`docs/analysis/S2C_BASELINE_MOGB_COMPARISON_OVERVIEW_V1.md` 为统一入口。该报告明确区分历史完整
+Cascade、当前 Trainable-K1 Gate、MOGB-MiniLM-Fair、MOGB 本地官方逻辑和 corrected-loss 诊断。
+
+2026-08-06 新增的两个 analysis-only 证据包进一步把“表示改善”和“多中心边界风险”分开：
+`docs/archive/analysis/REPRESENTATION_BOUNDARY_PACK_V1.md` 汇总 Frozen/CE/SupCon 的 K=1/K=2 交互，
+`docs/archive/analysis/STACKOVERFLOW_INTENT_MULTI_CENTER_DIAGNOSTIC_V1.md` 汇总 StackOverflow 按意图的
+新增 OOS 接受与恢复 Known 样本代价。它们不构成新方法结果，也不改变既有实验状态。
+
+此外，`docs/archive/analysis/INTENT_KIR_STABILITY_PACK_V1.md` 将已有 13,580 条 intent-level K/KIR 审计
+按数据集、KIR、距离和 seed 稳定性重新汇总，显示 Banking77 的 oracle 多中心候选率明显高于
+StackOverflow；该结果只用于解释意图异质性，不能代替 Known-only 的正式选择规则。
+
+2026-08-10 新增 detector 配对区间证据：`docs/archive/analysis/DETECTOR_MECHANISM_ANALYSIS_V1.md` 复用
+KIR=.50、3 seed 的 Trainable/Frozen MiniLM 原生 detector 控制和固定 10,000 次 paired bootstrap，
+把“表示训练收益”和“几何 Gate 收益”分开报告；不新增训练，不改变五 seed fair 主矩阵。
+
+2026-08-10 新增三数据集 Cascade 桥接：`docs/archive/analysis/CASCADE_BRIDGE_CROSS_DATASET_V1.md` 在同一
+Known-only SmolLM Expert 下比较 Frozen K=1 与 Trainable K=1，覆盖 CLINC150、Banking77、StackOverflow
+共 18 个 dataset×seed×Gate 单元。Trainable 的 Cascade OOS F1 配对增量分别为 `+1.12pp/+5.18pp/+9.42pp`，
+对应 false acceptance 降幅为 `2.86pp/10.00pp/15.40pp`；该结果仍与 fulltex 历史 Cascade、MOGB 论文和
+DCLOOS 外部 OOS 监督分层，不构成跨合同 SOTA 排名。
+
+2026-08-10 新增独立 CUDA runtime 下的 ADB 三 seed 外部参照：StackOverflow/KIR=.50 的 OOS F1
+为 `87.36±1.61%`、F1-All 为 `85.66±1.59%`；与相同 seed 的 Trainable K=1 配对时，Trainable
+高 `+0.85pp/+1.03pp`，但 false acceptance 高 `+0.66pp`。这是 BERT/TextOIR 合同，不并入当前
+MiniLM fair ranking。完整说明见 `docs/archive/analysis/ADB_GPU_RUNTIME_THREE_SEED_V1.md`，当前所有比较对象
+的合同入口见 `docs/analysis/EXPERIMENT_DECISION_DASHBOARD_V1.md`。
+
+## 1. 先给结论
+
+当前 s2c 不是一个已经验证成功的“通用自适应多中心方法”。本轮已经补做了真正的“表示—中心共同训练”
+受控 pilot，但它在 StackOverflow 上没有接受任何新增中心。当前最可靠的自有结果仍是：
+
+> **Known-only 训练的 Trainable MiniLM + 单中心 Gate（K=1）在 StackOverflow 上明显优于冻结
+> MiniLM K=1；但在同一 Trainable MiniLM 表示上固定改成 K=2 后，Known Recall 上升，却产生大规模
+> OOS false acceptance，OOS F1 下降。**
+
+因此当前研究状态是：
+
+- 表示适配（K=1）已经出现稳定正收益；
+- 固定多中心的收益高度依赖数据集和意图，不能作为默认配置；
+- StackOverflow 上的主要瓶颈是多球接受区域的过覆盖，而不是单纯的 MiniLM 没训练；
+- 本轮的训练参与式自适应 pilot 没有产生 `K_y>1`，所以不能宣称已经得到自适应多中心收益；
+- 当前不能宣称超过 MOGB 论文或 DCLOOS，也不能宣称已达到 SOTA；
+- MOGB、ADB、DA-ADB、DCLOOS 的现有结果中，有些是同协议组件比较，有些是不同 BERT/OOS 监督条件下的兼容性结果，必须分开报告。
+
+2026-08-06 新增的 `minilm_trainable_kir_sweep_v1` 完成了 3 数据集×3 KIR×3 seed 的 Trainable K=1
+控制（27/27）。相对同距离 Frozen K=1，CLINC150 和 StackOverflow 在三个 KIR 都有 OOS F1 正增量，
+Banking77 仅在低 KIR 有收益且在 KIR=.75 明显退化。该结果强化了“训练表示改善单中心排序，但不自动
+解决固定多中心”的判断。详细结果见 `docs/archive/analysis/MINILM_TRAINABLE_KIR_SWEEP_V1.md`；与历史
+`fulltex.tex` Cascade 和外部 baseline 的协议分层见 `docs/archive/analysis/MINILM_TRAINABLE_VS_FULLTEX_AND_BASELINES_V1.md`。
+
+## 2. 当前代码实现的方法是什么
+
+### 2.0 一个必须先澄清的事实：此前没有完成；本轮已实现但未得到正的结构选择
+
+你的判断是正确的。当前代码中“多中心”和“自适应”是两个尚未同时成立的概念：
+
+- **E2/E3 主方法是固定 K 后处理**：K 由配置文件给定，编码器先产生 embedding，随后每个 intent
+  内部才执行 KMeans；KMeans 中心不进入 MiniLM 优化器，也没有梯度回传。
+- **RACAL 阶段一是可训练表示，但只有 K=1**：它训练 MiniLM 最后两层和 residual projection，
+  但没有训练多个中心，也没有学习中心数。
+- **RACAL 阶段二只是固定 K=2 归因实验**：它复用阶段一 checkpoint，再对每个 intent 做 KMeans-2；
+  没有重新训练表示，也没有根据 calibration 学习中心激活规则。
+- **RC-AMBL 是冻结表示下的风险门原型**：它不参与编码器训练，第一轮所有候选分裂都被安全门拒绝。
+- **joint_adaptive_multicenter_v1 是本轮真正参与训练的版本**：它从已验证的 RACAL Trainable K=1
+  checkpoint 初始化，训练 MiniLM 最后两层、残差投影和 intent prototypes；候选 split 从 Known train
+  的 PCA 残差提出，候选模型用 Known train 更新，结构只由 Known calibration 的 recall/compactness/
+  父边界约束决定。测试 OOS 只在最终评估读取。
+- 但 `repair6` 的 3 个 seed 均拒绝候选 split，最终 10 个 intent 全部为 `K_y=1`。因此这是“真正实现并
+  得到负诊断结果”，不是“已经成功的 adaptive-K”。
+
+因此，当前最准确的方法命名是：
+
+```text
+主协议：fixed-K post-hoc multi-centroid Gate
+当前最佳自有结果：Known-only trainable MiniLM + K=1 Gate
+已尝试但未成功：RC-AMBL adaptive split pilot、joint_adaptive_multicenter_v1
+尚未完成：joint representation–center training + calibration-selected K_y
+```
+
+真正的自适应多中心至少应同时具备三点：
+
+1. 中心/子中心的产生或更新参与表示训练，或至少与表示学习交替更新；
+2. 每个 intent 的 `K_y` 不是预先固定，而是由不使用测试 OOS 的规则决定；
+3. 训练、结构选择和边界校准形成一个可复现的 Known-only 闭环。
+
+目前三点尚未在 s2c 中同时实现并通过实验验证。
+
+### 2.1 正式 protocol_v2 Gate
+
+主要入口是：
+
+- `src/protocol_v2/experiments/runner.py`
+- `src/protocol_v2/gate/multi_sphere_oos_detector.py`
+- `configs/methods/frozen_minilm_gate.yaml`
+
+数据流如下：
+
+```text
+固定 canonical / registry / views
+        ↓
+本地 all-MiniLM-L6-v2 句向量
+        ↓
+L2 归一化
+        ↓
+每个 Known intent 内拟合 1 个或 K 个中心
+        ↓
+每个中心估计对角协方差与半径
+        ↓
+Gate score 与 Known/OOS 判定
+```
+
+代码中的 `MultiSphereOOSDetector` 有三个中心模式：
+
+1. `class_centroid`：每个意图一个中心；
+2. `class_centroid_mixture`：每个意图内部执行 KMeans，得到固定数量的子中心；
+3. `kmeans`：全体样本做全局 KMeans，主要用于历史或诊断对照。
+
+正式 protocol_v2 使用 `class_centroid_mixture`，并把 `subcenters_per_intent` 设为实验配置中的
+`K`。因此当前正式多中心方法的本质是：
+
+> **冻结或已给定的表示 + 每个 Known intent 内固定 K 的 KMeans + 每个子簇一个球形/对角马氏边界。**
+
+### 2.2 距离、半径和判定语义
+
+正式 Gate runner 在 `runner.py::_build_detector` 中固定了：
+
+- `center_mode="class_centroid_mixture"`；
+- `distance_metric` 为 `euclidean` 或 `mahalanobis_diag`；
+- `radius_method="mean_std"`；
+- `radius = mean(distance) + lambda * std(distance)`；
+- `lambda=1.0`；
+- `threshold=1.0`；
+- `l2_normalize=True`；
+- `random_state=42`。
+
+对角马氏距离在每个簇内按维度估计方差：
+
+```text
+d(x,c) = sqrt(sum((x-c)^2 / (var + epsilon)))
+r      = mean(d_train) + lambda * std(d_train)
+```
+
+默认 `acceptance_mode="nearest_sphere"`。它先找原始距离最近的球，再检查：
+
+```text
+d_nearest(x) <= r_nearest
+```
+
+代码还保留了显式的 `normalized_union` 语义，但它不是 E2/E3 的默认协议；该模式会按
+`min_j d_j/r_j` 判断是否有任意球接收样本。两种语义不能混写，否则会改变历史 E2/E3 结果。
+
+### 2.3 当前最强的自有方法：RACAL-v1 的 Trainable K=1
+
+RACAL-v1 阶段一不是另一个完整 Cascade，而是一个 Gate 表示训练控制。主要代码是：
+
+- `src/protocol_v2/experiments/racal_v1/representation.py`
+- `src/protocol_v2/experiments/racal_v1/runner.py`
+- `configs/experiments/protocol_v2_textoir_v1/racal_v1.yaml`
+
+它的表示路径为：
+
+```text
+MiniLM AutoModel
+    ↓ mean pooling
+384D residual projection（384 → 256 → 384）
+    ↓ L2 normalize
+Gate detector
+```
+
+训练约束是：
+
+- 只使用 Known train；
+- 每轮刷新 Known 类中心；
+- 使用基于中心距离的 CE；
+- 加入类内紧致项和类间 margin 项；
+- 先只训练 projection，再解冻 MiniLM 最后两层；
+- checkpoint 只用 Known calibration 的 `F1-K + 0.05 × Known Recall` 选择；
+- 不使用测试 OOS 选 epoch、半径、阈值或 K。
+
+所以它目前准确的名称是：
+
+> **Known-only residual-adapted MiniLM + single-centroid Gate**，而不是已完成的 adaptive-K 方法。
+
+## 3. 已完成的自有实验和结论
+
+| 阶段 | 做了什么 | 完成情况 | 当前结论 |
+|---|---|---:|---|
+| E0 | 三数据集 canonical、registry、views、exports、TEXTOIR runtime independence | complete | 数据和协议可以独立运行 |
+| E1 | 三数据集 Gate smoke | 36/36 | 工程链路可运行 |
+| E2 | 3 数据集 × 11 KIR × 5 seed × K=1..5 × 2 distance | 1650/1650 | 不存在跨数据集统一最优 K |
+| E3 | KMeans/random-balanced、ARI、tiny-cluster、Known-only coverage | 720 cells + 180 诊断组 | 稳定聚类不等于有效 OOS 边界 |
+| R1/M1 | CE-Recon、SupCon、Geometry 等表示探索 | 已完成但按 contract audit superseded | 几何指标改善不等于多中心恢复 |
+| λ audit | lambda 网格、split 不重叠、Known-only 选择审计 | complete | 当前主协议不使用 test OOS 调 lambda |
+| URCSG | Known-only leave-one-intent 风险选择 K | 6/6 | Banking77 条件性收益不足，StackOverflow 仍退化 |
+| CCSG | 类级 mixture support、margin 和聚合消融 | 9/9 | 仅改变聚合不能稳定救活 K=2 |
+| RC-AMBL | PCA split、父边界、收缩协方差、风险门 | 6/6 | 所有候选分裂被拒绝，未形成成功 adaptive-K |
+| RACAL stage1 | Frozen K=1 回放 vs Trainable MiniLM K=1 | 3/3 + 3/3 | 当前最可靠的正收益来自 K=1 表示适配 |
+| RACAL stage2 | 同一 Trainable checkpoint 下纯 K=1 vs 固定 K=2 | 3/3 | K=2 的 OOS 过接受仍然严重，停止 K=3--5 |
+| joint_adaptive_multicenter_v1 | Trainable MiniLM + trainable prototypes；每轮提出一个 PCA split，Known calibration 安全门决定是否接受 | 3/3（repair6） | 真正的共同训练链路可运行，但 3/3 候选均拒绝，最终 `mean K_y=1.0` |
+| joint_adaptive_multicenter_contract_repair_v1 | 冻结 K=1 父边界、guarded compactness、负载/分离约束下的共同训练候选 split | 3/3（repair3） | 3/3 候选均因 calibration Known Recall 下降拒绝，最终 `mean K_y=1.0` |
+| consistency_gate_v1 | Trainable K=1 + 原始/MC-dropout/表面归一化多视图的一致性与证据 margin | 3/3 | 仅有零点几百分点描述性变化；不增加中心，不能称 SOTA |
+| minilm_trainable_kir_sweep_v1 | Trainable K=1 在 3 数据集×3 KIR×3 seed 下的 Known-only 控制 | 27/27 | CLINC/StackOverflow 三个 KIR 均优于同距离 Frozen；Banking77 仅低 KIR 有利，KIR=.75 退化 |
+
+### 3.3 训练参与式自适应多中心 pilot：joint_adaptive_multicenter_v1
+
+本阶段不是把固定 KMeans 的结果重新命名为“自适应”。每个 seed 的候选 intent 先由 Known train
+表示的残差 P90 选择，PCA 主方向二分后生成子中心；随后 encoder 和 prototypes 共同训练 2 个 epoch。
+候选只有同时满足 Known calibration Recall、compactness gain、objective regression 和父边界保护才
+能写入最终结构。当前配置 `max_candidate_splits=1`、`max_accepted_splits=1`，因此这是一个明确的
+小规模归因 pilot，不是大网格搜索。
+
+StackOverflow/KIR=0.50、seed=13/42/87 的结果如下：
+
+| 方法 | OOS F1 | F1-All | Known Recall | False Acceptance | 平均 K_y |
+|---|---:|---:|---:|---:|---:|
+| RACAL Trainable K=1 | 0.8671 ± 0.0079 | 0.8565 ± 0.0030 | 0.8392 ± 0.0032 | 0.1114 ± 0.0165 | 1.0 |
+| joint adaptive（repair6） | 0.8661 ± 0.0111 | 0.8563 ± 0.0050 | 0.8388 ± 0.0045 | 0.1129 ± 0.0228 | 1.0 |
+
+3/3 候选 split 均实际训练并被拒绝：seed13 的 calibration score gain 仅 `+0.00056`，seed42 为
+`-0.00900`，seed87 为 `-0.02172`；拒绝原因均为 `no_known_only_compactness_gain`。这说明当前
+StackOverflow 表示中，候选局部划分没有在不损害 Known-only 安全的前提下提供足够收益。
+
+为核验“拒绝 split”不是代码没有真正执行训练，pilot 还做了同一候选子中心的事后边界诊断：不加
+父边界保护的 K=2 union 平均 OOS F1 只有 `0.6777`、false acceptance `0.4513`；加父边界保护后
+平均 OOS F1 为 `0.8663`、false acceptance `0.1118`，但它仍是诊断，不是自适应正式结果。这个对照
+直接显示：StackOverflow 的风险主要来自多球 union 过覆盖，而不是“没有调用训练代码”。
+
+### 3.4 训练参与式合同修复：joint_adaptive_multicenter_contract_repair_v1
+
+为排除旧 pilot 的评估契约歧义，新阶段固定一次 K=1 父边界，候选子中心只能在该父边界内细化；候选
+compactness 使用同一 parent-guarded score，而不是 unconstrained score；训练损失增加子中心负载平衡和
+中心分离项。候选仍只用 Known train 训练，结构选择只读 Known calibration，测试 OOS 不参与训练或选择。
+
+`repair3` 的 StackOverflow/KIR=.50、seed=13/42/87 三个候选都实际完成了 2 个 epoch 的共同训练，
+但 3/3 均因 calibration Known Recall 下降而拒绝：
+
+| seed | 候选 intent | 子簇负载 | 最小中心分离 | calibration Recall（前→后） | 结论 |
+|---:|---|---|---:|---:|---|
+| 13 | osx | 452/148 | 0.0325 | 0.826→0.770 | reject |
+| 42 | cocoa | 138/462 | 0.0576 | 0.819→0.724 | reject |
+| 87 | osx | 276/324 | 0.0376 | 0.850→0.722 | reject |
+
+最终结果与 RACAL Trainable K=1 相同，说明修复评估合同后结论没有被夸大的数字改变：OOS F1
+`0.8661±0.0091`、F1-All `0.8563±0.0041`、Known Recall `0.8388±0.0037`、false acceptance
+`0.1129±0.0187`、平均 `K_y=1.0`。因此这是真正执行过“中心参与表示训练”的负诊断，而不是成功的自适应多中心方法。
+证据入口：`../artifacts/s2c/runs/protocol_v2_textoir_v1/joint_adaptive_multicenter_contract_repair_v1/repair3/`。
+
+### 3.5 Trainable K=1 + prediction consistency/evidence conflict Gate
+
+在训练参与式多中心仍然全部安全回退后，新增一个不增加中心的单中心拒识 pilot。它复用 RACAL
+Trainable K=1 checkpoint，不重新训练 encoder；对原始输入、两次固定 MC-dropout 和 NFKC/空白归一化
+视图分别编码，计算意图证据 margin 和跨视图冲突数。冲突容忍度和 margin 只由 Known calibration
+选择，test OOS 不参与选择。
+
+StackOverflow/KIR=.50、seed=13/42/87 的汇总：
+
+| Gate | OOS F1 | F1-All | Known Recall | False Acceptance |
+|---|---:|---:|---:|---:|
+| Trainable K=1 | 0.8671 ± 0.0079 | 0.8576 ± 0.0032 | 0.8392 ± 0.0032 | 0.1114 ± 0.0165 |
+| evidence margin | 0.8673 ± 0.0076 | 0.8580 ± 0.0027 | 0.8376 ± 0.0020 | 0.1099 ± 0.0145 |
+| combined consistency | 0.8674 ± 0.0073 | 0.8566 ± 0.0023 | 0.8319 ± 0.0025 | 0.1060 ± 0.0161 |
+
+evidence margin 的 OOS F1 仅提升约 `0.02pp`，Known Recall 下降约 `0.17pp`；combined Gate 虽将
+false acceptance 降低约 `0.54pp`，但 Known Recall 下降约 `0.73pp`。因此该阶段是拒识机制候选，
+不是已验证的新 SOTA 方法。证据入口：`docs/archive/experiments/consistency_gate_v1/CONSISTENCY_GATE_REPORT.md`。
+
+### 3.1 RACAL 阶段一：当前最好的自有结果
+
+StackOverflow、KIR=0.50、seed 13/42/87：
+
+| 方法 | OOS F1 | F1-All | Known Recall | False Acceptance |
+|---|---:|---:|---:|---:|
+| Frozen K=1 | 0.7729 ± 0.0417 | 0.7860 ± 0.0143 | 0.8371 ± 0.0013 | 0.2654 ± 0.0632 |
+| Trainable K=1 | **0.8671 ± 0.0079** | **0.8565 ± 0.0030** | **0.8392 ± 0.0032** | **0.1114 ± 0.0165** |
+
+相对 Frozen K=1：
+
+- OOS F1 `+9.42pp`；
+- F1-All `+7.06pp`；
+- Known Recall `+0.21pp`；
+- false acceptance `-15.40pp`；
+- AUROC `+3.56pp`。
+
+这说明表示训练确实有效，而且不是靠明显牺牲 Known Recall 换来的。
+
+### 3.2 RACAL 阶段二：固定 K=2 的反证
+
+同一批 Trainable MiniLM checkpoint、同一数据和边界，仅把每个 intent 从 K=1 改为 K=2：
+
+| 方法 | OOS F1 | F1-All | Known Recall | False Acceptance |
+|---|---:|---:|---:|---:|
+| Trainable K=1 | 0.8671 ± 0.0079 | 0.8565 ± 0.0030 | 0.8392 ± 0.0032 | 0.1114 ± 0.0165 |
+| Trainable fixed K=2 | 0.6765 ± 0.0615 | 0.7681 ± 0.0126 | 0.9362 ± 0.0029 | 0.4526 ± 0.0782 |
+| K=2 − K=1 | **−19.06pp** | **−8.85pp** | **+9.70pp** | **+34.11pp** |
+
+三个 seed 的 OOS F1 都下降；K=2 新增接受的 OOS 数量为 1169、753、1154，远多于恢复的
+Known 样本 298、309、285。结论是：
+
+> **当前主要问题不是“MiniLM 没训练好”，而是固定多球组合扩大了错误接受区域。**
+
+## 4. 同协议下与 MOGB 风格组件的比较
+
+下面的结果来自 `results/final_baselines/summary.csv`，覆盖相同的
+`protocol_v2_textoir_v1`、KIR=0.50、Frozen MiniLM、5 个 seed。它们可以作为组件级公平证据，
+但不是 MOGB 论文原始 BERT 结果。
+
+| 数据集 | 方法 | OOS F1 | F1-All | Known Recall |
+|---|---|---:|---:|---:|
+| CLINC150 | Single centroid | 88.94 | 80.27 | 78.76 |
+| CLINC150 | Fixed K=2 | 89.20 | 80.09 | 75.14 |
+| CLINC150 | Random partition | 89.07 | 80.75 | 79.48 |
+| CLINC150 | MOGB-MiniLM | 81.32 | 44.95 | 31.57 |
+| CLINC150 | MOGB partition + s2c boundary | 85.56 | 64.60 | 53.34 |
+| Banking77 | Single centroid | 72.43 | 74.51 | 85.01 |
+| Banking77 | Fixed K=2 | 75.46 | 76.16 | 82.55 |
+| Banking77 | Random partition | 71.62 | 74.72 | 85.96 |
+| Banking77 | MOGB-MiniLM | 74.99 | 48.60 | 33.41 |
+| Banking77 | MOGB partition + s2c boundary | **79.40** | 64.81 | 52.18 |
+| StackOverflow | Single centroid | 76.55 | 79.98 | 87.15 |
+| StackOverflow | Fixed K=2 | 63.53 | 72.76 | 86.89 |
+| StackOverflow | Random partition | 75.88 | 79.80 | 87.64 |
+| StackOverflow | MOGB-MiniLM | 72.92 | 43.30 | 27.09 |
+| StackOverflow | MOGB partition + s2c boundary | **79.25** | 63.34 | 50.39 |
+
+解释：MOGB 风格粒球在 Banking77 和 StackOverflow 上的 OOS F1 比固定 K=2 高，但 Known Recall
+和 F1-All 明显更低；这表明 OOS F1 的提升主要来自更激进的 Known 拒绝，不能直接称为综合性能提升。
+
+2026-08-09 的 `mogb_known_calibration_attribution_v1` 进一步补上了合法工作点对照：45/45 重拟合单元与
+冻结 MOGB-Fair score/指标等价，半径倍率仅由 Known calibration 的 80%–95% 覆盖目标决定。默认 mean
+radius 确实过窄，但 cal-95 恢复 61–68pp Known Recall 的同时增加 67–79pp false acceptance，OOS F1
+下降 33–38pp。预注册 cal-80 与当前 S2C Trainable K=1 同 seed 配对时，Trainable 在 OOS F1 和 F1-All
+均为 45/45 胜出。官方子中心损失在真实距离表上的梯度范数也比 raw-distance/tau=.10 小约两个数量级。
+详见 `docs/archive/analysis/MOGB_KNOWN_CALIBRATION_ATTRIBUTION_V1.md`。这仍是 MOGB-Fair 组件归因，不是完整
+官方 BERT MOGB 排名。
+
+`mogb_selected_class_rescue_v1` 又隔离了粒球筛选缺类：16/45 单元至少遗漏一个注册 Known 类，29 个无缺类
+单元严格零变化。为遗漏类补一个 train-fitted 平均半径球虽然恢复其分类，但 StackOverflow 默认工作点的
+false acceptance 增加 6.23pp、AUROC 下降 13.87pp；Known-cal80 工作点的 OOS F1 下降 15.66pp。
+因此缺类是实际覆盖缺陷，却不是当前 S2C 优于 MOGB-Fair 的主要原因；简单补球反而再次暴露 open-space
+union risk。详见 `docs/archive/analysis/MOGB_SELECTED_CLASS_RESCUE_V1.md`。
+
+## 5. 与 MOGB、ADB、DA-ADB、DCLOOS 的差异
+
+### 5.1 MOGB
+
+MOGB 完整逻辑不是“固定 MiniLM 后处理 KMeans”，而是：
+
+```text
+BERT 表示训练
+→ 自适应 granular-ball 划分
+→ 最近子中心损失
+→ 重新优化表示
+→ 再划分粒球
+→ 粒球中心 + 平均半径边界
+```
+
+当前有两类 MOGB 证据：
+
+1. **同协议 MOGB 风格组件比较**：使用 Frozen MiniLM，只替换粒球划分或边界；可以回答组件贡献，
+   但不是完整 MOGB。
+2. **官方 BERT 兼容运行**：StackOverflow KIR=.50 seed=0 和 Banking77 KIR=.75 seed=0
+   的本地结果均明显低于论文参考值，状态为 `not_reproduced_strict`；原作者配套数据缺失，
+   不能把本地数字当成对论文 MOGB 的公平否定。
+
+因此当前不能写“s2c 超过 MOGB 论文”。只能写：
+
+> 在相同 Frozen MiniLM 协议下，s2c 单中心的综合指标更稳；MOGB 风格组件在部分数据集提高
+> OOS F1，但代价是 Known Recall/F1-All 下降。官方 MOGB 论文结果尚未被本地严格复现。
+
+### 5.2 ADB 和 DA-ADB
+
+现有 ADB/DA-ADB 是 BERT、单 cell 的现代兼容结果：
+
+| 方法 | 数据/设置 | OOS F1 | F1-All | Accuracy | 状态 |
+|---|---|---:|---:|---:|---|
+| ADB | StackOverflow, KIR=.50, seed=0 | 89.47 | 87.63 | 88.53 | compatibility artifact |
+| DA-ADB | StackOverflow, KIR=.50, seed=0 | **90.90** | **89.23** | **90.07** | compatibility artifact |
+
+它们不是与 Frozen MiniLM s2c 的同协议五 seed 对比，不能直接作为严格排名；但它们说明当前
+s2c 仍有明显的强基线差距，尤其是 F1-All 和 Accuracy。
+
+### 5.3 DCLOOS
+
+DCLOOS 是端到端方法，训练中使用特征级伪 OOS 和外部开放域 OOS；它与当前 Known-only Gate
+的监督条件不同。
+
+- 官方完整单元：超时，没有正式最终指标；
+- reduced-budget 恢复单元：OOS F1 87.05、F1-All 90.26、Known Recall 92.14、Accuracy 88.68；
+- 该结果是 KIR=.75、seed=888，并使用 pseudo-OOS + 外部 SQuAD OOS，不能和当前 Frozen
+  MiniLM KIR=.50 结果直接排名。
+
+所以 DCLOOS 当前只能说明：在更强 OOS 监督下，它的兼容运行结果高于当前 Frozen Gate；并不说明
+在相同训练条件下已经公平超过 s2c。
+
+## 6. 当前结果究竟说明了什么
+
+### 已经有证据支持的结论
+
+- Known-only 表示适配可以显著改善 K=1 Gate；
+- 固定 K>1 没有跨数据集统一收益；
+- Banking77 的多中心收益是条件性的；
+- CLINC150 的多中心收益较弱；
+- StackOverflow 的固定多中心主要出现 OOS 过接受；
+- 聚类稳定、MOGB 风格粒球或改变聚合规则，并不能自动保证 OOS 边界有效。
+
+### 目前不能声称的结论
+
+- 不能声称当前 adaptive-K 已经成功；
+- 不能声称 s2c 超过 MOGB 论文；
+- 不能声称 s2c 超过 DCLOOS；
+- 不能把 BERT 单 cell 的 ADB/DA-ADB 结果当成同协议五 seed 排名；
+- 不能把历史 Cascade 结果与当前 Gate-only 结果混成一张表；
+- 不能把 MOGB 官方负复现当作论文方法本身失败。
+
+## 7. 当前唯一下一步
+
+跨数据集 Trainable K=1 控制已经完成：CLINC150、Banking77、StackOverflow 的 OOS F1 相对同 seed
+Frozen 分别为 `+1.12pp`、`+5.18pp`、`+9.42pp`，但前两个数据集 Known Recall 分别下降
+`1.33pp` 和 `1.95pp`。因此当前不应再跑 K=3--5，也不应继续增加新的损失项。
+
+Trainable K=1 的跨 KIR 扫描也已完成 27/27：CLINC150 在 KIR=.25/.50/.75 的 OOS F1 增量为
+`+0.64/+2.41/+3.59pp`，StackOverflow 为 `+1.19/+7.69/+13.54pp`，Banking77 为
+`+0.59/-0.05/-14.02pp`。这解释了为什么当前训练结果看起来仍低于历史表：它改善的是当前
+Gate-only 单中心排序，而不是恢复旧 Cascade 的 Router/Expert、旧 split 和历史调参合同。
+
+在同一 Trainable checkpoint 上补做的 K=1/K=2 跨数据集配对控制已经完成：K=2−K=1 的 OOS F1
+在 CLINC150、Banking77、StackOverflow 分别为 `-0.28pp`、`+0.13pp`、`-19.06pp`，Known Recall
+分别为 `-3.26pp`、`-1.95pp`、`+9.70pp`。Frozen/Trainable 的类内距离、半径分布、Known calibration
+覆盖、训练动态和阈值稳定性诊断已经完成：半径 CV 约为 0.02--0.04，KIR=.50 的诊断性最佳 threshold
+（Frozen/Trainable）为 CLINC150 `1.00/1.05`、Banking77 `0.90/0.95`、StackOverflow `0.95/0.95`。
+这说明当前差距主要是 score 工作点、监督/系统层级和历史 Cascade 合同差异，不能把 Trainable 表示的
+K=1 收益误写成多中心恢复。下一步应在相同 KIR、Known 列表、seed 和监督条件下整理外部 baseline 小矩阵；
+完整 Cascade 对照放在 Gate 候选冻结之后。当前仍不授权自适应 K 扩展或新的多中心实验。
+
+### 五 seed 收口补充（2026-08-06）
+
+Trainable K=1 的 KIR sweep 已补齐五个正式 seed：新增 18/18，合计 45/45。与精确匹配的 E2
+Frozen K=1 配对后，CLINC150、Banking77、StackOverflow 在 KIR=.25/.50/.75 的 OOS F1 增量分别为
+`+0.45/+1.12/+1.38pp`、`+2.47/+4.72/+6.94pp`、`+5.06/+9.55/+10.50pp`。对应 Known Recall
+最大下降为 `1.37pp`、`2.90pp`，StackOverflow 三个 KIR 均小幅上升。
+
+因此当前方法最可靠的可训练版本是“Known-only Trainable MiniLM + K=1 Gate”，而不是训练后固定
+多中心。完整五 seed 对比、MOGB 组件上下文和历史 fulltex 参照见
+`docs/archive/analysis/MINILM_TRAINABLE_5SEED_FAIR_COMPARISON_V1.md`；后者明确标记了协议不一致，不能直接
+用于 SOTA 排名。
+
+### 当前协议 Cascade bridge 收口（2026-08-10）
+
+为消除旧 v19 Router/Expert 混入，已在当前 `protocol_v2_textoir_v1` 的 StackOverflow/KIR=.50、
+seeds=13/42/87 上重新训练同一 Known-only SmolLM Expert，并分别接 Frozen K=1 与 Trainable K=1
+Gate；6/6 评价行完成。Trainable 相对 Frozen 的 OOS F1/F1-All/Known Recall/false acceptance
+配对变化为 `+9.42pp/+6.70pp/+0.21pp/-15.40pp`。这验证 Gate 改善能传递到当前协议下游，但不等同
+于 `fulltex.tex` 历史 Cascade，也不构成超过官方 MOGB 或 DCLOOS 的证据。报告：
+`docs/archive/analysis/CASCADE_BRIDGE_V1.md`。
+
+当前唯一下一步更新为：先把当前 fair Gate、Cascade bridge、MOGB 组件和外部 baseline 按合同分层
+整理成一个主表和可视化入口，再决定是否扩展其他数据集 Cascade；不再复用 v19 下游组件或新增
+adaptive-K/多中心矩阵。
+
+### 表示—边界诊断补充
+
+在相同 E2 Frozen K=1 合同下，KIR=.50 的 median normalized score gap（OOS−Known）由 Frozen 到
+Trainable 分别为：CLINC150 `0.258→0.438`、Banking77 `0.259→0.334`、StackOverflow
+`0.116→0.434`；对应 false acceptance 下降 `2.88pp/9.14pp/15.69pp`。因此 Trainable 的直接
+收益是把 Known 与 OOS 的 score 分布拉开，并非通过增加中心实现边界收益。该诊断只使用已完成 test
+预测进行事后解释，未用于任何调参。
+
+详见 `docs/archive/analysis/MINILM_BOUNDARY_DIAGNOSTICS_V1.md` 和
+`results/analysis/archive/analysis/minilm_boundary_diagnostics_v1/`。
+
+训练动态诊断进一步显示：45 个 Trainable K=1 run 的最佳 epoch 主要为 3--4，Known calibration
+选择目标本身没有明显失控；但 KIR 增大时，测试 OOS F1 仍在 Banking77 和 StackOverflow 下降。
+因此当前瓶颈不是简单的“epoch 不够”，而是 Known-only 表示训练目标与开放空间边界风险之间存在错位。
+详见 `docs/archive/analysis/MINILM_TRAINING_DYNAMICS_V1.md`。
+其中 KIR=.50 的 calibration→test Known Recall 转移差异仅为 CLINC150 `-0.64pp`、Banking77
+`-0.21pp`、StackOverflow `+0.33pp`，进一步排除了“当前差距主要由 Known 覆盖失效造成”的简单解释。
+
+与 MOGB 组件的五 seed 配对分析显示，Trainable K=1 在 KIR=.50 的 OOS F1 高于
+`MOGB partition + s2c boundary`（CLINC/Banking/StackOverflow 分别 `+4.88/+4.17/+8.42pp`），
+同时 Known Recall 高 `+21.10/+30.03/+33.51pp`；但 MOGB 的 false acceptance 更低。因此当前更准确的
+优势表述是“保留 Known 覆盖的平衡工作点”，不是“已无条件超过完整 MOGB”。详见
+`docs/archive/analysis/TRAINABLE_VS_MOGB_COMPONENT_V1.md`。
+
+### 为什么可训练 MiniLM 仍低于 fulltex 历史结果
+
+最新 threshold/radius 诊断没有发现“训练 MiniLM 无效”或“K=1 半径完全失稳”。相反，KIR=.50 时
+Trainable 的 K=1 score gap 和 OOS F1 均改善；但其 `threshold=1` 仍只是当前协议固定工作点，和 Frozen
+或历史 Cascade 并非同一 score 标度。事后网格仅显示 CLINC150、Banking77、StackOverflow 的诊断性最佳
+threshold 分别落在 `1.00/1.05`、`0.90/0.95`、`0.95/0.95`（Frozen/Trainable），不能用于正式结果。
+
+与 `fulltex.tex` 的差距是协议和系统层级差异叠加，而非单一的 MiniLM 训练问题：
+
+1. `fulltex.tex` 的高值来自完整 Gate→Router→Expert Cascade，当前 Trainable 结果是 Gate-only；
+2. 历史 Cascade 使用不同表示/路由器/专家训练、K=2 和历史超参数合同，当前 Trainable 是最后两层
+   MiniLM+projection、K=1、Known-only calibration 选模；
+3. 历史记录明确使用过 OOS validation 学习 lambda，而当前协议禁止 test OOS 参与选择；
+4. 当前固定 threshold=1 未经过独立 Known-only 校准，因此即使表示的 OOS/Known score gap 变大，绝对
+   工作点仍可能偏移；
+5. 训练动态诊断表明最佳 epoch 已集中在 3--4，继续盲目增加 epoch 不能解决这一层级/校准差异。
+
+证据入口：`docs/archive/analysis/THRESHOLD_RADIUS_STABILITY_V1.md`、
+`docs/archive/analysis/MINILM_TRAINABLE_5SEED_FAIR_COMPARISON_V1.md`、
+`docs/archive/analysis/MINILM_TRAINING_DYNAMICS_V1.md`。这些结果支持“Trainable K=1 是当前 Gate 的有效表示适配”，
+但不支持“已经复现 fulltex 或达到 SOTA”。
+
+### 同协议可视化的补充解释
+
+`cross_protocol_tradeoff_v1` 将当前五 seed 方法放在 OOS F1—Known Recall 平面和 false acceptance—false
+rejection 误差图上。可视化显示 MOGB 组件大多落在保守拒识区域，Trainable K=1 更接近覆盖—拒识平衡区域；
+这解释了为什么 Trainable 在 F1-All、Known Recall 和总体工作点上更稳，但不等于它的 OOS F1 在所有配置都最高。
+该分析使用 MOGB fair matrix 的 Frozen Euclidean/mean-radius 组件，和 E2 Mahalanobis Frozen K=1 分开报告。
+
+证据入口：`docs/archive/analysis/CROSS_PROTOCOL_TRADEOFF_V1.md`、
+`results/analysis/cross_protocol_tradeoff_v1/`、`figures/cross_protocol_tradeoff_v1/`。
+
+## 7.1 外部基线单格进展：ADB 已有同协议 BERT 参照，DA-ADB 仍无效
+
+在 StackOverflow/KIR=.50、seed=42/87/100 上，使用 protocol_v2 导出的相同 train/dev/test 和 Known
+labels 物化独立数据根，再通过 TextOIR 的 BERT ADB runner 运行。ADB 三个单元均通过 artifact audit，
+从逐样本 `y_true.npy/y_pred.npy` 统一重算得到：
+
+| 方法 | OOS F1 均值±std | F1-All 均值±std | Known Recall | 备注 |
+|---|---:|---:|---:|---|
+| S2C Trainable K=1 | 87.67±1.66 | 86.55±1.30 | 83.89 | 当前 MiniLM fair Gate |
+| ADB BERT/TextOIR | 87.36±1.61 | 85.66±1.59 | 80.78 | 外部同 split/KIR，3 个 CUDA seed，合同不同 |
+| MOGB-MiniLM | 72.92±0.62 | 43.30±3.40 | 27.09 | 公平组件，过度拒绝 Known |
+
+按同一 seed 配对，Trainable K=1 相对 ADB 的平均差为 OOS F1 `+0.74pp`、F1-All `+1.02pp`、
+Accuracy `+0.79pp`，但这不是“超过 ADB 的正式 SOTA”结论，因为 ADB 使用 BERT/TextOIR 端到端边界训练，
+而 S2C 行使用 MiniLM Trainable Gate；这是一个有价值但合同不同的单格参照。
+
+DA-ADB 原始和 clamp30 兼容尝试都不能作为结果：训练日志出现 NaN，最终预测全部为类别0，逐样本统一
+OOS F1=0、F1-All≈0.87%，且与 runner 的 `results.csv` 不一致。该运行被记录为
+`invalid_metrics_nan_all_class`/`invalid_metrics_all_class_prediction`，不能引用其官方汇总数字。
+
+证据入口：`docs/analysis/BASELINE_EXECUTION_STATUS_V1.md`、
+`docs/analysis/STACKOVERFLOW_EXTERNAL_COMPARISON_V1.md`、
+`results/analysis/archive/analysis/comparison_atlas_v1/stackoverflow_kir50_external_summary.csv`。
+
+## 8. 证据文件索引
+
+| 内容 | 文件 |
+|---|---|
+| 当前总状态 | `docs/CURRENT_STATUS.md` |
+| 实验总账 | `docs/EXPERIMENT_LEDGER.csv` |
+| E2/E3 总体审计 | `docs/audits/protocol_v2_implementation/` |
+| MOGB/DCLOOS 中文对比 | `docs/对比实验/MOGB_DCLOOS_对比结果报告.md` |
+| RACAL 阶段一 | `docs/archive/experiments/racal_v1/RACAL_V1_REPORT.md`、`RACAL_V1_CLOSEOUT.md` |
+| RACAL 阶段二 | `docs/archive/experiments/racal_v1/RACAL_V1_STAGE2_REPORT.md`、`RACAL_V1_STAGE2_CLOSEOUT.md` |
+| Trainable 跨数据集控制 | `docs/archive/analysis/MINILM_TRAINABLE_CONTROL_V1.md`、`results/diagnostics/minilm_trainable_control_v1/` |
+| Trainable K=1/K=2 配对控制 | `docs/archive/analysis/MINILM_TRAINABLE_K2_CONTROL_V1.md`、`results/diagnostics/minilm_trainable_k2_control_v1/` |
+| Trainable λ/K 交互控制 | `docs/archive/analysis/MINILM_TRAINABLE_LAMBDA_CONTROL_V1.md`、`results/diagnostics/minilm_trainable_lambda_control_v1/` |
+| Trainable KIR sweep | `docs/archive/analysis/MINILM_TRAINABLE_KIR_SWEEP_V1.md`、`results/analysis/archive/analysis/minilm_trainable_kir_sweep_v1/` |
+| Trainable 与 fulltex/基线分层解释 | `docs/archive/analysis/MINILM_TRAINABLE_VS_FULLTEX_AND_BASELINES_V1.md`、`results/analysis/archive/analysis/unified_layered_summary_v1/all_layers.csv` |
+| KIR=0.50 方法协议分层对比 | `docs/archive/analysis/KIR50_METHOD_COMPARISON_V1.md`、`results/analysis/archive/analysis/kir50_method_comparison_v1/` |
+| 同协议基线 CSV | `results/final_baselines/summary.csv`、`results/mogb/fair_matrix.csv` |
+| MOGB 复现审计 | `results/diagnostics/mogb_diff/`、`results/mogb_exact_reproduction*/` |
+| DCLOOS 审计 | `docs/archive/external_baselines/dcloos/DCLOOS_REPRODUCTION_REPORT.md` |
+| 阶段二完整 artifact | `../artifacts/s2c/runs/protocol_v2_textoir_v1/racal_v1/stage2_fixed_k2/` |
+| 当前 S2C 与 MOGB-Fair 45单元机制对比 | `docs/analysis/S2C_VS_MOGB_MECHANISM_DASHBOARD_V1.md`、`results/analysis/s2c_vs_mogb_mechanism_dashboard_v1/` |
+| S2C 与 MOGB-Fair 阈值曲线/排序归因 | `docs/archive/analysis/S2C_MOGB_OPERATING_CURVE_ATTRIBUTION_V1.md`、`results/analysis/archive/analysis/s2c_mogb_operating_curve_attribution_v1/` |
+| S2C 与 MOGB-Fair 逐意图结构桥接 | `docs/archive/analysis/S2C_MOGB_INTENT_STRUCTURE_BRIDGE_V1.md`、`results/analysis/archive/analysis/s2c_mogb_intent_structure_bridge_v1/` |
+
+## DA-ADB 当前协议三 seed 更新
+
+旧版 DA-ADB 单格记录不能作为当前协议代表。最新有效运行覆盖 StackOverflow/KIR=.50/seed=`42,87,100`，
+均值 OOS F1=`72.48±6.24%`、F1-All=`74.02±3.13%`；同 seed S2C Trainable K=1 为
+`88.21±1.72%`/`86.69±1.45%`。该对照仍保留 BERT/TextOIR 与 MiniLM/训练合同差异，详细审计见
+`docs/analysis/DA_ADB_CURRENT_PROTOCOL_SUMMARY_V1.md`，不替换历史记录，也不构造跨合同 SOTA 排名。
+## DCLOOS 固定 Registry 单格状态（2026-08-10）
+
+已实现运行时 `known_labels_file` 适配并启动当前 StackOverflow/KIR=.50/seed=42 单格。DCLOOS 保留
+BERT、pseudo-OOS 和外部 SQuAD 监督；运行约 3530 秒后没有最终 metrics，只保留中间预测，状态为
+`interrupted_no_final_metrics`。该结果不进入公平主表，详见 `docs/archive/analysis/DCLOOS_CURRENT_PROTOCOL_BLOCKER_V1.md`。

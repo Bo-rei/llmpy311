@@ -1,0 +1,57 @@
+{
+  "analysis_id": "s2c_baseline_mogb_overview_v1",
+  "experiment_id": "mogb_corrected_subcentroid_loss_v1",
+  "outputs": [
+    {
+      "path": "results/analysis/archive/analysis/s2c_baseline_mogb_overview_v1/method_comparison.csv",
+      "sha256": "8ec955a9c8f8fa785ef0357cd424aed749c455e636087779fbba10c7d1453a03"
+    },
+    {
+      "path": "results/analysis/archive/analysis/s2c_baseline_mogb_overview_v1/loss_contract_deltas.csv",
+      "sha256": "d1b085fa2fb110bb6f2e5e7bb2ebc5cfde5334e28344f8e79270eaddffe6476f"
+    },
+    {
+      "path": "results/analysis/archive/analysis/s2c_baseline_mogb_overview_v1/historical_ours_margins.csv",
+      "sha256": "3bdcabd3fa0e4b46a8c8c5c85a5099e9535d7a1fc73e09b8e990f2ee12835d5b"
+    },
+    {
+      "path": "results/analysis/archive/analysis/s2c_baseline_mogb_overview_v1/current_fair_component_summary.csv",
+      "sha256": "98156eb50354844edf830f9ada63fa8d2fb63c5fc466daf6f04520bbe3fb9fed"
+    },
+    {
+      "path": "results/analysis/archive/analysis/s2c_baseline_mogb_overview_v1/ball_level_comparison.csv",
+      "sha256": "e8287e8d2ac9b8681bac05c4c5aa08689845c6872f50a5fdbfa6008f4570891e"
+    },
+    {
+      "path": "docs/analysis/S2C_BASELINE_MOGB_COMPARISON_OVERVIEW_V1.md",
+      "sha256": "41a96ac2975bb6cebf681d7b8bf65625dd6260d7d9ac6a5436d747a2b5bfc104"
+    },
+    {
+      "path": "figures/s2c_baseline_mogb_overview_v1/mogb_ball_distribution_comparison.png",
+      "sha256": "80b22424c8a4681e29a703362b42ef3c58bcea698db25e76a6168ddd5f6cea7d"
+    },
+    {
+      "path": "figures/s2c_baseline_mogb_overview_v1/mogb_error_budget.png",
+      "sha256": "43a36c714017e7028d6080012d1493f5aeb57decb9e9e88308ee246dd285258b"
+    },
+    {
+      "path": "figures/s2c_baseline_mogb_overview_v1/mogb_published_local_corrected_metrics.png",
+      "sha256": "cfd088b82cf911f6280e087419be506648e791fb8664209a8c20ca8ce6aa9556"
+    },
+    {
+      "path": "figures/s2c_baseline_mogb_overview_v1/mogb_training_contract_curves.png",
+      "sha256": "dc6985a31e3710a403faff0e665a019c7b2cdc8a918e91c7c4f94dcc9412dfdb"
+    }
+  ],
+  "source_manifests": {
+    "corrected": {
+      "path": "/home/bo/bo01/llmpy311/artifacts/s2c/external/mogb_corrected_subcentroid_loss_v1/audit/official_fixed/mode_manifest.json",
+      "sha256": "f9bd1924c634a8f91773e889c20bf7b8dfa8bf67cdda74151528110a29a776ef"
+    },
+    "official_local": {
+      "path": "/home/bo/bo01/llmpy311/artifacts/s2c/external/mogb_exact_reproduction_v1/audit/official_fixed/mode_manifest.json",
+      "sha256": "8ad53b9df709bbca29272ee537c3a8dbca1056ea66e805b82b51647455d033e1"
+    }
+  },
+  "status": "complete"
+}

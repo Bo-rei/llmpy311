@@ -171,9 +171,9 @@ def main() -> int:
 
 ## 证据和图
 
-- 图：`figures/da_adb_contract_comparison_v1/da_adb_contract_metrics.png`
-- 表：`results/analysis/da_adb_contract_comparison_v1/da_adb_contract_comparison.csv`
-- Manifest：`results/analysis/da_adb_contract_comparison_v1/DA_ADB_CONTRACT_COMPARISON_MANIFEST.json`
+- 图：`figures/archive/analysis/da_adb_contract_comparison_v1/da_adb_contract_metrics.png`
+- 表：`results/analysis/archive/analysis/da_adb_contract_comparison_v1/da_adb_contract_comparison.csv`
+- Manifest：`results/analysis/archive/analysis/da_adb_contract_comparison_v1/DA_ADB_CONTRACT_COMPARISON_MANIFEST.json`
 - 新旧运行根：`{historical_run}`、`{isolated_legacy}`、`{isolated_current}`
 
 结论仍然是合同分层：DA-ADB 可作为外部 BERT/TextOIR 参照，但当前没有证据支持它与

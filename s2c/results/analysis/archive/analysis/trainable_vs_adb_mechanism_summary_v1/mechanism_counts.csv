@@ -1,0 +1,5 @@
+dataset,mechanism,n_kir
+banking77,conservative_rejection,3
+clinc150,conservative_rejection,3
+stackoverflow,coverage_false_accept_tradeoff,2
+stackoverflow,coverage_recovery,1

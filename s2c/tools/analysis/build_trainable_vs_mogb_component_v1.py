@@ -21,9 +21,9 @@ import seaborn as sns
 
 
 ROOT = Path(__file__).resolve().parents[2]
-OUT = ROOT / "results/analysis/trainable_vs_mogb_component_v1"
-FIG = ROOT / "figures/trainable_vs_mogb_component_v1"
-TRAINABLE = ROOT / "results/analysis/minilm_trainable_5seed_fair_v1/trainable_per_seed.csv"
+OUT = ROOT / "results/analysis/archive/analysis/trainable_vs_mogb_component_v1"
+FIG = ROOT / "figures/archive/analysis/trainable_vs_mogb_component_v1"
+TRAINABLE = ROOT / "results/analysis/archive/analysis/minilm_trainable_5seed_fair_v1/trainable_per_seed.csv"
 MOGB = ROOT / "results/mogb/fair_matrix.csv"
 DATASETS = ("clinc150", "banking77", "stackoverflow")
 KIRS = (0.25, 0.50, 0.75)
@@ -189,9 +189,9 @@ def _report(aggregate: pd.DataFrame, effects: pd.DataFrame) -> None:
             "",
             "## 4. 证据文件",
             "",
-            "- `results/analysis/trainable_vs_mogb_component_v1/aggregate.csv`",
-            "- `results/analysis/trainable_vs_mogb_component_v1/paired_effects.csv`",
-            "- `figures/trainable_vs_mogb_component_v1/`",
+            "- `results/analysis/archive/analysis/trainable_vs_mogb_component_v1/aggregate.csv`",
+            "- `results/analysis/archive/analysis/trainable_vs_mogb_component_v1/paired_effects.csv`",
+            "- `figures/archive/analysis/trainable_vs_mogb_component_v1/`",
             "",
             "## 5. 结论边界",
             "",
@@ -200,7 +200,7 @@ def _report(aggregate: pd.DataFrame, effects: pd.DataFrame) -> None:
             "- 下一步应把相同监督条件下的强基线和完整 Cascade 单独桥接，而不是把不同协议的数字合成一个 SOTA 排名。",
         ]
     )
-    (ROOT / "docs/analysis/TRAINABLE_VS_MOGB_COMPONENT_V1.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
+    (ROOT / "docs/archive/analysis/TRAINABLE_VS_MOGB_COMPONENT_V1.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
 def main() -> int:

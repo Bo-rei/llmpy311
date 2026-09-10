@@ -20,8 +20,8 @@ import pandas as pd
 
 ROOT = Path(__file__).resolve().parents[2]
 ARTIFACT_ROOT = ROOT.parent / "artifacts/s2c/runs/protocol_v2_textoir_v1"
-OUT = ROOT / "results/analysis/threshold_radius_stability_v1"
-FIG = ROOT / "figures/threshold_radius_stability_v1"
+OUT = ROOT / "results/analysis/archive/analysis/threshold_radius_stability_v1"
+FIG = ROOT / "figures/archive/analysis/threshold_radius_stability_v1"
 TRAINABLE_ROOTS = (ARTIFACT_ROOT / "minilm_trainable_kir_sweep_v1", ARTIFACT_ROOT / "minilm_trainable_kir_sweep_extension_v1")
 DATASETS = ("clinc150", "banking77", "stackoverflow")
 KIRS = (0.25, 0.50, 0.75)
@@ -225,9 +225,9 @@ def _report(threshold_mean: pd.DataFrame, radius_mean: pd.DataFrame) -> None:
             "",
             "## 3. 证据文件",
             "",
-            "- `results/analysis/threshold_radius_stability_v1/threshold_sensitivity_mean_std.csv`",
-            "- `results/analysis/threshold_radius_stability_v1/radius_stability_mean_std.csv`",
-            "- `figures/threshold_radius_stability_v1/`",
+            "- `results/analysis/archive/analysis/threshold_radius_stability_v1/threshold_sensitivity_mean_std.csv`",
+            "- `results/analysis/archive/analysis/threshold_radius_stability_v1/radius_stability_mean_std.csv`",
+            "- `figures/archive/analysis/threshold_radius_stability_v1/`",
             "",
             "## 4. 结论边界",
             "",
@@ -235,7 +235,7 @@ def _report(threshold_mean: pd.DataFrame, radius_mean: pd.DataFrame) -> None:
             "- 若要提高当前 Trainable 与历史结果的可比性，下一步应预注册 Known-only 的 threshold/半径校准规则，再在新的独立验证池上运行，而不是读取 test oracle。",
         ]
     )
-    (ROOT / "docs/analysis/THRESHOLD_RADIUS_STABILITY_V1.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
+    (ROOT / "docs/archive/analysis/THRESHOLD_RADIUS_STABILITY_V1.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
 def main() -> int:

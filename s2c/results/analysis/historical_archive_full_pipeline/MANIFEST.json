@@ -1,0 +1,37 @@
+{
+  "schema_version": "s2c.historical_archive_full_pipeline.summary.v1",
+  "protocol": "historical_v19_archive",
+  "data_root": "/home/bo/bo01/llmpy311/archives/submissions/s2c-submission/data",
+  "artifact_root": "/home/bo/bo01/llmpy311/artifacts/s2c/runs/historical_archive_full_pipeline_seed42",
+  "datasets": [
+    "clinc150",
+    "stackoverflow",
+    "banking77"
+  ],
+  "seed": 42,
+  "kir": 0.5,
+  "methods": [
+    "frozen_k1",
+    "partial_k1",
+    "lora_k1"
+  ],
+  "completed_units": 9,
+  "full_pipeline_device": [
+    "cuda"
+  ],
+  "gate_metric_max_abs_delta": 0.0,
+  "lora_oos_f1_not_below_partial_by_dataset": {
+    "clinc150": false,
+    "stackoverflow": false,
+    "banking77": true
+  },
+  "seed_expansion": "not_run",
+  "seed_expansion_reason": "LoRA OOS F1 decreased versus partial on CLINC150 and StackOverflow seed42.",
+  "test_used_for_selection": false,
+  "oos_used_for_training": false,
+  "source_manifests": [
+    "/home/bo/bo01/llmpy311/artifacts/s2c/runs/historical_archive_full_pipeline_seed42/clinc150/kir50_seed42/MANIFEST.json",
+    "/home/bo/bo01/llmpy311/artifacts/s2c/runs/historical_archive_full_pipeline_seed42/stackoverflow/kir50_seed42/MANIFEST.json",
+    "/home/bo/bo01/llmpy311/artifacts/s2c/runs/historical_archive_full_pipeline_seed42/banking77/kir50_seed42/MANIFEST.json"
+  ]
+}

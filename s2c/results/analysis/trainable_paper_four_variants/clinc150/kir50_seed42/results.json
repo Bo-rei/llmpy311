@@ -1,0 +1,50 @@
+[
+  {
+    "dataset": "clinc150",
+    "kir": 0.5,
+    "seed": 42,
+    "variant": "Ours",
+    "known_f1": 82.56154091870508,
+    "oos_f1": 91.6438772409602,
+    "overall_accuracy": 87.92727272727274,
+    "f1_all": 82.68104534399791,
+    "known_recall": 85.95555555555555,
+    "false_accept_rate": 7.199999999999999
+  },
+  {
+    "dataset": "clinc150",
+    "kir": 0.5,
+    "seed": 42,
+    "variant": "Without Gate",
+    "known_f1": 70.95292187068948,
+    "oos_f1": 76.03027754415476,
+    "overall_accuracy": 73.0,
+    "f1_all": 71.01972918218243,
+    "known_recall": 80.66666666666666,
+    "false_accept_rate": 30.461538461538463
+  },
+  {
+    "dataset": "clinc150",
+    "kir": 0.5,
+    "seed": 42,
+    "variant": "Cascade-MiniLM",
+    "known_f1": 87.04163837615818,
+    "oos_f1": 91.6438772409602,
+    "overall_accuracy": 89.67272727272727,
+    "f1_all": 87.10219415069504,
+    "known_recall": 85.95555555555555,
+    "false_accept_rate": 7.199999999999999
+  },
+  {
+    "dataset": "clinc150",
+    "kir": 0.5,
+    "seed": 42,
+    "variant": "Cascade-SmolLM",
+    "known_f1": 67.39676259604143,
+    "oos_f1": 69.70577551761714,
+    "overall_accuracy": 67.65454545454546,
+    "f1_all": 67.42714434500951,
+    "known_recall": 85.02222222222223,
+    "false_accept_rate": 40.95384615384615
+  }
+]

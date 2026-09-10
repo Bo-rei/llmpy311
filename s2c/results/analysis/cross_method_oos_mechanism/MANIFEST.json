@@ -1,0 +1,125 @@
+{
+  "schema_version": "s2c.cross_method_oos_mechanism.v1",
+  "bundle": "cross_method_oos_mechanism",
+  "contract_layers": [
+    "same_protocol_fair",
+    "textoir_native_compatibility",
+    "external_backbone_reference",
+    "different_supervision_or_incomplete"
+  ],
+  "question": "Why does S2C occupy a different OOS/coverage/error regime from TextOIR methods, MOGB components, ADB/DA-ADB, and DCLOOS?",
+  "source_data": [
+    "results/analysis/cross_protocol_tradeoff_v1/summary_mean_std.csv",
+    "../artifacts/s2c/outputs/experiments/cluster_separability_v19/textoir_protocol/official_runs/textoir_results_by_seed.csv",
+    "results/analysis/adb_kir_sensitivity_v2/adb_summary.csv",
+    "results/analysis/da_adb_current_protocol_summary_v1/summary_mean_std_ci.csv",
+    "results/analysis/deep_geometry_mechanism_v1/mogb_ball_risk_summary.csv",
+    "results/analysis/deep_geometry_mechanism_v1/multi_method_error_transitions.csv",
+    "results/analysis/cross_method_oos_mechanism/official_mogb_status.csv",
+    "results/analysis/unified_prediction_contract_v1/blocked_methods.csv",
+    "../artifacts/s2c/external/dcloos_official_oos_kir75_seed888_reduced_v2/recovery_metrics.json"
+  ],
+  "figures": [
+    "figures/cross_method_oos_mechanism/fair_oos_boundary_tradeoff.png",
+    "figures/cross_method_oos_mechanism/fair_oos_boundary_tradeoff.tiff",
+    "figures/cross_method_oos_mechanism/fair_oos_boundary_tradeoff.pdf",
+    "figures/cross_method_oos_mechanism/fair_oos_boundary_tradeoff.svg",
+    "figures/cross_method_oos_mechanism/fair_oos_precision_recall.png",
+    "figures/cross_method_oos_mechanism/fair_oos_precision_recall.tiff",
+    "figures/cross_method_oos_mechanism/fair_oos_precision_recall.pdf",
+    "figures/cross_method_oos_mechanism/fair_oos_precision_recall.svg",
+    "figures/cross_method_oos_mechanism/textoir_native_oos_kir_stability.png",
+    "figures/cross_method_oos_mechanism/textoir_native_oos_kir_stability.tiff",
+    "figures/cross_method_oos_mechanism/textoir_native_oos_kir_stability.pdf",
+    "figures/cross_method_oos_mechanism/textoir_native_oos_kir_stability.svg",
+    "figures/cross_method_oos_mechanism/s2c_vs_adb_oos_frontier.png",
+    "figures/cross_method_oos_mechanism/s2c_vs_adb_oos_frontier.tiff",
+    "figures/cross_method_oos_mechanism/s2c_vs_adb_oos_frontier.pdf",
+    "figures/cross_method_oos_mechanism/s2c_vs_adb_oos_frontier.svg",
+    "figures/cross_method_oos_mechanism/mogb_component_bridge.png",
+    "figures/cross_method_oos_mechanism/mogb_component_bridge.tiff",
+    "figures/cross_method_oos_mechanism/mogb_component_bridge.pdf",
+    "figures/cross_method_oos_mechanism/mogb_component_bridge.svg",
+    "figures/cross_method_oos_mechanism/oos_error_budget_frontier.png",
+    "figures/cross_method_oos_mechanism/oos_error_budget_frontier.tiff",
+    "figures/cross_method_oos_mechanism/oos_error_budget_frontier.pdf",
+    "figures/cross_method_oos_mechanism/oos_error_budget_frontier.svg",
+    "figures/cross_method_oos_mechanism/mogb_ball_risk_surface.png",
+    "figures/cross_method_oos_mechanism/mogb_ball_risk_surface.tiff",
+    "figures/cross_method_oos_mechanism/mogb_ball_risk_surface.pdf",
+    "figures/cross_method_oos_mechanism/mogb_ball_risk_surface.svg",
+    "figures/cross_method_oos_mechanism/same_sample_mogb_s2c_transitions.png",
+    "figures/cross_method_oos_mechanism/same_sample_mogb_s2c_transitions.tiff",
+    "figures/cross_method_oos_mechanism/same_sample_mogb_s2c_transitions.pdf",
+    "figures/cross_method_oos_mechanism/same_sample_mogb_s2c_transitions.svg",
+    "figures/cross_method_oos_mechanism/cross_method_evidence_status.png",
+    "figures/cross_method_oos_mechanism/cross_method_evidence_status.tiff",
+    "figures/cross_method_oos_mechanism/cross_method_evidence_status.pdf",
+    "figures/cross_method_oos_mechanism/cross_method_evidence_status.svg"
+  ],
+  "figure_index": {
+    "fair_oos_boundary_tradeoff": [
+      "figures/cross_method_oos_mechanism/fair_oos_boundary_tradeoff.png",
+      "figures/cross_method_oos_mechanism/fair_oos_boundary_tradeoff.tiff",
+      "figures/cross_method_oos_mechanism/fair_oos_boundary_tradeoff.pdf",
+      "figures/cross_method_oos_mechanism/fair_oos_boundary_tradeoff.svg"
+    ],
+    "fair_oos_precision_recall": [
+      "figures/cross_method_oos_mechanism/fair_oos_precision_recall.png",
+      "figures/cross_method_oos_mechanism/fair_oos_precision_recall.tiff",
+      "figures/cross_method_oos_mechanism/fair_oos_precision_recall.pdf",
+      "figures/cross_method_oos_mechanism/fair_oos_precision_recall.svg"
+    ],
+    "textoir_native_oos_kir_stability": [
+      "figures/cross_method_oos_mechanism/textoir_native_oos_kir_stability.png",
+      "figures/cross_method_oos_mechanism/textoir_native_oos_kir_stability.tiff",
+      "figures/cross_method_oos_mechanism/textoir_native_oos_kir_stability.pdf",
+      "figures/cross_method_oos_mechanism/textoir_native_oos_kir_stability.svg"
+    ],
+    "s2c_vs_adb_oos_frontier": [
+      "figures/cross_method_oos_mechanism/s2c_vs_adb_oos_frontier.png",
+      "figures/cross_method_oos_mechanism/s2c_vs_adb_oos_frontier.tiff",
+      "figures/cross_method_oos_mechanism/s2c_vs_adb_oos_frontier.pdf",
+      "figures/cross_method_oos_mechanism/s2c_vs_adb_oos_frontier.svg"
+    ],
+    "mogb_component_bridge": [
+      "figures/cross_method_oos_mechanism/mogb_component_bridge.png",
+      "figures/cross_method_oos_mechanism/mogb_component_bridge.tiff",
+      "figures/cross_method_oos_mechanism/mogb_component_bridge.pdf",
+      "figures/cross_method_oos_mechanism/mogb_component_bridge.svg"
+    ],
+    "oos_error_budget_frontier": [
+      "figures/cross_method_oos_mechanism/oos_error_budget_frontier.png",
+      "figures/cross_method_oos_mechanism/oos_error_budget_frontier.tiff",
+      "figures/cross_method_oos_mechanism/oos_error_budget_frontier.pdf",
+      "figures/cross_method_oos_mechanism/oos_error_budget_frontier.svg"
+    ],
+    "mogb_ball_risk_surface": [
+      "figures/cross_method_oos_mechanism/mogb_ball_risk_surface.png",
+      "figures/cross_method_oos_mechanism/mogb_ball_risk_surface.tiff",
+      "figures/cross_method_oos_mechanism/mogb_ball_risk_surface.pdf",
+      "figures/cross_method_oos_mechanism/mogb_ball_risk_surface.svg"
+    ],
+    "same_sample_mogb_s2c_transitions": [
+      "figures/cross_method_oos_mechanism/same_sample_mogb_s2c_transitions.png",
+      "figures/cross_method_oos_mechanism/same_sample_mogb_s2c_transitions.tiff",
+      "figures/cross_method_oos_mechanism/same_sample_mogb_s2c_transitions.pdf",
+      "figures/cross_method_oos_mechanism/same_sample_mogb_s2c_transitions.svg"
+    ],
+    "cross_method_evidence_status": [
+      "figures/cross_method_oos_mechanism/cross_method_evidence_status.png",
+      "figures/cross_method_oos_mechanism/cross_method_evidence_status.tiff",
+      "figures/cross_method_oos_mechanism/cross_method_evidence_status.pdf",
+      "figures/cross_method_oos_mechanism/cross_method_evidence_status.svg"
+    ]
+  },
+  "style_reference": {
+    "level": "style_only_inheritance",
+    "vocabulary": "Known blue circles, OOS red crosses, yellow stars, gray dashed guides, white canvas, black axes",
+    "reference": "RECENT_MECHANISM_ANALYSIS_PRESENTATION_V1.md Fig. 1"
+  },
+  "selection_used_test_oos": false,
+  "new_training": false,
+  "historical_banking_note": "The paper-facing historical H1 mechanism figures use banking77_oos; archive/current fair figures use standard banking77. No cross-line banking row is pooled.",
+  "dc_lo_os_note": "DCLOOS reduced metrics are retained as reference-only evidence and excluded from fair ranking."
+}

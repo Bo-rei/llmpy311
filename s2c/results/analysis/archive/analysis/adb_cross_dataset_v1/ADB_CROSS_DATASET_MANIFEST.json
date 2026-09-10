@@ -1,0 +1,168 @@
+{
+  "schema_version": 1,
+  "analysis": "adb_cross_dataset_v1",
+  "protocol_version": "protocol_v2_textoir_v1",
+  "external_roots": [
+    "/home/bo/bo01/llmpy311/artifacts/s2c/external/adb_gpu_runtime_v2",
+    "/home/bo/bo01/llmpy311/artifacts/s2c/external/adb_gpu_runtime_v1"
+  ],
+  "fair_source": "/home/bo/bo01/llmpy311/s2c/results/analysis/cross_protocol_tradeoff_v1/per_seed.csv",
+  "fair_source_sha256": "31ccdd433b38b86ec92b0cd81b460114a7fe1e7f12b94d4a5d031aab7d703145",
+  "run_manifest_count": 9,
+  "valid_units": 9,
+  "paired_effect_rows": 63,
+  "run_manifests": [
+    {
+      "path": "artifacts/s2c/external/adb_gpu_runtime_v1/stackoverflow/ADB/kir50/seed100/run_manifest.json",
+      "sha256": "78a018efd0eec3c8cda37d6aaf8c8dde9dd0ee15f05f758197d9fab29ace3fde",
+      "status": "complete",
+      "artifact_audit": {
+        "complete": true,
+        "prediction_directories": [
+          "/home/bo/bo01/llmpy311/artifacts/s2c/external/adb_gpu_runtime_v1/stackoverflow/ADB/kir50/seed100/textoir_outputs/open_intent_detection/ADB_stackoverflow_0.5_1.0_bert_100"
+        ],
+        "prediction_directory_count": 1,
+        "results_csv": "/home/bo/bo01/llmpy311/artifacts/s2c/external/adb_gpu_runtime_v1/stackoverflow/ADB/kir50/seed100/results/results.csv",
+        "results_csv_exists": true,
+        "y_pred_sha256": "b5140526c0109c3ac81feb3e075e884fb0a078d2bed266afe3c5a6994aebfc19",
+        "y_true_sha256": "5654e2846c1d51cf121aea63e9a76a879d595f1723339aae14e79a1ebf6ea925"
+      }
+    },
+    {
+      "path": "artifacts/s2c/external/adb_gpu_runtime_v1/stackoverflow/ADB/kir50/seed42/run_manifest.json",
+      "sha256": "d4c358a1cb3e568561484a109c3ed4043ce6b45a88e7d64ac5c274e2966cb778",
+      "status": "complete",
+      "artifact_audit": {
+        "complete": true,
+        "prediction_directories": [
+          "/home/bo/bo01/llmpy311/artifacts/s2c/external/adb_gpu_runtime_v1/stackoverflow/ADB/kir50/seed42/textoir_outputs/open_intent_detection/ADB_stackoverflow_0.5_1.0_bert_42"
+        ],
+        "prediction_directory_count": 1,
+        "results_csv": "/home/bo/bo01/llmpy311/artifacts/s2c/external/adb_gpu_runtime_v1/stackoverflow/ADB/kir50/seed42/results/results.csv",
+        "results_csv_exists": true,
+        "y_pred_sha256": "af4f8030982f845f2c6372687b352fa82be776c8e14c6a19cb4c8faf5d9c69c2",
+        "y_true_sha256": "ebc4a64b14beaafaa06004aaccada70ab4b334b22a9e41561b69bd9149e01b57"
+      }
+    },
+    {
+      "path": "artifacts/s2c/external/adb_gpu_runtime_v1/stackoverflow/ADB/kir50/seed87/run_manifest.json",
+      "sha256": "3cd0f9ee73b912af114749785c3bac25a54e95a8065407cbe16063f97047c568",
+      "status": "complete",
+      "artifact_audit": {
+        "complete": true,
+        "prediction_directories": [
+          "/home/bo/bo01/llmpy311/artifacts/s2c/external/adb_gpu_runtime_v1/stackoverflow/ADB/kir50/seed87/textoir_outputs/open_intent_detection/ADB_stackoverflow_0.5_1.0_bert_87"
+        ],
+        "prediction_directory_count": 1,
+        "results_csv": "/home/bo/bo01/llmpy311/artifacts/s2c/external/adb_gpu_runtime_v1/stackoverflow/ADB/kir50/seed87/results/results.csv",
+        "results_csv_exists": true,
+        "y_pred_sha256": "d92dfb42ba9e1772b89068715ea82ddce5b0fa01290ae7ea3023db63bf029345",
+        "y_true_sha256": "e7fb5a3b7a9c3070f3e03d19e808bf80ddf1b0acadf6dd6cb2f7f77ab826d01e"
+      }
+    },
+    {
+      "path": "artifacts/s2c/external/adb_gpu_runtime_v2/banking/ADB/kir50/seed100/run_manifest.json",
+      "sha256": "2e7853107caccfd95206e22b8b88cab4c46a55a204cd685ecbd764ee298c42a5",
+      "status": "complete",
+      "artifact_audit": {
+        "complete": true,
+        "prediction_directories": [
+          "/home/bo/bo01/llmpy311/artifacts/s2c/external/adb_gpu_runtime_v2/banking/ADB/kir50/seed100/textoir_outputs/open_intent_detection/ADB_banking_0.5_1.0_bert_100"
+        ],
+        "prediction_directory_count": 1,
+        "results_csv": "/home/bo/bo01/llmpy311/artifacts/s2c/external/adb_gpu_runtime_v2/banking/ADB/kir50/seed100/results/results.csv",
+        "results_csv_exists": true,
+        "y_pred_sha256": "13bff118801eaf0a537c7656dbbf01e0fba45623257166185b52af87f0b64ec1",
+        "y_true_sha256": "cb15845785364fc027ecc6e4b12071270d66d87155d91bd751198eea7af60d99"
+      }
+    },
+    {
+      "path": "artifacts/s2c/external/adb_gpu_runtime_v2/banking/ADB/kir50/seed42/run_manifest.json",
+      "sha256": "a077fdebd3b02e4351615e49c3db5829d392d8cfe03bee1163ce0434fce42544",
+      "status": "complete",
+      "artifact_audit": {
+        "complete": true,
+        "prediction_directories": [
+          "/home/bo/bo01/llmpy311/artifacts/s2c/external/adb_gpu_runtime_v2/banking/ADB/kir50/seed42/textoir_outputs/open_intent_detection/ADB_banking_0.5_1.0_bert_42"
+        ],
+        "prediction_directory_count": 1,
+        "results_csv": "/home/bo/bo01/llmpy311/artifacts/s2c/external/adb_gpu_runtime_v2/banking/ADB/kir50/seed42/results/results.csv",
+        "results_csv_exists": true,
+        "y_pred_sha256": "1659326ce05c767de0a3946d719236d464ee0310115042670381b816624ba437",
+        "y_true_sha256": "19c0b163881df2f4fa9bbaedd16e13bb5abcdc998ffe7b8c4de1ed292da85e8a"
+      }
+    },
+    {
+      "path": "artifacts/s2c/external/adb_gpu_runtime_v2/banking/ADB/kir50/seed87/run_manifest.json",
+      "sha256": "9183e8ee5482bf2ff266d36f27fd2234477fa25ac7fbac4dfc1608c9025d7f67",
+      "status": "complete",
+      "artifact_audit": {
+        "complete": true,
+        "prediction_directories": [
+          "/home/bo/bo01/llmpy311/artifacts/s2c/external/adb_gpu_runtime_v2/banking/ADB/kir50/seed87/textoir_outputs/open_intent_detection/ADB_banking_0.5_1.0_bert_87"
+        ],
+        "prediction_directory_count": 1,
+        "results_csv": "/home/bo/bo01/llmpy311/artifacts/s2c/external/adb_gpu_runtime_v2/banking/ADB/kir50/seed87/results/results.csv",
+        "results_csv_exists": true,
+        "y_pred_sha256": "c3ff968802c2916733149cf6438e3152e618ba42e3544fa8d20c4eb60d097883",
+        "y_true_sha256": "3cc01a047bb18f38d652d265cc17c0613cb9163a265ade0e1c7ea9e0951d66dc"
+      }
+    },
+    {
+      "path": "artifacts/s2c/external/adb_gpu_runtime_v2/clinc150/ADB/kir50/seed100/run_manifest.json",
+      "sha256": "276f0d47495ec73fbe4296ebc374ae34c79b71a68b318f8293084e3497426cc6",
+      "status": "complete",
+      "artifact_audit": {
+        "complete": true,
+        "prediction_directories": [
+          "/home/bo/bo01/llmpy311/artifacts/s2c/external/adb_gpu_runtime_v2/clinc150/ADB/kir50/seed100/textoir_outputs/open_intent_detection/ADB_oos_0.5_1.0_bert_100"
+        ],
+        "prediction_directory_count": 1,
+        "results_csv": "/home/bo/bo01/llmpy311/artifacts/s2c/external/adb_gpu_runtime_v2/clinc150/ADB/kir50/seed100/results/results.csv",
+        "results_csv_exists": true,
+        "y_pred_sha256": "bc75493d936494f3b948018b36be6792b9a407338855539841e22b2c17d6a415",
+        "y_true_sha256": "fe275ef11c64bf4c03b3e3b58f66fc0921bebc0ed76cac95a0eb57760c796c6a"
+      }
+    },
+    {
+      "path": "artifacts/s2c/external/adb_gpu_runtime_v2/clinc150/ADB/kir50/seed42/run_manifest.json",
+      "sha256": "1ca7b06dc88ae7c4516a620033796add37adbd00d54f171b04ce660ff12b265e",
+      "status": "complete",
+      "artifact_audit": {
+        "complete": true,
+        "prediction_directories": [
+          "/home/bo/bo01/llmpy311/artifacts/s2c/external/adb_gpu_runtime_v2/clinc150/ADB/kir50/seed42/textoir_outputs/open_intent_detection/ADB_oos_0.5_1.0_bert_42"
+        ],
+        "prediction_directory_count": 1,
+        "results_csv": "/home/bo/bo01/llmpy311/artifacts/s2c/external/adb_gpu_runtime_v2/clinc150/ADB/kir50/seed42/results/results.csv",
+        "results_csv_exists": true,
+        "y_pred_sha256": "dcea0ec7cadf88c32aa20e28310f7dcb285b56ce36b7ef3f7921ca5ac415b514",
+        "y_true_sha256": "7588aa3ebd1fe114c9c593142cab310a3a65b6ba2fb715ca450e16409ac03a80"
+      }
+    },
+    {
+      "path": "artifacts/s2c/external/adb_gpu_runtime_v2/clinc150/ADB/kir50/seed87/run_manifest.json",
+      "sha256": "62f55b8ca6f680eea644f62c92fa8fdc17e2fba141410554d7cc705e4f6e2ca1",
+      "status": "complete",
+      "artifact_audit": {
+        "complete": true,
+        "prediction_directories": [
+          "/home/bo/bo01/llmpy311/artifacts/s2c/external/adb_gpu_runtime_v2/clinc150/ADB/kir50/seed87/textoir_outputs/open_intent_detection/ADB_oos_0.5_1.0_bert_87"
+        ],
+        "prediction_directory_count": 1,
+        "results_csv": "/home/bo/bo01/llmpy311/artifacts/s2c/external/adb_gpu_runtime_v2/clinc150/ADB/kir50/seed87/results/results.csv",
+        "results_csv_exists": true,
+        "y_pred_sha256": "6ad0f80a3039f6ebadc3d9ade645eb0de433e1e1b03ab42d496e66f288484ba7",
+        "y_true_sha256": "4cc247b1ce291a39cde8f8016c058cb7addc12d10a141158ce295974fb7d01a4"
+      }
+    }
+  ],
+  "selection_used_test_oos": false,
+  "metric_source": "y_true.npy/y_pred.npy",
+  "outputs": [
+    "adb_per_seed.csv",
+    "adb_summary.csv",
+    "adb_trainable_paired_effects.csv",
+    "adb_trainable_paired_summary.csv"
+  ]
+}

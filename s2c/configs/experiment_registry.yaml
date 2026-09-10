@@ -64,6 +64,204 @@ experiments:
       checkpoint_globs:
         - expert_models/**/*.pt
 
+    historical_archive_full_pipeline_lora:
+      id: pipeline.historical_archive_full_pipeline_lora
+      research_question: "在旧 archive 数据协议下，Trainable/LoRA MiniLM Gate 能否把收益传递到完整 Gate→Router→Expert？"
+      status: complete_seed42
+      entrypoints:
+        - tools/legacy/analysis_v19/run_trainable_minilm_historical_v1.py
+        - tools/train/train_router_v19.py
+        - tools/train/train_all_experts_v19.py
+        - tools/eval/run_historical_archive_full_pipeline.py
+      protocol: historical_v19_archive
+      artifact_root: ../../runs/historical_archive_full_pipeline_seed42
+      manifest:
+        - clinc150/kir50_seed42/MANIFEST.json
+        - stackoverflow/kir50_seed42/MANIFEST.json
+        - banking77/kir50_seed42/MANIFEST.json
+      summary:
+        - clinc150/kir50_seed42/per_method.csv
+        - stackoverflow/kir50_seed42/per_method.csv
+        - banking77/kir50_seed42/per_method.csv
+      expected_unit_count: 9
+      count_source: none
+      notes: "Seed42 Frozen/Partial/LoRA Gate comparison with archive-data Router/Expert retraining; raw predictions remain outside Git."
+
+    historical_archive_gate_workpoint_tuning:
+      id: pipeline.historical_archive_gate_workpoint_tuning
+      research_question: "在论文 OOS F1 为主目标时，Gate 的 K、lambda、threshold 和接受规则能否改善当前 full pipeline？"
+      status: complete_seed42
+      entrypoints:
+        - tools/analysis/search_historical_archive_gate_workpoints.py
+        - tools/analysis/materialize_historical_archive_gate_candidates.py
+        - tools/eval/run_historical_archive_full_pipeline.py
+      protocol: historical_v19_archive_development_tuning
+      config: configs/experiments/historical_archive_tuned_full_pipeline.yaml
+      artifact_root: ../../runs/historical_archive_tuned_full_pipeline_seed42
+      manifest:
+        - clinc150/kir50_seed42/MANIFEST.json
+        - stackoverflow/kir50_seed42/MANIFEST.json
+        - banking77/kir50_seed42/MANIFEST.json
+      summary:
+        - clinc150/kir50_seed42/per_method.csv
+        - stackoverflow/kir50_seed42/per_method.csv
+        - banking77/kir50_seed42/per_method.csv
+      expected_unit_count: 9
+      count_source: none
+      notes: "Validation-OOS labels selected development workpoints; test OOS was confirmation only; standard banking77 remains separate from historical banking77_oos."
+
+    historical_trainable_parameter_full_pipeline:
+      id: pipeline.historical_trainable_parameter_full_pipeline
+      research_question: "在历史论文主线 H1 协议下，训练后的 MiniLM Gate 的边界参数能否改善真实 full pipeline 的 OOS F1？"
+      status: complete_h1_parameter_search
+      entrypoints:
+        - tools/eval/run_historical_trainable_parameter_full_pipeline.py
+        - tools/analysis/build_historical_trainable_parameter_full_pipeline_summary.py
+      protocol: historical_v19_paper_main__H1_controlled_gate_to_router_to_expert
+      config: configs/experiments/historical_trainable_parameter_full_pipeline.yaml
+      artifact_root: ../../../../s2c/results/analysis/historical_trainable_parameter_full_pipeline
+      manifest:
+        - MANIFEST.json
+        - FIGURE_MANIFEST.json
+      summary:
+        - selected_validation.csv
+        - full_pipeline_selected_summary.csv
+        - paper_beating_candidates.csv
+      expected_unit_count: 9
+      count_source: csv_rows
+      count_summary: full_pipeline_selected_per_seed.csv
+      notes: "Uses existing H1 Trainable last2+projection checkpoints and fixed H1 Router/Expert components; test is confirmation only; no raw predictions are retained."
+
+    historical_trainable_adaptive_centers:
+      id: pipeline.historical_trainable_adaptive_centers
+      research_question: "Can train-only adaptive per-intent K improve H1 validation-selected OOS F1?"
+      status: complete_h1_adaptive_search
+      entrypoints:
+        - scripts/experiments/run_historical_trainable_adaptive_centers.py
+        - tools/analysis/build_historical_trainable_adaptive_centers_report.py
+      protocol: historical_v19_paper_main
+      config: configs/experiments/historical_trainable_adaptive_centers.yaml
+      artifact_root: ../../../../s2c/results/analysis/historical_trainable_adaptive_centers
+      manifest: [MANIFEST.json]
+      summary: [selected_test_per_seed.csv, selected_test_summary.csv]
+      expected_unit_count: 9
+      count_source: none
+      notes: "Train Known only rankings; no auxiliary guard; choices locked before test; fixed controls rerun under changed objective."
+
+    historical_trainable_checkpoint_selection:
+      id: pipeline.historical_trainable_checkpoint_selection
+      research_question: "Can validation-OOS checkpoint selection and longer representation training close the CLINC gap?"
+      status: complete_h1_checkpoint_followup
+      entrypoints: [scripts/experiments/run_historical_trainable_checkpoint_selection.py, tools/analysis/build_historical_trainable_checkpoint_selection_report.py]
+      protocol: historical_v19_paper_main
+      config: configs/experiments/historical_trainable_checkpoint_selection.yaml
+      artifact_root: ../../../../s2c/results/analysis/historical_trainable_checkpoint_selection
+      manifest: [MANIFEST.json]
+      summary: [candidate_validation.csv, selected_test_per_seed.csv, selected_test_summary.csv]
+      expected_unit_count: 9
+      count_source: none
+      notes: "Nine training recipes completed; three CUDA confirmations after global selection lock. CLINC OOS F1 91.64+/-0.27 percent, one seed exceeds 91.96 reference; macro/Accuracy loss and score-oracle diagnostics reported."
+
+    historical_trainable_gate_search:
+      id: pipeline.historical_trainable_gate_search
+      research_question: "Can existing Trainable checkpoints plus adaptive centers and covariance/radius rules close the CLINC KIR=.50 gap?"
+      status: complete_h1_geometry_search
+      entrypoints: [scripts/experiments/run_historical_trainable_gate_search.py]
+      protocol: historical_v19_paper_main__H1_controlled_gate_to_router_to_expert
+      config: configs/experiments/historical_trainable_gate_search.yaml
+      artifact_root: ../../../../s2c/results/analysis/historical_trainable_gate_search
+      manifest: [MANIFEST.json]
+      summary: [selected_test.csv, selection_lock.json]
+      expected_unit_count: 3
+      count_source: csv_rows
+      count_summary: selected_test.csv
+      notes: "Four representation families and ten geometry variants searched with validation-only selection; best full-pipeline OOS F1 91.79+/-0.43, still below 91.96."
+
+    historical_trainable_gate_recipe_search:
+      id: pipeline.historical_trainable_gate_recipe_search
+      research_question: "Can Known-only loss and optimization changes improve CLINC KIR=.50 score ranking?"
+      status: complete_h1_recipe_search
+      entrypoints: [scripts/experiments/run_historical_trainable_gate_recipe_search.py]
+      protocol: historical_v19_paper_main__H1_controlled_gate_to_router_to_expert
+      config: configs/experiments/historical_trainable_gate_recipe_search.yaml
+      artifact_root: ../../../../s2c/results/analysis/historical_trainable_gate_recipe_search
+      manifest: [MANIFEST.json]
+      summary: [candidate_validation.csv, selected_test.csv, selection_lock.json]
+      expected_unit_count: 12
+      count_source: none
+      notes: "Four Known-only recipes x three seeds; validation-selected checkpoints and real CUDA pipeline confirmation. Best OOS F1 91.93+/-0.48, 0.03pp below paper reference."
+
+    historical_trainable_kir25_full_pipeline:
+      id: pipeline.historical_trainable_kir25_full_pipeline
+      research_question: "Can the existing Trainable K=1 Gate that exceeds the KIR=.25 paper reference also exceed it after matched Router/Expert inference?"
+      status: complete_h1_kir25_full_pipeline
+      entrypoints:
+        - tools/train/run_cascade_components.py
+        - tools/eval/run_historical_trainable_full_pipeline.py
+      protocol: historical_v19_paper_main__H1_controlled_gate_to_router_to_expert
+      config: null
+      artifact_root: cascade_full/gpu_kir25
+      manifest: [component_plan.json]
+      summary: [../../../../../../s2c/results/analysis/historical_trainable_kir25_full_pipeline/per_seed.csv, ../../../../../../s2c/results/analysis/historical_trainable_kir25_full_pipeline/MANIFEST.json]
+      expected_unit_count: 9
+      count_source: csv_rows
+      count_summary: ../../../../../../s2c/results/analysis/historical_trainable_kir25_full_pipeline/per_seed.csv
+      notes: "KIR=.25 Trainable K=1 matched full pipeline is now complete for all 3 datasets and 3 seeds (9 CUDA confirmations). CLINC OOS F1 95.10+/-0.30 versus fulltex reported reference 95.01; Banking77-OOS remains descriptive because its data key differs from the paper Banking77 reference."
+
+    historical_trainable_kir75_full_pipeline:
+      id: pipeline.historical_trainable_kir75_full_pipeline
+      research_question: "What is the complete current H1 Trainable K=1 full-pipeline result at KIR=.75 across all datasets?"
+      status: complete_h1_kir75_full_pipeline
+      entrypoints:
+        - tools/train/run_cascade_components.py
+        - tools/eval/run_historical_trainable_full_pipeline.py
+      protocol: historical_v19_paper_main__H1_controlled_gate_to_router_to_expert
+      config: null
+      artifact_root: cascade_full/gpu_kir75
+      manifest: [component_plan.json]
+      summary: [../../../../../../s2c/results/analysis/historical_trainable_kir75_full_pipeline/per_seed.csv, ../../../../../../s2c/results/analysis/historical_trainable_kir75_full_pipeline/MANIFEST.json]
+      expected_unit_count: 9
+      count_source: csv_rows
+      count_summary: ../../../../../../s2c/results/analysis/historical_trainable_kir75_full_pipeline/per_seed.csv
+      notes: "Three datasets x three seeds; all Router/Expert components and full-pipeline confirmations used CUDA; current H1 Trainable K=1 results are compared to fulltex reported references with Banking77 protocol caveat."
+
+    historical_trainable_oos_priority_search:
+      id: pipeline.historical_trainable_oos_priority_search
+      research_question: "Can validation OOS-F1-only boundary selection improve Banking77-OOS while explicitly allowing Known degradation?"
+      status: complete_h1_oos_priority_search
+      entrypoints:
+        - tools/eval/run_historical_trainable_parameter_full_pipeline.py
+        - tools/analysis/build_historical_trainable_oos_priority_report.py
+      protocol: historical_v19_paper_main__H1_controlled_gate_to_router_to_expert
+      config: null
+      artifact_root: ../../../../s2c/results/analysis/historical_trainable_oos_priority_search
+      manifest:
+        - MANIFEST.json
+        - kir25/MANIFEST.json
+        - kir50/MANIFEST.json
+        - kir75/MANIFEST.json
+      summary:
+        - summary.csv
+        - per_seed.csv
+      expected_unit_count: 9
+      count_source: none
+      notes: "Banking77-OOS only; validation OOS F1 is the sole selection objective, Known F1/Accuracy are diagnostics. KIR=.25 reaches 95.95+/-0.48 OOS F1, +1.96pp versus historical Ours 93.99, with Known Recall cost."
+
+    paper_setting_ablation:
+      id: pipeline.paper_setting_ablation
+      research_question: "在论文原始设置下，Gate、级联 backbone 和无 Gate 变体的消融结果是否完整可追溯？"
+      status: complete_historical_anchor
+      entrypoints:
+        - tools/analysis/build_historical_paper_ablation_report.py
+      protocol: historical_v19_paper_main_paper_ablation_anchor
+      artifact_root: ../../outputs/paper_results
+      manifest: [ablation_ledger.json]
+      summary: [ablation_summary.csv]
+      expected_unit_count: 36
+      count_source: csv_rows
+      count_summary: ablation_summary.csv
+      notes: "完整覆盖 3 数据集×3 KIR×4 论文变体；这是历史 paper-anchor artifact，不是本轮 CUDA H1 消融重跑。"
+
   gate_mechanism:
     cluster_separability_v19:
       id: gate_mechanism.cluster_separability_v19
@@ -538,6 +736,31 @@ analysis_catalog_policy:
   git_policy: "commit only closed evidence bundles and their reproducible source"
 
 analysis_bundles:
+  trainable_paper_four_variants:
+    status: active
+    contract_layer: historical_v19_current_trainable_four_variants
+    question: "Evaluate Ours with Trainable Gate versus Without Gate and homogeneous MiniLM/SmolLM cascades on matched current splits."
+    source_experiments: [pipeline.historical_trainable_parameter_full_pipeline]
+    runner: tools/eval/run_trainable_paper_four_variants.py
+    builder: tools/analysis/build_trainable_paper_four_variants.py
+    result_dir: results/analysis/trainable_paper_four_variants
+    report: docs/analysis/trainable_paper_four_variants.md
+    manifest: results/analysis/trainable_paper_four_variants/MANIFEST.json
+    selected_for_main_report: true
+    commit_policy: closed_evidence
+
+  trainable_paper_four_variants_paper_geometry:
+    status: closed
+    contract_layer: historical_v19_current_trainable_paper_geometry_four_variants
+    question: "Under paper K=2/lambda/threshold geometry, how does current Trainable-Gate Ours compare with Without Gate and homogeneous cascades?"
+    source_experiments: [pipeline.historical_trainable_parameter_full_pipeline]
+    runner: tools/eval/run_trainable_paper_four_variants.py
+    builder: tools/analysis/build_trainable_paper_four_variants.py
+    result_dir: results/analysis/trainable_paper_four_variants_paper_geometry
+    report: docs/analysis/trainable_paper_four_variants_paper_geometry.md
+    manifest: results/analysis/trainable_paper_four_variants_paper_geometry/MANIFEST.json
+    selected_for_main_report: true
+    commit_policy: closed_evidence
   fair_trainable_vs_components:
     status: active
     contract_layer: same_protocol_fair
@@ -566,7 +789,7 @@ analysis_bundles:
     builder: tools/analysis/build_native_baselines_v1.py
     result_dir: results/analysis/native_baselines_v1
     figure_dir: figures/native_baselines_v1
-    report: docs/analysis/NATIVE_BASELINES_V1.md
+    report: docs/archive/analysis/NATIVE_BASELINES_V1.md
     manifest: results/analysis/native_baselines_v1/MANIFEST.json
     aliases:
       - native_baselines_v1
@@ -583,7 +806,7 @@ analysis_bundles:
     builder: tools/analysis/build_adb_kir_sensitivity.py
     result_dir: results/analysis/adb_kir_sensitivity_v2
     figure_dir: figures/adb_kir_sensitivity_v2
-    report: docs/analysis/ADB_TRAINABLE_KIR_ANALYSIS_V1.md
+    report: docs/archive/analysis/ADB_TRAINABLE_KIR_ANALYSIS_V1.md
     manifest: results/analysis/adb_kir_sensitivity_v2/ADB_KIR_SENSITIVITY_MANIFEST.json
     aliases:
       - adb_kir_sensitivity_v2
@@ -592,6 +815,26 @@ analysis_bundles:
       - adb_kir_sensitivity_v1
     selected_for_main_report: true
     commit_policy: closed_evidence
+
+  cross_kir_contract_atlas:
+    status: reference
+    contract_layer: mixed_contract_visualization
+    question: "在明确 backbone、监督和 seed 合同的前提下，S2C、MOGB-MiniLM 与 ADB 的跨 KIR 工作点如何并列展示？"
+    source_experiments:
+      - gate_mechanism.minilm_training_stackoverflow_repair
+      - external_validation.mogb
+      - external_validation.adb_compat_stackoverflow_kir50_seed0_v2
+    builder: tools/analysis/build_cross_kir_contract_atlas.py
+    result_dir: results/analysis/cross_kir_contract_atlas_v2
+    figure_dir: figures/cross_kir_contract_atlas_v2
+    report: results/analysis/cross_kir_contract_atlas_v2/CROSS_KIR_CONTRACT_ATLAS_REPORT.md
+    manifest: results/analysis/cross_kir_contract_atlas_v2/CROSS_KIR_CONTRACT_ATLAS_MANIFEST.json
+    aliases:
+      - cross_kir_contract_atlas_v2
+    supersedes:
+      - cross_kir_contract_atlas_v1
+    selected_for_main_report: false
+    commit_policy: reference_only
 
   baseline_da_adb_external:
     status: closed
@@ -602,7 +845,7 @@ analysis_bundles:
     builder: tools/analysis/build_da_adb_current_protocol_summary_v1.py
     result_dir: results/analysis/da_adb_current_protocol_summary_v1
     figure_dir: figures/da_adb_current_protocol_summary_v1
-    report: docs/analysis/DA_ADB_CURRENT_PROTOCOL_SUMMARY_V1.md
+    report: docs/archive/analysis/DA_ADB_CURRENT_PROTOCOL_SUMMARY_V1.md
     manifest: results/analysis/da_adb_current_protocol_summary_v1/MANIFEST.json
     aliases:
       - da_adb_current_protocol_summary_v1
@@ -620,7 +863,7 @@ analysis_bundles:
     builder: tools/analysis/build_s2c_baseline_mogb_overview_v1.py
     result_dir: results/analysis/cross_protocol_tradeoff_v1
     figure_dir: figures/s2c_baseline_mogb_overview_v1
-    report: docs/analysis/S2C_BASELINE_MOGB_COMPARISON_OVERVIEW_V1.md
+    report: docs/archive/analysis/S2C_BASELINE_MOGB_COMPARISON_OVERVIEW_V1.md
     manifest: results/analysis/cross_protocol_tradeoff_v1/MANIFEST.json
     aliases:
       - mogb_fair_component_rows
@@ -639,13 +882,91 @@ analysis_bundles:
     builder: tools/analysis/build_s2c_vs_mogb_mechanism_dashboard_v1.py
     result_dir: results/analysis/s2c_vs_mogb_mechanism_dashboard_v1
     figure_dir: figures/s2c_vs_mogb_mechanism_dashboard_v1
-    report: docs/analysis/S2C_VS_MOGB_MECHANISM_DASHBOARD_V1.md
+    report: docs/archive/analysis/S2C_VS_MOGB_MECHANISM_DASHBOARD_V1.md
     manifest: results/analysis/s2c_vs_mogb_mechanism_dashboard_v1/MANIFEST.json
     aliases:
       - s2c_vs_mogb_mechanism_dashboard_v1
       - mogb_component_swap_analysis
     supersedes: []
     selected_for_main_report: true
+    commit_policy: closed_evidence
+
+  mechanism_explanation_pack:
+    status: active
+    contract_layer: same_protocol_fair
+    question: "同一样本的 score 重排、Known intent 错误、MOGB ball 风险和表示—边界耦合能否解释 S2C 的优势与代价？"
+    source_experiments:
+      - gate_mechanism.minilm_training_stackoverflow_repair
+      - gate_mechanism.multicenter_boundary_attribution
+      - external_validation.mogb
+    builder: tools/analysis/build_mechanism_explanation_pack_v1.py
+    result_dir: results/analysis/mechanism_explanation_v1
+    figure_dir: figures/mechanism_explanation_v1
+    report: docs/analysis/UNIFIED_COMPARISON_AND_MECHANISM_REPORT_V1.md
+    manifest: results/analysis/mechanism_explanation_v1/MANIFEST.json
+    aliases:
+      - mechanism_explanation_v1
+      - score_reordering_and_boundary_risk
+    supersedes: []
+    selected_for_main_report: false
+    commit_policy: closed_evidence
+
+  deep_geometry_mechanism_pack:
+    status: active
+    contract_layer: same_protocol_fair
+    question: "真实 Frozen/Trainable embedding 的样本位移、局部邻域和投影边界能否解释 S2C 相对 Frozen/MOGB 的错误转移？"
+    source_experiments:
+      - gate_mechanism.minilm_training_stackoverflow_repair
+      - gate_mechanism.multicenter_boundary_attribution
+      - external_validation.mogb
+    builder: tools/analysis/build_deep_geometry_mechanism_pack_v1.py
+    result_dir: results/analysis/deep_geometry_mechanism_v1
+    figure_dir: figures/deep_geometry_mechanism_v1
+    report: docs/analysis/UNIFIED_COMPARISON_AND_MECHANISM_REPORT_V1.md
+    manifest: results/analysis/deep_geometry_mechanism_v1/MANIFEST.json
+    aliases:
+      - deep_geometry_mechanism_v1
+      - embedding_movement_boundary_overlay
+    supersedes: []
+    selected_for_main_report: false
+    commit_policy: closed_evidence
+
+  oos_readability_figures:
+    status: active
+    contract_layer: same_protocol_fair
+    question: "在当前 Frozen E2 K=1 与 Trainable K=1 的统一协议下，如何用低阅读成本图形说明 OOS score、工作点和错误机制？"
+    source_experiments:
+      - gate_mechanism.minilm_training_stackoverflow_repair
+      - gate_mechanism.multicenter_boundary_attribution
+    builder: tools/analysis/build_oos_readability_figures_v1.py
+    result_dir: results/analysis/oos_readability_figures_v1
+    figure_dir: figures/oos_readability_figures_v1
+    report: docs/analysis/VISUAL_ANALYSIS_INDEX_V1.md
+    manifest: results/analysis/oos_readability_figures_v1/MANIFEST.json
+    aliases:
+      - oos_readability_figures_v1
+      - oos_first_main_figures
+    supersedes:
+      - oos_visual_readability_contract_v1
+    selected_for_main_report: true
+    commit_policy: closed_evidence
+
+  adb_deep_mechanism_pack:
+    status: active
+    contract_layer: external_backbone_reference
+    question: "ADB 的原生最近中心距离、学习半径和边界位置如何造成 Known under-coverage 与 OOS false acceptance？"
+    source_experiments:
+      - external_validation.adb_compat_stackoverflow_kir50_seed0_v2
+    builder: tools/analysis/build_adb_deep_mechanism_pack_v1.py
+    result_dir: results/analysis/adb_deep_mechanism_v1
+    figure_dir: figures/adb_deep_mechanism_v1
+    report: docs/analysis/UNIFIED_COMPARISON_AND_MECHANISM_REPORT_V1.md
+    manifest: results/analysis/adb_deep_mechanism_v1/MANIFEST.json
+    aliases:
+      - adb_deep_mechanism_v1
+      - adb_native_boundary_risk
+    supersedes: []
+    selected_for_main_report: false
     commit_policy: closed_evidence
 
   audit_unified_prediction_contract:
@@ -679,7 +1000,7 @@ analysis_bundles:
     builder: tools/analysis/build_comparison_atlas_v2.py
     result_dir: results/analysis/comparison_atlas_v2
     figure_dir: figures/comparison_atlas_v2
-    report: docs/analysis/COMPARISON_ATLAS_V2.md
+    report: docs/archive/analysis/COMPARISON_ATLAS_V2.md
     manifest: results/analysis/comparison_atlas_v2/MANIFEST.json
     aliases:
       - comparison_atlas_v2
@@ -688,6 +1009,124 @@ analysis_bundles:
       - comparison_atlas_v1
     selected_for_main_report: false
     commit_policy: reference_only
+
+  historical_protocol_reconciliation:
+    status: active
+    contract_layer: historical_protocol_reproduction
+    question: "旧论文 H0/H1 数据链、Frozen/Trainable Gate 和当前 protocol_v2 的 OOS 结果能否逐项对账？"
+    source_experiments:
+      - pipeline.cascade_full_kir50
+      - gate_mechanism.cluster_separability_v19
+      - gate_mechanism.minilm_training_stackoverflow_repair
+      - baseline_native_detectors
+    builder: tools/analysis/build_historical_protocol_oos_figure_v1.py
+    result_dir: results/analysis/historical_protocol_v1
+    figure_dir: figures/historical_protocol_oos_v1
+    report: docs/analysis/HISTORICAL_PROTOCOL_RECONCILIATION_V1.md
+    manifest: figures/historical_protocol_oos_v1/FIGURE_MANIFEST.json
+    aliases:
+      - historical_protocol_reconciliation
+      - historical_oos_protocol_audit
+    supersedes: []
+    selected_for_main_report: false
+    commit_policy: closed_evidence
+
+  historical_oos_visual_explanation:
+    status: active
+    contract_layer: historical_controlled_gate_H1
+    question: "在不改变 H1 v19 K=1 Gate、阈值和数据合同的前提下，Trainable MiniLM 如何减少 OOS false acceptance？"
+    source_experiments:
+      - historical_protocol_reconciliation
+      - gate_mechanism.minilm_training_stackoverflow_repair
+    builder: tools/analysis/build_historical_oos_visual_explanation.py
+    result_dir: results/analysis/historical_oos_visual_explanation
+    figure_dir: figures/historical_oos_visual_explanation
+    report: docs/analysis/RECENT_MECHANISM_ANALYSIS_PRESENTATION_V1.md
+    manifest: results/analysis/historical_oos_visual_explanation/MANIFEST.json
+    aliases:
+      - historical_oos_visual_explanation
+      - paper_style_oos_mechanism
+    supersedes:
+      - historical_protocol_oos_v3
+    selected_for_main_report: true
+    commit_policy: closed_evidence
+
+  historical_trainable_full_pipeline:
+    status: active
+    contract_layer: historical_controlled_gate_to_router_to_expert_H1
+    question: "当前 H1 Trainable MiniLM K=1 Gate 的改善能否传递到完整 Gate→Router→Expert pipeline？"
+    source_experiments:
+      - pipeline.cascade_full_kir50
+      - historical_protocol_reconciliation
+    runner: tools/eval/run_historical_trainable_full_pipeline.py
+    builder: tools/analysis/build_full_pipeline_visual_explanation.py
+    result_dir: results/analysis/historical_trainable_full_pipeline
+    figure_dir: figures/full_pipeline_visual_explanation
+    report: docs/analysis/RECENT_MECHANISM_ANALYSIS_PRESENTATION_V1.md
+    manifest: results/analysis/historical_trainable_full_pipeline/MANIFEST.json
+    aliases:
+      - historical_trainable_full_pipeline
+      - h1_trainable_cascade_result
+    supersedes: []
+    selected_for_main_report: true
+    commit_policy: closed_evidence
+
+  historical_trainable_parameter_full_pipeline:
+    status: closed
+    contract_layer: historical_controlled_gate_to_router_to_expert_H1_parameter_search
+    question: "在固定 H1 Router/Expert 下，训练后的 MiniLM Gate 的 K、lambda、threshold 和 acceptance mode 哪些配置能达到或超过论文 Ours 的 OOS F1？"
+    source_experiments:
+      - pipeline.historical_trainable_parameter_full_pipeline
+      - historical_trainable_full_pipeline
+    runner: tools/eval/run_historical_trainable_parameter_full_pipeline.py
+    builder: tools/analysis/build_historical_trainable_parameter_full_pipeline_summary.py
+    result_dir: results/analysis/historical_trainable_parameter_full_pipeline
+    figure_dir: figures/historical_trainable_parameter_full_pipeline
+    report: docs/analysis/historical_trainable_parameter_full_pipeline_presentation.md
+    manifest: results/analysis/historical_trainable_parameter_full_pipeline/MANIFEST.json
+    aliases:
+      - historical_trainable_parameter_full_pipeline
+      - h1_trainable_gate_workpoint_search
+    supersedes: []
+    selected_for_main_report: true
+    commit_policy: closed_evidence
+
+  historical_archive_full_pipeline:
+    status: closed
+    contract_layer: historical_archive_controlled_gate_to_router_to_expert
+    question: "旧 archive 数据协议下，训练后的 MiniLM Gate 与 LoRA Gate 的完整链路结果和参数代价是什么？"
+    source_experiments:
+      - pipeline.historical_archive_full_pipeline_lora
+    builder: tools/analysis/build_historical_archive_full_pipeline_summary.py
+    result_dir: results/analysis/historical_archive_full_pipeline
+    figure_dir: null
+    report: docs/analysis/HISTORICAL_ARCHIVE_FULL_PIPELINE_REPORT.md
+    manifest: results/analysis/historical_archive_full_pipeline/MANIFEST.json
+    aliases:
+      - historical_archive_full_pipeline
+      - archive_gate_lora_comparison
+    supersedes: []
+    selected_for_main_report: false
+    commit_policy: closed_evidence
+
+  historical_archive_tuned_full_pipeline:
+    status: closed
+    contract_layer: historical_archive_oos_focused_development_tuning
+    question: "以论文 OOS F1 为主、Known F1/Accuracy 不明显崩坏为约束时，当前 archive full pipeline 的最佳候选是什么？"
+    source_experiments:
+      - pipeline.historical_archive_gate_workpoint_tuning
+      - pipeline.historical_archive_full_pipeline_lora
+    builder: tools/analysis/build_historical_archive_tuned_full_pipeline_summary.py
+    result_dir: results/analysis/historical_archive_tuned_full_pipeline
+    figure_dir: figures/historical_archive_tuned_full_pipeline
+    report: docs/analysis/historical_pipeline_experiment_presentation.md
+    manifest: results/analysis/historical_archive_tuned_full_pipeline/MANIFEST.json
+    aliases:
+      - historical_archive_tuned_full_pipeline
+      - paper_oos_focused_archive_candidates
+    supersedes: []
+    selected_for_main_report: false
+    commit_policy: closed_evidence
 
   blocked_external_baselines:
     status: blocked
@@ -701,7 +1140,7 @@ analysis_bundles:
     builder: tools/analysis/build_baseline_execution_status_v1.py
     result_dir: results/analysis/unified_prediction_contract_v1
     figure_dir: null
-    report: docs/analysis/BASELINE_EXECUTION_STATUS_V1.md
+    report: docs/archive/analysis/BASELINE_EXECUTION_STATUS_V1.md
     manifest: results/analysis/unified_prediction_contract_v1/blocked_methods.csv
     aliases:
       - blocked_external_methods
@@ -709,6 +1148,224 @@ analysis_bundles:
     supersedes: []
     selected_for_main_report: false
     commit_policy: do_not_commit_as_main_evidence
+
+  cross_method_oos_mechanism:
+    status: active
+    contract_layer: layered_oos_comparison
+    question: "在明确 backbone、监督和系统层级后，S2C 相对 TextOIR、MOGB、ADB/DA-ADB 和 DCLOOS 的 OOS 差异来自哪里？"
+    source_experiments:
+      - gate_mechanism.minilm_training_stackoverflow_repair
+      - external_validation.mogb
+      - external_validation.mogb_official_converged
+      - external_validation.adb_compat_stackoverflow_kir50_seed0_v2
+      - external_validation.da_adb_compat_stackoverflow_kir50_seed0_v3
+      - external_validation.dcloos
+      - external_validation.dcloos_official_oos_kir75_seed888_reduced_v2
+    builder: tools/analysis/build_cross_method_oos_mechanism.py
+    result_dir: results/analysis/cross_method_oos_mechanism
+    figure_dir: figures/cross_method_oos_mechanism
+    report: docs/analysis/cross_method_oos_mechanism_presentation.md
+    manifest: results/analysis/cross_method_oos_mechanism/MANIFEST.json
+    aliases:
+      - cross_method_oos_mechanism_v1
+      - layered_oos_comparison
+    supersedes: []
+    selected_for_main_report: true
+    commit_policy: closed_evidence
+
+  historical_trainable_adaptive_centers:
+    status: active
+    contract_layer: historical_v19_paper_main_h1_controlled
+    question: "Do train-only adaptive centers improve OOS F1 over fixed K under validation-only selection?"
+    source_experiments: [pipeline.historical_trainable_adaptive_centers]
+    runner: scripts/experiments/run_historical_trainable_adaptive_centers.py
+    builder: tools/analysis/build_historical_trainable_adaptive_centers_report.py
+    result_dir: results/analysis/historical_trainable_adaptive_centers
+    figure_dir: null
+    report: docs/analysis/historical_trainable_adaptive_centers_presentation.md
+    manifest: results/analysis/historical_trainable_adaptive_centers/MANIFEST.json
+    aliases: []
+    supersedes: []
+    selected_for_main_report: true
+    commit_policy: closed_evidence
+
+  historical_trainable_checkpoint_selection:
+    status: active
+    contract_layer: historical_v19_paper_main_h1_controlled
+    question: "Does changing MiniLM training and validation checkpoint selection improve CLINC OOS F1?"
+    source_experiments: [pipeline.historical_trainable_checkpoint_selection]
+    runner: scripts/experiments/run_historical_trainable_checkpoint_selection.py
+    builder: tools/analysis/build_historical_trainable_checkpoint_selection_report.py
+    result_dir: results/analysis/historical_trainable_checkpoint_selection
+    figure_dir: null
+    report: docs/analysis/historical_trainable_checkpoint_selection_presentation.md
+    manifest: results/analysis/historical_trainable_checkpoint_selection/MANIFEST.json
+    aliases: []
+    supersedes: []
+    selected_for_main_report: true
+    commit_policy: closed_evidence
+
+  historical_trainable_kir25_full_pipeline:
+    status: active
+    contract_layer: historical_v19_paper_main_h1_controlled
+    question: "Does the KIR=.25 Trainable K=1 Gate improvement survive matched Router/Expert inference?"
+    source_experiments: [pipeline.historical_trainable_kir25_full_pipeline]
+    runner: tools/eval/run_historical_trainable_full_pipeline.py
+    builder: null
+    result_dir: results/analysis/historical_trainable_kir25_full_pipeline
+    figure_dir: null
+    report: docs/analysis/historical_trainable_kir25_full_pipeline_presentation.md
+    manifest: results/analysis/historical_trainable_kir25_full_pipeline/MANIFEST.json
+    aliases: []
+    supersedes: []
+    selected_for_main_report: true
+    commit_policy: closed_evidence
+
+  historical_trainable_kir75_full_pipeline:
+    status: active
+    contract_layer: historical_v19_paper_main_h1_controlled
+    question: "What is the complete current H1 Trainable K=1 full-pipeline result at KIR=.75 across all datasets?"
+    source_experiments: [pipeline.historical_trainable_kir75_full_pipeline]
+    runner: tools/eval/run_historical_trainable_full_pipeline.py
+    builder: null
+    result_dir: results/analysis/historical_trainable_kir75_full_pipeline
+    figure_dir: null
+    report: docs/analysis/historical_paper_ablation_report.md
+    manifest: results/analysis/historical_trainable_kir75_full_pipeline/MANIFEST.json
+    aliases: [historical_trainable_kir75_full_pipeline]
+    supersedes: []
+    selected_for_main_report: true
+    commit_policy: closed_evidence
+
+  historical_trainable_oos_priority_search:
+    status: closed
+    supplementary_builder: tools/analysis/search_historical_known_oos_tradeoff.py
+    supplementary_report: docs/analysis/historical_known_oos_tradeoff.md
+    supplementary_results: [corrected_current_metrics.csv, validation_tradeoff_choices.csv, corrected_candidate_audit.csv]
+    contract_layer: historical_v19_paper_main_h1_oos_priority
+    question: "How much OOS F1 can the current Trainable Gate gain when Known metrics are allowed to fall?"
+    source_experiments: [pipeline.historical_trainable_oos_priority_search]
+    runner: tools/eval/run_historical_trainable_parameter_full_pipeline.py
+    builder: tools/analysis/build_historical_trainable_oos_priority_report.py
+    result_dir: results/analysis/historical_trainable_oos_priority_search
+    figure_dir: null
+    report: docs/analysis/historical_trainable_oos_priority_presentation.md
+    manifest: results/analysis/historical_trainable_oos_priority_search/MANIFEST.json
+    aliases: [historical_trainable_oos_priority_search]
+    supersedes: []
+    selected_for_main_report: true
+    commit_policy: closed_evidence
+
+  historical_trainable_sota_tradeoff:
+    status: closed
+    contract_layer: historical_v19_paper_main_h1_oos_sota_tradeoff
+    question: "Can the Trainable Gate reach the external-baseline OOS target while limiting Known F1 and Accuracy loss?"
+    source_experiments: [pipeline.historical_trainable_oos_priority_search]
+    runner: tools/eval/run_historical_trainable_parameter_full_pipeline.py
+    builder: tools/analysis/build_historical_oos_sota_tradeoff_report.py
+    result_dir: results/analysis/historical_trainable_sota_tradeoff
+    figure_dir: null
+    report: docs/analysis/historical_oos_sota_tradeoff.md
+    manifest: results/analysis/historical_trainable_sota_tradeoff/MANIFEST.json
+    aliases: [historical_trainable_sota_tradeoff]
+    supersedes: []
+    selected_for_main_report: true
+    commit_policy: closed_evidence
+
+  historical_gate_ablation:
+    status: closed
+    contract_layer: historical_v19_paper_main_h1_gate_representation_ablation
+    question: "Under fixed Router/Expert components, does replacing Frozen MiniLM Gate with Trainable MiniLM Gate improve the full pipeline?"
+    source_experiments: [pipeline.historical_trainable_kir25_full_pipeline, pipeline.historical_trainable_kir75_full_pipeline, pipeline.historical_trainable_full_pipeline]
+    runner: tools/eval/run_historical_trainable_full_pipeline.py
+    builder: tools/analysis/build_historical_gate_ablation_report.py
+    result_dir: results/analysis/historical_gate_ablation
+    figure_dir: null
+    report: docs/analysis/historical_gate_ablation_report.md
+    manifest: results/analysis/historical_gate_ablation/MANIFEST.json
+    aliases: [historical_gate_ablation]
+    supersedes: []
+    selected_for_main_report: true
+    commit_policy: closed_evidence
+
+  historical_deployment_benchmark:
+    status: closed
+    contract_layer: historical_v19_paper_main_h1_gate_and_cascade_deployment_benchmark
+    question: "在同一 CUDA 设备和 H1 合同下，Frozen 与 Trainable 的 Gate-only 与完整 Cascade 参数量、吞吐、延迟和显存开销是多少？"
+    source_experiments:
+      - pipeline.cascade_full_kir50
+      - historical_gate_ablation
+    runner: tools/analysis/benchmark_historical_deployment.py
+    builder: tools/analysis/benchmark_historical_deployment.py
+    result_dir: results/analysis/historical_deployment_benchmark
+    report: docs/analysis/historical_deployment_benchmark.md
+    manifest: results/analysis/historical_deployment_benchmark/MANIFEST.json
+    selected_for_main_report: false
+    commit_policy: closed_evidence
+
+  historical_paper_style_trainable_gate_ablation:
+    status: closed
+    contract_layer: historical_v19_paper_main_h1_paper_style_gate_extension
+    question: "Under the paper K=2/lambda/threshold geometry, what happens when the Gate representation is changed to Trainable MiniLM?"
+    source_experiments: [pipeline.historical_trainable_kir25_full_pipeline, pipeline.historical_trainable_full_pipeline, pipeline.historical_trainable_kir75_full_pipeline]
+    runner: tools/eval/run_historical_paper_style_trainable_gate_ablation.py
+    builder: tools/analysis/build_historical_paper_style_trainable_gate_ablation_report.py
+    result_dir: results/analysis/historical_paper_style_trainable_gate_ablation
+    figure_dir: null
+    report: docs/analysis/historical_paper_style_trainable_gate_ablation_report.md
+    manifest: results/analysis/historical_paper_style_trainable_gate_ablation/MANIFEST.json
+    aliases: [historical_paper_style_trainable_gate_ablation]
+    supersedes: []
+    selected_for_main_report: true
+    commit_policy: closed_evidence
+
+  historical_trainable_gate_search:
+    status: active
+    contract_layer: historical_v19_paper_main_h1_controlled
+    question: "Can geometry search over existing Trainable representations close CLINC KIR=.50?"
+    source_experiments: [pipeline.historical_trainable_gate_search]
+    runner: scripts/experiments/run_historical_trainable_gate_search.py
+    builder: null
+    result_dir: results/analysis/historical_trainable_gate_search
+    figure_dir: null
+    report: docs/analysis/historical_trainable_gate_search_presentation.md
+    manifest: results/analysis/historical_trainable_gate_search/MANIFEST.json
+    aliases: []
+    supersedes: []
+    selected_for_main_report: true
+    commit_policy: closed_evidence
+
+  historical_trainable_gate_recipe_search:
+    status: active
+    contract_layer: historical_v19_paper_main_h1_controlled
+    question: "Can Known-only training recipe changes close CLINC KIR=.50?"
+    source_experiments: [pipeline.historical_trainable_gate_recipe_search]
+    runner: scripts/experiments/run_historical_trainable_gate_recipe_search.py
+    builder: null
+    result_dir: results/analysis/historical_trainable_gate_recipe_search
+    figure_dir: null
+    report: docs/analysis/historical_trainable_gate_search_presentation.md
+    manifest: results/analysis/historical_trainable_gate_recipe_search/MANIFEST.json
+    aliases: []
+    supersedes: []
+    selected_for_main_report: true
+    commit_policy: closed_evidence
+
+  historical_paper_ablation:
+    status: reference
+    contract_layer: historical_paper_ablation_anchor
+    question: "论文设置下的 36 个结构/ backbone 消融单元以及当前 H1 主结果如何并列审计？"
+    source_experiments: [pipeline.paper_setting_ablation]
+    runner: tools/analysis/build_historical_paper_ablation_report.py
+    builder: tools/analysis/build_historical_paper_ablation_report.py
+    result_dir: results/analysis/historical_paper_ablation
+    figure_dir: null
+    report: docs/analysis/historical_paper_ablation_report.md
+    manifest: results/analysis/historical_paper_ablation/MANIFEST.json
+    aliases: [historical_paper_ablation, paper_setting_ablation]
+    supersedes: []
+    selected_for_main_report: false
+    commit_policy: reference_only
 
 analysis_archives:
   cross_kir_matched_frontier_builder:

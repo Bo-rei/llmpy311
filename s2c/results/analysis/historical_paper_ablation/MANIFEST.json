@@ -1,0 +1,86 @@
+{
+  "schema_version": "s2c.historical_paper_ablation.v1",
+  "stage": "historical_paper_ablation_and_current_h1_bridge",
+  "paper_protocol": "historical_v19_paper_main_paper_ablation_anchor",
+  "current_protocol": "historical_v19_paper_main__H1_controlled_gate_to_router_to_expert",
+  "datasets": [
+    "clinc150",
+    "stackoverflow",
+    "banking77_oos"
+  ],
+  "kir_values": [
+    0.25,
+    0.5,
+    0.75
+  ],
+  "paper_variants": [
+    "Ours",
+    "Without Gate",
+    "Cascade-MiniLM",
+    "Cascade-SmolLM"
+  ],
+  "paper_reference_dataset_by_current_key": {
+    "clinc150": "clinc150",
+    "stackoverflow": "stackoverflow",
+    "banking77_oos": "banking77_oos"
+  },
+  "paper_reference_comparable_by_current_key": {
+    "clinc150": true,
+    "stackoverflow": true,
+    "banking77_oos": true
+  },
+  "paper_ablation_expected_units": 36,
+  "paper_ablation_completed_units": 36,
+  "paper_ablation_missing_units": 0,
+  "paper_ablation_actual_eval_files": 36,
+  "paper_anchor_key": "seed42 historical artifact",
+  "paper_anchor_cells_matching_fulltex_both_metrics": 5,
+  "paper_anchor_mismatches": [
+    {
+      "dataset": "clinc150",
+      "kir": 0.25,
+      "delta_oos_f1_pp": 0.28866000454235063,
+      "delta_accuracy_pp": 0.5863636363636289
+    },
+    {
+      "dataset": "clinc150",
+      "kir": 0.75,
+      "delta_oos_f1_pp": -4.959999999999994,
+      "delta_accuracy_pp": 0.9200000000000017
+    },
+    {
+      "dataset": "stackoverflow",
+      "kir": 0.25,
+      "delta_oos_f1_pp": -2.7655926212305246,
+      "delta_accuracy_pp": -5.213622704507529
+    },
+    {
+      "dataset": "banking77_oos",
+      "kir": 0.75,
+      "delta_oos_f1_pp": -1.2099999999999937,
+      "delta_accuracy_pp": 0.0
+    }
+  ],
+  "paper_ablation_fresh_cuda_rerun": false,
+  "paper_ablation_metadata_source": "artifacts/s2c/outputs/paper_results/ablation_summary.csv",
+  "paper_ablation_eval_root": "artifacts/s2c/outputs/paper_results",
+  "paper_ablation_source": "artifacts/s2c/outputs/paper_results/ablation_summary.csv",
+  "paper_ablation_ledger": "artifacts/s2c/outputs/paper_results/ablation_ledger.json",
+  "historical_source_cuda_available": false,
+  "current_h1_completed_units": 27,
+  "current_h1_summary_units": 9,
+  "current_h1_source_bundles": [
+    "results/analysis/historical_trainable_kir25_full_pipeline",
+    "results/analysis/historical_trainable_gate_recipe_search",
+    "results/analysis/historical_trainable_adaptive_centers",
+    "results/analysis/historical_trainable_kir75_full_pipeline"
+  ],
+  "current_h1_test_used_for_selection": false,
+  "current_h1_oos_used_for_training": false,
+  "paper_ablation_summary": "results/analysis/historical_paper_ablation/paper_ablation_summary.csv",
+  "current_h1_per_seed": "results/analysis/historical_paper_ablation/current_h1_full_pipeline_per_seed.csv",
+  "current_h1_summary": "results/analysis/historical_paper_ablation/current_h1_full_pipeline_summary.csv",
+  "report": "docs/analysis/historical_paper_ablation_report.md",
+  "raw_predictions_exported": false,
+  "fulltex_modified": false
+}

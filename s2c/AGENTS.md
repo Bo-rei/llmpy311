@@ -51,6 +51,25 @@
 `docs/archive/` 仅保存历史资料，不是当前事实来源。不要重新建立平行文档索引或版本号
 文档树。
 
+## 用户指定的后续实验默认（2026-08-26）
+
+除非用户另行指定，新的实验默认使用与 `fulltex.tex` 历史数据家族对应的
+`historical_v19_paper_main` 协议；当前可执行的具体快照是已核验的 H1 controlled v19，
+不能把它写成严格 H0 主 Cascade：
+
+- 数据根为 `../assets/datasets/s2c/prepared/data/multidataset/v19`；主表三项使用
+  `clinc150`、`stackoverflow`、`banking77_oos`，后者必须按实际名称报告，不能写成标准
+  `banking77`。
+- 论文主表对齐使用 `seed=42`、`KIR={0.25,0.50,0.75}`、Gate 的 `K_y=2`、对角
+  Mahalanobis、`mean+lambda*std`（CLINC `lambda=0.5`，其余 `lambda=1`）以及历史
+  Router/Expert/Cascade 设置。
+- Frozen/Trainable 机制对照可以使用同一旧数据根，但必须单独标为 Gate-only 控制，不能
+  把它填回论文完整 Cascade 表。
+- 论文严格 H0 只有在 `data/v19`、历史 Gate detector、匹配的 Router/Expert 和必要的
+  语义输入全部恢复后才允许运行；缺任何一项都必须停止并标记为缺输入，不得自动回退到 H1。
+- `protocol_v2_textoir_v1` 的既有结果只作为冻结参考；没有用户明确要求，不再启动新的
+  `protocol_v2` 实验，也不把两套结果混排。
+
 ## 源码位置
 
 ```text
@@ -107,16 +126,17 @@ figures/archive/analysis/
 - 新计划若与 ledger 中 `do_not_repeat` 且已完成的 protocol/dataset/KIR/seed/representation/K/distance/
   partition/boundary 完全相同，必须拒绝为 `duplicate_completed_experiment`；只有带明确 rerun reason
   的显式覆盖才允许继续。
-- 当前协议只从 `protocol_v2.*` 导入；历史 Router 只从 `legacy.router` 导入，禁止在
-  `legacy.models` 重新导出 Router。
+- 冻结的 `protocol_v2` 运行只从 `protocol_v2.*` 导入；历史 v19 运行使用 `legacy.*`，
+  历史 Router 只从 `legacy.router` 导入，禁止在 `legacy.models` 重新导出 Router。
 - 训练循环不要添加会破坏 LoRA 梯度的 `torch.no_grad()`。
 - 不在初始化阶段调用 `torch.cuda.is_available()`；部分环境会触发原生运行时问题。
 - `configs/data/protocol_v2_admission.json` 是唯一数据准入开关。只有同时满足 dataset_version、
   dataset-level admission 和 materialized view/export 的任务才可运行；不得绕过 Gate runner 或 E4
-  adapter 向任何 `../artifacts/s2c/runs/<dataset_version>/` 写入。唯一活动版本是
-  `protocol_v2_textoir_v1`；StackOverflow 为 `admitted_benchmark_local_only`，允许本地实验但
+  adapter 向任何 `../artifacts/s2c/runs/<dataset_version>/` 写入。已有
+  `protocol_v2_textoir_v1` 作为冻结参考；StackOverflow 为 `admitted_benchmark_local_only`，允许本地实验但
   禁止完整语料进入 Git、论文附件或任何 s2c 再分发包。`protocol_v2_official_v1` 冻结审计，
-  legacy `protocol_v2` 仍被拒绝。
+  legacy `protocol_v2` 仍被拒绝。新的历史 v19 实验按上面的用户指定默认走
+  `multidataset/v19` 数据根和历史 runner，不改写已冻结的 protocol_v2 产物。
 
 ## 最小验证
 

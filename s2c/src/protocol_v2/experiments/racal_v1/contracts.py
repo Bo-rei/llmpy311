@@ -46,6 +46,7 @@ class RacalConfig:
     radius_lambda: float
     threshold: float
     device: str
+    representation_mode: str
 
     @classmethod
     def from_mapping(cls, payload: Mapping[str, Any]) -> "RacalConfig":
@@ -60,6 +61,9 @@ class RacalConfig:
         seeds = tuple(int(seed) for seed in payload["seeds"])
         if not seeds or any(seed not in FORMAL_SEEDS for seed in seeds):
             raise ValueError(f"RACAL seeds must be drawn from {FORMAL_SEEDS}: {seeds}")
+        representation_mode = str(payload.get("representation_mode", "last2_minilm_plus_projection"))
+        if representation_mode not in {"last2_minilm_plus_projection", "lora_minilm_plus_projection"}:
+            raise ValueError(f"Unsupported RACAL representation mode: {representation_mode}")
         return cls(
             protocol_version=str(payload["protocol_version"]),
             model_path=str(payload["model_path"]),
@@ -82,6 +86,7 @@ class RacalConfig:
             radius_lambda=float(payload.get("radius_lambda", 1.0)),
             threshold=float(payload.get("threshold", 1.0)),
             device=str(payload.get("device", "auto")),
+            representation_mode=representation_mode,
         )
 
     def as_dict(self) -> dict[str, Any]:
@@ -108,6 +113,7 @@ class RacalConfig:
             "radius_lambda": self.radius_lambda,
             "threshold": self.threshold,
             "device": self.device,
+            "representation_mode": self.representation_mode,
             "selection": "known_calibration_only",
             "test_used_for_selection": False,
             "oos_used_for_training": False,

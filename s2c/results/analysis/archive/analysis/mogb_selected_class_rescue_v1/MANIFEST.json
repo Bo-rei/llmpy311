@@ -1,0 +1,31 @@
+{
+  "affected_cells": 16,
+  "calibration_target": 0.8,
+  "completed_cells": 45,
+  "elapsed_seconds": 0.6186308860778809,
+  "experiment_id": "mogb_selected_class_rescue_v1",
+  "fallback_intent_units": 26,
+  "output_hashes": {
+    "affected_summary.csv": "2eda086f2701d522590717a7bb97bff8dc4eb95bf16999643eede5df8c4893b2",
+    "fallback_intents.csv": "bfda213e5306f13bbe4dfbede77fa1ad9a674d949210ea30d07ca4a3f39c1bd9",
+    "paired_effects.csv": "bb1eaf098b71c04648557bace72a30b5916ed4c57209384b7a931c921a7a6718",
+    "per_seed.csv": "eefa0f73ed7d3bcdad03e855a5fca27ef42b80e8be1e9da529881ad0b19d283d",
+    "summary.csv": "cdb08a8fed0f4ca26b37da46a3e37144b49e33f9b9fb98e05ce0263e0f34e448",
+    "trainable_comparison.csv": "231ba2d2ec6edaf18fb55563adf77616382470efeb88f02919ea69de0e2d957a",
+    "transition_counts.csv": "31be930030e3c1e00f335ab80e8e8bb13feaa028e7525347fb123f3789320318"
+  },
+  "planned_cells": 45,
+  "protocol_version": "protocol_v2_textoir_v1",
+  "scoring_units": 180,
+  "script_sha256": "78db9ea3bdafa7b1b69a53ae8e7a16ce0a44f7f3c0b87e93f44180c4cf57d741",
+  "selection_split": "train_known_and_calibration_known",
+  "source_hashes": {
+    "mogb_adapter": "cb5baf42b40b818c773256af0e4b5ae2485c135f22185110e8d72c094cab98e6",
+    "source_stage_manifest": "5e2d90bf4a793fcf19af240610f04245cab505ecdf63936853ca4fd20174656b",
+    "trainable_reference": "c32a327d1b42e74813da3c081c2c21c2a09af6ac1b60e08c19e2f0428117688d"
+  },
+  "status": "complete",
+  "test_used_for_selection": false,
+  "total_units": 225,
+  "transition_units": 90
+}

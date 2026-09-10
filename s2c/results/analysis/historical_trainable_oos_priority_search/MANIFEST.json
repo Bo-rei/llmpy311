@@ -1,0 +1,27 @@
+{
+  "schema_version": "s2c.historical_trainable_oos_priority_search.v1",
+  "stage": "historical_trainable_oos_priority_search",
+  "protocol": "historical_v19_paper_main__H1_controlled_gate_to_router_to_expert",
+  "dataset": "banking77_oos",
+  "kirs": [
+    0.25,
+    0.5,
+    0.75
+  ],
+  "seeds": [
+    13,
+    42,
+    87
+  ],
+  "selection_objective": "validation_oos_f1_only",
+  "known_metrics_are_diagnostics": true,
+  "test_used_for_selection": false,
+  "oos_used_for_training": false,
+  "completed_selected_cells": 3,
+  "completed_direct_seed_cells": 9,
+  "summary": "results/analysis/historical_trainable_oos_priority_search/summary.csv",
+  "balanced_comparison_kir50": "results/analysis/historical_trainable_oos_priority_search/balanced_vs_oos_priority_kir50.csv",
+  "per_seed": "results/analysis/historical_trainable_oos_priority_search/per_seed.csv",
+  "report": "docs/analysis/historical_trainable_oos_priority_presentation.md",
+  "raw_predictions_exported": false
+}

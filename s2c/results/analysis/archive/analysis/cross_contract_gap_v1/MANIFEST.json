@@ -1,0 +1,21 @@
+{
+  "stage": "cross_contract_gap_v1",
+  "source_files": {
+    "historical": "results/analysis/archive/analysis/historical_sota_comparison_v1/fulltex_main_results.csv",
+    "current": "results/analysis/cross_protocol_tradeoff_v1/summary_mean_std.csv",
+    "external": "results/analysis/archive/analysis/comparison_atlas_v1/external_contract_reference.csv"
+  },
+  "source_sha256": {
+    "historical": "ad165cdac250595778b13414d951f6ece85860ddf7de5e94c6465d264a618f1a",
+    "current": "c3f5b5cb9701bfd2e111da85575226393e3baf9c8bcace7df6fc39eb2d396ae8",
+    "external": "c8d88ae22f82a1a4642aaf99ef17a70ee232da7954a3faced71d2e3be0d006a5"
+  },
+  "rows": 9,
+  "contract_warning": "Historical full Cascade, current Gate, MOGB, ADB and DCLOOS are layered, not ranked together.",
+  "outputs": [
+    "results/analysis/archive/analysis/cross_contract_gap_v1/current_vs_historical.csv",
+    "results/analysis/archive/analysis/cross_contract_gap_v1/external_contract_reference.csv",
+    "figures/archive/analysis/cross_contract_gap_v1/current_vs_historical.svg",
+    "docs/analysis/CROSS_CONTRACT_GAP_V1.md"
+  ]
+}

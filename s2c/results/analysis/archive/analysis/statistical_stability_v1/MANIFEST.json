@@ -1,0 +1,56 @@
+{
+  "analysis_id": "statistical_stability_v1",
+  "baseline": "trainable_k1",
+  "bootstrap_repetitions": 10000,
+  "bootstrap_seed": 20260725,
+  "datasets": [
+    "clinc150",
+    "banking77",
+    "stackoverflow"
+  ],
+  "kirs": [
+    0.25,
+    0.5,
+    0.75
+  ],
+  "methods": [
+    "trainable_k1",
+    "single_centroid",
+    "fixed_k2",
+    "random_partition",
+    "mogb_minilm",
+    "mogb_partition_ours_boundary",
+    "ours_partition_mogb_boundary"
+  ],
+  "metrics": [
+    "f1_k",
+    "aupr_oos",
+    "oos_f1",
+    "f1_all",
+    "false_accept_rate",
+    "known_recall",
+    "false_reject_rate",
+    "f1_u",
+    "auroc"
+  ],
+  "outputs": [
+    "paired_effects.csv",
+    "rank_per_seed.csv",
+    "rank_summary.csv",
+    "paired_oos_f1_forest.png",
+    "method_rank_heatmap_oos_f1.png",
+    "five_seed_oos_f1_kir_curves.png"
+  ],
+  "protocol_version": "protocol_v2_textoir_v1",
+  "seeds": [
+    13,
+    42,
+    87,
+    100,
+    123
+  ],
+  "source": "/home/bo/bo01/llmpy311/s2c/results/analysis/cross_protocol_tradeoff_v1/per_seed.csv",
+  "source_rows": 315,
+  "source_sha256": "31ccdd433b38b86ec92b0cd81b460114a7fe1e7f12b94d4a5d031aab7d703145",
+  "test_usage": "post-hoc statistical analysis only; no selection or tuning"
+}

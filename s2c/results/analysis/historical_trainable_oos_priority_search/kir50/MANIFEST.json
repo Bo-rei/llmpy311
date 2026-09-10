@@ -1,0 +1,79 @@
+{
+  "schema_version": "s2c.historical_trainable_parameter_full_pipeline.v1",
+  "stage": "historical_trainable_parameter_full_pipeline_v1",
+  "protocol": "historical_v19_paper_main__H1_controlled_gate_to_router_to_expert",
+  "datasets": [
+    "banking77_oos"
+  ],
+  "seeds": [
+    13,
+    42,
+    87
+  ],
+  "kir": 0.5,
+  "gate_representation": "existing_trainable_last2_minilm_plus_projection_checkpoint",
+  "gate_distance": "mahalanobis_diag",
+  "gate_radius_method": "mean_std",
+  "candidate_k_values": [
+    1,
+    2,
+    3,
+    5
+  ],
+  "candidate_lambda_values": [
+    0.25,
+    0.5,
+    0.75,
+    1.0,
+    1.25,
+    1.5,
+    2.0,
+    2.5
+  ],
+  "candidate_threshold_values": [
+    0.2,
+    0.3,
+    0.4,
+    0.5,
+    0.6,
+    0.7,
+    0.75,
+    0.8,
+    0.85,
+    0.9,
+    0.95,
+    1.0,
+    1.05,
+    1.1,
+    1.2
+  ],
+  "acceptance_modes": [
+    "nearest_sphere",
+    "normalized_union"
+  ],
+  "candidate_count_per_seed_dataset": 960,
+  "selection_split": "validation",
+  "selection_uses_validation_oos_labels": true,
+  "selection_guard": "none_oos_f1_only",
+  "test_used_for_selection": false,
+  "oos_used_for_training": false,
+  "downstream_router_expert_fixed": true,
+  "full_pipeline_candidate_mode": "derived_from_one_permissive_gate_downstream_replay",
+  "selected_direct_pipeline_verified": true,
+  "raw_predictions_written": false,
+  "device": "cuda",
+  "h1_trainable_artifact_root": "/home/bo/bo01/llmpy311/artifacts/s2c/runs/historical_protocol_v2/minilm_k1",
+  "paper_reference": "fulltex.tex KIR=0.50 Ours row",
+  "paper_oos_f1": {
+    "banking77_oos": 88.23
+  },
+  "completed_gate_rows": 5760,
+  "completed_full_candidate_rows": 2880,
+  "completed_selected_direct_rows": 3,
+  "paper_beating_candidate_count": 360,
+  "paper_beating_datasets": [
+    "banking77_oos"
+  ],
+  "direct_vs_derived_max_abs_delta": 0.0,
+  "elapsed_seconds": 285.2696316242218
+}

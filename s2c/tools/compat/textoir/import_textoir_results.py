@@ -85,7 +85,11 @@ def main() -> int:
     if y_true.shape != y_pred.shape:
         raise ValueError(f"Prediction shape mismatch: {y_true.shape} != {y_pred.shape}")
 
-    test_path = Path(manifest["textoir_root"]) / "data" / manifest["dataset"] / "test.tsv"
+    # Protocol runs may intentionally use an isolated data root whose split
+    # hashes are recorded in the manifest.  Falling back to the TextOIR clone
+    # would silently validate predictions against a different test file.
+    data_root = Path(manifest.get("data_root", manifest["textoir_root"] + "/data"))
+    test_path = data_root / manifest["dataset"] / "test.tsv"
     test_rows = read_tsv(test_path)
     if len(test_rows) != y_true.size:
         raise ValueError(f"Test/prediction length mismatch: {len(test_rows)} != {y_true.size}")

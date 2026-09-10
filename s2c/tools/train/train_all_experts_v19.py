@@ -178,10 +178,14 @@ def main():
         log.info(f"  CMD: {' '.join(str(c) for c in cmd)}")
 
         env = os.environ.copy()
-        env["PYTHONPATH"] = str(PROJECT_ROOT)
+        pythonpath = [str(PROJECT_ROOT / "src"), str(PROJECT_ROOT)]
+        existing_pythonpath = env.get("PYTHONPATH", "")
+        if existing_pythonpath:
+            pythonpath.append(existing_pythonpath)
+        env["PYTHONPATH"] = os.pathsep.join(pythonpath)
 
         try:
-            proc = subprocess.run(cmd, env=env, check=True)
+            subprocess.run(cmd, env=env, check=True)
             results[domain] = "OK"
             log.info(f"  ✓ {domain} completed successfully.")
         except subprocess.CalledProcessError as exc:

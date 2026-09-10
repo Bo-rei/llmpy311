@@ -1,0 +1,4 @@
+dataset,mean_oos_f1_delta_pp,mean_f1_all_delta_pp,mean_known_rejected_delta_pp,mean_oos_false_accept_delta_pp,n_kir,dominant_mechanism
+banking77,6.6117516160,3.6865656528,6.8351482154,-16.7370631486,3,保守拒识：Known 误拒增加，但 OOS 误接收下降
+clinc150,0.9017114833,-2.0663973976,16.7225146199,-11.4905497206,3,保守拒识：Known 误拒增加，但 OOS 误接收下降
+stackoverflow,1.8023781282,2.1865307745,-2.1881481481,-0.8096296296,3,覆盖恢复，但中高 KIR 出现误接收权衡

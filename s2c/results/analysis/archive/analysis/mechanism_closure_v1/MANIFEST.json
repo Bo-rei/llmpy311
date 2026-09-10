@@ -1,0 +1,35 @@
+{
+  "analysis_only": true,
+  "builder_sha256": "d142e6379b7cb73d6fa5f860bc3c00cd2df122599f402ab7815f3c7a77f1a91e",
+  "figures": [
+    "figures/archive/analysis/mechanism_closure_v1/performance_operating_curves.png",
+    "figures/archive/analysis/mechanism_closure_v1/trainable_mogb_error_budget.png",
+    "figures/archive/analysis/mechanism_closure_v1/mogb_risk_workpoints.png",
+    "figures/archive/analysis/mechanism_closure_v1/mechanism_closure_dashboard.png"
+  ],
+  "notes": [
+    "All values are post-hoc summaries of frozen runs; no test result was used to choose a model, K, threshold, or radius.",
+    "Trainable K=1 versus MOGB-Fair transitions explain F1-All/coverage tradeoffs and are not a causal claim.",
+    "External ADB/DCLOOS and historical full Cascade are intentionally not appended to the fair matrix."
+  ],
+  "outputs": [
+    "results/analysis/archive/analysis/mechanism_closure_v1/kir_robustness.csv",
+    "results/analysis/archive/analysis/mechanism_closure_v1/method_kir_performance.csv",
+    "results/analysis/archive/analysis/mechanism_closure_v1/mogb_risk_summary.csv",
+    "results/analysis/archive/analysis/mechanism_closure_v1/trainable_mogb_transition_summary.csv"
+  ],
+  "protocol_version": "protocol_v2_textoir_v1",
+  "rows": {
+    "kir_robustness": 21,
+    "method_kir_performance": 63,
+    "mogb_risk_summary": 18,
+    "trainable_mogb_transitions": 9
+  },
+  "schema": 1,
+  "source_files": {
+    "results/analysis/cross_protocol_tradeoff_v1/summary_mean_std.csv": "c3f5b5cb9701bfd2e111da85575226393e3baf9c8bcace7df6fc39eb2d396ae8",
+    "results/analysis/archive/analysis/kir_sensitivity_decomposition_v1/kir_sensitivity_summary.csv": "cbdbb792258387d693e672c9c7a397947b8f38089724a6f9064a226f4a3e8bca",
+    "results/analysis/archive/analysis/mogb_ball_risk_attribution_v1/dataset_kir_summary.csv": "f521135938160b3c4986204191950935351bb2ea18dac639135d0e07f6e928b9",
+    "results/analysis/archive/analysis/trainable_mogb_open_intent_transitions_v1/cell_decomposition_summary.csv": "19eb0d0fa50c07f3106ee3f6afd1b72fb9d86c1a1d23b8a820bd4ed04a1526bf"
+  }
+}

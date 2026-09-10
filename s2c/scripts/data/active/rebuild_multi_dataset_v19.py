@@ -672,7 +672,11 @@ def _audit_bundle(bundle: DatasetBundle) -> Dict[str, Any]:
     train_val_overlap = gate_train_texts & gate_val_texts
     train_test_overlap = gate_train_texts & gate_test_texts
     val_test_overlap = gate_val_texts & gate_test_texts
-    gate_isolation_ok = len(train_val_overlap) == 0 and len(train_test_overlap) == 0
+    gate_isolation_ok = (
+        len(train_val_overlap) == 0
+        and len(train_test_overlap) == 0
+        and len(val_test_overlap) == 0
+    )
 
     expert_oos_violations: Dict[str, int] = {}
     for domain_name, domain_splits in bundle.experts.items():
@@ -1779,8 +1783,8 @@ def main() -> None:
     parser.add_argument(
         "--datasets",
         nargs="+",
-        default=["CLINC150", "BANKING77-OOS", "SNIPS"],
-        help="Datasets to rebuild. Defaults to all supported datasets.",
+        default=["CLINC150", "STACKOVERFLOW", "BANKING77-OOS"],
+        help="Datasets to rebuild. Defaults to the historical paper-main datasets.",
     )
     parser.add_argument(
         "--kir_values",

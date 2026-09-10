@@ -6,6 +6,7 @@
 /assets
 /textoir/
 /.venvs/
+/s2c/figures
 
 # Python runtime/test caches; they are never experiment provenance.
 __pycache__/

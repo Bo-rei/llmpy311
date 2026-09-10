@@ -1,0 +1,91 @@
+{
+  "analysis": "adb_deep_mechanism_pack_v1",
+  "analysis_only": true,
+  "audits": {
+    "adb": {
+      "analysis_manifest": "/home/bo/bo01/llmpy311/artifacts/s2c/external/adb_mechanism_v1/stackoverflow/ADB/kir_0.50/seed_42/textoir_outputs/open_intent_detection/ADB_stackoverflow_0.5_1.0_bert_42/analysis/analysis_manifest.json",
+      "analysis_manifest_sha256": "650937ea9bc61f82d2dc216c93e8ccfe287cbac1833319bb0033f9a9b88ffea2",
+      "canonical_main_prediction_mismatch_count": 113,
+      "canonical_main_prediction_path": "/home/bo/bo01/llmpy311/artifacts/s2c/external/adb_gpu_runtime_v1/stackoverflow/ADB/kir50/seed42/textoir_outputs/open_intent_detection/ADB_stackoverflow_0.5_1.0_bert_42/y_pred.npy",
+      "canonical_main_prediction_sha256": "af4f8030982f845f2c6372687b352fa82be776c8e14c6a19cb4c8faf5d9c69c2",
+      "feature_shape": [
+        6000,
+        768
+      ],
+      "known_labels": [
+        "ajax",
+        "svn",
+        "sharepoint",
+        "apache",
+        "linq",
+        "excel",
+        "oracle",
+        "cocoa",
+        "visual-studio",
+        "spring"
+      ],
+      "mechanism_probe_is_main_metric_run": false,
+      "run_manifest": "/home/bo/bo01/llmpy311/artifacts/s2c/external/adb_mechanism_v1/stackoverflow/ADB/kir_0.50/seed_42/run_manifest.json",
+      "run_manifest_sha256": "cd9c9cc19e28a57ce0aae25c6b289190693984adde3d2ad342e285ba30d12333",
+      "sample_count": 6000,
+      "score_definition": "nearest-centroid distance divided by learned radius; larger means more OOS",
+      "test_used_for_selection": "not_declared_external",
+      "unknown_label_id": 10
+    },
+    "adb_saved_pred_exact": true,
+    "s2c": {
+      "metrics_path": "/home/bo/bo01/llmpy311/artifacts/s2c/runs/protocol_v2_textoir_v1/minilm_trainable_kir_sweep_v1/kir_0.50/runs/stackoverflow/seed_42/metrics.json",
+      "prediction_path": "/home/bo/bo01/llmpy311/artifacts/s2c/runs/protocol_v2_textoir_v1/minilm_trainable_kir_sweep_v1/kir_0.50/runs/stackoverflow/seed_42/predictions.jsonl",
+      "prediction_sha256": "ad323a5f22ded65c409110c514a4bfd50411f1139390730ea0234e4fa0587597",
+      "test_used_for_selection": false
+    },
+    "sample_order_exact": true,
+    "score_rank_spearman": 0.7661265175118027,
+    "true_label_order_exact": true
+  },
+  "backbone": "BERT",
+  "contract": "external_backbone_reference",
+  "dataset": "stackoverflow",
+  "figures": [
+    "figures/adb_deep_mechanism_v1/adb_centroid_pca_error_map.png",
+    "figures/adb_deep_mechanism_v1/adb_intent_radius_risk.png",
+    "figures/adb_deep_mechanism_v1/adb_native_distance_radius.png",
+    "figures/adb_deep_mechanism_v1/adb_s2c_native_error_transition.png",
+    "figures/adb_deep_mechanism_v1/adb_s2c_score_rank_transfer.png"
+  ],
+  "kir": 0.5,
+  "mechanism_probe_not_substituted_for_main_metrics": true,
+  "method": "ADB",
+  "native_boundary": "nearest_centroid_distance / learned_radius <= 1.0",
+  "outputs": {
+    "correctness_transition": "results/analysis/adb_deep_mechanism_v1/adb_s2c_correctness_transition.csv",
+    "intent_boundary_risk": "results/analysis/adb_deep_mechanism_v1/adb_intent_boundary_risk.csv",
+    "native_state_summary": "results/analysis/adb_deep_mechanism_v1/adb_native_state_summary.csv",
+    "sample_mechanism": "results/analysis/adb_deep_mechanism_v1/adb_sample_mechanism.csv",
+    "state_transition": "results/analysis/adb_deep_mechanism_v1/adb_s2c_state_transition.csv"
+  },
+  "projection": "PCA-2D-for-visualization-only",
+  "protocol_view": "data/views/protocol_v2_textoir_v1/stackoverflow/seed_42/kir_0.50/test_combined.jsonl",
+  "raw_embeddings_exported": false,
+  "raw_text_saved": false,
+  "sample_ids_exported": false,
+  "seed": 42,
+  "source_hashes": {
+    "/home/bo/bo01/llmpy311/artifacts/s2c/external/adb_gpu_runtime_v1/stackoverflow/ADB/kir50/seed42/run_manifest.json": "d4c358a1cb3e568561484a109c3ed4043ce6b45a88e7d64ac5c274e2966cb778",
+    "/home/bo/bo01/llmpy311/artifacts/s2c/external/adb_gpu_runtime_v1/stackoverflow/ADB/kir50/seed42/textoir_outputs/open_intent_detection/ADB_stackoverflow_0.5_1.0_bert_42/y_pred.npy": "af4f8030982f845f2c6372687b352fa82be776c8e14c6a19cb4c8faf5d9c69c2",
+    "/home/bo/bo01/llmpy311/artifacts/s2c/external/adb_mechanism_v1/stackoverflow/ADB/kir_0.50/seed_42/run_manifest.json": "cd9c9cc19e28a57ce0aae25c6b289190693984adde3d2ad342e285ba30d12333",
+    "/home/bo/bo01/llmpy311/artifacts/s2c/external/adb_mechanism_v1/stackoverflow/ADB/kir_0.50/seed_42/textoir_outputs/open_intent_detection/ADB_stackoverflow_0.5_1.0_bert_42/analysis/analysis_manifest.json": "650937ea9bc61f82d2dc216c93e8ccfe287cbac1833319bb0033f9a9b88ffea2",
+    "/home/bo/bo01/llmpy311/artifacts/s2c/external/adb_mechanism_v1/stackoverflow/ADB/kir_0.50/seed_42/textoir_outputs/open_intent_detection/ADB_stackoverflow_0.5_1.0_bert_42/analysis/native_pred.npy": "488bc0553ec7a446bd608fbf23c1591039c9ba06405e022d96510b46eace6380",
+    "/home/bo/bo01/llmpy311/artifacts/s2c/external/adb_mechanism_v1/stackoverflow/ADB/kir_0.50/seed_42/textoir_outputs/open_intent_detection/ADB_stackoverflow_0.5_1.0_bert_42/analysis/nearest_distance.npy": "cefbf0e229dd2c9b765c1768f95874967a835b62ac463b0a16a1830b8b9e3f52",
+    "/home/bo/bo01/llmpy311/artifacts/s2c/external/adb_mechanism_v1/stackoverflow/ADB/kir_0.50/seed_42/textoir_outputs/open_intent_detection/ADB_stackoverflow_0.5_1.0_bert_42/analysis/nearest_label.npy": "bb781c29d401d0b27e3c491ad85ddbdebcd1439326ba7bc8572ec34fd7c39b8e",
+    "/home/bo/bo01/llmpy311/artifacts/s2c/external/adb_mechanism_v1/stackoverflow/ADB/kir_0.50/seed_42/textoir_outputs/open_intent_detection/ADB_stackoverflow_0.5_1.0_bert_42/analysis/oos_score.npy": "bc9e5a2de100420b3ec2e7697aa3ecafa64f79037b48d3a85e1bac750935618c",
+    "/home/bo/bo01/llmpy311/artifacts/s2c/external/adb_mechanism_v1/stackoverflow/ADB/kir_0.50/seed_42/textoir_outputs/open_intent_detection/ADB_stackoverflow_0.5_1.0_bert_42/analysis/radius.npy": "cc1587c7b87b244a360b67644fc5d6a215633b567da8d1e23623aaec784e9679",
+    "/home/bo/bo01/llmpy311/artifacts/s2c/external/adb_mechanism_v1/stackoverflow/ADB/kir_0.50/seed_42/textoir_outputs/open_intent_detection/ADB_stackoverflow_0.5_1.0_bert_42/analysis/test_features.npy": "77e3678b92ad0c66f623b5fac7c3855234dd64638ea852d3ed7f082b8392028e",
+    "/home/bo/bo01/llmpy311/artifacts/s2c/external/adb_mechanism_v1/stackoverflow/ADB/kir_0.50/seed_42/textoir_outputs/open_intent_detection/ADB_stackoverflow_0.5_1.0_bert_42/analysis/y_pred.npy": "488bc0553ec7a446bd608fbf23c1591039c9ba06405e022d96510b46eace6380",
+    "/home/bo/bo01/llmpy311/artifacts/s2c/external/adb_mechanism_v1/stackoverflow/ADB/kir_0.50/seed_42/textoir_outputs/open_intent_detection/ADB_stackoverflow_0.5_1.0_bert_42/analysis/y_true.npy": "ebc4a64b14beaafaa06004aaccada70ab4b334b22a9e41561b69bd9149e01b57",
+    "/home/bo/bo01/llmpy311/s2c/data/views/protocol_v2_textoir_v1/stackoverflow/seed_42/kir_0.50/test_combined.jsonl": "80b602db560e7fb8ab590edfc4abee492813c7b0f1c4ee3e31c0849712097740",
+    "/home/bo/bo01/llmpy311/s2c/results/analysis/adb_kir_sensitivity_v2/adb_per_seed.csv": "ef6251e9bbbb12ab611ec490387219a4d1b5c5ed844b7125ae5cc6a6caf33384",
+    "/home/bo/bo01/llmpy311/s2c/results/analysis/cross_protocol_tradeoff_v1/per_seed.csv": "31ccdd433b38b86ec92b0cd81b460114a7fe1e7f12b94d4a5d031aab7d703145"
+  },
+  "test_used_for_selection": false
+}

@@ -141,8 +141,8 @@ def _report(frame: pd.DataFrame) -> None:
         "2. 若对齐后 Trainable 仍保持更高 OOS F1，说明表示/score 排序本身更有利；若优势消失，说明主要是当前 threshold=1 导致拒识工作点更激进。",
         "3. 该诊断不改变正式 protocol_v2_textoir_v1 的 Known-only 选择规则。",
         "",
-        "- 数据：`results/analysis/operating_point_diagnostic_v1/per_seed_targets.csv`",
-        "- 图：`figures/operating_point_diagnostic_v1/`",
+        "- 数据：`results/analysis/archive/analysis/operating_point_diagnostic_v1/per_seed_targets.csv`",
+        "- 图：`figures/archive/analysis/operating_point_diagnostic_v1/`",
     ]
     (ROOT / "docs" / "analysis").mkdir(parents=True, exist_ok=True)
     (ROOT / "docs" / "analysis" / "OPERATING_POINT_DIAGNOSTIC_V1.md").write_text("\n".join(lines) + "\n", encoding="utf-8")

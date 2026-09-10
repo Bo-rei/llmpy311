@@ -452,7 +452,39 @@ def prepare_runtime_overlay(
         }
     )
 
+    analysis_run_relative = Path("run.py")
+    analysis_compatibility_files: list[str] = []
+    if config_name in {"ADB", "DA-ADB"}:
+        # Only the ADB family needs the numeric-only native boundary hook.
+        analysis_run_source = source_root / analysis_run_relative
+        analysis_run_overlay = overlay_root / analysis_run_relative
+        analysis_run_text = analysis_run_overlay.read_text(encoding="utf-8")
+        old_analysis_call = "    outputs = method.test(args, data)\n    logger.info('Testing finished...')"
+        new_analysis_call = (
+            "    outputs = method.test(args, data)\n"
+            "    if os.environ.get('S2C_TEXTOIR_ANALYSIS') == '1':\n"
+            "        from tools.compat.textoir.runtime_analysis import save_analysis_artifacts\n"
+            "        save_analysis_artifacts(args, data, method, outputs)\n"
+            "    logger.info('Testing finished...')"
+        )
+        if analysis_run_text.count(old_analysis_call) != 1:
+            raise ValueError(f"Expected one TextOIR test call in {analysis_run_source}")
+        analysis_run_overlay.write_text(
+            analysis_run_text.replace(old_analysis_call, new_analysis_call), encoding="utf-8"
+        )
+        analysis_compatibility_files.append(analysis_run_relative.as_posix())
+        compatibility_patches.append(
+            {
+                "file": analysis_run_relative.as_posix(),
+                "reason": "invoke s2c numeric-only native score and representation analysis hook",
+                "source_sha256": sha256_file(analysis_run_source),
+                "overlay_sha256": sha256_file(analysis_run_overlay),
+                "status": "s2c_analysis_hook",
+            }
+        )
+
     method_compatibility_files: list[str] = []
+
     if config_name in {"ADB", "DA-ADB"}:
         # 官方 ADB 命令启用 --save_model，但 upstream 会把 CUDA tensor list
         # 直接交给 np.save，导致训练完成后、测试前崩溃。这里只修复诊断轨迹的
@@ -479,6 +511,33 @@ def prepare_runtime_overlay(
                 "reason": "move ADB diagnostic delta history to CPU before np.save",
                 "source_sha256": sha256_file(adb_source),
                 "overlay_sha256": sha256_file(adb_overlay),
+            }
+        )
+
+    if config_name == "KNNCL":
+        # The upstream KNNCL backbone reads a misspelled anum_labels field,
+        # while DataManager correctly exposes num_labels.  Fix only this
+        # reachability typo in the isolated overlay; the model and loss are
+        # otherwise unchanged.
+        knncl_relative = Path("backbones/bert.py")
+        knncl_source = source_root / knncl_relative
+        knncl_overlay = overlay_root / knncl_relative
+        knncl_text = knncl_overlay.read_text(encoding="utf-8")
+        old_label_alias = "        self.number_labels = args.anum_labels"
+        new_label_alias = "        self.number_labels = args.num_labels"
+        if knncl_text.count(old_label_alias) != 1:
+            raise ValueError(f"Expected one KNNCL label alias in {knncl_source}")
+        knncl_overlay.write_text(
+            knncl_text.replace(old_label_alias, new_label_alias), encoding="utf-8"
+        )
+        method_compatibility_files.append(knncl_relative.as_posix())
+        compatibility_patches.append(
+            {
+                "file": knncl_relative.as_posix(),
+                "reason": "fix upstream KNNCL args.anum_labels typo to DataManager's args.num_labels",
+                "source_sha256": sha256_file(knncl_source),
+                "overlay_sha256": sha256_file(knncl_overlay),
+                "status": "reachability_compatibility",
             }
         )
 
@@ -552,7 +611,11 @@ def prepare_runtime_overlay(
     )
     compatibility_files = sorted(
         [path.as_posix() for path in compatibility_specs]
-        + [dataloader_relative.as_posix(), base_relative.as_posix()]
+        + [
+            dataloader_relative.as_posix(),
+            base_relative.as_posix(),
+        ]
+        + analysis_compatibility_files
         + method_compatibility_files
     )
     expected_changed_files = sorted([relative_config.as_posix(), *compatibility_files])
@@ -804,6 +867,13 @@ def main() -> int:
 
     environment = os.environ.copy()
     environment["PYTHONHASHSEED"] = str(args.seed)
+    project_root = Path(__file__).resolve().parents[3]
+    existing_pythonpath = environment.get("PYTHONPATH")
+    environment["PYTHONPATH"] = os.pathsep.join(
+        item for item in (str(project_root), existing_pythonpath) if item
+    )
+    if args.method in {"ADB", "DA-ADB"}:
+        environment["S2C_TEXTOIR_ANALYSIS"] = "1"
     # 不在 overlay 内生成 pyc，否则运行后 tree hash 会受解释器缓存干扰。
     environment["PYTHONDONTWRITEBYTECODE"] = "1"
     log_path = run_dir / "external_process.log"

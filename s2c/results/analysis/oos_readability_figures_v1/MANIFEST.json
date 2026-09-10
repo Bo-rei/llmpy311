@@ -1,0 +1,154 @@
+{
+  "analysis_id": "oos_readability_figures_v1",
+  "analysis_stage": "ANALYSIS_OOS_READABILITY_FIGURES_V1",
+  "protocol_version": "protocol_v2_textoir_v1",
+  "datasets": [
+    "clinc150",
+    "banking77",
+    "stackoverflow"
+  ],
+  "kirs": [
+    0.25,
+    0.5,
+    0.75
+  ],
+  "central_kir_for_score_and_mechanism": 0.5,
+  "seeds": [
+    13,
+    42,
+    87,
+    100,
+    123
+  ],
+  "mechanism_seeds": [
+    13,
+    42,
+    87
+  ],
+  "methods": [
+    "Frozen E2 K=1",
+    "Trainable K=1"
+  ],
+  "k_values": [
+    1
+  ],
+  "distances": [
+    "mahalanobis_diag"
+  ],
+  "selection_used_test_oos": false,
+  "test_labels_used_post_hoc": true,
+  "oos_used_for_training": false,
+  "threshold": 1.0,
+  "threshold_semantics": "normalized score > 1 rejects as OOS",
+  "figure_count": 3,
+  "figure_export_formats": [
+    "png",
+    "tiff",
+    "svg",
+    "pdf"
+  ],
+  "sources": [
+    "results/analysis/archive/analysis/minilm_boundary_diagnostics_v1/score_quantiles.csv",
+    "results/analysis/archive/analysis/minilm_trainable_5seed_fair_v1/trainable_vs_frozen_paired.csv",
+    "results/analysis/deep_geometry_mechanism_v1/movement_transition_summary.csv",
+    "tools/analysis/build_oos_readability_figures_v1.py"
+  ],
+  "figures": [
+    "figures/oos_readability_figures_v1/oos_score_distribution_kir050.png",
+    "figures/oos_readability_figures_v1/oos_score_distribution_kir050.tiff",
+    "figures/oos_readability_figures_v1/oos_score_distribution_kir050.svg",
+    "figures/oos_readability_figures_v1/oos_score_distribution_kir050.pdf",
+    "figures/oos_readability_figures_v1/oos_operating_point_kir.png",
+    "figures/oos_readability_figures_v1/oos_operating_point_kir.tiff",
+    "figures/oos_readability_figures_v1/oos_operating_point_kir.svg",
+    "figures/oos_readability_figures_v1/oos_operating_point_kir.pdf",
+    "figures/oos_readability_figures_v1/oos_mechanism_transitions_kir050.png",
+    "figures/oos_readability_figures_v1/oos_mechanism_transitions_kir050.tiff",
+    "figures/oos_readability_figures_v1/oos_mechanism_transitions_kir050.svg",
+    "figures/oos_readability_figures_v1/oos_mechanism_transitions_kir050.pdf"
+  ],
+  "figure_contract": [
+    {
+      "figure_id": "oos_score_distribution",
+      "question": "Trainable 是否把 OOS score 推向拒绝侧？",
+      "population": "test OOS plus quiet Known reference at KIR=.50",
+      "primary_metric": "oos_score",
+      "guard_metric": "false_acceptance",
+      "output": {
+        "png": "figures/oos_readability_figures_v1/oos_score_distribution_kir050.png",
+        "tiff": "figures/oos_readability_figures_v1/oos_score_distribution_kir050.tiff",
+        "svg": "figures/oos_readability_figures_v1/oos_score_distribution_kir050.svg",
+        "pdf": "figures/oos_readability_figures_v1/oos_score_distribution_kir050.pdf"
+      }
+    },
+    {
+      "figure_id": "oos_operating_point",
+      "question": "Trainable 的 OOS F1—false acceptance 工作点是否跨 KIR 稳定改善？",
+      "population": "test metrics, 5-seed means",
+      "primary_metric": "oos_f1",
+      "guard_metric": "known_recall",
+      "output": {
+        "png": "figures/oos_readability_figures_v1/oos_operating_point_kir.png",
+        "tiff": "figures/oos_readability_figures_v1/oos_operating_point_kir.tiff",
+        "svg": "figures/oos_readability_figures_v1/oos_operating_point_kir.svg",
+        "pdf": "figures/oos_readability_figures_v1/oos_operating_point_kir.pdf"
+      }
+    },
+    {
+      "figure_id": "oos_mechanism_transitions",
+      "question": "Trainable-only OOS 正确是否伴随拒绝侧 score 移动？",
+      "population": "test OOS, KIR=.50, seeds=13/42/87, post-hoc state transitions",
+      "primary_metric": "trainable_only_correct_rate",
+      "guard_metric": "both_wrong_rate",
+      "output": {
+        "png": "figures/oos_readability_figures_v1/oos_mechanism_transitions_kir050.png",
+        "tiff": "figures/oos_readability_figures_v1/oos_mechanism_transitions_kir050.tiff",
+        "svg": "figures/oos_readability_figures_v1/oos_mechanism_transitions_kir050.svg",
+        "pdf": "figures/oos_readability_figures_v1/oos_mechanism_transitions_kir050.pdf"
+      }
+    }
+  ],
+  "source_hashes": {
+    "results/analysis/archive/analysis/minilm_boundary_diagnostics_v1/score_quantiles.csv": "3312c8c8fc6a3e1a2c2cfc9bf2867863eafa844f5233fbeaee6e55b737863937",
+    "results/analysis/archive/analysis/minilm_trainable_5seed_fair_v1/trainable_vs_frozen_paired.csv": "ac833123c8e312c68a7682e1406cd9bbaf12c1a0c83465b5e672e1ed6c16a9b4",
+    "results/analysis/deep_geometry_mechanism_v1/movement_transition_summary.csv": "4fd8c93c3191cc3bd74bef35c3512063f1dab77184538d42e11177d520ff7e55",
+    "tools/analysis/build_oos_readability_figures_v1.py": "353e13799c225b7274ebb56feb0544cc8df3d0e204e10cd67547c3a08a6f6f81"
+  },
+  "builder_sha256": "353e13799c225b7274ebb56feb0544cc8df3d0e204e10cd67547c3a08a6f6f81",
+  "output_hashes": {
+    "results/analysis/oos_readability_figures_v1/oos_score_summary_kir050.csv": "7ed9010f69e5fbd708ce731a8afd6e7fd7b3f417a91a6360533744e6512b4c0d",
+    "results/analysis/oos_readability_figures_v1/oos_operating_point_summary.csv": "5379299a55c139eca4ddd04596705d8c5c1b788f2ec2a645345a95e8d07de85a",
+    "results/analysis/oos_readability_figures_v1/oos_transition_summary_kir050.csv": "1d5252898bffe43abf370d1dfdc61168cfff20bff13c1609b0ec2fcf7308372c",
+    "figures/oos_readability_figures_v1/oos_score_distribution_kir050.png": "71a63918471f1f77ec2d2c8ab13e400645f9a0098f341314e63c17e24cd2d0ad",
+    "figures/oos_readability_figures_v1/oos_score_distribution_kir050.tiff": "ac2e908813c5cd688f056e0a78b2779559dfb24b5017697b01b99b3ed8135d74",
+    "figures/oos_readability_figures_v1/oos_score_distribution_kir050.svg": "382c78a9ae24b95d89a227f698f8f75b9ef6f18328a35f8850730893e9dee4a5",
+    "figures/oos_readability_figures_v1/oos_score_distribution_kir050.pdf": "83632b8a034799da4a88d87408407e6a2a992d996fe7225f8202e9d2d033b86d",
+    "figures/oos_readability_figures_v1/oos_operating_point_kir.png": "557570d0d987a66c63507bf0d277c8e68601dd4a81487fa61da721678f4eee3e",
+    "figures/oos_readability_figures_v1/oos_operating_point_kir.tiff": "be292b3e603d09ab1b29f3ccedd070511a883dedc89aac545c530217b92a819a",
+    "figures/oos_readability_figures_v1/oos_operating_point_kir.svg": "2be7c9dcd303550d572625040ffd0b5edcca79dd495e04cae1b3bc95fbe0fe79",
+    "figures/oos_readability_figures_v1/oos_operating_point_kir.pdf": "a281e39354083503dda68f47f610c33e37200f00d789899f42458bed3a55ffa4",
+    "figures/oos_readability_figures_v1/oos_mechanism_transitions_kir050.png": "d56ebc03db254141ad3c33503b6308f6e5392ae916cf76ee2fd51d30a8302219",
+    "figures/oos_readability_figures_v1/oos_mechanism_transitions_kir050.tiff": "e382b61709ca7ef2f467c9280305c7e96da2138177d116b32c37745120d51e48",
+    "figures/oos_readability_figures_v1/oos_mechanism_transitions_kir050.svg": "5bbffafac423a46282bbd7d12cfd45dca2925c2d58066bcd23abad03279e9311",
+    "figures/oos_readability_figures_v1/oos_mechanism_transitions_kir050.pdf": "132739a8344b834a487d58d0fbca5d3ed870d7f3600062abe078189ad21f1d33"
+  },
+  "outputs": {
+    "score_summary": "results/analysis/oos_readability_figures_v1/oos_score_summary_kir050.csv",
+    "operating_point_summary": "results/analysis/oos_readability_figures_v1/oos_operating_point_summary.csv",
+    "transition_summary": "results/analysis/oos_readability_figures_v1/oos_transition_summary_kir050.csv",
+    "figures": [
+      "figures/oos_readability_figures_v1/oos_score_distribution_kir050.png",
+      "figures/oos_readability_figures_v1/oos_score_distribution_kir050.tiff",
+      "figures/oos_readability_figures_v1/oos_score_distribution_kir050.svg",
+      "figures/oos_readability_figures_v1/oos_score_distribution_kir050.pdf",
+      "figures/oos_readability_figures_v1/oos_operating_point_kir.png",
+      "figures/oos_readability_figures_v1/oos_operating_point_kir.tiff",
+      "figures/oos_readability_figures_v1/oos_operating_point_kir.svg",
+      "figures/oos_readability_figures_v1/oos_operating_point_kir.pdf",
+      "figures/oos_readability_figures_v1/oos_mechanism_transitions_kir050.png",
+      "figures/oos_readability_figures_v1/oos_mechanism_transitions_kir050.tiff",
+      "figures/oos_readability_figures_v1/oos_mechanism_transitions_kir050.svg",
+      "figures/oos_readability_figures_v1/oos_mechanism_transitions_kir050.pdf"
+    ]
+  }
+}

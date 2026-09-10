@@ -18,6 +18,13 @@ def test_profile_exposes_strict_historical_data_root():
     assert strict["known_intents_path"] == "data/v19/KNOWN_INTENTS.json"
 
 
+def test_historical_best_profile_points_at_recovered_strict_data():
+    profile = HISTORICAL_BEST_PIPELINE.profile_sections()["data"]
+    assert profile["data_root"] == "data/v19"
+    assert profile["gate_root"] == "data/v19/gate"
+    assert profile["data_status"] == "anchor_reconstructed_not_byte_identical_h0"
+
+
 def test_profile_exposes_historical_gate_encoder():
     strict = HISTORICAL_BEST_PIPELINE.strict_replay_defaults()
     assert strict["gate_encoder_path"] == "all-MiniLM-L6-v2"
@@ -46,7 +53,7 @@ def test_profile_exposes_strict_historical_artifact_paths():
 
 
 def test_historical_gate_test_split_counts_are_stable():
-    historical_test = Path("data/v19/gate/test.json")
+    historical_test = PROJECT_ROOT / "data/v19/gate/test.json"
     if not historical_test.is_file():
         # 严格历史快照不再复制到活跃仓库；只有显式挂载 repro bundle 时才校验
         # 样本计数。跳过优于偷偷改用当前 5500 条的新协议数据冒充历史 5499 条。
@@ -68,6 +75,10 @@ def test_replay_eval_command_uses_historical_protocol():
     joined = " ".join(cmd)
     assert "--data_root data/v19" in joined
     assert "--gate_encoder_path all-MiniLM-L6-v2" in joined
+    assert "--gate_detector_path outputs/experiments/archive/sweeps/2026-03-23/gate_l2_mix2_train/gate_l2_mix2_true_lambda_1p6/detector.json" in joined
+    assert "--router_ckpt outputs/experiments/components/router/router_v19/best_model.pt" in joined
+    assert "--experts_root outputs/experiments/components/experts/experts_v19" in joined
+    assert "--semantic_gate_mode prototype" in joined
     assert "data/multidataset/v19" not in joined
 
 

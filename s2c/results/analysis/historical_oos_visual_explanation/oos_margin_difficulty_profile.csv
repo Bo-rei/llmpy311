@@ -1,0 +1,73 @@
+dataset,seed,difficulty_band,outcome,count
+banking77_oos,13,≤0.05,corrected,200
+banking77_oos,13,≤0.05,still accepted,62
+banking77_oos,13,0.05–0.10,corrected,90
+banking77_oos,13,0.05–0.10,still accepted,111
+banking77_oos,13,0.10–0.20,corrected,24
+banking77_oos,13,0.10–0.20,still accepted,212
+banking77_oos,13,>0.20,corrected,0
+banking77_oos,13,>0.20,still accepted,118
+banking77_oos,42,≤0.05,corrected,133
+banking77_oos,42,≤0.05,still accepted,100
+banking77_oos,42,0.05–0.10,corrected,47
+banking77_oos,42,0.05–0.10,still accepted,102
+banking77_oos,42,0.10–0.20,corrected,13
+banking77_oos,42,0.10–0.20,still accepted,162
+banking77_oos,42,>0.20,corrected,0
+banking77_oos,42,>0.20,still accepted,99
+banking77_oos,87,≤0.05,corrected,195
+banking77_oos,87,≤0.05,still accepted,52
+banking77_oos,87,0.05–0.10,corrected,78
+banking77_oos,87,0.05–0.10,still accepted,74
+banking77_oos,87,0.10–0.20,corrected,26
+banking77_oos,87,0.10–0.20,still accepted,184
+banking77_oos,87,>0.20,corrected,0
+banking77_oos,87,>0.20,still accepted,104
+clinc150,13,≤0.05,corrected,94
+clinc150,13,≤0.05,still accepted,53
+clinc150,13,0.05–0.10,corrected,36
+clinc150,13,0.05–0.10,still accepted,46
+clinc150,13,0.10–0.20,corrected,5
+clinc150,13,0.10–0.20,still accepted,47
+clinc150,13,>0.20,corrected,0
+clinc150,13,>0.20,still accepted,5
+clinc150,42,≤0.05,corrected,85
+clinc150,42,≤0.05,still accepted,25
+clinc150,42,0.05–0.10,corrected,25
+clinc150,42,0.05–0.10,still accepted,31
+clinc150,42,0.10–0.20,corrected,8
+clinc150,42,0.10–0.20,still accepted,28
+clinc150,42,>0.20,corrected,0
+clinc150,42,>0.20,still accepted,9
+clinc150,87,≤0.05,corrected,60
+clinc150,87,≤0.05,still accepted,35
+clinc150,87,0.05–0.10,corrected,26
+clinc150,87,0.05–0.10,still accepted,35
+clinc150,87,0.10–0.20,corrected,1
+clinc150,87,0.10–0.20,still accepted,27
+clinc150,87,>0.20,corrected,1
+clinc150,87,>0.20,still accepted,6
+stackoverflow,13,≤0.05,corrected,685
+stackoverflow,13,≤0.05,still accepted,88
+stackoverflow,13,0.05–0.10,corrected,27
+stackoverflow,13,0.05–0.10,still accepted,15
+stackoverflow,13,0.10–0.20,corrected,0
+stackoverflow,13,0.10–0.20,still accepted,11
+stackoverflow,13,>0.20,corrected,0
+stackoverflow,13,>0.20,still accepted,3
+stackoverflow,42,≤0.05,corrected,364
+stackoverflow,42,≤0.05,still accepted,27
+stackoverflow,42,0.05–0.10,corrected,26
+stackoverflow,42,0.05–0.10,still accepted,12
+stackoverflow,42,0.10–0.20,corrected,0
+stackoverflow,42,0.10–0.20,still accepted,8
+stackoverflow,42,>0.20,corrected,0
+stackoverflow,42,>0.20,still accepted,1
+stackoverflow,87,≤0.05,corrected,622
+stackoverflow,87,≤0.05,still accepted,105
+stackoverflow,87,0.05–0.10,corrected,20
+stackoverflow,87,0.05–0.10,still accepted,66
+stackoverflow,87,0.10–0.20,corrected,0
+stackoverflow,87,0.10–0.20,still accepted,31
+stackoverflow,87,>0.20,corrected,0
+stackoverflow,87,>0.20,still accepted,3

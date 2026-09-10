@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "analysis": "trainable_vs_adb_kir_v1",
+  "protocol_version": "protocol_v2_textoir_v1",
+  "scope": "3 datasets x 3 KIR x 5 seeds; descriptive same-split external-contract comparison",
+  "bootstrap_seed": 20260810,
+  "bootstrap_resamples": 10000,
+  "source_hashes": {
+    "fair": "31ccdd433b38b86ec92b0cd81b460114a7fe1e7f12b94d4a5d031aab7d703145",
+    "adb": "0a287bf154bdb0d2db06ec916cfbb4aea40c8b536fabf419942f684e587e1223"
+  },
+  "n_paired_rows": 45,
+  "n_cells": 9,
+  "selection_uses_test_oos": false,
+  "contract_note": "Trainable-K1 is Known-only MiniLM; ADB is BERT/TextOIR compatibility; no same-backbone SOTA claim."
+}

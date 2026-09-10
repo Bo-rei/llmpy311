@@ -1,0 +1,14 @@
+{
+  "stage": "trainable_mogb_error_budget_v1",
+  "source": "results/analysis/archive/analysis/trainable_mogb_open_intent_transitions_v1/cell_decomposition_per_seed.csv",
+  "source_sha256": "25022e6200d88e8b4271b803148d5ed3b67640225b4e0e82363b849b0d1f8efc",
+  "summary_rows": 9,
+  "source_rows": 45,
+  "decomposition_mismatches": 0,
+  "outputs": [
+    "results/analysis/archive/analysis/trainable_mogb_error_budget_v1/budget_summary.csv",
+    "results/analysis/archive/analysis/trainable_mogb_error_budget_v1/integrity.json",
+    "figures/archive/analysis/trainable_mogb_error_budget_v1/error_budget_decomposition.svg",
+    "docs/archive/analysis/TRAINABLE_MOGB_ERROR_BUDGET_V1.md"
+  ]
+}

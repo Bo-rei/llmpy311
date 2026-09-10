@@ -1,0 +1,29 @@
+{
+  "checkpoint_sha256": "127bd347fe9912f81b771630ae8f5d70bd91348567fb8bfd3b2c418da68dfc22",
+  "default_metric_abs_delta": {
+    "Accuracy": 1.216700000000003,
+    "F1-All": 1.218900000000005,
+    "F1-K": 1.2206000000000046,
+    "F1-U": 1.2017999999999915,
+    "Known Recall": 0.5667000000000044,
+    "OOS Precision": 0.7960999999999956,
+    "OOS Recall": 1.8666999999999945
+  },
+  "default_metric_max_abs_delta": 1.8666999999999945,
+  "default_metric_replay_equivalent": false,
+  "reference_checkpoint_sha256": "127bd347fe9912f81b771630ae8f5d70bd91348567fb8bfd3b2c418da68dfc22",
+  "replay_seed": 4,
+  "replay_status": "deterministic_fixed_checkpoint_reconstruction",
+  "selected_ball_replay": {
+    "passed": false,
+    "reason": "ball_identity_mismatch"
+  },
+  "train_side_reconstruction_breakdown": {
+    "count_penalty": 0.0,
+    "label_hist_penalty": 6.0,
+    "purity_mean_penalty": 0.0,
+    "radius_mean_penalty": 0.02994801058913721,
+    "sample_count_l1": 4080.0
+  },
+  "train_side_reconstruction_score": 64109.948010589134
+}

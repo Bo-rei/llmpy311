@@ -203,18 +203,18 @@ Accuracy `{delta['accuracy'] * 100:+.2f}pp`。
 
 - `metrics.json` 中 `test_used_for_selection=false`、`oos_used_for_training=false`。
 - 每个 seed 记录 train/calibration/test sample-id hash 和 Expert checkpoint SHA256。
-- 完整模型 checkpoint 保留在 artifacts，轻量汇总和图在 `results/analysis/cascade_bridge_v1/`、
-  `figures/cascade_bridge_v1/`。
+- 完整模型 checkpoint 保留在 artifacts，轻量汇总和图在 `results/analysis/archive/analysis/cascade_bridge_v1/`、
+  `figures/archive/analysis/cascade_bridge_v1/`。
 - 只有三个 StackOverflow seed，尚未覆盖 CLINC150/Banking77，也没有 Router 多 domain 训练。
 - 旧 fulltex Cascade、MOGB 官方论文数字和 DCLOOS 外部 OOS 结果仍需要单独的统一协议桥接，不能从本实验外推。
 
 ## 证据文件
 
-- `results/analysis/cascade_bridge_v1/per_seed.csv`
-- `results/analysis/cascade_bridge_v1/summary_mean_std.csv`
-- `results/analysis/cascade_bridge_v1/paired_effects.csv`
-- `figures/cascade_bridge_v1/frozen_vs_trainable_cascade_metrics.png`
-- `figures/cascade_bridge_v1/trainable_minus_frozen_cascade_effect.png`
+- `results/analysis/archive/analysis/cascade_bridge_v1/per_seed.csv`
+- `results/analysis/archive/analysis/cascade_bridge_v1/summary_mean_std.csv`
+- `results/analysis/archive/analysis/cascade_bridge_v1/paired_effects.csv`
+- `figures/archive/analysis/cascade_bridge_v1/frozen_vs_trainable_cascade_metrics.png`
+- `figures/archive/analysis/cascade_bridge_v1/trainable_minus_frozen_cascade_effect.png`
 - `../artifacts/s2c/runs/protocol_v2_textoir_v1/cascade_bridge_v1/PROVENANCE.json`
 """
 

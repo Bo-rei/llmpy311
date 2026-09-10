@@ -186,15 +186,15 @@ def write_report(df: pd.DataFrame, summary: pd.DataFrame, corr: pd.DataFrame) ->
 ## 原始证据与图
 
 - [`RACAL_V1_STAGE2_INTENT_DIAGNOSTICS.csv`](../../results/diagnostics/racal_v1/stage2_fixed_k2/RACAL_V1_STAGE2_INTENT_DIAGNOSTICS.csv)
-- [`intent_diagnostic_summary.csv`](../../results/analysis/stackoverflow_intent_diagnostic_v1/intent_diagnostic_summary.csv)
-- [`intent_net_benefit.png`](../../figures/stackoverflow_intent_diagnostic_v1/intent_net_benefit.png)
-- [`ari_vs_new_oos.png`](../../figures/stackoverflow_intent_diagnostic_v1/ari_vs_new_oos.png)
-- [`intent_recovered_vs_oos.png`](../../figures/stackoverflow_intent_diagnostic_v1/intent_recovered_vs_oos.png)
-- [`intent_diagnostic_heatmap.png`](../../figures/stackoverflow_intent_diagnostic_v1/intent_diagnostic_heatmap.png)
+- [`intent_diagnostic_summary.csv`](../../results/analysis/archive/analysis/stackoverflow_intent_diagnostic_v1/intent_diagnostic_summary.csv)
+- [`intent_net_benefit.png`](../../figures/archive/analysis/stackoverflow_intent_diagnostic_v1/intent_net_benefit.png)
+- [`ari_vs_new_oos.png`](../../figures/archive/analysis/stackoverflow_intent_diagnostic_v1/ari_vs_new_oos.png)
+- [`intent_recovered_vs_oos.png`](../../figures/archive/analysis/stackoverflow_intent_diagnostic_v1/intent_recovered_vs_oos.png)
+- [`intent_diagnostic_heatmap.png`](../../figures/archive/analysis/stackoverflow_intent_diagnostic_v1/intent_diagnostic_heatmap.png)
 
 ## Spearman 相关
 
-相关矩阵已保存为 [`intent_diagnostic_correlations.csv`](../../results/analysis/stackoverflow_intent_diagnostic_v1/intent_diagnostic_correlations.csv)，仅作探索性机制分析，未进行多重比较校正。
+相关矩阵已保存为 [`intent_diagnostic_correlations.csv`](../../results/analysis/archive/analysis/stackoverflow_intent_diagnostic_v1/intent_diagnostic_correlations.csv)，仅作探索性机制分析，未进行多重比较校正。
 """
     REPORT.parent.mkdir(parents=True, exist_ok=True)
     REPORT.write_text(report, encoding="utf-8")

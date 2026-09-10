@@ -1,0 +1,4 @@
+dataset,seed,configuration,direct_prediction_count,oos_f1_abs_delta,f1_all_abs_delta,known_macro_f1_abs_delta,overall_accuracy_abs_delta,known_recall_abs_delta,false_accept_rate_abs_delta,false_reject_rate_abs_delta,router_error_rate_abs_delta,expert_error_rate_abs_delta,max_abs_delta
+banking77_oos,13,"K=1,lambda=0.75,threshold=1.0,normalized_union",4080,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+banking77_oos,42,"K=1,lambda=0.75,threshold=1.0,normalized_union",4080,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+banking77_oos,87,"K=1,lambda=0.75,threshold=1.0,normalized_union",4080,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0

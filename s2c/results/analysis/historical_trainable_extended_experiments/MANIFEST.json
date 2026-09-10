@@ -1,0 +1,29 @@
+{
+  "schema_version": "s2c.historical_trainable_extended_experiments.v1",
+  "stage": "historical_trainable_extended_experiments_v1",
+  "protocol": "historical_v19_paper_main__H1_controlled_gate_to_router_to_expert",
+  "datasets": [
+    "clinc150",
+    "stackoverflow",
+    "banking77_oos"
+  ],
+  "seeds": [
+    13,
+    42,
+    87
+  ],
+  "selection_split": "validation",
+  "test_used_for_selection": false,
+  "oos_used_for_training": false,
+  "source_results": [
+    "results/analysis/historical_trainable_extended_boundary_search",
+    "results/analysis/historical_trainable_fine_threshold_search",
+    "results/analysis/historical_trainable_per_seed_full_pipeline",
+    "results/analysis/historical_trainable_per_sphere_calibration_search",
+    "results/analysis/historical_trainable_parameter_full_pipeline"
+  ],
+  "summary": "results/analysis/historical_trainable_extended_experiments/summary.csv",
+  "report": "docs/analysis/historical_trainable_extended_experiments_presentation.md",
+  "cuda_training_pilot": "not_completed_cuda_unavailable_on_2026-09-06",
+  "note": "The OOS-assisted training pilot stopped before training because CUDA was unavailable; no partial checkpoint was retained."
+}

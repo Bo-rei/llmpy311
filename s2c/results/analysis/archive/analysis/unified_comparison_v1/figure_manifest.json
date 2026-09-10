@@ -1,0 +1,160 @@
+{
+  "figures": [
+    {
+      "contract_layer": "same_protocol_fair",
+      "figure_id": "unified_fair_oos_f1_heatmap",
+      "kind": "performance",
+      "path": "figures/archive/analysis/unified_comparison_v1/fair_oos_f1_heatmap.png",
+      "source": "results/analysis/cross_protocol_tradeoff_v1/summary_mean_std.csv",
+      "source_sha256": "c3f5b5cb9701bfd2e111da85575226393e3baf9c8bcace7df6fc39eb2d396ae8",
+      "status": "generated"
+    },
+    {
+      "contract_layer": "same_protocol_fair",
+      "figure_id": "unified_fair_pareto_kir050",
+      "kind": "performance",
+      "path": "figures/archive/analysis/unified_comparison_v1/fair_pareto_kir050.png",
+      "source": "results/analysis/cross_protocol_tradeoff_v1/summary_mean_std.csv",
+      "source_sha256": "c3f5b5cb9701bfd2e111da85575226393e3baf9c8bcace7df6fc39eb2d396ae8",
+      "status": "generated"
+    },
+    {
+      "contract_layer": "all",
+      "figure_id": "unified_contract_layers",
+      "kind": "contract",
+      "path": "figures/archive/analysis/unified_comparison_v1/contract_layer_counts.png",
+      "source": "results/analysis/archive/analysis/unified_comparison_v1/contract_summary.csv",
+      "source_sha256": "1fbfec8de2255189ed836468443c660f0a1a3fac3c9d47674374d30e8a39c796",
+      "status": "generated"
+    },
+    {
+      "contract_layer": "same_protocol_fair",
+      "figure_id": "fair_pareto_existing",
+      "kind": "performance",
+      "path": "figures/cross_protocol_tradeoff_v1/pareto_oos_f1_known_recall.png",
+      "source": "results/analysis/cross_protocol_tradeoff_v1/per_seed.csv",
+      "source_sha256": "31ccdd433b38b86ec92b0cd81b460114a7fe1e7f12b94d4a5d031aab7d703145",
+      "status": "reused"
+    },
+    {
+      "contract_layer": "same_protocol_fair",
+      "figure_id": "fair_error_decomposition",
+      "kind": "error",
+      "path": "figures/cross_protocol_tradeoff_v1/error_decomposition_kir050.png",
+      "source": "results/analysis/cross_protocol_tradeoff_v1/per_seed.csv",
+      "source_sha256": "31ccdd433b38b86ec92b0cd81b460114a7fe1e7f12b94d4a5d031aab7d703145",
+      "status": "reused"
+    },
+    {
+      "contract_layer": "same_protocol_fair",
+      "figure_id": "fair_kir_curves",
+      "kind": "performance",
+      "path": "figures/cross_protocol_tradeoff_v1/kir_curves_oos_f1_f1_all.png",
+      "source": "results/analysis/cross_protocol_tradeoff_v1/per_seed.csv",
+      "source_sha256": "31ccdd433b38b86ec92b0cd81b460114a7fe1e7f12b94d4a5d031aab7d703145",
+      "status": "reused"
+    },
+    {
+      "contract_layer": "same_protocol_fair",
+      "figure_id": "fair_seed_variance",
+      "kind": "robustness",
+      "path": "figures/cross_protocol_tradeoff_v1/seed_variance_oos_f1_kir050.png",
+      "source": "results/analysis/cross_protocol_tradeoff_v1/per_seed.csv",
+      "source_sha256": "31ccdd433b38b86ec92b0cd81b460114a7fe1e7f12b94d4a5d031aab7d703145",
+      "status": "reused"
+    },
+    {
+      "contract_layer": "same_protocol_fair",
+      "figure_id": "mechanism_pack_heatmap",
+      "kind": "performance",
+      "path": "figures/archive/analysis/experimental_mechanism_pack_v3/oos_f1_method_kir_heatmap.png",
+      "source": "results/analysis/archive/analysis/experimental_mechanism_pack_v3/method_summary.csv",
+      "source_sha256": "4842d66a066ae43494be5b643ba77106c7d9075b48832b717d0d4ab11713a42b",
+      "status": "reused"
+    },
+    {
+      "contract_layer": "same_protocol_fair",
+      "figure_id": "mechanism_pack_paired_effects",
+      "kind": "paired_statistics",
+      "path": "figures/archive/analysis/experimental_mechanism_pack_v3/trainable_paired_effects_heatmap.png",
+      "source": "results/analysis/archive/analysis/experimental_mechanism_pack_v3/method_summary.csv",
+      "source_sha256": "4842d66a066ae43494be5b643ba77106c7d9075b48832b717d0d4ab11713a42b",
+      "status": "reused"
+    },
+    {
+      "contract_layer": "same_protocol_fair",
+      "figure_id": "mechanism_closure_dashboard",
+      "kind": "mechanism",
+      "path": "figures/archive/analysis/mechanism_closure_v1/mechanism_closure_dashboard.png",
+      "source": "results/analysis/archive/analysis/mechanism_closure_v1/MANIFEST.json",
+      "source_sha256": "b04e23e58b9a46ecc95161a40deab00527da3f69108166ce99c7b9522f379c76",
+      "status": "reused"
+    },
+    {
+      "contract_layer": "same_protocol_fair",
+      "figure_id": "mechanism_closure_mogb_risk",
+      "kind": "mechanism",
+      "path": "figures/archive/analysis/mechanism_closure_v1/mogb_risk_workpoints.png",
+      "source": "results/analysis/archive/analysis/mechanism_closure_v1/MANIFEST.json",
+      "source_sha256": "b04e23e58b9a46ecc95161a40deab00527da3f69108166ce99c7b9522f379c76",
+      "status": "reused"
+    },
+    {
+      "contract_layer": "layered",
+      "figure_id": "comparison_atlas_layers",
+      "kind": "contract",
+      "path": "figures/comparison_atlas_v2/current_gate_and_cascade_layers.png",
+      "source": "results/analysis/comparison_atlas_v2/MANIFEST.json",
+      "source_sha256": "c8c2dcaf100db8f85205fe5dbdbc584b5aff36b9322c50651c093544424425bb",
+      "status": "reused"
+    },
+    {
+      "contract_layer": "different_system_level",
+      "figure_id": "comparison_atlas_cascade_seed",
+      "kind": "contract",
+      "path": "figures/comparison_atlas_v2/cascade_bridge_seed_effect.png",
+      "source": "results/analysis/comparison_atlas_v2/MANIFEST.json",
+      "source_sha256": "c8c2dcaf100db8f85205fe5dbdbc584b5aff36b9322c50651c093544424425bb",
+      "status": "reused"
+    },
+    {
+      "contract_layer": "same_protocol_fair",
+      "figure_id": "statistical_forest",
+      "kind": "paired_statistics",
+      "path": "figures/archive/analysis/statistical_stability_v1/paired_oos_f1_forest.png",
+      "source": "results/analysis/archive/analysis/statistical_stability_v1/MANIFEST.json",
+      "source_sha256": "2c1b2e13303be76704493435c4747565c9775a98709b1a28f438b00b3b97dc6b",
+      "status": "reused"
+    },
+    {
+      "contract_layer": "same_protocol_fair",
+      "figure_id": "statistical_rank_heatmap",
+      "kind": "performance",
+      "path": "figures/archive/analysis/statistical_stability_v1/method_rank_heatmap_oos_f1.png",
+      "source": "results/analysis/archive/analysis/statistical_stability_v1/MANIFEST.json",
+      "source_sha256": "2c1b2e13303be76704493435c4747565c9775a98709b1a28f438b00b3b97dc6b",
+      "status": "reused"
+    },
+    {
+      "contract_layer": "mechanism",
+      "figure_id": "representation_geometry",
+      "kind": "representation",
+      "path": "figures/archive/analysis/representation_geometry_visuals_v1/geometry_tradeoff.png",
+      "source": "results/analysis/archive/analysis/representation_geometry_visuals_v1/MANIFEST.json",
+      "source_sha256": "2560bd011306c3f76e882d6a7a0ce79a06bc7cdfa5a3641fd3a24f5e6d7bfe74",
+      "status": "reused"
+    },
+    {
+      "contract_layer": "mechanism",
+      "figure_id": "error_quadrants",
+      "kind": "error",
+      "path": "figures/archive/analysis/representation_geometry_visuals_v1/stackoverflow_error_quadrants.png",
+      "source": "results/analysis/archive/analysis/representation_geometry_visuals_v1/MANIFEST.json",
+      "source_sha256": "2560bd011306c3f76e882d6a7a0ce79a06bc7cdfa5a3641fd3a24f5e6d7bfe74",
+      "status": "reused"
+    }
+  ],
+  "protocol_version": "protocol_v2_textoir_v1",
+  "schema_version": "unified_figure_manifest_v1",
+  "test_usage": "analysis-only"
+}

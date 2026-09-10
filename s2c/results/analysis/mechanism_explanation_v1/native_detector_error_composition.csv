@@ -1,0 +1,76 @@
+dataset,method,outcome,count,is_true_oos,total,rate,method_label,gold_type
+banking77,Native-Energy-Trainable-MiniLM,known_correct,4096,0,4560,0.8982456140350877,Energy,Known
+banking77,Native-Energy-Trainable-MiniLM,known_rejected,326,0,4560,0.07149122807017544,Energy,Known
+banking77,Native-Energy-Trainable-MiniLM,known_wrong_intent,138,0,4560,0.030263157894736843,Energy,Known
+banking77,Native-Energy-Trainable-MiniLM,oos_correct,2667,1,4680,0.5698717948717948,Energy,OOS
+banking77,Native-Energy-Trainable-MiniLM,oos_false_accept,2013,1,4680,0.43012820512820515,Energy,OOS
+banking77,Native-LOF-Trainable-MiniLM,known_correct,4171,0,4560,0.9146929824561404,LOF,Known
+banking77,Native-LOF-Trainable-MiniLM,known_rejected,226,0,4560,0.04956140350877193,LOF,Known
+banking77,Native-LOF-Trainable-MiniLM,known_wrong_intent,163,0,4560,0.03574561403508772,LOF,Known
+banking77,Native-LOF-Trainable-MiniLM,oos_correct,1991,1,4680,0.4254273504273504,LOF,OOS
+banking77,Native-LOF-Trainable-MiniLM,oos_false_accept,2689,1,4680,0.5745726495726495,LOF,OOS
+banking77,Native-MSP-Trainable-MiniLM,known_correct,4169,0,4560,0.9142543859649123,MSP,Known
+banking77,Native-MSP-Trainable-MiniLM,known_rejected,280,0,4560,0.06140350877192982,MSP,Known
+banking77,Native-MSP-Trainable-MiniLM,known_wrong_intent,111,0,4560,0.024342105263157894,MSP,Known
+banking77,Native-MSP-Trainable-MiniLM,oos_correct,2824,1,4680,0.6034188034188034,MSP,OOS
+banking77,Native-MSP-Trainable-MiniLM,oos_false_accept,1856,1,4680,0.39658119658119656,MSP,OOS
+banking77,Native-kNN-Trainable-MiniLM,known_correct,4169,0,4560,0.9142543859649123,kNN,Known
+banking77,Native-kNN-Trainable-MiniLM,known_rejected,238,0,4560,0.052192982456140354,kNN,Known
+banking77,Native-kNN-Trainable-MiniLM,known_wrong_intent,153,0,4560,0.03355263157894737,kNN,Known
+banking77,Native-kNN-Trainable-MiniLM,oos_correct,2497,1,4680,0.5335470085470085,kNN,OOS
+banking77,Native-kNN-Trainable-MiniLM,oos_false_accept,2183,1,4680,0.46645299145299146,kNN,OOS
+banking77,S2C-Trainable-K1,known_correct,6082,0,7600,0.8002631578947368,S2C Trainable K=1,Known
+banking77,S2C-Trainable-K1,known_rejected,1352,0,7600,0.17789473684210527,S2C Trainable K=1,Known
+banking77,S2C-Trainable-K1,known_wrong_intent,166,0,7600,0.021842105263157895,S2C Trainable K=1,Known
+banking77,S2C-Trainable-K1,oos_correct,6572,1,7800,0.8425641025641025,S2C Trainable K=1,OOS
+banking77,S2C-Trainable-K1,oos_false_accept,1228,1,7800,0.15743589743589745,S2C Trainable K=1,OOS
+clinc150,Native-Energy-Trainable-MiniLM,known_correct,6317,0,6750,0.9358518518518518,Energy,Known
+clinc150,Native-Energy-Trainable-MiniLM,known_rejected,336,0,6750,0.049777777777777775,Energy,Known
+clinc150,Native-Energy-Trainable-MiniLM,known_wrong_intent,97,0,6750,0.01437037037037037,Energy,Known
+clinc150,Native-Energy-Trainable-MiniLM,oos_correct,8449,1,10350,0.816328502415459,Energy,OOS
+clinc150,Native-Energy-Trainable-MiniLM,oos_false_accept,1901,1,10350,0.18367149758454107,Energy,OOS
+clinc150,Native-LOF-Trainable-MiniLM,known_correct,6296,0,6750,0.9327407407407408,LOF,Known
+clinc150,Native-LOF-Trainable-MiniLM,known_rejected,294,0,6750,0.043555555555555556,LOF,Known
+clinc150,Native-LOF-Trainable-MiniLM,known_wrong_intent,160,0,6750,0.023703703703703703,LOF,Known
+clinc150,Native-LOF-Trainable-MiniLM,oos_correct,6913,1,10350,0.6679227053140097,LOF,OOS
+clinc150,Native-LOF-Trainable-MiniLM,oos_false_accept,3437,1,10350,0.33207729468599034,LOF,OOS
+clinc150,Native-MSP-Trainable-MiniLM,known_correct,6349,0,6750,0.9405925925925926,MSP,Known
+clinc150,Native-MSP-Trainable-MiniLM,known_rejected,333,0,6750,0.04933333333333333,MSP,Known
+clinc150,Native-MSP-Trainable-MiniLM,known_wrong_intent,68,0,6750,0.010074074074074074,MSP,Known
+clinc150,Native-MSP-Trainable-MiniLM,oos_correct,8465,1,10350,0.8178743961352657,MSP,OOS
+clinc150,Native-MSP-Trainable-MiniLM,oos_false_accept,1885,1,10350,0.1821256038647343,MSP,OOS
+clinc150,Native-kNN-Trainable-MiniLM,known_correct,6247,0,6750,0.9254814814814815,kNN,Known
+clinc150,Native-kNN-Trainable-MiniLM,known_rejected,364,0,6750,0.053925925925925926,kNN,Known
+clinc150,Native-kNN-Trainable-MiniLM,known_wrong_intent,139,0,6750,0.020592592592592593,kNN,Known
+clinc150,Native-kNN-Trainable-MiniLM,oos_correct,8218,1,10350,0.7940096618357488,kNN,OOS
+clinc150,Native-kNN-Trainable-MiniLM,oos_false_accept,2132,1,10350,0.20599033816425122,kNN,OOS
+clinc150,S2C-Trainable-K1,known_correct,8279,0,11250,0.7359111111111111,S2C Trainable K=1,Known
+clinc150,S2C-Trainable-K1,known_rejected,2875,0,11250,0.25555555555555554,S2C Trainable K=1,Known
+clinc150,S2C-Trainable-K1,known_wrong_intent,96,0,11250,0.008533333333333334,S2C Trainable K=1,Known
+clinc150,S2C-Trainable-K1,oos_correct,16613,1,17250,0.963072463768116,S2C Trainable K=1,OOS
+clinc150,S2C-Trainable-K1,oos_false_accept,637,1,17250,0.03692753623188406,S2C Trainable K=1,OOS
+stackoverflow,Native-Energy-Trainable-MiniLM,known_correct,8274,0,9000,0.9193333333333333,Energy,Known
+stackoverflow,Native-Energy-Trainable-MiniLM,known_rejected,391,0,9000,0.043444444444444445,Energy,Known
+stackoverflow,Native-Energy-Trainable-MiniLM,known_wrong_intent,335,0,9000,0.03722222222222222,Energy,Known
+stackoverflow,Native-Energy-Trainable-MiniLM,oos_correct,2571,1,9000,0.2856666666666667,Energy,OOS
+stackoverflow,Native-Energy-Trainable-MiniLM,oos_false_accept,6429,1,9000,0.7143333333333334,Energy,OOS
+stackoverflow,Native-LOF-Trainable-MiniLM,known_correct,8186,0,9000,0.9095555555555556,LOF,Known
+stackoverflow,Native-LOF-Trainable-MiniLM,known_rejected,456,0,9000,0.050666666666666665,LOF,Known
+stackoverflow,Native-LOF-Trainable-MiniLM,known_wrong_intent,358,0,9000,0.03977777777777778,LOF,Known
+stackoverflow,Native-LOF-Trainable-MiniLM,oos_correct,4437,1,9000,0.493,LOF,OOS
+stackoverflow,Native-LOF-Trainable-MiniLM,oos_false_accept,4563,1,9000,0.507,LOF,OOS
+stackoverflow,Native-MSP-Trainable-MiniLM,known_correct,8298,0,9000,0.922,MSP,Known
+stackoverflow,Native-MSP-Trainable-MiniLM,known_rejected,396,0,9000,0.044,MSP,Known
+stackoverflow,Native-MSP-Trainable-MiniLM,known_wrong_intent,306,0,9000,0.034,MSP,Known
+stackoverflow,Native-MSP-Trainable-MiniLM,oos_correct,2786,1,9000,0.30955555555555553,MSP,OOS
+stackoverflow,Native-MSP-Trainable-MiniLM,oos_false_accept,6214,1,9000,0.6904444444444444,MSP,OOS
+stackoverflow,Native-kNN-Trainable-MiniLM,known_correct,8232,0,9000,0.9146666666666666,kNN,Known
+stackoverflow,Native-kNN-Trainable-MiniLM,known_rejected,435,0,9000,0.04833333333333333,kNN,Known
+stackoverflow,Native-kNN-Trainable-MiniLM,known_wrong_intent,333,0,9000,0.037,kNN,Known
+stackoverflow,Native-kNN-Trainable-MiniLM,oos_correct,4987,1,9000,0.5541111111111111,kNN,OOS
+stackoverflow,Native-kNN-Trainable-MiniLM,oos_false_accept,4013,1,9000,0.4458888888888889,kNN,OOS
+stackoverflow,S2C-Trainable-K1,known_correct,12445,0,15000,0.8296666666666667,S2C Trainable K=1,Known
+stackoverflow,S2C-Trainable-K1,known_rejected,2416,0,15000,0.16106666666666666,S2C Trainable K=1,Known
+stackoverflow,S2C-Trainable-K1,known_wrong_intent,139,0,15000,0.009266666666666666,S2C Trainable K=1,Known
+stackoverflow,S2C-Trainable-K1,oos_correct,13599,1,15000,0.9066,S2C Trainable K=1,OOS
+stackoverflow,S2C-Trainable-K1,oos_false_accept,1401,1,15000,0.0934,S2C Trainable K=1,OOS

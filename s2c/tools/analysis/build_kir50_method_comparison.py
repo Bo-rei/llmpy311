@@ -147,12 +147,12 @@ def _write_report(summary: pd.DataFrame) -> None:
         "",
         "## 文件",
         "",
-        "- `results/analysis/kir50_method_comparison_v1/rows.csv`：逐方法分层表。",
-        "- `results/analysis/kir50_method_comparison_v1/mean_std.csv`：按数据集/方法的轻量汇总。",
-        "- `figures/active_experiment_dashboard_v1/kir50_method_layers.png`：协议分层柱状图。",
-        "- `figures/active_experiment_dashboard_v1/kir50_method_tradeoff.png`：Known/OOS 权衡图。",
+        "- `results/analysis/archive/analysis/kir50_method_comparison_v1/rows.csv`：逐方法分层表。",
+        "- `results/analysis/archive/analysis/kir50_method_comparison_v1/mean_std.csv`：按数据集/方法的轻量汇总。",
+        "- `figures/archive/analysis/active_experiment_dashboard_v1/kir50_method_layers.png`：协议分层柱状图。",
+        "- `figures/archive/analysis/active_experiment_dashboard_v1/kir50_method_tradeoff.png`：Known/OOS 权衡图。",
     ]
-    (ROOT / "docs/analysis/KIR50_METHOD_COMPARISON_V1.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
+    (ROOT / "docs/archive/analysis/KIR50_METHOD_COMPARISON_V1.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
 def main() -> None:
@@ -204,7 +204,7 @@ def main() -> None:
     fig.savefig(FIG / "kir50_method_tradeoff.png", dpi=220, bbox_inches="tight")
     plt.close(fig)
     _write_report(summary)
-    print({"rows": len(frame), "summary": str(OUT / "mean_std.csv"), "report": str(ROOT / "docs/analysis/KIR50_METHOD_COMPARISON_V1.md")})
+    print({"rows": len(frame), "summary": str(OUT / "mean_std.csv"), "report": str(ROOT / "docs/archive/analysis/KIR50_METHOD_COMPARISON_V1.md")})
 
 
 if __name__ == "__main__":

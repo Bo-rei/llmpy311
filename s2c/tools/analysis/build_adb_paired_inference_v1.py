@@ -27,8 +27,8 @@ plt.rcParams["axes.unicode_minus"] = False
 ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_FAIR = ROOT / "results/analysis/cross_protocol_tradeoff_v1/per_seed.csv"
 DEFAULT_ADB = ROOT / "results/analysis/adb_kir_sensitivity_v2/adb_per_seed.csv"
-DEFAULT_OUTPUT = ROOT / "results/analysis/adb_paired_inference_v1"
-DEFAULT_FIGURES = ROOT / "figures/adb_paired_inference_v1"
+DEFAULT_OUTPUT = ROOT / "results/analysis/archive/analysis/adb_paired_inference_v1"
+DEFAULT_FIGURES = ROOT / "figures/archive/analysis/adb_paired_inference_v1"
 DATASETS = ("clinc150", "banking77", "stackoverflow")
 KIRS = (0.25, 0.50, 0.75)
 METRICS = (
@@ -184,7 +184,7 @@ def report(rows: list[dict[str, object]], fair_path: Path, adb_path: Path, repet
             "",
             f"fair source SHA256：`{sha256(fair_path)}`",
             f"ADB source SHA256：`{sha256(adb_path)}`",
-            "图：`figures/adb_paired_inference_v1/trainable_minus_adb_paired_forest.png`",
+            "图：`figures/archive/analysis/adb_paired_inference_v1/trainable_minus_adb_paired_forest.png`",
         ]
     )
     return "\n".join(lines) + "\n"

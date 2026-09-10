@@ -1,0 +1,410 @@
+{
+  "source": "train_known_only",
+  "rankings": [
+    {
+      "intent": "apache",
+      "n_train": 600,
+      "mean_distance": 0.5252308306826137,
+      "variance": 0.29468426917609364,
+      "sse_reduction": 0.05577582748331159
+    },
+    {
+      "intent": "excel",
+      "n_train": 600,
+      "mean_distance": 0.44920529724056735,
+      "variance": 0.21906452759766248,
+      "sse_reduction": 0.053956062033346394
+    },
+    {
+      "intent": "linq",
+      "n_train": 600,
+      "mean_distance": 0.4189731285868195,
+      "variance": 0.20242983364819028,
+      "sse_reduction": 0.11310230697594162
+    },
+    {
+      "intent": "matlab",
+      "n_train": 599,
+      "mean_distance": 0.45049785578132945,
+      "variance": 0.23069157995311532,
+      "sse_reduction": 0.08683586156000374
+    },
+    {
+      "intent": "osx",
+      "n_train": 600,
+      "mean_distance": 0.5864656235304523,
+      "variance": 0.3589993372092845,
+      "sse_reduction": 0.04806470484757359
+    },
+    {
+      "intent": "qt",
+      "n_train": 600,
+      "mean_distance": 0.41141637772803674,
+      "variance": 0.18919018278779023,
+      "sse_reduction": 0.0727325923129913
+    },
+    {
+      "intent": "scala",
+      "n_train": 599,
+      "mean_distance": 0.46014365835413895,
+      "variance": 0.2413555521874857,
+      "sse_reduction": 0.11468238604407703
+    },
+    {
+      "intent": "sharepoint",
+      "n_train": 600,
+      "mean_distance": 0.5064938496167585,
+      "variance": 0.27354502603344905,
+      "sse_reduction": 0.06878956284749636
+    },
+    {
+      "intent": "spring",
+      "n_train": 599,
+      "mean_distance": 0.49388631304197683,
+      "variance": 0.2616852509847949,
+      "sse_reduction": 0.0586536607445057
+    },
+    {
+      "intent": "visual-studio",
+      "n_train": 600,
+      "mean_distance": 0.5222851972723147,
+      "variance": 0.29331720761817964,
+      "sse_reduction": 0.06826476951030794
+    }
+  ],
+  "strategies": {
+    "fixed_k1": {
+      "apache": 1,
+      "excel": 1,
+      "linq": 1,
+      "matlab": 1,
+      "osx": 1,
+      "qt": 1,
+      "scala": 1,
+      "sharepoint": 1,
+      "spring": 1,
+      "visual-studio": 1
+    },
+    "fixed_k2": {
+      "apache": 2,
+      "excel": 2,
+      "linq": 2,
+      "matlab": 2,
+      "osx": 2,
+      "qt": 2,
+      "scala": 2,
+      "sharepoint": 2,
+      "spring": 2,
+      "visual-studio": 2
+    },
+    "fixed_k3": {
+      "apache": 3,
+      "excel": 3,
+      "linq": 3,
+      "matlab": 3,
+      "osx": 3,
+      "qt": 3,
+      "scala": 3,
+      "sharepoint": 3,
+      "spring": 3,
+      "visual-studio": 3
+    },
+    "mean_distance_top10_k2": {
+      "apache": 1,
+      "excel": 1,
+      "linq": 1,
+      "matlab": 1,
+      "osx": 2,
+      "qt": 1,
+      "scala": 1,
+      "sharepoint": 1,
+      "spring": 1,
+      "visual-studio": 1
+    },
+    "mean_distance_top10_k3": {
+      "apache": 1,
+      "excel": 1,
+      "linq": 1,
+      "matlab": 1,
+      "osx": 3,
+      "qt": 1,
+      "scala": 1,
+      "sharepoint": 1,
+      "spring": 1,
+      "visual-studio": 1
+    },
+    "mean_distance_top25_k2": {
+      "apache": 2,
+      "excel": 1,
+      "linq": 1,
+      "matlab": 1,
+      "osx": 2,
+      "qt": 1,
+      "scala": 1,
+      "sharepoint": 1,
+      "spring": 1,
+      "visual-studio": 2
+    },
+    "mean_distance_top25_k3": {
+      "apache": 3,
+      "excel": 1,
+      "linq": 1,
+      "matlab": 1,
+      "osx": 3,
+      "qt": 1,
+      "scala": 1,
+      "sharepoint": 1,
+      "spring": 1,
+      "visual-studio": 3
+    },
+    "mean_distance_top50_k2": {
+      "apache": 2,
+      "excel": 1,
+      "linq": 1,
+      "matlab": 1,
+      "osx": 2,
+      "qt": 1,
+      "scala": 1,
+      "sharepoint": 2,
+      "spring": 2,
+      "visual-studio": 2
+    },
+    "mean_distance_top50_k3": {
+      "apache": 3,
+      "excel": 1,
+      "linq": 1,
+      "matlab": 1,
+      "osx": 3,
+      "qt": 1,
+      "scala": 1,
+      "sharepoint": 3,
+      "spring": 3,
+      "visual-studio": 3
+    },
+    "mean_distance_top75_k2": {
+      "apache": 2,
+      "excel": 2,
+      "linq": 1,
+      "matlab": 2,
+      "osx": 2,
+      "qt": 1,
+      "scala": 2,
+      "sharepoint": 2,
+      "spring": 2,
+      "visual-studio": 2
+    },
+    "mean_distance_top75_k3": {
+      "apache": 3,
+      "excel": 3,
+      "linq": 1,
+      "matlab": 3,
+      "osx": 3,
+      "qt": 1,
+      "scala": 3,
+      "sharepoint": 3,
+      "spring": 3,
+      "visual-studio": 3
+    },
+    "variance_top10_k2": {
+      "apache": 1,
+      "excel": 1,
+      "linq": 1,
+      "matlab": 1,
+      "osx": 2,
+      "qt": 1,
+      "scala": 1,
+      "sharepoint": 1,
+      "spring": 1,
+      "visual-studio": 1
+    },
+    "variance_top10_k3": {
+      "apache": 1,
+      "excel": 1,
+      "linq": 1,
+      "matlab": 1,
+      "osx": 3,
+      "qt": 1,
+      "scala": 1,
+      "sharepoint": 1,
+      "spring": 1,
+      "visual-studio": 1
+    },
+    "variance_top25_k2": {
+      "apache": 2,
+      "excel": 1,
+      "linq": 1,
+      "matlab": 1,
+      "osx": 2,
+      "qt": 1,
+      "scala": 1,
+      "sharepoint": 1,
+      "spring": 1,
+      "visual-studio": 2
+    },
+    "variance_top25_k3": {
+      "apache": 3,
+      "excel": 1,
+      "linq": 1,
+      "matlab": 1,
+      "osx": 3,
+      "qt": 1,
+      "scala": 1,
+      "sharepoint": 1,
+      "spring": 1,
+      "visual-studio": 3
+    },
+    "variance_top50_k2": {
+      "apache": 2,
+      "excel": 1,
+      "linq": 1,
+      "matlab": 1,
+      "osx": 2,
+      "qt": 1,
+      "scala": 1,
+      "sharepoint": 2,
+      "spring": 2,
+      "visual-studio": 2
+    },
+    "variance_top50_k3": {
+      "apache": 3,
+      "excel": 1,
+      "linq": 1,
+      "matlab": 1,
+      "osx": 3,
+      "qt": 1,
+      "scala": 1,
+      "sharepoint": 3,
+      "spring": 3,
+      "visual-studio": 3
+    },
+    "variance_top75_k2": {
+      "apache": 2,
+      "excel": 2,
+      "linq": 1,
+      "matlab": 2,
+      "osx": 2,
+      "qt": 1,
+      "scala": 2,
+      "sharepoint": 2,
+      "spring": 2,
+      "visual-studio": 2
+    },
+    "variance_top75_k3": {
+      "apache": 3,
+      "excel": 3,
+      "linq": 1,
+      "matlab": 3,
+      "osx": 3,
+      "qt": 1,
+      "scala": 3,
+      "sharepoint": 3,
+      "spring": 3,
+      "visual-studio": 3
+    },
+    "sse_reduction_top10_k2": {
+      "apache": 1,
+      "excel": 1,
+      "linq": 1,
+      "matlab": 1,
+      "osx": 1,
+      "qt": 1,
+      "scala": 2,
+      "sharepoint": 1,
+      "spring": 1,
+      "visual-studio": 1
+    },
+    "sse_reduction_top10_k3": {
+      "apache": 1,
+      "excel": 1,
+      "linq": 1,
+      "matlab": 1,
+      "osx": 1,
+      "qt": 1,
+      "scala": 3,
+      "sharepoint": 1,
+      "spring": 1,
+      "visual-studio": 1
+    },
+    "sse_reduction_top25_k2": {
+      "apache": 1,
+      "excel": 1,
+      "linq": 2,
+      "matlab": 2,
+      "osx": 1,
+      "qt": 1,
+      "scala": 2,
+      "sharepoint": 1,
+      "spring": 1,
+      "visual-studio": 1
+    },
+    "sse_reduction_top25_k3": {
+      "apache": 1,
+      "excel": 1,
+      "linq": 3,
+      "matlab": 3,
+      "osx": 1,
+      "qt": 1,
+      "scala": 3,
+      "sharepoint": 1,
+      "spring": 1,
+      "visual-studio": 1
+    },
+    "sse_reduction_top50_k2": {
+      "apache": 1,
+      "excel": 1,
+      "linq": 2,
+      "matlab": 2,
+      "osx": 1,
+      "qt": 2,
+      "scala": 2,
+      "sharepoint": 2,
+      "spring": 1,
+      "visual-studio": 1
+    },
+    "sse_reduction_top50_k3": {
+      "apache": 1,
+      "excel": 1,
+      "linq": 3,
+      "matlab": 3,
+      "osx": 1,
+      "qt": 3,
+      "scala": 3,
+      "sharepoint": 3,
+      "spring": 1,
+      "visual-studio": 1
+    },
+    "sse_reduction_top75_k2": {
+      "apache": 2,
+      "excel": 1,
+      "linq": 2,
+      "matlab": 2,
+      "osx": 1,
+      "qt": 2,
+      "scala": 2,
+      "sharepoint": 2,
+      "spring": 2,
+      "visual-studio": 2
+    },
+    "sse_reduction_top75_k3": {
+      "apache": 3,
+      "excel": 1,
+      "linq": 3,
+      "matlab": 3,
+      "osx": 1,
+      "qt": 3,
+      "scala": 3,
+      "sharepoint": 3,
+      "spring": 3,
+      "visual-studio": 3
+    }
+  },
+  "aliases": {
+    "mean_distance_top100_k2": "fixed_k2",
+    "mean_distance_top100_k3": "fixed_k3",
+    "variance_top100_k2": "fixed_k2",
+    "variance_top100_k3": "fixed_k3",
+    "sse_reduction_top100_k2": "fixed_k2",
+    "sse_reduction_top100_k3": "fixed_k3"
+  },
+  "rounding": "ceil; descending rank; intent lexical ties"
+}

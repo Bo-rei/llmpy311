@@ -1,0 +1,5 @@
+left_method,right_method,transition,count,rate,denominator
+trainable_k1,fixed_k2,both_correct,1640.3333333333333,0.5467777777777778,3000.0
+trainable_k1,fixed_k2,both_incorrect,332.3333333333333,0.11077777777777777,3000.0
+trainable_k1,fixed_k2,left_only_correct,1025.3333333333333,0.34177777777777774,3000.0
+trainable_k1,fixed_k2,right_only_correct,2.0,0.0006666666666666666,3000.0

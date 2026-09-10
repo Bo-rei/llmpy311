@@ -1,0 +1,2 @@
+dataset,kir,seed,selection_rule,selected_frozen_cluster,selected_known_intent,frozen_score_band_low,frozen_score_band_high,frozen_false_accepts_at_selected_cluster,known_train_points,validation_unknown_points_not_plotted,test_oos_points,corrected_oos_points,projection_scope
+stackoverflow,0.5,42,"Frozen OOS false-accept nearest cluster with largest count; smallest cluster id breaks ties; display uses fixed Frozen score band [0.90,1.10]",2,drupal,0.9,1.1,361,599,937,2806,349,separate local PCA per method; descriptive only

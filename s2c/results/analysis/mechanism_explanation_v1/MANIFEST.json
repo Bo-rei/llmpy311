@@ -1,0 +1,75 @@
+{
+  "analysis": "mechanism_explanation_pack_v1",
+  "analysis_only": true,
+  "datasets": [
+    "clinc150",
+    "banking77",
+    "stackoverflow"
+  ],
+  "figure_count": 6,
+  "figure_export_formats": [
+    "png_preview_600dpi",
+    "svg",
+    "pdf"
+  ],
+  "figures": [
+    "figures/mechanism_explanation_v1/boundary_margin_fingerprint.png",
+    "figures/mechanism_explanation_v1/geometry_boundary_coupling.png",
+    "figures/mechanism_explanation_v1/intent_error_localization.png",
+    "figures/mechanism_explanation_v1/mogb_ball_risk_surface.png",
+    "figures/mechanism_explanation_v1/native_detector_error_fingerprint.png",
+    "figures/mechanism_explanation_v1/paired_score_reordering.png"
+  ],
+  "input_rows_after_filter": 768560,
+  "kir": 0.5,
+  "methods_after_filter": [
+    "ADB-external-BERT",
+    "MOGB-MiniLM",
+    "MOGB-partition-S2C-boundary",
+    "Native-Energy-Trainable-MiniLM",
+    "Native-LOF-Trainable-MiniLM",
+    "Native-MSP-Trainable-MiniLM",
+    "Native-kNN-Trainable-MiniLM",
+    "S2C-Frozen-K1",
+    "S2C-Frozen-K2",
+    "S2C-Trainable-K1",
+    "S2C-partition-MOGB-boundary",
+    "S2C-random-K2"
+  ],
+  "methods_with_missing_oos_score": [
+    "ADB-external-BERT"
+  ],
+  "missing_oos_score_rows": 73900,
+  "outputs": {
+    "boundary_margin_rates": "results/analysis/mechanism_explanation_v1/boundary_margin_rates.csv",
+    "geometry_boundary_coupling": "results/analysis/mechanism_explanation_v1/geometry_boundary_coupling.csv",
+    "intent_error_localization": "results/analysis/mechanism_explanation_v1/intent_error_localization.csv",
+    "mogb_ball_risk_surface": "results/analysis/mechanism_explanation_v1/mogb_ball_risk_surface.csv",
+    "native_detector_error_composition": "results/analysis/mechanism_explanation_v1/native_detector_error_composition.csv",
+    "paired_score_reordering_summary": "results/analysis/mechanism_explanation_v1/paired_score_reordering_summary.csv"
+  },
+  "protocol_version": "protocol_v2_textoir_v1",
+  "sample_ids_exported": false,
+  "score_figure_methods": [
+    "MOGB-MiniLM",
+    "MOGB-partition-S2C-boundary",
+    "Native-Energy-Trainable-MiniLM",
+    "Native-LOF-Trainable-MiniLM",
+    "Native-MSP-Trainable-MiniLM",
+    "Native-kNN-Trainable-MiniLM",
+    "S2C-Frozen-K1",
+    "S2C-Frozen-K2",
+    "S2C-Trainable-K1",
+    "S2C-partition-MOGB-boundary",
+    "S2C-random-K2"
+  ],
+  "selection_used_test_oos": false,
+  "source_hashes": {
+    "artifacts/s2c/analysis/unified_prediction_contract_v1/predictions.jsonl.gz": "42d07e0d8b530ebc4e3a6533c2a2a8dd999a601d57eea7d5227a55e1ea9340ad",
+    "s2c/results/analysis/archive/analysis/mogb_ball_risk_attribution_v1/per_ball.csv": "49a0b561ca5f8e98fdb236f51a5e1c3fdc07fda886e402823c78579344599357",
+    "s2c/results/representation/collision_summary.csv": "d856ae24cb3ea8f8ff27c9985c6cc5508be549235b672b7339c497901effb1d8",
+    "s2c/results/representation/representation_fixed_results.csv": "edc29d2e45c9ff7eb105b176f71a624eae8002ec314877dc88e4874ffbd42800",
+    "s2c/results/representation/representation_geometry_summary.csv": "483aabedc94c0be6fd30232cf29af4b85454f4f84ec0e8c27b5f5513f74467ee"
+  },
+  "test_labels_used_post_hoc": true
+}

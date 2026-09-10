@@ -313,7 +313,7 @@ def main() -> None:
         description="Run the multi-dataset v19 training pipeline"
     )
     parser.add_argument(
-        "--datasets", nargs="+", default=["CLINC150", "BANKING77-OOS", "SNIPS"]
+        "--datasets", nargs="+", default=["CLINC150", "STACKOVERFLOW", "BANKING77-OOS"]
     )
     parser.add_argument(
         "--kir_values", nargs="+", type=float, default=[0.25, 0.5, 0.75]

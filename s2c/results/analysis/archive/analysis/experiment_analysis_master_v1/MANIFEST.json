@@ -1,0 +1,36 @@
+{
+  "analysis_id": "experiment_analysis_master_v1",
+  "analysis_only": true,
+  "datasets": [
+    "clinc150",
+    "banking77",
+    "stackoverflow"
+  ],
+  "figures": [
+    "f1_all_heatmap.png",
+    "method_rank1_counts.png",
+    "oos_f1_heatmap.png",
+    "oos_f1_kir_curves.png",
+    "pareto_oos_f1_f1_all_kir050.png"
+  ],
+  "kirs": [
+    0.25,
+    0.5,
+    0.75
+  ],
+  "methods": [
+    "trainable_k1",
+    "single_centroid",
+    "fixed_k2",
+    "random_partition",
+    "mogb_partition_ours_boundary",
+    "ours_partition_mogb_boundary",
+    "mogb_minilm"
+  ],
+  "protocol_version": "protocol_v2_textoir_v1",
+  "rows": 63,
+  "seeds_per_cell": 5,
+  "source": "results/analysis/cross_protocol_tradeoff_v1/summary_mean_std.csv",
+  "source_sha256": "c3f5b5cb9701bfd2e111da85575226393e3baf9c8bcace7df6fc39eb2d396ae8",
+  "test_selection": false
+}

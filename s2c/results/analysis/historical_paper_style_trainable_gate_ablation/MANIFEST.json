@@ -1,0 +1,36 @@
+{
+  "schema_version": "s2c.historical_paper_style_trainable_gate_ablation.v1",
+  "stage": "historical_paper_style_trainable_gate_ablation",
+  "protocol": "historical_v19_paper_main__H1_controlled_gate_to_router_to_expert",
+  "datasets": [
+    "clinc150",
+    "stackoverflow",
+    "banking77_oos"
+  ],
+  "kirs": [
+    0.25,
+    0.5,
+    0.75
+  ],
+  "seed": 42,
+  "gate": {
+    "representation": "last2_minilm_plus_residual_projection",
+    "k_per_intent": 2,
+    "distance": "mahalanobis_diag",
+    "radius": "mean+lambda*std",
+    "lambda": {
+      "clinc150": 0.5,
+      "stackoverflow": 1.0,
+      "banking77_oos": 1.0
+    },
+    "threshold": 1.0,
+    "acceptance_mode": "normalized_union"
+  },
+  "downstream": "current H1 fixed Router/Expert components",
+  "completed_units": 9,
+  "device": "cuda",
+  "test_used_for_selection": false,
+  "oos_used_for_training": false,
+  "report": "docs/analysis/historical_paper_style_trainable_gate_ablation_report.md",
+  "per_cell": "results/analysis/historical_paper_style_trainable_gate_ablation/per_cell.csv"
+}

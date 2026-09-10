@@ -1,0 +1,43 @@
+{
+  "analysis_id": "kir_sensitivity_decomposition_v1",
+  "datasets": [
+    "clinc150",
+    "banking77",
+    "stackoverflow"
+  ],
+  "detail_rows": 126,
+  "kirs": [
+    0.25,
+    0.5,
+    0.75
+  ],
+  "methods": [
+    "trainable_k1",
+    "single_centroid",
+    "fixed_k2",
+    "random_partition",
+    "mogb_partition_ours_boundary",
+    "mogb_minilm",
+    "ours_partition_mogb_boundary"
+  ],
+  "metrics": [
+    "oos_f1",
+    "f1_all",
+    "f1_k",
+    "known_recall",
+    "false_accept_rate",
+    "false_reject_rate"
+  ],
+  "outputs": [
+    "kir_sensitivity_detail.csv",
+    "kir_sensitivity_summary.csv",
+    "oos_f1_kir_sensitivity.png",
+    "kir_endpoint_delta_heatmap.png",
+    "coverage_oos_trajectory_by_kir.png"
+  ],
+  "protocol_version": "protocol_v2_textoir_v1",
+  "source": "/home/bo/bo01/llmpy311/s2c/results/analysis/cross_protocol_tradeoff_v1/summary_mean_std.csv",
+  "source_contract": "experimental_mechanism_pack_v3 five-seed summary; no new model run",
+  "source_sha256": "c3f5b5cb9701bfd2e111da85575226393e3baf9c8bcace7df6fc39eb2d396ae8",
+  "summary_rows": 21
+}

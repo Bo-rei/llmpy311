@@ -1,0 +1,25 @@
+{
+  "analysis": "representation_geometry_visuals_v1",
+  "protocol_version": "protocol_v2_textoir_v1",
+  "analysis_only": true,
+  "selection_used_test_oos": false,
+  "test_labels_used_post_hoc": true,
+  "inputs": {
+    "geometry": "4b547017d9397994325be497ff49e29297756aad047b00944b0a4e47a3ac449d",
+    "k_summary": "80769c5c92a4151b77429791bbe0879de3295d8915da9569bd23d1a892e9d75e",
+    "boundary": "e2b1caaada9259b69f4b553c5e35607a9142721bbf74be27863d5dd0b7b58d7e",
+    "transitions": "bb688822e5b91cdca836f8b106f5d1a96e86506ad7ff1d3dc99f83c8dbacc1f9"
+  },
+  "outputs": {
+    "geometry_summary": "/home/bo/bo01/llmpy311/s2c/results/analysis/archive/analysis/representation_geometry_visuals_v1/geometry_summary.csv",
+    "k_effects": "/home/bo/bo01/llmpy311/s2c/results/analysis/archive/analysis/representation_geometry_visuals_v1/k_effects.csv",
+    "score_gap_false_accept": "/home/bo/bo01/llmpy311/s2c/results/analysis/archive/analysis/representation_geometry_visuals_v1/score_gap_false_accept.csv",
+    "stackoverflow_error_quadrants": "/home/bo/bo01/llmpy311/s2c/results/analysis/archive/analysis/representation_geometry_visuals_v1/stackoverflow_error_quadrants.csv"
+  },
+  "figures": [
+    "/home/bo/bo01/llmpy311/s2c/figures/archive/analysis/representation_geometry_visuals_v1/geometry_tradeoff.png",
+    "/home/bo/bo01/llmpy311/s2c/figures/archive/analysis/representation_geometry_visuals_v1/near_oos_delta.png",
+    "/home/bo/bo01/llmpy311/s2c/figures/archive/analysis/representation_geometry_visuals_v1/score_gap_false_accept.png",
+    "/home/bo/bo01/llmpy311/s2c/figures/archive/analysis/representation_geometry_visuals_v1/stackoverflow_error_quadrants.png"
+  ]
+}

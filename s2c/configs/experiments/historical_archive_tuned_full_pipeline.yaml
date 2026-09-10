@@ -1,0 +1,41 @@
+stage: historical_archive_tuned_full_pipeline
+protocol: historical_v19_archive_development_tuning
+data_root: ../archives/submissions/s2c-submission/data
+seed: 42
+kir: 0.50
+selection:
+  split: validation
+  uses_oos_labels: true
+  test_used_for_selection: false
+  known_accuracy_guard: "within 1 pp of method baseline"
+gate:
+  distance: mahalanobis_diag
+  radius_method: mean_std
+  candidate_k_values: [1, 2, 3]
+  banking_extended_k_values: [4, 5]
+  candidate_lambda_values: [0.25, 0.50, 0.75, 1.00, 1.25, 1.50, 2.00]
+  candidate_threshold_values: [0.85, 0.90, 0.95, 1.00, 1.05, 1.10, 1.20]
+  acceptance_modes: [nearest_sphere, normalized_union]
+candidates:
+  clinc150:
+    method: partial_k1
+    k: 3
+    radius_lambda: 2.0
+    threshold: 1.0
+    acceptance_mode: normalized_union
+  stackoverflow:
+    method: partial_k1
+    k: 1
+    radius_lambda: 2.0
+    threshold: 0.85
+    acceptance_mode: nearest_sphere
+  banking77:
+    method: partial_k1
+    k: 2
+    radius_lambda: 1.0
+    threshold: 0.95
+    acceptance_mode: nearest_sphere
+paper_reference:
+  source: fulltex.tex
+  kir: 0.50
+  note: "Historical Ours row; Banking77 label is not byte-identical to standard archive banking77."

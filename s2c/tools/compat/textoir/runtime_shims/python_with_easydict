@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+set -euo pipefail
+shim_root="$(cd -- "$(dirname -- "$0")" && pwd)"
+export MKL_THREADING_LAYER="GNU"
+if [[ -n "${PYTHONPATH:-}" ]]; then
+  export PYTHONPATH="${shim_root}:${PYTHONPATH}"
+else
+  export PYTHONPATH="${shim_root}"
+fi
+exec /home/bo/anaconda3/bin/python "$@"

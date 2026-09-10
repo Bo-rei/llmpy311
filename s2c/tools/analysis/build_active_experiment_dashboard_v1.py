@@ -679,7 +679,7 @@ def build_report(trainable: pd.DataFrame, figures: list[str], lambda_deltas: pd.
         "## 6. KIR=0.50 方法分层对照",
         "",
         f"`KIR50_METHOD_COMPARISON_V1.md` 将 Trainable K=1、Frozen K=1/K=2、MOGB 组件和 ADB/DA-ADB/BRAK 兼容结果放在同一张分层表中。当前 5-seed fair matrix 的 StackOverflow Trainable K=1 为 {current_pct('trainable_k1', 'oos_f1')}，Frozen Single centroid 为 {current_pct('frozen_k1', 'oos_f1')}，Frozen fixed K=2 为 {current_pct('frozen_k2', 'oos_f1')}；ADB/DA-ADB 仍分别为 89.47%/90.90%，但属于 BERT/不同训练合同的兼容单格，不能直接视为公平超越或落后。",
-        "详见 `docs/analysis/KIR50_METHOD_COMPARISON_V1.md`、`kir50_method_layers.png` 和 `kir50_method_tradeoff.png`。",
+        "详见 `docs/archive/analysis/KIR50_METHOD_COMPARISON_V1.md`、`kir50_method_layers.png` 和 `kir50_method_tradeoff.png`。",
         "",
         "## 7. Trainable MiniLM 的 λ/K 受控分析",
         "",
@@ -694,7 +694,7 @@ def build_report(trainable: pd.DataFrame, figures: list[str], lambda_deltas: pd.
             )
     lines += [
         "这说明 StackOverflow 的 K=2 退化不是 λ=1 单点设置造成，Trainable MiniLM 的主要收益仍属于 K=1 表示和分数排序。",
-        "详见 `docs/analysis/MINILM_TRAINABLE_LAMBDA_CONTROL_V1.md` 和 `trainable_lambda_k_interaction.png`。",
+        "详见 `docs/archive/analysis/MINILM_TRAINABLE_LAMBDA_CONTROL_V1.md` 和 `trainable_lambda_k_interaction.png`。",
         "",
         "## 8. 自适应多中心的实际结果",
         "",
@@ -774,7 +774,7 @@ def main() -> None:
         if comparison_figure.is_file():
             figures.append(str(comparison_figure.relative_to(ROOT)))
     figures.append(plot_adaptive())
-    source_paths = ["results/gate_only/kir_k_fixed_mean_std.csv", "results/representation/representation_fixed_results.csv", "results/mogb/fair_matrix.csv", "results/final_baselines/summary.csv", "results/analysis/cross_protocol_tradeoff_v1/summary_mean_std.csv", "results/analysis/kir50_method_comparison_v1/rows.csv", "results/diagnostics/racal_v1/RACAL_V1_STAGE1_MEAN_STD.csv", "results/diagnostics/racal_v1/stage2_fixed_k2/RACAL_V1_STAGE2_MEAN_STD.csv", "results/diagnostics/joint_adaptive_multicenter_v1/pilot_summary.csv", "results/diagnostics/joint_adaptive_multicenter_contract_repair_v1/summary.csv", "results/diagnostics/consistency_gate_v1/summary.csv", "results/diagnostics/minilm_trainable_lambda_control_v1/k_delta_by_lambda.csv", "../artifacts/s2c/outputs/paper_results/stackoverflow/kir50_seed42/full_anchor/eval_results.json", "../artifacts/s2c/outputs/paper_results/ablation_summary.csv", "../artifacts/s2c/outputs/experiments/cascade_full/gpu_kir50/cascade_summary.csv"]
+    source_paths = ["results/gate_only/kir_k_fixed_mean_std.csv", "results/representation/representation_fixed_results.csv", "results/mogb/fair_matrix.csv", "results/final_baselines/summary.csv", "results/analysis/cross_protocol_tradeoff_v1/summary_mean_std.csv", "results/analysis/archive/analysis/kir50_method_comparison_v1/rows.csv", "results/diagnostics/racal_v1/RACAL_V1_STAGE1_MEAN_STD.csv", "results/diagnostics/racal_v1/stage2_fixed_k2/RACAL_V1_STAGE2_MEAN_STD.csv", "results/diagnostics/joint_adaptive_multicenter_v1/pilot_summary.csv", "results/diagnostics/joint_adaptive_multicenter_contract_repair_v1/summary.csv", "results/diagnostics/consistency_gate_v1/summary.csv", "results/diagnostics/minilm_trainable_lambda_control_v1/k_delta_by_lambda.csv", "../artifacts/s2c/outputs/paper_results/stackoverflow/kir50_seed42/full_anchor/eval_results.json", "../artifacts/s2c/outputs/paper_results/ablation_summary.csv", "../artifacts/s2c/outputs/experiments/cascade_full/gpu_kir50/cascade_summary.csv"]
     sources = {p: sha256(ROOT / p) for p in source_paths if (ROOT / p).is_file()}
     manifest = {"schema": "s2c.active_experiment_dashboard_v1", "existing_results_only": True, "sources": sources, "figures": figures}
     atomic_text(json.dumps(manifest, ensure_ascii=False, indent=2, sort_keys=True), OUT / "DASHBOARD_MANIFEST.json")

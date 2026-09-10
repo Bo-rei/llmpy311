@@ -1,0 +1,55 @@
+{
+  "analysis_stage": "raw_gate_error_visualization_v1",
+  "protocol_version": "protocol_v2_textoir_v1",
+  "dataset": "stackoverflow",
+  "kir": 0.5,
+  "seeds": [
+    13,
+    42,
+    87
+  ],
+  "methods": [
+    "trainable_k1",
+    "frozen_k1",
+    "fixed_k2",
+    "mogb_fair"
+  ],
+  "selection_used_test_oos": false,
+  "analysis_uses_test_labels_post_hoc": true,
+  "raw_text_exported": false,
+  "source_hashes": {
+    "artifacts/s2c/runs/protocol_v2_textoir_v1/racal_v1/runs/trainable_k1/seed_13/predictions.jsonl": "3ee586271b848548d944fa6e4a3d5f8f35f9123ea63e6a66375bdaff25a424e5",
+    "artifacts/s2c/runs/protocol_v2_textoir_v1/racal_v1/runs/frozen_k1/seed_13/predictions.jsonl": "56bce1d57a0eba4952e9bdce2407517c41982a21f2b729e4a6e42b523a830b01",
+    "artifacts/s2c/runs/protocol_v2_textoir_v1/racal_v1/stage2_fixed_k2/runs/seed_13/predictions_k2.jsonl": "c9e9ca21b81d145614fcf212b259ba36d941e793246d4d6b9ae16bc772007078",
+    "artifacts/s2c/runs/protocol_v2_textoir_v1/mogb_ablation_v1/select_095/stackoverflow/kir_0.50/seed_13/predictions.tsv": "dd15d5087f33b7c7a72628291b3df090c7873f4c4a02a8b114302a57e6f78dbb",
+    "artifacts/s2c/runs/protocol_v2_textoir_v1/racal_v1/runs/trainable_k1/seed_42/predictions.jsonl": "ad0c9e44dcd964bcaed1035d82d054d7936641c6328d3bab32f87e9854a7b8f6",
+    "artifacts/s2c/runs/protocol_v2_textoir_v1/racal_v1/runs/frozen_k1/seed_42/predictions.jsonl": "41b64fff8741d2aa6b09ff5b9e5864ded577cd279ed07d8af8b2cefc5a2d68d7",
+    "artifacts/s2c/runs/protocol_v2_textoir_v1/racal_v1/stage2_fixed_k2/runs/seed_42/predictions_k2.jsonl": "3226a32fef5381701a2843f41845c4fa8adb7f8b4b22ff938cbeee4750ee6f7c",
+    "artifacts/s2c/runs/protocol_v2_textoir_v1/mogb_ablation_v1/select_095/stackoverflow/kir_0.50/seed_42/predictions.tsv": "dd5a504131a7bf3956e2e9496044a78ed079a931e8b4bbe9d54fef87a28f05ce",
+    "artifacts/s2c/runs/protocol_v2_textoir_v1/racal_v1/runs/trainable_k1/seed_87/predictions.jsonl": "4896d329cca4e176adfab1ed98dcc48bd281c47feaaeebaee17f5629d36046bc",
+    "artifacts/s2c/runs/protocol_v2_textoir_v1/racal_v1/runs/frozen_k1/seed_87/predictions.jsonl": "294558f49c5bb22ca087ea77db70449d90de93603383d9b2716b3156b047ba3c",
+    "artifacts/s2c/runs/protocol_v2_textoir_v1/racal_v1/stage2_fixed_k2/runs/seed_87/predictions_k2.jsonl": "a814d568478c687758718e63d81cd594bde9cab577dc3b1c5c539025953cbc29",
+    "artifacts/s2c/runs/protocol_v2_textoir_v1/mogb_ablation_v1/select_095/stackoverflow/kir_0.50/seed_87/predictions.tsv": "cfdde87f83cac7679ee5b7f84d1a7f5ab16b6c0166fa9161f5feae7251af6b24"
+  },
+  "outputs": [
+    "MANIFEST.json",
+    "boundary_expansion_transitions.csv",
+    "external_official_mogb_summary.csv",
+    "intent_error_attribution.csv",
+    "pairwise_transitions.csv",
+    "pr_curve_points.csv",
+    "raw_metrics_per_seed.csv",
+    "raw_metrics_summary.csv",
+    "roc_curve_points.csv",
+    "score_quantiles.csv",
+    "trainable_vs_fixed_k2_oos_waterfall.csv"
+  ],
+  "figure_outputs": [
+    "boundary_expansion_waterfall.png",
+    "intent_error_heatmap.png",
+    "metric_bars.png",
+    "oos_transitions.png",
+    "roc_pr_curves.png",
+    "score_distributions.png"
+  ]
+}

@@ -1,0 +1,14 @@
+trainable_state,adb_state,count,trainable_state_label,adb_state_label,rate_all
+known_correct,known_correct,7002,Known 正确分类,Known 正确分类,0.389
+known_correct,known_rejected,434,Known 正确分类,Known 被拒绝,0.02411111111111111
+known_correct,known_wrong,2,Known 正确分类,Known 错意图,0.00011111111111111112
+known_rejected,known_correct,209,Known 被拒绝,Known 正确分类,0.01161111111111111
+known_rejected,known_rejected,1240,Known 被拒绝,Known 被拒绝,0.06888888888888889
+known_rejected,known_wrong,20,Known 被拒绝,Known 错意图,0.0011111111111111111
+known_wrong,known_correct,12,Known 错意图,Known 正确分类,0.0006666666666666666
+known_wrong,known_rejected,56,Known 错意图,Known 被拒绝,0.003111111111111111
+known_wrong,known_wrong,25,Known 错意图,Known 错意图,0.001388888888888889
+oos_correct_rejected,oos_correct_rejected,7884,OOS 正确拒绝,OOS 正确拒绝,0.438
+oos_correct_rejected,oos_false_accept,380,OOS 正确拒绝,OOS 误接收,0.021111111111111112
+oos_false_accept,oos_correct_rejected,439,OOS 误接收,OOS 正确拒绝,0.02438888888888889
+oos_false_accept,oos_false_accept,297,OOS 误接收,OOS 误接收,0.0165

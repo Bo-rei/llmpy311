@@ -22,8 +22,8 @@ import pandas as pd
 
 ROOT = Path(__file__).resolve().parents[2]
 ARTIFACT_ROOT = ROOT.parent / "artifacts/s2c/runs/protocol_v2_textoir_v1"
-OUT = ROOT / "results/analysis/minilm_boundary_diagnostics_v1"
-FIG = ROOT / "figures/minilm_boundary_diagnostics_v1"
+OUT = ROOT / "results/analysis/archive/analysis/minilm_boundary_diagnostics_v1"
+FIG = ROOT / "figures/archive/analysis/minilm_boundary_diagnostics_v1"
 TRAINABLE_ROOTS = (
     ARTIFACT_ROOT / "minilm_trainable_kir_sweep_v1",
     ARTIFACT_ROOT / "minilm_trainable_kir_sweep_extension_v1",
@@ -270,10 +270,10 @@ def _report(summary: pd.DataFrame, aggregate: pd.DataFrame) -> None:
         "",
         "## 4. 证据文件",
         "",
-        "- `results/analysis/minilm_boundary_diagnostics_v1/run_summary.csv`：45×2 个逐 seed 诊断摘要。",
-        "- `results/analysis/minilm_boundary_diagnostics_v1/summary_mean_std.csv`：dataset×KIR×representation 汇总。",
-        "- `results/analysis/minilm_boundary_diagnostics_v1/score_quantiles.csv`：Known/OOS score 分位数。",
-        "- `figures/minilm_boundary_diagnostics_v1/`：score 分布、几何差值和 OOS F1—false acceptance 图。",
+        "- `results/analysis/archive/analysis/minilm_boundary_diagnostics_v1/run_summary.csv`：45×2 个逐 seed 诊断摘要。",
+        "- `results/analysis/archive/analysis/minilm_boundary_diagnostics_v1/summary_mean_std.csv`：dataset×KIR×representation 汇总。",
+        "- `results/analysis/archive/analysis/minilm_boundary_diagnostics_v1/score_quantiles.csv`：Known/OOS score 分位数。",
+        "- `figures/archive/analysis/minilm_boundary_diagnostics_v1/`：score 分布、几何差值和 OOS F1—false acceptance 图。",
         "",
         "## 5. 当前结论边界",
         "",
@@ -282,7 +282,7 @@ def _report(summary: pd.DataFrame, aggregate: pd.DataFrame) -> None:
         "- 下一步应优先做 calibration coverage、半径稳定性和历史 fulltex/当前协议的逐组件桥接，而不是继续盲目扩展 K。",
         ]
     )
-    (ROOT / "docs/analysis/MINILM_BOUNDARY_DIAGNOSTICS_V1.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
+    (ROOT / "docs/archive/analysis/MINILM_BOUNDARY_DIAGNOSTICS_V1.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
 def main() -> int:

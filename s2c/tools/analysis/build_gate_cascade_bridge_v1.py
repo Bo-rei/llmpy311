@@ -20,10 +20,10 @@ import pandas as pd
 
 
 ROOT = Path(__file__).resolve().parents[2]
-CASCADE = ROOT / "results/analysis/active_experiment_dashboard_v1/current_cascade_rows.csv"
-TRAINABLE = ROOT / "results/analysis/minilm_trainable_5seed_fair_v1/trainable_per_seed.csv"
-OUT = ROOT / "results/analysis/gate_cascade_bridge_v1"
-FIG = ROOT / "figures/gate_cascade_bridge_v1"
+CASCADE = ROOT / "results/analysis/archive/analysis/active_experiment_dashboard_v1/current_cascade_rows.csv"
+TRAINABLE = ROOT / "results/analysis/archive/analysis/minilm_trainable_5seed_fair_v1/trainable_per_seed.csv"
+OUT = ROOT / "results/analysis/archive/analysis/gate_cascade_bridge_v1"
+FIG = ROOT / "figures/archive/analysis/gate_cascade_bridge_v1"
 DATASETS = ("clinc150", "banking77", "stackoverflow")
 SEEDS = (13, 42, 87)
 CASCADE_ORDER = ("frozen_k1", "frozen_selected_k", "ce_recon_selected_k", "best_controlled_baseline")
@@ -171,11 +171,11 @@ def _report(summary: pd.DataFrame) -> None:
             "",
             "## 3. 证据",
             "",
-        "- `results/analysis/gate_cascade_bridge_v1/per_seed.csv`",
-        "- `results/analysis/gate_cascade_bridge_v1/summary_mean_std.csv`",
-        "- `figures/gate_cascade_bridge_v1/gate_vs_cascade_oos_f1.png`",
-        "- `figures/gate_cascade_bridge_v1/cascade_error_decomposition.png`",
-        "- `figures/gate_cascade_bridge_v1/cascade_oos_known_tradeoff.png`",
+        "- `results/analysis/archive/analysis/gate_cascade_bridge_v1/per_seed.csv`",
+        "- `results/analysis/archive/analysis/gate_cascade_bridge_v1/summary_mean_std.csv`",
+        "- `figures/archive/analysis/gate_cascade_bridge_v1/gate_vs_cascade_oos_f1.png`",
+        "- `figures/archive/analysis/gate_cascade_bridge_v1/cascade_error_decomposition.png`",
+        "- `figures/archive/analysis/gate_cascade_bridge_v1/cascade_oos_known_tradeoff.png`",
         "",
         "## 4. 结论边界",
         "",
@@ -183,7 +183,7 @@ def _report(summary: pd.DataFrame) -> None:
         "- 它不是新的 SOTA 结果，也不把 3-seed 当前 Cascade 变体冒充 fulltex 历史主表。",
         ]
     )
-    (ROOT / "docs/analysis/GATE_CASCADE_BRIDGE_V1.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
+    (ROOT / "docs/archive/analysis/GATE_CASCADE_BRIDGE_V1.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
 def main() -> int:

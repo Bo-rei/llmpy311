@@ -1,0 +1,16 @@
+experiment,dataset,oos_f1_mean_pct,oos_f1_std_pct,paper_oos_f1_pct,delta_oos_f1_pp,beats_paper,direct_pipeline_verified,note
+aggregate_validation_selected_direct_pipeline,banking77_oos,91.52981321817292,0.04749029638264776,88.23,3.2998132181729147,True,True,single configuration selected from aggregate validation
+aggregate_validation_selected_direct_pipeline,clinc150,91.044731303582,0.8062344974827172,91.96,-0.9152686964179964,False,True,single configuration selected from aggregate validation
+aggregate_validation_selected_direct_pipeline,stackoverflow,89.14512174601849,1.5448659886960656,89.71,-0.5648782539815045,False,True,single configuration selected from aggregate validation
+per_seed_validation_selected_direct_pipeline,banking77_oos,91.6506668647591,0.13578319201773012,88.23,3.4206668647590988,True,True,one configuration selected independently per seed
+per_seed_validation_selected_direct_pipeline,clinc150,90.9903817323738,0.6762167661151868,91.96,-0.9696182676261884,False,True,one configuration selected independently per seed
+per_seed_validation_selected_direct_pipeline,stackoverflow,89.90784457360492,1.5386681155910837,89.71,0.19784457360492524,True,True,one configuration selected independently per seed
+fine_threshold_gate_confirmation,banking77_oos,91.6423132282402,0.06262599403210377,88.23,3.412313228240194,True,False,Gate-only; threshold grid step .01; no new pipeline run
+fine_threshold_gate_confirmation,clinc150,91.07435121342816,0.674997214047629,91.96,-0.885648786571835,False,False,Gate-only; threshold grid step .01; no new pipeline run
+fine_threshold_gate_confirmation,stackoverflow,89.86284680054547,1.469025085367929,89.71,0.1528468005454755,True,False,Gate-only; threshold grid step .01; no new pipeline run
+extended_boundary_gate_confirmation,clinc150,91.044731303582,0.8062344974827172,91.96,-0.9152686964179964,False,False,Gate-only; K=1..5 and wider lambda/threshold grid
+extended_boundary_gate_confirmation,stackoverflow,89.24658462775567,2.054853771842281,89.71,-0.4634153722443273,False,False,Gate-only; K=1..5 and wider lambda/threshold grid
+extended_boundary_gate_confirmation,banking77_oos,91.7618486848366,0.0397569595297559,88.23,3.5318486848365893,True,False,Gate-only; K=1..5 and wider lambda/threshold grid
+per_sphere_calibration_selected_direct_pipeline,banking77_oos,91.6506668647591,0.13578319201773012,88.23,3.4206668647590988,True,True,per-sphere known-validation calibration; none selected by validation
+per_sphere_calibration_selected_direct_pipeline,clinc150,90.9190726211673,0.6013954861241915,91.96,-1.0409273788326914,False,True,per-sphere known-validation calibration; none selected by validation
+per_sphere_calibration_selected_direct_pipeline,stackoverflow,89.90974458434314,1.538508642475495,89.71,0.19974458434315068,True,True,per-sphere known-validation calibration; none selected by validation

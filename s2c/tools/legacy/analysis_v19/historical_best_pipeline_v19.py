@@ -63,10 +63,11 @@ class HistoricalBestPipelineProfile:
                 "slug": "clinc150",
                 "kir": 0.5,
                 "seed": 42,
-                "data_root": "data/multidataset/v19/clinc150/kir50_seed42",
-                "gate_root": "data/multidataset/v19/clinc150/kir50_seed42/gate",
-                "router_root": "data/multidataset/v19/clinc150/kir50_seed42/router",
-                "experts_root": "data/multidataset/v19/clinc150/kir50_seed42/experts",
+                "data_root": "data/v19",
+                "gate_root": "data/v19/gate",
+                "router_root": "data/v19/router",
+                "experts_root": "data/v19/experts",
+                "data_status": "anchor_reconstructed_not_byte_identical_h0",
             },
             "gate": self.training_gate_defaults(),
             "router": {
@@ -140,6 +141,20 @@ class HistoricalBestPipelineProfile:
                 "outputs/experiments/archive/sweeps/2026-03-23/"
                 "gate_l2_mix2_train/gate_l2_mix2_true_lambda_1p6/detector.json"
             ),
+            "router_ckpt": "outputs/experiments/components/router/router_v19/best_model.pt",
+            "experts_root": "outputs/experiments/components/experts/experts_v19",
+            "multi_prototype_path": (
+                "outputs/experiments/components/prototypes/"
+                "prototypes_v19/selective_expansion.json"
+            ),
+            "semantic_gate_mode": self.semantic_gate_mode,
+            "semantic_gate_threshold": self.semantic_gate_threshold,
+            "semantic_uncertain_low": self.semantic_uncertain_low,
+            "semantic_uncertain_high": self.semantic_uncertain_high,
+            "semantic_top_k": self.semantic_top_k,
+            "prototype_centers_default": self.prototype_centers_default,
+            "multi_proto_id_threshold": self.multi_proto_id_threshold,
+            "multi_proto_threshold_mode": self.multi_proto_threshold_mode,
             "target_metrics": {
                 "macro_f1": 0.8121241036585573,
                 "overall_accuracy": 0.8677941443898891,

@@ -1,0 +1,16 @@
+{
+  "analysis": "trainable_vs_adb_intent_error_v1",
+  "protocol_version": "protocol_v2_textoir_v1",
+  "source_fair": "results/analysis/cross_protocol_tradeoff_v1/per_seed.csv",
+  "source_adb": "results/analysis/adb_kir_sensitivity_v2/adb_per_seed.csv",
+  "source_fair_sha256": "31ccdd433b38b86ec92b0cd81b460114a7fe1e7f12b94d4a5d031aab7d703145",
+  "source_adb_sha256": "0a287bf154bdb0d2db06ec916cfbb4aea40c8b536fabf419942f684e587e1223",
+  "raw_rows": 1850,
+  "mean_rows": 663,
+  "aligned_units": 45,
+  "output_root": "results/analysis/archive/analysis/trainable_vs_adb_intent_error_v1",
+  "figure_root": "figures/archive/analysis/trainable_vs_adb_intent_error_v1",
+  "no_training": true,
+  "no_test_selection": true,
+  "manifest_sha256": "beffb22bc4ecbcbbb50f4c5f0720d7baa29f081cc7a9a2353141592544524f9b"
+}

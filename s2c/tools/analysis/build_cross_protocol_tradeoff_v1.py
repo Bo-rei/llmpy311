@@ -20,7 +20,7 @@ import pandas as pd
 
 
 ROOT = Path(__file__).resolve().parents[2]
-INPUT = ROOT / "results/analysis/minilm_trainable_5seed_fair_v1/all_methods_per_seed.csv"
+INPUT = ROOT / "results/analysis/archive/analysis/minilm_trainable_5seed_fair_v1/all_methods_per_seed.csv"
 OUT = ROOT / "results/analysis/cross_protocol_tradeoff_v1"
 FIG = ROOT / "figures/cross_protocol_tradeoff_v1"
 DATASETS = ("clinc150", "banking77", "stackoverflow")
@@ -38,11 +38,20 @@ METHOD_ORDER = (
 )
 METHOD_LABELS = {
     "trainable_k1": "Trainable K=1",
-    "single_centroid": "Frozen K=1",
-    "fixed_k2": "Frozen K=2",
+    "single_centroid": "Frozen single-centroid (MOGB-Fair; Euclidean)",
+    "fixed_k2": "Frozen K=2 (MOGB-Fair; Euclidean)",
     "random_partition": "Random K=2",
     "mogb_partition_ours_boundary": "MOGB partition + s2c boundary",
     "ours_partition_mogb_boundary": "s2c partition + MOGB boundary",
+    "mogb_minilm": "MOGB-MiniLM",
+}
+PLOT_LABELS = {
+    "trainable_k1": "Trainable K=1",
+    "single_centroid": "Frozen single",
+    "fixed_k2": "Frozen K=2",
+    "random_partition": "Random K=2",
+    "mogb_partition_ours_boundary": "MOGB partition + S2C",
+    "ours_partition_mogb_boundary": "S2C partition + MOGB",
     "mogb_minilm": "MOGB-MiniLM",
 }
 COLORS = {
@@ -156,7 +165,7 @@ def _plot_pareto(summary: pd.DataFrame) -> None:
                 rows.oos_f1 * 100,
                 rows.known_recall * 100,
                 color=COLORS[method],
-                label=METHOD_LABELS[method],
+                label=PLOT_LABELS[method],
                 s=70,
                 alpha=0.85,
                 edgecolor="white",
@@ -186,7 +195,7 @@ def _plot_errors(summary: pd.DataFrame) -> None:
         ax.bar(x + width / 2, part.set_index("method").loc[list(METHOD_ORDER), "false_reject_rate"] * 100, width, label="False rejection", color="#4c78a8")
         ax.set_title(dataset)
         ax.set_xticks(x)
-        ax.set_xticklabels([METHOD_LABELS[m].replace(" + ", " +\n") for m in METHOD_ORDER], rotation=35, ha="right", fontsize=8)
+        ax.set_xticklabels([PLOT_LABELS[m].replace(" + ", " +\n") for m in METHOD_ORDER], rotation=35, ha="right", fontsize=8)
         ax.grid(axis="y", alpha=0.25)
         ax.set_ylabel("Error rate (%)")
     axes[-1].legend(frameon=False)
@@ -204,7 +213,7 @@ def _plot_kir(summary: pd.DataFrame) -> None:
             ax = axes[row, col]
             for method in METHOD_ORDER:
                 line = part[part.method == method].sort_values("kir")
-                ax.plot(line.kir, line[metric] * 100, marker="o", color=COLORS[method], label=METHOD_LABELS[method])
+                ax.plot(line.kir, line[metric] * 100, marker="o", color=COLORS[method], label=PLOT_LABELS[method])
             ax.set_title(f"{dataset}: {metric}")
             ax.grid(alpha=0.25)
             ax.set_ylabel("score (%)")
@@ -223,7 +232,7 @@ def _plot_variance(frame: pd.DataFrame) -> None:
     for ax, dataset in zip(axes, DATASETS):
         part = frame[(frame.dataset == dataset) & (frame.kir == 0.50)]
         data = [part[part.method == method].oos_f1.to_numpy() * 100 for method in METHOD_ORDER]
-        ax.boxplot(data, tick_labels=[METHOD_LABELS[m].replace(" + ", " +\n") for m in METHOD_ORDER], showmeans=True)
+        ax.boxplot(data, tick_labels=[PLOT_LABELS[m].replace(" + ", " +\n") for m in METHOD_ORDER], showmeans=True)
         ax.set_title(dataset)
         ax.tick_params(axis="x", labelrotation=35)
         ax.grid(axis="y", alpha=0.25)
@@ -243,7 +252,7 @@ def _report(summary: pd.DataFrame, paired: pd.DataFrame) -> None:
         "## 1. 分析范围",
         "",
         "- 三个数据集、KIR={0.25, 0.50, 0.75}、5 个 seed；",
-        "- Trainable K=1、Frozen K=1、Frozen K=2、Random K=2、MOGB 组件三种变体；",
+            "- Trainable K=1、Euclidean MOGB-Fair single-centroid/K=2 组件、Random K=2；",
         "- 主要观察 OOS F1、F1-All、Known Recall、false acceptance/rejection 和 seed 方差；",
         "- 所有行仍是 Gate-only 或同协议组件，不是完整 Cascade 的 SOTA 排名。",
         "",
@@ -265,7 +274,7 @@ def _report(summary: pd.DataFrame, paired: pd.DataFrame) -> None:
             "",
             "## 3. 机制结论",
             "",
-            "1. Trainable K=1 通常位于更好的覆盖—拒识折中区域：它保留较高 Known Recall/F1-All，同时比 Frozen K=1 降低 false acceptance。",
+            "1. Trainable K=1 通常位于更好的覆盖—拒识折中区域：它保留较高 Known Recall/F1-All，同时比 Frozen single-centroid 组件降低 false acceptance。",
             "2. MOGB 风格组件有时提高 OOS F1，但常以显著牺牲 Known Recall 和 F1-All 为代价；这说明它们更像保守拒识工作点，而不是全面替代。",
             "3. StackOverflow 的 Frozen K=2 仍出现明显 OOS 误接受，说明训练表示的 K=1 收益不能直接外推为固定多中心安全性。",
             "4. KIR 增大时，方法之间的差距和误差权衡发生变化；因此不能用单一 KIR 的最好数字宣称跨数据集统一优势。",
@@ -288,7 +297,7 @@ def _report(summary: pd.DataFrame, paired: pd.DataFrame) -> None:
             "- 后续应在统一监督、split、seed 和系统层级后再做强基线主表；本报告本身不启动新训练。",
         ]
     )
-    (ROOT / "docs/analysis/CROSS_PROTOCOL_TRADEOFF_V1.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
+    (ROOT / "docs/archive/analysis/CROSS_PROTOCOL_TRADEOFF_V1.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
 def main() -> int:

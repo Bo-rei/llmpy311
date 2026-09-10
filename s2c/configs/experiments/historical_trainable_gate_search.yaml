@@ -1,0 +1,17 @@
+schema_version: 1
+experiment: historical_trainable_gate_search
+protocol: historical_v19_paper_main
+evidence_level: H1 controlled
+dataset: clinc150
+kir: 0.50
+seeds: [13, 42, 87]
+selection_objective: validation_oos_f1_only
+train_oos_used: false
+test_used_for_selection: false
+representations: [existing_last2, last2_long, projection_only, lora_long]
+geometry: [k1, k2, k3, k5, adaptive_top25_k2, adaptive_top50_k2]
+covariance: [local, shrink_intent25, shrink_global25]
+radius_rules: [mean_std, quantile95]
+acceptance_modes: [nearest_sphere, normalized_union]
+artifact_root: ../artifacts/s2c/runs/historical_trainable_gate_search
+result_root: results/analysis/historical_trainable_gate_search

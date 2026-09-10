@@ -172,12 +172,12 @@ def _write_report(summary: pd.DataFrame, paired: pd.DataFrame, budget: pd.DataFr
         "",
         "## 6. 证据路径",
         "",
-        "- 逐 seed：`results/analysis/cascade_bridge_cross_dataset_v1/per_seed.csv`",
-        "- 配对差值：`results/analysis/cascade_bridge_cross_dataset_v1/paired_effects.csv`",
-        "- 错误预算：`results/analysis/cascade_bridge_cross_dataset_v1/error_budget.csv`",
-        "- 图：`figures/cascade_bridge_cross_dataset_v1/`",
-        "- StackOverflow 单独报告：`docs/analysis/CASCADE_BRIDGE_V1.md`",
-        "- MOGB 复现差距：`docs/analysis/MOGB_REPRODUCTION_GAP_ANALYSIS_V2.md`",
+        "- 逐 seed：`results/analysis/archive/analysis/cascade_bridge_cross_dataset_v1/per_seed.csv`",
+        "- 配对差值：`results/analysis/archive/analysis/cascade_bridge_cross_dataset_v1/paired_effects.csv`",
+        "- 错误预算：`results/analysis/archive/analysis/cascade_bridge_cross_dataset_v1/error_budget.csv`",
+        "- 图：`figures/archive/analysis/cascade_bridge_cross_dataset_v1/`",
+        "- StackOverflow 单独报告：`docs/archive/analysis/CASCADE_BRIDGE_V1.md`",
+        "- MOGB 复现差距：`docs/archive/analysis/MOGB_REPRODUCTION_GAP_ANALYSIS_V2.md`",
     ]
     (ROOT / "docs" / "analysis" / "CASCADE_BRIDGE_CROSS_DATASET_V1.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
 

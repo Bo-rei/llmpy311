@@ -1,0 +1,22 @@
+{
+  "schema_version": "paired_effect_intent_heterogeneity_v1",
+  "protocol_version": "protocol_v2_textoir_v1",
+  "analysis_only": true,
+  "bootstrap_replicates": 10000,
+  "bootstrap_seed_base": 20260808,
+  "inputs": {
+    "results/analysis/cross_protocol_tradeoff_v1/per_seed.csv": "31ccdd433b38b86ec92b0cd81b460114a7fe1e7f12b94d4a5d031aab7d703145",
+    "results/analysis/archive/analysis/intent_kir_stability_pack_v1/intent_kir_rows.csv": "73800ccc0105d4a8888e14c5787612bff2185e7b00f649b48f43b970b141c3bc"
+  },
+  "outputs": {
+    "results/analysis/archive/analysis/paired_effect_intent_heterogeneity_v1/paired_effects.csv": "5751196ff02b6e8fb820c9085c51561c86eafa726e82c928545ea972566544cf",
+    "results/analysis/archive/analysis/paired_effect_intent_heterogeneity_v1/paired_summary.csv": "d3e866ff3d4dac1dd68e43a0e38839c742fcad740c72addafc40d6c661e1d2b0",
+    "results/analysis/archive/analysis/paired_effect_intent_heterogeneity_v1/intent_summary.csv": "bc3d6a497b1ca5bbe04e09e3ce5db84ef9608aa0a60cf91f7583c60e60a7b8d2",
+    "results/analysis/archive/analysis/paired_effect_intent_heterogeneity_v1/best_k_distribution.csv": "ced7c948049e6c2569dad0b6821d1cfe6c2aaa68d509ad6c2bb77fcc3b6a614e"
+  },
+  "paired_rows": 270,
+  "paired_summary_rows": 216,
+  "intent_rows": 3700,
+  "intent_summary_rows": 18,
+  "best_k_distribution_rows": 88
+}

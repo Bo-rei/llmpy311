@@ -1,0 +1,4 @@
+dataset,kir,seed,n_test,n_known,n_oos,trainable_known_correct,trainable_known_wrong,trainable_known_rejected,trainable_oos_correct_rejected,trainable_oos_false_accept,adb_known_correct,adb_known_wrong,adb_known_rejected,adb_oos_correct_rejected,adb_oos_false_accept
+stackoverflow,0.5,42,6000,3000,3000,2468,37,495,2721,279,2362,17,621,2729,271
+stackoverflow,0.5,87,6000,3000,3000,2486,34,480,2675,325,2408,18,574,2753,247
+stackoverflow,0.5,100,6000,3000,3000,2484,22,494,2868,132,2453,12,535,2841,159

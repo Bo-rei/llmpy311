@@ -1,0 +1,31 @@
+dataset,method,scope_group,oos_f1_mean,oos_f1_std,known_macro_f1_mean,known_macro_f1_std,known_recall_mean,known_recall_std,f1_all_mean,f1_all_std,accuracy_mean,accuracy_std
+banking77,Fixed K=2,same protocol / frozen MiniLM / 5 seeds,0.754616,,0.761824,,0.825526,,0.761639,,0.747922,
+banking77,MOGB partition + s2c boundary,same protocol / frozen MiniLM / 5 seeds,0.793975,,0.644258,,0.521842,,0.648097,,0.743831,
+banking77,MOGB-MiniLM,same protocol / frozen MiniLM / 5 seeds,0.749937,,0.479063,,0.334079,,0.486008,,0.66513,
+banking77,MOGB-official (compatibility),external compatibility / BERT or pseudo-OOS,,,0.179685,,,,0.192843,,0.55488,
+banking77,Random partition,same protocol / frozen MiniLM / 5 seeds,0.716221,,0.748016,,0.859605,,0.747201,,0.720519,
+banking77,Single centroid,same protocol / frozen MiniLM / 5 seeds,0.72428,,0.745688,,0.850132,,0.745139,,0.723896,
+banking77,Trainable K=1,same protocol / Trainable MiniLM / 3 seeds,0.8476968183476892,0.007122469721089224,0.8224290964692372,0.008298290363772063,0.8190789473684211,0.0017406258625424784,0.8230769867738129,0.008265884758620284,0.8318181818181819,0.007959513423461868
+banking77,Trainable K=2,same protocol / Trainable MiniLM / 3 seeds,0.8489621749536508,0.0038054340391326406,0.816782676542056,0.0017503518495050145,0.7995614035087719,0.0003798357034142447,0.8176077918859431,0.0017544134237010153,0.8314935064935064,0.0022727272727272874
+banking77,s2c partition + MOGB boundary,same protocol / frozen MiniLM / 5 seeds,0.788595,,0.653312,,0.5325,,0.656781,,0.736104,
+clinc150,Fixed K=2,same protocol / frozen MiniLM / 5 seeds,0.892006,,0.799729,,0.751378,,0.800943,,0.856561,
+clinc150,MOGB partition + s2c boundary,same protocol / frozen MiniLM / 5 seeds,0.855554,,0.643187,,0.533422,,0.645982,,0.798526,
+clinc150,MOGB-MiniLM,same protocol / frozen MiniLM / 5 seeds,0.813195,,0.444689,,0.315733,,0.449538,,0.723789,
+clinc150,Random partition,same protocol / frozen MiniLM / 5 seeds,0.890691,,0.806398,,0.794756,,0.807507,,0.855544,
+clinc150,Single centroid,same protocol / frozen MiniLM / 5 seeds,0.889433,,0.801537,,0.787556,,0.802693,,0.853158,
+clinc150,Trainable K=1,same protocol / Trainable MiniLM / 3 seeds,0.9043025833372952,0.0062487196963865975,0.8179015323608753,0.010131856497277403,0.7426666666666666,0.0032049344670791553,0.8190383882947754,0.010077844399131845,0.8739766081871346,0.008469039687029412
+clinc150,Trainable K=2,same protocol / Trainable MiniLM / 3 seeds,0.9015090754397211,0.004237565194638721,0.8023328247540582,0.012716609302765351,0.7100740740740741,0.010925863151106548,0.8036377754209748,0.012604845181586737,0.8687134502923977,0.007029230035703724
+clinc150,s2c partition + MOGB boundary,same protocol / frozen MiniLM / 5 seeds,0.833232,,0.560505,,0.4224,,0.564093,,0.759158,
+stackoverflow,ADB,external compatibility / BERT or pseudo-OOS,0.894712,,0.874428,,,,0.876272,,0.8853,
+stackoverflow,BRAK,external compatibility / BERT or pseudo-OOS,0.81341,,0.799727,,0.833333,,0.800971,,0.789,
+stackoverflow,DA-ADB,external compatibility / BERT or pseudo-OOS,0.908978,,0.890584,,,,0.892256,,0.9007,
+stackoverflow,Fixed K=2,same protocol / frozen MiniLM / 5 seeds,0.635295,,0.736818,,0.868867,,0.727588,,0.669267,
+stackoverflow,MOGB partition + s2c boundary,same protocol / frozen MiniLM / 5 seeds,0.792471,,0.617539,,0.503867,,0.633442,,0.740733,
+stackoverflow,MOGB-MiniLM,same protocol / frozen MiniLM / 5 seeds,0.729199,,0.403358,,0.270933,,0.43298,,0.630567,
+stackoverflow,MOGB-official (compatibility),external compatibility / BERT or pseudo-OOS,,,0.375916,,,,0.407243,,0.61488,
+stackoverflow,MOGB-official (strict single-cell),external compatibility / BERT or pseudo-OOS,,,0.671884,,0.515333,,0.683502,,0.751667,
+stackoverflow,Random partition,same protocol / frozen MiniLM / 5 seeds,0.7588,,0.801965,,0.8764,,0.798041,,0.761,
+stackoverflow,Single centroid,same protocol / frozen MiniLM / 5 seeds,0.765496,,0.803227,,0.871467,,0.799796,,0.765767,
+stackoverflow,Trainable K=1,same protocol / Trainable MiniLM / 3 seeds,0.8670909818700716,0.009628993510880545,0.8554844072613187,0.0033284968616471094,0.8392222222222222,0.0038920621973637963,0.856539550407569,0.003713175493914943,0.8582222222222221,0.007768049471559253
+stackoverflow,Trainable K=2,same protocol / Trainable MiniLM / 3 seeds,0.6764813688704443,0.07532518444936462,0.7772291535774679,0.00973981606171208,0.9362222222222222,0.0035642255405212227,0.7680702640586476,0.015447168759475728,0.7156111111111111,0.04252755098277572
+stackoverflow,s2c partition + MOGB boundary,same protocol / frozen MiniLM / 5 seeds,0.733522,,0.626104,,0.544933,,0.63587,,0.683533,

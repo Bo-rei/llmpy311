@@ -1,0 +1,21 @@
+{
+  "schema_version": "s2c.historical_trainable_sota_tradeoff.v1",
+  "stage": "historical_trainable_sota_tradeoff",
+  "protocol": "historical_v19_paper_main__H1_controlled_gate_to_router_to_expert",
+  "objective": "validation_oos_f1_at_external_baseline_max_accuracy_then_known_recall",
+  "datasets": [
+    "clinc150",
+    "stackoverflow",
+    "banking77_oos"
+  ],
+  "kirs": [
+    0.25,
+    0.5,
+    0.75
+  ],
+  "test_used_for_selection": false,
+  "oos_used_for_training": false,
+  "direct_banking_cuda_cells": 9,
+  "summary": "results/analysis/historical_trainable_sota_tradeoff/summary.csv",
+  "report": "docs/analysis/historical_oos_sota_tradeoff.md"
+}

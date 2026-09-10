@@ -27,7 +27,7 @@ plt.rcParams["axes.unicode_minus"] = False
 
 ROOT = Path(__file__).resolve().parents[2]
 ARTIFACTS = ROOT.parent / "artifacts" / "s2c"
-OUT = ROOT / "results/analysis/s2c_baseline_mogb_overview_v1"
+OUT = ROOT / "results/analysis/archive/analysis/s2c_baseline_mogb_overview_v1"
 FIG = ROOT / "figures/s2c_baseline_mogb_overview_v1"
 REPORT = ROOT / "docs/analysis/S2C_BASELINE_MOGB_COMPARISON_OVERVIEW_V1.md"
 
@@ -41,7 +41,7 @@ CORRECTED_MANIFEST = (
 )
 ORIGINAL_RESULTS = ROOT / "results/mogb_exact_reproduction"
 CORRECTED_RESULTS = ROOT / "results/mogb_corrected_subcentroid_loss_v1"
-HISTORICAL = ROOT / "results/analysis/historical_sota_comparison_v1"
+HISTORICAL = ROOT / "results/analysis/archive/analysis/historical_sota_comparison_v1"
 PUBLISHED = {"Accuracy": 88.67, "F1-All": 87.49, "F1-U": 89.71, "F1-K": 87.27}
 
 
@@ -246,10 +246,10 @@ def write_report(
         "",
         "已经生成，但此前分散。主要入口：",
         "",
-        "- `figures/historical_sota_comparison_v1/`：历史 Ours 与七个基线的热力图和逐格优势；",
-        "- `figures/experiment_analysis_master_v1/`：当前 protocol_v2 的方法总览；",
-        "- `figures/mogb_reproduction_gap_analysis_v2/`：MOGB 训练、论文差距和粒球分布；",
-        "- `figures/mogb_operating_point_visuals_v1/`：MOGB Known/OOS 工作点；",
+        "- `figures/archive/analysis/historical_sota_comparison_v1/`：历史 Ours 与七个基线的热力图和逐格优势；",
+        "- `figures/archive/analysis/experiment_analysis_master_v1/`：当前 protocol_v2 的方法总览；",
+        "- `figures/archive/analysis/mogb_reproduction_gap_analysis_v2/`：MOGB 训练、论文差距和粒球分布；",
+        "- `figures/archive/analysis/mogb_operating_point_visuals_v1/`：MOGB Known/OOS 工作点；",
         "- `figures/s2c_baseline_mogb_overview_v1/`：本报告新增的统一对照图。",
         "",
         "## 3. MOGB 当前到底复现了什么",
@@ -295,7 +295,7 @@ def write_report(
         "",
         "## 7. 本次证据文件",
         "",
-        "- `results/analysis/s2c_baseline_mogb_overview_v1/method_comparison.csv`",
+        "- `results/analysis/archive/analysis/s2c_baseline_mogb_overview_v1/method_comparison.csv`",
         "- `loss_contract_deltas.csv`",
         "- `ball_level_comparison.csv`",
         "- `figures/s2c_baseline_mogb_overview_v1/mogb_published_local_corrected_metrics.png`",

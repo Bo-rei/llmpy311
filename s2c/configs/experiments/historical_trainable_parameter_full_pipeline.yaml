@@ -1,0 +1,41 @@
+schema_version: 1
+experiment: historical_trainable_parameter_full_pipeline
+research_question: "在历史论文主线协议下，训练后的 MiniLM Gate 的边界参数能否把真实 full pipeline 的 OOS F1 推近或超过 fulltex.tex 的 Ours？"
+protocol:
+  name: historical_v19_paper_main__H1_controlled_gate_to_router_to_expert
+  data_root: ../../assets/datasets/s2c/prepared/data/multidataset/v19
+  datasets: [clinc150, stackoverflow, banking77_oos]
+  kir: 0.50
+  seeds: [13, 42, 87]
+  train_oos_used: false
+  test_used_for_selection: false
+gate:
+  representation: existing_trainable_last2_minilm_plus_projection_checkpoint
+  encoder: all-MiniLM-L6-v2
+  distance_metric: mahalanobis_diag
+  radius_method: mean_std
+  center_mode: class_centroid_mixture
+  random_state: 42
+  k_values: [1, 2, 3]
+  radius_lambda_values: [0.50, 0.75, 1.00, 1.25, 1.50, 2.00]
+  threshold_values: [0.85, 0.90, 0.95, 1.00, 1.05, 1.10, 1.20]
+  acceptance_modes: [nearest_sphere, normalized_union]
+selection:
+  split: validation
+  objective: oos_f1
+  guard: "Known F1 and Accuracy remain within 1 percentage point of K=1, lambda=1, threshold=1, nearest_sphere baseline"
+  guard_scope: per_seed_and_mean
+  fallback: mean_guard_only_if_no_per_seed_candidate
+  uses_validation_oos_labels: true
+  test_used_for_selection: false
+full_pipeline:
+  downstream: fixed_existing_h1_router_and_expert_checkpoints
+  stages: [gate, router, expert]
+  candidate_evaluation: derived_from_fixed_downstream_replay
+  selected_evaluation: direct_pipeline_and_derived_replay
+  raw_predictions_written: false
+paper_reference:
+  source: fulltex.tex
+  kir: 0.50
+  ours_oos_f1: {clinc150: 91.96, stackoverflow: 89.71, banking77_oos: 88.23}
+  note: "The paper table labels the last dataset Banking77; this historical H1 data key is banking77_oos."

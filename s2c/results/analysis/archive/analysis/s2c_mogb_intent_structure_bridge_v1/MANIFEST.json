@@ -1,0 +1,30 @@
+{
+  "stage": "ANALYSIS_S2C_MOGB_INTENT_STRUCTURE_BRIDGE_V1",
+  "protocol_version": "protocol_v2_textoir_v1",
+  "status": "complete",
+  "analysis_only": true,
+  "test_labels_used_for_posthoc_attribution": true,
+  "intent_seed_rows": 1850,
+  "cell_rows": 45,
+  "intent_summary_rows": 663,
+  "correlation_rows": 90,
+  "source_sha256": {
+    "results/analysis/archive/analysis/cross_dataset_error_attribution_v1/intent_error_attribution_per_seed.csv": "aef92a39f47fde42d77a7b85c0308f97af20554f1a62d47f5a4684dc7a8ccf9c",
+    "results/analysis/archive/analysis/mogb_ball_risk_attribution_v1/per_ball.csv": "49a0b561ca5f8e98fdb236f51a5e1c3fdc07fda886e402823c78579344599357"
+  },
+  "output_sha256": {
+    "results/analysis/archive/analysis/s2c_mogb_intent_structure_bridge_v1/intent_seed_bridge.csv": "8942817c7eadd4650d691d648d2eab88ef44b96898264283df9b3a94db1ad69b",
+    "results/analysis/archive/analysis/s2c_mogb_intent_structure_bridge_v1/ball_count_group_summary.csv": "2eb9dbad6e1f8a981409d87cc7fd6d67f0ee987eef9b2a7970483a08052e4465",
+    "results/analysis/archive/analysis/s2c_mogb_intent_structure_bridge_v1/cell_tradeoff_summary.csv": "23de3bfbd39861ed57e061439133618180a0c024cf74409fec47acd2dc127d2f",
+    "results/analysis/archive/analysis/s2c_mogb_intent_structure_bridge_v1/dataset_kir_summary.csv": "ef86ae87d299a34c1b8c1447daaf1c0ef859c686ea8b1bacf53c907db1ca9cb6",
+    "results/analysis/archive/analysis/s2c_mogb_intent_structure_bridge_v1/intent_summary.csv": "20c6d728d695292b46a0651311956751adaf48c9cabc648365ee840c591f48c5",
+    "results/analysis/archive/analysis/s2c_mogb_intent_structure_bridge_v1/recovery_concentration.csv": "913e6d77e20054df26c63ad933d4dbd10126baecb67216fafbe0faf6a623a63a",
+    "results/analysis/archive/analysis/s2c_mogb_intent_structure_bridge_v1/structure_correlations.csv": "578d6abef4c7348b219665696829051699635c7b880a0fe513871728a09dc32e",
+    "figures/archive/analysis/s2c_mogb_intent_structure_bridge_v1/intent_known_recovery_distribution.png": "ef4b26b09ba49dffaacf4dad682e97be32e8b7c530c3c9de056b7376130cbf45",
+    "figures/archive/analysis/s2c_mogb_intent_structure_bridge_v1/ball_count_recovery_tradeoff.png": "b04b0fea293d9f9d95f206e1fd0a4dfd45108b8b773c220bd232cc71e3144e4d",
+    "figures/archive/analysis/s2c_mogb_intent_structure_bridge_v1/ball_count_vs_recovery.png": "55c47fb01c6dcfdd7893564fbf9f5adfa08edfad8dcc57258b202f0b7fa7667f",
+    "figures/archive/analysis/s2c_mogb_intent_structure_bridge_v1/known_recovery_concentration.png": "d6a51ac7c6706f6cd1d9ae6262593e22cef38a3ab24439a1a3a24b9ebcefe256",
+    "figures/archive/analysis/s2c_mogb_intent_structure_bridge_v1/top_intent_recovery_kir050.png": "db96d4a210e586d4eb372cc0ae0dd2a26aca2dae42c4d77a79c2d4ba3a33f23f",
+    "figures/archive/analysis/s2c_mogb_intent_structure_bridge_v1/known_recovery_vs_oos_cost.png": "3a42cc0101d270c70a153890d3562b247faf33f215cf0e126a0fbe8d10f32578"
+  }
+}

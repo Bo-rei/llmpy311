@@ -14,12 +14,17 @@ from protocol_v2.evaluation.metrics import compute_binary_oos_metrics
 from protocol_v2.gate.multi_sphere_oos_detector import MultiSphereOOSDetector
 
 
-def fit_k1_detector(train: np.ndarray, rows: Sequence[Mapping[str, Any]], distance: str) -> MultiSphereOOSDetector:
+def fit_k1_detector(
+    train: np.ndarray,
+    rows: Sequence[Mapping[str, Any]],
+    distance: str,
+    radius_lambda: float = 1.0,
+) -> MultiSphereOOSDetector:
     detector = MultiSphereOOSDetector(
         center_mode="class_centroid_mixture",
         subcenters_per_intent=1,
         radius_method="mean_std",
-        radius_lambda=1.0,
+        radius_lambda=float(radius_lambda),
         distance_metric=distance,
         covariance_eps=1e-6,
         l2_normalize=True,
@@ -59,9 +64,15 @@ def evaluate_open(
     output = detector.predict_with_scores(np.asarray(embeddings))
     labels = np.asarray([int(row["label"]) for row in rows], dtype=np.int64)
     metrics = compute_binary_oos_metrics(labels, output["score"], threshold)
+    # predict_with_scores uses the detector's serialized threshold. The
+    # evaluator also accepts an explicit threshold, so use that same decision
+    # for the multiclass/open-set fields below; otherwise f1_u/f1_k silently
+    # remain tied to the detector default when threshold != 1.
+    thresholded_output = dict(output)
+    thresholded_output["pred"] = (np.asarray(output["score"]) > float(threshold)).astype(np.int64)
     known_intents = sorted({str(row["intent"]) for row in rows if int(row["label"]) == 0})
     truth = [str(row["intent"]) if int(row["label"]) == 0 else "__oos__" for row in rows]
-    predicted = [_open_label(detector, output, i) for i in range(len(rows))]
+    predicted = [_open_label(detector, thresholded_output, i) for i in range(len(rows))]
     all_labels = [*known_intents, "__oos__"]
     metrics.update({
         "f1_all": float(f1_score(truth, predicted, labels=all_labels, average="macro", zero_division=0)),
@@ -76,7 +87,7 @@ def evaluate_open(
             "sample_id": row["sample_id"],
             "gold_intent": row["intent"],
             "gold_is_oos": int(row["label"]),
-            "predicted_is_oos": int(output["pred"][index]),
+            "predicted_is_oos": int(thresholded_output["pred"][index]),
             "predicted_intent": predicted[index],
             "nearest_cluster": int(output["nearest_cluster"][index]),
             "distance": float(output["distance"][index]),

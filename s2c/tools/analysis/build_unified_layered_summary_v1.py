@@ -152,7 +152,7 @@ def main() -> None:
         "- `current_protocol`：protocol_v2_textoir_v1 下的 Trainable/Frozen/MOGB fair rows。\n"
         "- `external_compatibility`：ADB、DA-ADB、BRAK、MOGB strict、DCLOOS reduced 等兼容性行，"
         "表示、监督或 seed 合同不同。\n"
-        "- `fulltex.tex` 历史 Cascade 不在 CSV 中，需参见 `docs/analysis/MINILM_TRAINABLE_VS_FULLTEX_AND_BASELINES_V1.md`。\n",
+        "- `fulltex.tex` 历史 Cascade 不在 CSV 中，需参见 `docs/archive/analysis/MINILM_TRAINABLE_VS_FULLTEX_AND_BASELINES_V1.md`。\n",
         encoding="utf-8",
     )
     print(f"wrote {len(out)} rows to {OUT / 'all_layers.csv'}")

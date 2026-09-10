@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "tool": "build_external_single_cell_comparison_v1.py",
+  "external_root": "artifacts/s2c/external/adb_protocol_v2_probe/stackoverflow",
+  "external_rows": 9,
+  "fair_rows": 35,
+  "valid_rows": 38,
+  "invalid_rows": 6,
+  "invalid_methods": [
+    "ADB",
+    "DA-ADB"
+  ],
+  "metric_source": "y_true.npy/y_pred.npy; external results.csv is not trusted when inconsistent",
+  "auroc_and_aupr": "not available from hard predictions; recorded as NaN",
+  "paired_effect_rows": 30
+}

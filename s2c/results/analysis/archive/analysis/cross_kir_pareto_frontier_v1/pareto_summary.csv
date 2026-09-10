@@ -1,0 +1,10 @@
+dataset,kir,pareto_methods,pareto_count
+banking77,0.25,Frozen K=2|MOGB-MiniLM|MOGB part. + S2C bound.|Random K=2|Frozen K=1|Trainable K=1,6
+banking77,0.5,Frozen K=2|MOGB-MiniLM|MOGB part. + S2C bound.|S2C part. + MOGB bound.|Random K=2|Frozen K=1|Trainable K=1,7
+banking77,0.75,Frozen K=2|MOGB-MiniLM|MOGB part. + S2C bound.|S2C part. + MOGB bound.|Random K=2|Frozen K=1|Trainable K=1,7
+clinc150,0.25,Frozen K=2|MOGB-MiniLM|MOGB part. + S2C bound.|S2C part. + MOGB bound.|Random K=2|Frozen K=1|Trainable K=1,7
+clinc150,0.5,Frozen K=2|MOGB-MiniLM|MOGB part. + S2C bound.|S2C part. + MOGB bound.|Random K=2|Frozen K=1|Trainable K=1,7
+clinc150,0.75,Frozen K=2|MOGB-MiniLM|MOGB part. + S2C bound.|S2C part. + MOGB bound.|Random K=2|Frozen K=1|Trainable K=1,7
+stackoverflow,0.25,MOGB-MiniLM|MOGB part. + S2C bound.|Random K=2|Frozen K=1|Trainable K=1,5
+stackoverflow,0.5,MOGB-MiniLM|MOGB part. + S2C bound.|Random K=2|Frozen K=1|Trainable K=1,5
+stackoverflow,0.75,MOGB-MiniLM|MOGB part. + S2C bound.|Random K=2|Frozen K=1|Trainable K=1,5

@@ -1,0 +1,2 @@
+dataset,kir,seed,method,oos_f1,f1_known,f1_all,accuracy,known_recall,false_acceptance_rate,false_rejection_rate
+stackoverflow,0.5,42,DA-ADB,0.7082344967807523,0.7215058006958159,0.7202993185217192,0.7015,0.7293333333333333,0.30333333333333334,0.27066666666666667

@@ -1,0 +1,10 @@
+dataset,kir,method,f1_k_percent,oos_f1_percent,accuracy_percent,source
+clinc150,0.25,fulltex_historical_ours,71.75,95.01,90.45,s2c/fulltex.tex:main_results_all
+stackoverflow,0.25,fulltex_historical_ours,73.61,94.47,91.04,s2c/fulltex.tex:main_results_all
+banking77,0.25,fulltex_historical_ours,75.83,93.99,89.07,s2c/fulltex.tex:main_results_all
+clinc150,0.5,fulltex_historical_ours,79.95,91.96,86.78,s2c/fulltex.tex:main_results_all
+stackoverflow,0.5,fulltex_historical_ours,75.48,89.71,85.54,s2c/fulltex.tex:main_results_all
+banking77,0.5,fulltex_historical_ours,74.9,88.23,78.98,s2c/fulltex.tex:main_results_all
+clinc150,0.75,fulltex_historical_ours,66.32,87.1,79.83,s2c/fulltex.tex:main_results_all
+stackoverflow,0.75,fulltex_historical_ours,80.18,75.57,81.32,s2c/fulltex.tex:main_results_all
+banking77,0.75,fulltex_historical_ours,70.28,86.49,77.84,s2c/fulltex.tex:main_results_all

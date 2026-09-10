@@ -1,0 +1,43 @@
+{
+  "analysis_id": "trainable_detector_mechanism_v1",
+  "bootstrap_repetitions": 10000,
+  "bootstrap_seed": 20260808,
+  "contract": {
+    "native_detectors": "same Trainable MiniLM representation; Known-only conformal calibration",
+    "oos_used_for_training": false,
+    "test_used_for_selection": false,
+    "trainable_gate": "Known-only Trainable MiniLM K=1 Gate"
+  },
+  "datasets": [
+    "clinc150",
+    "banking77",
+    "stackoverflow"
+  ],
+  "gate_rows": 9,
+  "gate_source": "/home/bo/bo01/llmpy311/s2c/results/analysis/cross_protocol_tradeoff_v1/per_seed.csv",
+  "gate_source_sha256": "31ccdd433b38b86ec92b0cd81b460114a7fe1e7f12b94d4a5d031aab7d703145",
+  "kir": 0.5,
+  "native_detectors": [
+    "msp",
+    "energy",
+    "knn",
+    "lof"
+  ],
+  "native_rows": 36,
+  "native_source": "/home/bo/bo01/llmpy311/s2c/results/analysis/archive/analysis/native_baselines_trainable_v1/trainable_native_per_seed.csv",
+  "native_source_sha256": "2ec70364d20b04772e535ae129d42cdf810225f825c3e5aa1f6205736bcdb00d",
+  "outputs": [
+    "paired_effects_per_seed.csv",
+    "paired_effects_summary.csv",
+    "performance_summary.csv",
+    "trainable_detector_pareto.png",
+    "trainable_detector_paired_effects.png",
+    "trainable_detector_error_balance.png"
+  ],
+  "protocol_version": "protocol_v2_textoir_v1",
+  "seeds": [
+    13,
+    42,
+    87
+  ]
+}

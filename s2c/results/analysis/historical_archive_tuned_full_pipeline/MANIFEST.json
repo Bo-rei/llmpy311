@@ -1,0 +1,21 @@
+{
+  "schema_version": "s2c.historical_archive_tuned_full_pipeline.summary.v1",
+  "protocol": "historical_v19_archive_development_tuning",
+  "selection_split": "validation_with_oos_labels",
+  "known_accuracy_guard": "validation known_f1 and accuracy within 1 pp of method baseline",
+  "datasets": [
+    "clinc150",
+    "stackoverflow",
+    "banking77"
+  ],
+  "seed": 42,
+  "kir": 0.5,
+  "selected_method": "partial_k1",
+  "test_used_for_selection": false,
+  "oos_used_for_training": false,
+  "gate_replay_max_abs_delta": 0.0,
+  "selected_rows": 3,
+  "candidate_rows": 4,
+  "paper_reference": "fulltex.tex KIR=.50 Ours row",
+  "note": "Banking77 is standard archive data; paper historical Banking row is not a byte-identical task and is reported as a reference only."
+}

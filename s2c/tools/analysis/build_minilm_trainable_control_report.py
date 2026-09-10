@@ -171,7 +171,7 @@ def report(summary: pd.DataFrame, delta: pd.DataFrame) -> str:
         "",
         "- `results/diagnostics/minilm_trainable_control_v1/summary.csv`",
         "- `results/diagnostics/minilm_trainable_control_v1/paired_deltas.csv`",
-        "- `figures/active_experiment_dashboard_v1/trainable_cross_dataset.png`",
+        "- `figures/archive/analysis/active_experiment_dashboard_v1/trainable_cross_dataset.png`",
         "- `artifacts/s2c/runs/protocol_v2_textoir_v1/minilm_trainable_control_v1/`",
         "",
     ]

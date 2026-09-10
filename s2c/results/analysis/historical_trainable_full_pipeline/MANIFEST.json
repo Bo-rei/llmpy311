@@ -1,0 +1,23 @@
+{
+  "schema_version": "s2c.h1_trainable_full_pipeline.v1",
+  "stage": "historical_trainable_full_pipeline_v1",
+  "protocol": "historical_v19_paper_main__H1_controlled_gate_to_router_to_expert",
+  "datasets": [
+    "clinc150",
+    "stackoverflow",
+    "banking77_oos"
+  ],
+  "seeds": [
+    13,
+    42,
+    87
+  ],
+  "device": "cuda",
+  "completed_units": 9,
+  "downstream_artifact_root": "/home/bo/bo01/llmpy311/artifacts/s2c/outputs/experiments/cascade_full/gpu_kir50",
+  "h1_trainable_artifact_root": "/home/bo/bo01/llmpy311/artifacts/s2c/runs/historical_protocol_v2/minilm_k1",
+  "test_used_for_selection": false,
+  "oos_used_for_training": false,
+  "raw_predictions_written": false,
+  "elapsed_seconds": 479.5729947090149
+}

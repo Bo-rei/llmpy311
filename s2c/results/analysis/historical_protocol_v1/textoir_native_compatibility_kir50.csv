@@ -1,0 +1,11 @@
+dataset,method,known_cls_ratio,seeds,oos_f1_mean,oos_f1_std,metric_source,status,notes
+oos,MSP,0.50,0|1|2,0.616799380,0.015370148,imported.open_oos_f1,complete,TextOIR native compatibility; three-seed mean with population standard deviation
+oos,DOC,0.50,0|1|2,0.883644209,0.002234733,imported.open_oos_f1,complete,TextOIR native compatibility; three-seed mean with population standard deviation
+oos,ADB,0.50,0|1|2,0.892207226,0.007575346,imported.open_oos_f1,complete,TextOIR native compatibility; three-seed mean with population standard deviation
+banking,MSP,0.50,0|1|2,0.446685120,0.014221220,imported.open_oos_f1,complete,TextOIR native compatibility; three-seed mean with population standard deviation
+banking,DOC,0.50,0|1|2,0.725739096,0.016615157,imported.open_oos_f1,complete,TextOIR native compatibility; three-seed mean with population standard deviation
+banking,ADB,0.50,0|1|2,0.786510606,0.001404553,imported.open_oos_f1,complete,TextOIR native compatibility; three-seed mean with population standard deviation
+stackoverflow,MSP,0.50,0|1|2,0.334869436,0.043813768,imported.open_oos_f1,complete,TextOIR native compatibility; three-seed mean with population standard deviation
+stackoverflow,DOC,0.50,0|1|2,0.716740499,0.041448046,imported.open_oos_f1,complete,TextOIR native compatibility; three-seed mean with population standard deviation
+stackoverflow,ADB,0.50,0|1|2,0.869826474,0.019084713,imported.open_oos_f1,complete,TextOIR native compatibility; three-seed mean with population standard deviation
+stackoverflow,DA-ADB,0.50,42|87|100,0.724751667,0.050984555,native_results.csv.F1-open,complete,Current compatibility runtime; three-seed mean with population standard deviation

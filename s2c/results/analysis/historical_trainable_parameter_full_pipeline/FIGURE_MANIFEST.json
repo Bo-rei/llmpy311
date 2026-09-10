@@ -1,0 +1,31 @@
+{
+  "schema_version": "s2c.historical_trainable_parameter_full_pipeline.figures.v1",
+  "backend": "python_matplotlib",
+  "result_root": "/home/bo/bo01/llmpy311/s2c/results/analysis/historical_trainable_parameter_full_pipeline",
+  "figure_root": "/home/bo/bo01/llmpy311/s2c/figures/historical_trainable_parameter_full_pipeline",
+  "figures": [
+    "figures/historical_trainable_parameter_full_pipeline/validation_parameter_frontier.png",
+    "figures/historical_trainable_parameter_full_pipeline/validation_parameter_frontier.tiff",
+    "figures/historical_trainable_parameter_full_pipeline/validation_parameter_frontier.pdf",
+    "figures/historical_trainable_parameter_full_pipeline/validation_parameter_frontier.svg",
+    "figures/historical_trainable_parameter_full_pipeline/test_oos_f1_vs_paper_ours.png",
+    "figures/historical_trainable_parameter_full_pipeline/test_oos_f1_vs_paper_ours.tiff",
+    "figures/historical_trainable_parameter_full_pipeline/test_oos_f1_vs_paper_ours.pdf",
+    "figures/historical_trainable_parameter_full_pipeline/test_oos_f1_vs_paper_ours.svg",
+    "figures/historical_trainable_parameter_full_pipeline/selected_full_pipeline_error_budget.png",
+    "figures/historical_trainable_parameter_full_pipeline/selected_full_pipeline_error_budget.tiff",
+    "figures/historical_trainable_parameter_full_pipeline/selected_full_pipeline_error_budget.pdf",
+    "figures/historical_trainable_parameter_full_pipeline/selected_full_pipeline_error_budget.svg"
+  ],
+  "figure_stems": [
+    "validation_parameter_frontier",
+    "test_oos_f1_vs_paper_ours",
+    "selected_full_pipeline_error_budget"
+  ],
+  "source_data": [
+    "results/analysis/historical_trainable_parameter_full_pipeline/validation_aggregate.csv",
+    "results/analysis/historical_trainable_parameter_full_pipeline/full_pipeline_candidate_summary.csv",
+    "results/analysis/historical_trainable_parameter_full_pipeline/full_pipeline_selected_summary.csv"
+  ],
+  "exclusions": "None; all 252 candidates per dataset are retained in the source table."
+}

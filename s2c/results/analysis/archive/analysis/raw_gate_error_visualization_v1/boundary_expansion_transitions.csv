@@ -1,0 +1,13 @@
+seed,transition,count,denominator,rate
+13,known_recovered_by_k2,298,3000,0.049666666666666665
+13,known_lost_by_k2,5,3000,0.0008333333333333334
+13,oos_newly_accepted_by_k2,1169,3000,0.19483333333333333
+13,oos_newly_rejected_by_k2,2,3000,0.0003333333333333333
+42,known_recovered_by_k2,309,3000,0.0515
+42,known_lost_by_k2,12,3000,0.002
+42,oos_newly_accepted_by_k2,753,3000,0.1255
+42,oos_newly_rejected_by_k2,2,3000,0.0003333333333333333
+87,known_recovered_by_k2,285,3000,0.0475
+87,known_lost_by_k2,2,3000,0.0003333333333333333
+87,oos_newly_accepted_by_k2,1154,3000,0.19233333333333333
+87,oos_newly_rejected_by_k2,2,3000,0.0003333333333333333

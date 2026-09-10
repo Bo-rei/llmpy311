@@ -1,0 +1,4 @@
+method,contract,accuracy,f1_all,f1_u,f1_k,known_recall,oos_precision,oos_recall,known_to_oos,oos_to_known,best_epoch,best_dev_accuracy,ball_count,checkpoint_sha256
+MOGB published reference,paper_reference_not_same_split,88.67,87.49,89.71,87.27,,,,,,,,,not_available
+MOGB local official logic,official_logic_modern_compatibility,75.1667,68.3502,79.9676,67.1884,51.5333,67.1652,98.8,1449.0,36.0,28.0,91.6,28.0,e43553d9d52a75277726a5d8256b9cca93df43dc1048cd694b9e8e26679137f0
+MOGB raw-distance diagnostic,adapted_loss_diagnostic_not_official,77.25,72.6392,80.9571,71.8074,59.2,70.3667,95.3,1204.0,141.0,51.0,92.1,33.0,127bd347fe9912f81b771630ae8f5d70bd91348567fb8bfd3b2c418da68dfc22

@@ -1,0 +1,7 @@
+dataset,seed,gate,stage,count,rate
+banking77_oos,42,frozen_k1,correct_oos_rejection,2424,0.5941176470588235
+banking77_oos,42,frozen_k1,oos_accepted_by_gate,656,0.1607843137254902
+banking77_oos,42,frozen_k1,known_rejected_by_gate,123,0.030147058823529412
+banking77_oos,42,frozen_k1,known_wrong_domain,0,0.0
+banking77_oos,42,frozen_k1,known_wrong_expert,102,0.025
+banking77_oos,42,frozen_k1,correct_known_prediction,775,0.18995098039215685

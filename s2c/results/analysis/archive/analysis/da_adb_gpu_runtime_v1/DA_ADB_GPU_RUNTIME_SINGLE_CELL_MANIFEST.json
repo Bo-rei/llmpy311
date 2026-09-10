@@ -1,0 +1,122 @@
+{
+  "contract": "BERT/TextOIR external compatibility",
+  "dataset": "stackoverflow",
+  "environment": {
+    "cuda_allocation_verified": true,
+    "cuda_device_count": 1,
+    "distribution_versions": {
+      "easydict": "1.13",
+      "numpy": "2.4.6",
+      "pandas": "3.0.5",
+      "scikit-learn": "1.9.0",
+      "scipy": "1.17.1",
+      "torch": "2.9.1+cu128",
+      "transformers": "4.46.3"
+    },
+    "package_files": {
+      "easydict": "/tmp/s2c_gpu_runtime_20260810/lib/python3.11/site-packages/easydict/__init__.py",
+      "numpy": "/tmp/s2c_gpu_runtime_20260810/lib/python3.11/site-packages/numpy/__init__.py",
+      "pandas": "/tmp/s2c_gpu_runtime_20260810/lib/python3.11/site-packages/pandas/__init__.py",
+      "scikit-learn": "/tmp/s2c_gpu_runtime_20260810/lib/python3.11/site-packages/sklearn/__init__.py",
+      "scipy": "/tmp/s2c_gpu_runtime_20260810/lib/python3.11/site-packages/scipy/__init__.py",
+      "torch": "/tmp/s2c_gpu_runtime_20260810/lib/python3.11/site-packages/torch/__init__.py",
+      "transformers": "/tmp/s2c_gpu_runtime_20260810/lib/python3.11/site-packages/transformers/__init__.py"
+    },
+    "packages": {
+      "easydict": "1.13",
+      "numpy": "2.4.6",
+      "pandas": "3.0.5",
+      "scikit-learn": "1.9.0",
+      "scipy": "1.17.1",
+      "torch": "2.9.1+cu128",
+      "transformers": "4.46.3"
+    },
+    "python_executable": "/tmp/s2c_gpu_runtime_20260810/bin/python",
+    "python_version": "3.11.13 (main, Jun  5 2025, 13:12:00) [GCC 11.2.0]",
+    "selected_gpu_capability": [
+      12,
+      0
+    ],
+    "selected_gpu_id": 0,
+    "selected_gpu_name": "NVIDIA GeForce RTX 5070",
+    "torch_compiled_arch_list": [
+      "sm_70",
+      "sm_75",
+      "sm_80",
+      "sm_86",
+      "sm_90",
+      "sm_100",
+      "sm_120"
+    ],
+    "torch_cuda_version": "12.8"
+  },
+  "kir": 0.5,
+  "known_labels": [
+    "ajax",
+    "svn",
+    "sharepoint",
+    "apache",
+    "linq",
+    "excel",
+    "oracle",
+    "cocoa",
+    "visual-studio",
+    "spring"
+  ],
+  "method": "DA-ADB",
+  "metrics": {
+    "accuracy": 0.7015,
+    "f1_all": 0.7202993185217192,
+    "f1_known": 0.7215058006958159,
+    "false_acceptance_rate": 0.30333333333333334,
+    "false_rejection_rate": 0.27066666666666667,
+    "known_recall": 0.7293333333333333,
+    "oos_f1": 0.7082344967807523
+  },
+  "prediction_audit": {
+    "all_class_collapse": false,
+    "finite": true,
+    "n_samples": 6000,
+    "predicted_labels": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10
+    ],
+    "shape_equal": true,
+    "true_labels": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10
+    ],
+    "y_pred_sha256": "743cdea9b4d68d34ca21a2df691c9895c5e9a9de25b0f055bd747b096831705d",
+    "y_true_sha256": "ebc4a64b14beaafaa06004aaccada70ab4b334b22a9e41561b69bd9149e01b57"
+  },
+  "protocol_version": "protocol_v2_textoir_v1",
+  "ranking_policy": "external_contract_only; not merged with MiniLM fair ranking",
+  "run_manifest": "/home/bo/bo01/llmpy311/artifacts/s2c/external/da_adb_gpu_runtime_v1/stackoverflow/DA-ADB/kir_0.50/seed_42/run_manifest.json",
+  "run_manifest_sha256": "1a605f236645ce02da6a824996cdbfb27bbc5bca478594da083a2523da2cdaa6",
+  "schema_version": 1,
+  "seed": 42,
+  "split_sha256": {
+    "dev": "067d8b39d448f101b5078e95f4d5794b87021b1fd7513d1c37529dbe340a7f6b",
+    "test": "a488d555cf47920ad8a41ffa5df37dcbf4cb92862bbcbe6f907191a7a6e94c12",
+    "train": "c6258605b94ae0fd2bda09bfd8aefa5f60086306dc1993ecbb97eed19b4c23b0"
+  },
+  "status": "valid_external_cell"
+}

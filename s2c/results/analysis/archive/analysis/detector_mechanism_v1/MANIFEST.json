@@ -1,0 +1,54 @@
+{
+  "analysis_only": true,
+  "builder_sha256": "4321c09644e104c239af48c57e13c250d125682e949675705e4cd8144d87551b",
+  "figures": [
+    "figures/archive/analysis/detector_mechanism_v1/native_detector_comparison.png",
+    "figures/archive/analysis/detector_mechanism_v1/native_detector_frontier.png",
+    "figures/archive/analysis/detector_mechanism_v1/representation_vs_detector_gain.png",
+    "figures/archive/analysis/detector_mechanism_v1/gate_vs_native_oos_f1_ci.png",
+    "figures/archive/analysis/detector_mechanism_v1/trainable_vs_frozen_native_oos_f1_ci.png"
+  ],
+  "notes": [
+    "Trainable and Frozen native detector rows use the same three-seed KIR=.50 scope.",
+    "Thresholds were fixed by the registered Known-calibration conformal contract in the source experiment.",
+    "No test result is used for selection here; the outputs are post-hoc analysis only.",
+    "Paired confidence intervals are copied from the registered 10,000-resample bootstrap tables; no new resampling is performed.",
+    "Gate-vs-native source direction is inverted so positive values mean Gate is better; wins/losses are inverted accordingly."
+  ],
+  "outputs": [
+    "results/analysis/archive/analysis/detector_mechanism_v1/detector_paired_ci.csv",
+    "results/analysis/archive/analysis/detector_mechanism_v1/detector_summary.csv",
+    "results/analysis/archive/analysis/detector_mechanism_v1/gate_vs_native_paired.csv",
+    "results/analysis/archive/analysis/detector_mechanism_v1/representation_gain_summary.csv",
+    "results/analysis/archive/analysis/detector_mechanism_v1/representation_paired_ci.csv"
+  ],
+  "protocol_version": "protocol_v2_textoir_v1",
+  "rows": {
+    "detector_paired_ci": 48,
+    "detector_summary": 27,
+    "gate_vs_native_paired": 36,
+    "representation_gain_summary": 12,
+    "representation_paired_ci": 48
+  },
+  "schema": 2,
+  "scope": {
+    "datasets": [
+      "clinc150",
+      "banking77",
+      "stackoverflow"
+    ],
+    "kir": 0.5,
+    "seeds": [
+      13,
+      42,
+      87
+    ]
+  },
+  "source_files": {
+    "results/analysis/archive/analysis/native_baselines_trainable_v1/frozen_native_per_seed.csv": "13fe84ae4098f47d126ff4e02f7a592f0627c0e0a58fe0e9feff83c1082f6336",
+    "results/analysis/archive/analysis/native_baselines_trainable_v1/trainable_gate_per_seed.csv": "1dd2b79607c5d8645150ecdd81f1cac29510ad859b6e1a89fc8a58973c864ba4",
+    "results/analysis/archive/analysis/native_baselines_trainable_v1/trainable_native_per_seed.csv": "2ec70364d20b04772e535ae129d42cdf810225f825c3e5aa1f6205736bcdb00d",
+    "results/analysis/archive/analysis/native_baselines_trainable_v1/trainable_native_vs_gate_paired.csv": "c95bee588ecbfb18a622c59a162c6cebca7d2725272722044234f2868c1b5579",
+    "results/analysis/archive/analysis/native_baselines_trainable_v1/trainable_vs_frozen_native_paired.csv": "dedf43ae7fb6f5b2bdbb81ec418124d083c6ac1755ee16fd151fc9dd2b2a5d65"
+  }
+}

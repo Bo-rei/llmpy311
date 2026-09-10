@@ -1,0 +1,43 @@
+{
+  "completed_cells": 45,
+  "elapsed_seconds": 0.933765172958374,
+  "equivalence_passed": 45,
+  "experiment_id": "mogb_known_calibration_attribution_v1",
+  "loss_contract_units": 270,
+  "loss_variants": [
+    "official_l1",
+    "raw_tau_0.05",
+    "raw_tau_0.10",
+    "raw_tau_0.20",
+    "raw_tau_0.50",
+    "raw_tau_1.00"
+  ],
+  "output_hashes": {
+    "class_count_probability_bound.csv": "a6b741e6c3e24515214a80c02b76686e6d82eaf34ac62e5f76b65b5472a63399",
+    "equivalence.csv": "5cbbd67dfb34980d0241946d0d1cc2fe25727f5d93cc9c35c994216ddc7f938b",
+    "loss_contract_per_cell.csv": "a334fc5bfff9c206c527eb5d0a5302fa929c66837171e4d2b7fcfad8267eb29a",
+    "loss_contract_summary.csv": "91734e32adcb1ab5c137b8fe416e6948cfbd9a9456d4ecfa373069ebaef5a2ac",
+    "missing_selected_classes.csv": "6967d6348334ef54811a43c1ad00bf0d655ded908ea73a3da7464226481f3b81",
+    "trainable_vs_calibrated_mogb.csv": "bde99438babf399d66dc104c46c328925fa05c10c42557d7c8e65c9daa97ba33",
+    "workpoint_per_seed.csv": "2f621a264ed8bcd1f0d41d9f2f05f8eaa9d2219c9812de74b8c2df4ae0e02370",
+    "workpoint_summary.csv": "b9eaf213ce59b72b6c136c655babb3c88f972110a6de427c64abe4b4208debac"
+  },
+  "planned_cells": 45,
+  "protocol_version": "protocol_v2_textoir_v1",
+  "script_sha256": "a6cfa505fe6b06dd8aa980c4a0ae83d18496817d839d3f5d60d14ed2423f049e",
+  "selection_split": "calibration_known",
+  "source_hashes": {
+    "mogb_adapter": "cb5baf42b40b818c773256af0e4b5ae2485c135f22185110e8d72c094cab98e6",
+    "official_loss": "140fb4d8aa640c18b1c9f5a00950ce837fb2c00f673790a547aa0467ee8adbd1",
+    "trainable_comparison": "c32a327d1b42e74813da3c081c2c21c2a09af6ac1b60e08c19e2f0428117688d"
+  },
+  "status": "complete",
+  "target_coverages": [
+    0.8,
+    0.85,
+    0.9,
+    0.95
+  ],
+  "test_used_for_selection": false,
+  "workpoint_units": 225
+}

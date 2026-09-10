@@ -1,0 +1,181 @@
+dataset,kir,method,method_label,metric,n_pairs,mean_delta,median_delta,ci95_low,ci95_high,wins,ties,losses,reference,seed
+banking77,0.25,fixed_k2,Fixed K=2,oos_f1,5,0.0060547072638130525,0.003910747785912383,-0.012899428455874084,0.024572049817731135,3,0,2,single_centroid,paired same split/seed
+banking77,0.25,fixed_k2,Fixed K=2,f1_all,5,0.01814304773827604,0.023837902903219077,-0.0051784366054679065,0.03921479805375461,4,0,1,single_centroid,paired same split/seed
+banking77,0.25,fixed_k2,Fixed K=2,id_recall,5,-0.019999999999999997,-0.014473684210526305,-0.0381578947368421,-0.0018421052631578893,1,0,4,single_centroid,paired same split/seed
+banking77,0.25,fixed_k2,Fixed K=2,false_accept_rate,5,-0.01508620689655174,-0.006465517241379309,-0.04543103448275866,0.015258620689655184,3,0,2,single_centroid,paired same split/seed
+banking77,0.5,fixed_k2,Fixed K=2,oos_f1,5,0.030335552667536292,0.03143270513116858,0.015276061945232988,0.04488534250211884,5,0,0,single_centroid,paired same split/seed
+banking77,0.5,fixed_k2,Fixed K=2,f1_all,5,0.016499892341202395,0.015962558515165037,0.00897277209280225,0.024032361526538915,5,0,0,single_centroid,paired same split/seed
+banking77,0.5,fixed_k2,Fixed K=2,id_recall,5,-0.02460526315789473,-0.019078947368420973,-0.03565789473684213,-0.013552631578947327,0,0,5,single_centroid,paired same split/seed
+banking77,0.5,fixed_k2,Fixed K=2,false_accept_rate,5,-0.05794871794871794,-0.06474358974358974,-0.08371794871794869,-0.03205128205128204,5,0,0,single_centroid,paired same split/seed
+banking77,0.75,fixed_k2,Fixed K=2,oos_f1,5,0.056502442890412716,0.055668734556542865,0.042950784591337256,0.0701883313815174,5,0,0,single_centroid,paired same split/seed
+banking77,0.75,fixed_k2,Fixed K=2,f1_all,5,0.020510657089751416,0.01910437675950405,0.016179687477378656,0.025266590450215353,5,0,0,single_centroid,paired same split/seed
+banking77,0.75,fixed_k2,Fixed K=2,id_recall,5,-0.03275862068965516,-0.03491379310344833,-0.03732758620689654,-0.028189655172413786,0,0,5,single_centroid,paired same split/seed
+banking77,0.75,fixed_k2,Fixed K=2,false_accept_rate,5,-0.11921052631578948,-0.125,-0.13552631578947372,-0.1013157894736842,5,0,0,single_centroid,paired same split/seed
+clinc150,0.25,fixed_k2,Fixed K=2,oos_f1,5,0.0026461393592261294,0.002098994524965203,0.000935126433416289,0.004846074149697221,4,0,1,single_centroid,paired same split/seed
+clinc150,0.25,fixed_k2,Fixed K=2,f1_all,5,-0.00425524901491392,-0.005110559993234731,-0.010336289936617704,0.0020053775754174776,1,0,4,single_centroid,paired same split/seed
+clinc150,0.25,fixed_k2,Fixed K=2,id_recall,5,-0.035964912280701734,-0.03245614035087718,-0.04298245614035088,-0.029298245614035025,0,0,5,single_centroid,paired same split/seed
+clinc150,0.25,fixed_k2,Fixed K=2,false_accept_rate,5,-0.0130701754385965,-0.010526315789473703,-0.016666666666666673,-0.010263157894736858,5,0,0,single_centroid,paired same split/seed
+clinc150,0.5,fixed_k2,Fixed K=2,oos_f1,5,0.0025724928139466254,0.002244791260191281,-0.0001996853865418924,0.0063626090922525025,4,0,1,single_centroid,paired same split/seed
+clinc150,0.5,fixed_k2,Fixed K=2,f1_all,5,-0.0017502523902213963,-0.0014774206931162936,-0.0037460714994550725,0.00016251018580863973,1,0,4,single_centroid,paired same split/seed
+clinc150,0.5,fixed_k2,Fixed K=2,id_recall,5,-0.036177777777777774,-0.03511111111111109,-0.040622222222222205,-0.03155555555555556,0,0,5,single_centroid,paired same split/seed
+clinc150,0.5,fixed_k2,Fixed K=2,false_accept_rate,5,-0.023768115942028965,-0.0228985507246377,-0.030550724637681125,-0.01779710144927535,5,0,0,single_centroid,paired same split/seed
+clinc150,0.75,fixed_k2,Fixed K=2,oos_f1,5,-0.0024272305181286978,-0.004473982449062164,-0.006626246263087521,0.002146226803037066,2,0,3,single_centroid,paired same split/seed
+clinc150,0.75,fixed_k2,Fixed K=2,f1_all,5,-0.0030636964176163684,-0.004440803464037191,-0.0052465465674198745,6.0178774266939075e-05,1,0,4,single_centroid,paired same split/seed
+clinc150,0.75,fixed_k2,Fixed K=2,id_recall,5,-0.032678571428571425,-0.032440476190476186,-0.037083333333333315,-0.027083333333333348,0,0,5,single_centroid,paired same split/seed
+clinc150,0.75,fixed_k2,Fixed K=2,false_accept_rate,5,-0.027777777777777797,-0.027350427350427406,-0.03239316239316239,-0.02358974358974359,5,0,0,single_centroid,paired same split/seed
+stackoverflow,0.25,fixed_k2,Fixed K=2,oos_f1,5,-0.028206091854828298,-0.010509052965695598,-0.05439192276546747,-0.002020260944189123,1,0,4,single_centroid,paired same split/seed
+stackoverflow,0.25,fixed_k2,Fixed K=2,f1_all,5,-0.04212526134951864,-0.03436381484193074,-0.07095914743644043,-0.01329137526259685,0,0,5,single_centroid,paired same split/seed
+stackoverflow,0.25,fixed_k2,Fixed K=2,id_recall,5,-0.003999999999999981,-0.009333333333333305,-0.020266666666666634,0.01226666666666667,2,0,3,single_centroid,paired same split/seed
+stackoverflow,0.25,fixed_k2,Fixed K=2,false_accept_rate,5,0.045155555555555546,0.0111111111111111,-0.0016888888888889008,0.09199999999999998,2,0,3,single_centroid,paired same split/seed
+stackoverflow,0.5,fixed_k2,Fixed K=2,oos_f1,5,-0.13020144872799364,-0.12837265043815127,-0.14592958902825073,-0.11519736135131904,0,0,5,single_centroid,paired same split/seed
+stackoverflow,0.5,fixed_k2,Fixed K=2,f1_all,5,-0.0722081592631693,-0.07418303670420812,-0.08432654035256415,-0.06010606597591226,0,0,5,single_centroid,paired same split/seed
+stackoverflow,0.5,fixed_k2,Fixed K=2,id_recall,5,-0.0026000000000000025,-0.0010000000000000009,-0.009600000000000008,0.004266666666666641,1,0,4,single_centroid,paired same split/seed
+stackoverflow,0.5,fixed_k2,Fixed K=2,false_accept_rate,5,0.1746,0.16333333333333333,0.15026666666666672,0.1990666666666667,0,0,5,single_centroid,paired same split/seed
+stackoverflow,0.75,fixed_k2,Fixed K=2,oos_f1,5,-0.21970603753577783,-0.24028391364065105,-0.2606034208287872,-0.1757630333470331,0,0,5,single_centroid,paired same split/seed
+stackoverflow,0.75,fixed_k2,Fixed K=2,f1_all,5,-0.0677210778546862,-0.06892928536831122,-0.07872434075104433,-0.05707758947263537,0,0,5,single_centroid,paired same split/seed
+stackoverflow,0.75,fixed_k2,Fixed K=2,id_recall,5,0.0040000000000000036,0.004666666666666597,-0.005155555555555536,0.012711111111111117,4,0,1,single_centroid,paired same split/seed
+stackoverflow,0.75,fixed_k2,Fixed K=2,false_accept_rate,5,0.28840000000000005,0.30600000000000005,0.23066666666666674,0.34253333333333336,0,0,5,single_centroid,paired same split/seed
+banking77,0.25,random_partition,Random partition,oos_f1,5,-0.0016753358421975673,-0.0001588443013588181,-0.005742708649125716,0.0020000969316193327,2,0,3,single_centroid,paired same split/seed
+banking77,0.25,random_partition,Random partition,f1_all,5,0.0002922218403299537,0.002350909186322192,-0.005235731906857976,0.005078093434650955,3,0,2,single_centroid,paired same split/seed
+banking77,0.25,random_partition,Random partition,id_recall,5,0.00842105263157893,0.009210526315789447,0.002631578947368385,0.013947368421052642,4,0,1,single_centroid,paired same split/seed
+banking77,0.25,random_partition,Random partition,false_accept_rate,5,0.0047413793103448345,0.004310344827586188,-0.00249999999999998,0.012500000000000016,2,0,3,single_centroid,paired same split/seed
+banking77,0.5,random_partition,Random partition,oos_f1,5,-0.00805929902282907,-0.00999144012112163,-0.016384401428459185,0.00026580338280104423,2,0,3,single_centroid,paired same split/seed
+banking77,0.5,random_partition,Random partition,f1_all,5,0.0020611236409404433,0.0014160864387843253,-0.0008293462943924412,0.0049515935762733275,3,0,2,single_centroid,paired same split/seed
+banking77,0.5,random_partition,Random partition,id_recall,5,0.009473684210526323,0.009868421052631637,0.004868421052631566,0.01407894736842108,5,0,0,single_centroid,paired same split/seed
+banking77,0.5,random_partition,Random partition,false_accept_rate,5,0.016538461538461568,0.01602564102564108,0.006794871794871815,0.02628205128205132,0,0,5,single_centroid,paired same split/seed
+banking77,0.75,random_partition,Random partition,oos_f1,5,-0.00281891977119606,-0.003753366406803682,-0.009603181505509383,0.0036778884273143573,2,0,3,single_centroid,paired same split/seed
+banking77,0.75,random_partition,Random partition,f1_all,5,0.0068154224105832165,0.008016685027798731,0.005206273387347781,0.00840423706493496,5,0,0,single_centroid,paired same split/seed
+banking77,0.75,random_partition,Random partition,id_recall,5,0.00862068965517242,0.009051724137930983,0.0069827586206896,0.010000000000000031,5,0,0,single_centroid,paired same split/seed
+banking77,0.75,random_partition,Random partition,false_accept_rate,5,0.01315789473684208,0.014473684210526305,0.0031578947368420705,0.023421052631578898,1,0,4,single_centroid,paired same split/seed
+clinc150,0.25,random_partition,Random partition,oos_f1,5,0.0003274983890425798,-0.0005761079062064356,-0.0016915009208969378,0.0026505460958141215,2,0,3,single_centroid,paired same split/seed
+clinc150,0.25,random_partition,Random partition,f1_all,5,0.0034136988023769853,-0.00011523609442121163,-0.0025688179036134073,0.010948810138376985,2,0,3,single_centroid,paired same split/seed
+clinc150,0.25,random_partition,Random partition,id_recall,5,0.008947368421052659,0.01140350877192986,0.002280701754385994,0.015614035087719302,4,0,1,single_centroid,paired same split/seed
+clinc150,0.25,random_partition,Random partition,false_accept_rate,5,0.001359649122807001,0.0008771929824561014,-0.0016666666666666635,0.004385964912280665,2,0,3,single_centroid,paired same split/seed
+clinc150,0.5,random_partition,Random partition,oos_f1,5,0.0012577996295294546,0.0024100791201051575,-0.0009443347642339228,0.002678474925130336,4,0,1,single_centroid,paired same split/seed
+clinc150,0.5,random_partition,Random partition,f1_all,5,0.004813702115465057,0.00490048100450613,0.0015714819451384753,0.007495890876677213,4,0,1,single_centroid,paired same split/seed
+clinc150,0.5,random_partition,Random partition,id_recall,5,0.007200000000000007,0.00622222222222224,0.00497777777777777,0.009511111111111137,5,0,0,single_centroid,paired same split/seed
+clinc150,0.5,random_partition,Random partition,false_accept_rate,5,0.001449275362318861,0.0002898550724638044,-0.0005217391304347757,0.0046376811594203175,1,1,3,single_centroid,paired same split/seed
+clinc150,0.75,random_partition,Random partition,oos_f1,5,0.004585663923408445,0.005636972053399969,0.0029516851037127536,0.00588449826748807,5,0,0,single_centroid,paired same split/seed
+clinc150,0.75,random_partition,Random partition,f1_all,5,0.006043892431159414,0.0072452108612165445,0.003914667385015202,0.0081088442297385,5,0,0,single_centroid,paired same split/seed
+clinc150,0.75,random_partition,Random partition,id_recall,5,0.009761904761904795,0.010119047619047583,0.007976190476190536,0.011547619047619051,5,0,0,single_centroid,paired same split/seed
+clinc150,0.75,random_partition,Random partition,false_accept_rate,5,0.0011965811965811812,0.00042735042735041195,-0.0017948717948717801,0.004273504273504242,1,0,4,single_centroid,paired same split/seed
+stackoverflow,0.25,random_partition,Random partition,oos_f1,5,-0.0037193359629865475,-0.00253711588547767,-0.006782698419546107,-0.0010592786285291034,0,0,5,single_centroid,paired same split/seed
+stackoverflow,0.25,random_partition,Random partition,f1_all,5,-0.0014704573438513613,-0.0013784679297624836,-0.0030058426734017596,0.00010015988236415918,1,0,4,single_centroid,paired same split/seed
+stackoverflow,0.25,random_partition,Random partition,id_recall,5,0.0048000000000000265,0.005333333333333412,0.002666666666666684,0.006399999999999984,5,0,0,single_centroid,paired same split/seed
+stackoverflow,0.25,random_partition,Random partition,false_accept_rate,5,0.007288888888888878,0.00555555555555548,0.003194444444444381,0.011911111111111147,0,0,5,single_centroid,paired same split/seed
+stackoverflow,0.5,random_partition,Random partition,oos_f1,5,-0.00669628048475337,-0.005618800790253342,-0.008573628140067102,-0.005188436279896891,0,0,5,single_centroid,paired same split/seed
+stackoverflow,0.5,random_partition,Random partition,f1_all,5,-0.0017555112358077051,-0.0016043204441242853,-0.002501218165079955,-0.0010222109377850063,0,0,5,single_centroid,paired same split/seed
+stackoverflow,0.5,random_partition,Random partition,id_recall,5,0.0049333333333333226,0.003666666666666707,0.0031333333333333434,0.006999999999999939,5,0,0,single_centroid,paired same split/seed
+stackoverflow,0.5,random_partition,Random partition,false_accept_rate,5,0.01273333333333333,0.01200000000000001,0.01040000000000001,0.01573333333333331,0,0,5,single_centroid,paired same split/seed
+stackoverflow,0.75,random_partition,Random partition,oos_f1,5,-0.005953780772385597,-0.005874016083812328,-0.007460229587641543,-0.004228485931368975,0,0,5,single_centroid,paired same split/seed
+stackoverflow,0.75,random_partition,Random partition,f1_all,5,-0.0015880142758449179,-0.0018704923133520124,-0.0025654055011928635,-0.0005092766065389887,1,0,4,single_centroid,paired same split/seed
+stackoverflow,0.75,random_partition,Random partition,id_recall,5,0.0057333333333333455,0.005777777777777771,0.00471111111111111,0.006800000000000006,5,0,0,single_centroid,paired same split/seed
+stackoverflow,0.75,random_partition,Random partition,false_accept_rate,5,0.01733333333333331,0.016666666666666607,0.014266666666666695,0.020533333333333292,0,0,5,single_centroid,paired same split/seed
+banking77,0.25,mogb_minilm,MOGB-MiniLM,oos_f1,5,0.05126826316720887,0.056965317496963874,0.031543011824626245,0.0709935145097915,5,0,0,single_centroid,paired same split/seed
+banking77,0.25,mogb_minilm,MOGB-MiniLM,f1_all,5,-0.1340972014170707,-0.13567715642148304,-0.15940973033647843,-0.10640123605052876,0,0,5,single_centroid,paired same split/seed
+banking77,0.25,mogb_minilm,MOGB-MiniLM,id_recall,5,-0.43921052631578944,-0.44999999999999996,-0.45999999999999996,-0.41893421052631596,0,0,5,single_centroid,paired same split/seed
+banking77,0.25,mogb_minilm,MOGB-MiniLM,false_accept_rate,5,-0.20336206896551726,-0.2163793103448276,-0.2341379310344828,-0.17120689655172416,5,0,0,single_centroid,paired same split/seed
+banking77,0.5,mogb_minilm,MOGB-MiniLM,oos_f1,5,0.025656703747521582,0.014036781833011491,0.004083934782669618,0.047229472712373544,4,0,1,single_centroid,paired same split/seed
+banking77,0.5,mogb_minilm,MOGB-MiniLM,f1_all,5,-0.2591312905980991,-0.2534755096562309,-0.2800558754806134,-0.23820670571558486,0,0,5,single_centroid,paired same split/seed
+banking77,0.5,mogb_minilm,MOGB-MiniLM,id_recall,5,-0.5160526315789473,-0.5203947368421054,-0.5325000000000001,-0.49697368421052623,0,0,5,single_centroid,paired same split/seed
+banking77,0.5,mogb_minilm,MOGB-MiniLM,false_accept_rate,5,-0.3375641025641026,-0.3294871794871795,-0.3692307692307692,-0.3058974358974359,5,0,0,single_centroid,paired same split/seed
+banking77,0.75,mogb_minilm,MOGB-MiniLM,oos_f1,5,-0.06026273981196713,-0.06576035893734933,-0.08775214336805423,-0.02365214922370502,1,0,4,single_centroid,paired same split/seed
+banking77,0.75,mogb_minilm,MOGB-MiniLM,f1_all,5,-0.3581902896584438,-0.3583803468026269,-0.3688056050017702,-0.34757497431511747,0,0,5,single_centroid,paired same split/seed
+banking77,0.75,mogb_minilm,MOGB-MiniLM,id_recall,5,-0.5764655172413795,-0.584051724137931,-0.5881896551724138,-0.5632758620689655,0,0,5,single_centroid,paired same split/seed
+banking77,0.75,mogb_minilm,MOGB-MiniLM,false_accept_rate,5,-0.4723684210526316,-0.47105263157894744,-0.5142105263157895,-0.4347368421052632,5,0,0,single_centroid,paired same split/seed
+clinc150,0.25,mogb_minilm,MOGB-MiniLM,oos_f1,5,-0.018236147090829546,-0.018331855282439746,-0.02312777569519593,-0.013959431562714309,0,0,5,single_centroid,paired same split/seed
+clinc150,0.25,mogb_minilm,MOGB-MiniLM,f1_all,5,-0.261986331741643,-0.25900399192785406,-0.2845532013652835,-0.24157986985846955,0,0,5,single_centroid,paired same split/seed
+clinc150,0.25,mogb_minilm,MOGB-MiniLM,id_recall,5,-0.4084210526315789,-0.40877192982456145,-0.42666666666666664,-0.3901754385964912,0,0,5,single_centroid,paired same split/seed
+clinc150,0.25,mogb_minilm,MOGB-MiniLM,false_accept_rate,5,-0.053771929824561415,-0.057017543859649196,-0.06276315789473685,-0.04315789473684208,5,0,0,single_centroid,paired same split/seed
+clinc150,0.5,mogb_minilm,MOGB-MiniLM,oos_f1,5,-0.07623820404803802,-0.07589095590683781,-0.0793468677818163,-0.07312954031425975,0,0,5,single_centroid,paired same split/seed
+clinc150,0.5,mogb_minilm,MOGB-MiniLM,f1_all,5,-0.3531553874957094,-0.3497698914071451,-0.3626015257761751,-0.34370924921524376,0,0,5,single_centroid,paired same split/seed
+clinc150,0.5,mogb_minilm,MOGB-MiniLM,id_recall,5,-0.4718222222222222,-0.4702222222222222,-0.4779555555555556,-0.4663111111111111,0,0,5,single_centroid,paired same split/seed
+clinc150,0.5,mogb_minilm,MOGB-MiniLM,false_accept_rate,5,-0.07913043478260869,-0.0811594202898551,-0.08208695652173911,-0.07553623188405797,5,0,0,single_centroid,paired same split/seed
+clinc150,0.75,mogb_minilm,MOGB-MiniLM,oos_f1,5,-0.15815025817043107,-0.15674089958649606,-0.16344649030453118,-0.15285402603633097,0,0,5,single_centroid,paired same split/seed
+clinc150,0.75,mogb_minilm,MOGB-MiniLM,f1_all,5,-0.3994386695479412,-0.4019916990148807,-0.4093064823285095,-0.3874065160984347,0,0,5,single_centroid,paired same split/seed
+clinc150,0.75,mogb_minilm,MOGB-MiniLM,id_recall,5,-0.49874999999999997,-0.5011904761904762,-0.5023809523809524,-0.4925,0,0,5,single_centroid,paired same split/seed
+clinc150,0.75,mogb_minilm,MOGB-MiniLM,false_accept_rate,5,-0.09273504273504277,-0.0940170940170941,-0.09863247863247865,-0.08683760683760686,5,0,0,single_centroid,paired same split/seed
+stackoverflow,0.25,mogb_minilm,MOGB-MiniLM,oos_f1,5,-0.00042069605738603855,-8.168469162295189e-05,-0.031838213608014906,0.030996821493242833,2,0,3,single_centroid,paired same split/seed
+stackoverflow,0.25,mogb_minilm,MOGB-MiniLM,f1_all,5,-0.26941208923057564,-0.2850977642185588,-0.29427656474522984,-0.23000930259930494,0,0,5,single_centroid,paired same split/seed
+stackoverflow,0.25,mogb_minilm,MOGB-MiniLM,id_recall,5,-0.53,-0.5246666666666666,-0.576,-0.48200000000000004,0,0,5,single_centroid,paired same split/seed
+stackoverflow,0.25,mogb_minilm,MOGB-MiniLM,false_accept_rate,5,-0.1401777777777778,-0.15377777777777782,-0.19493333333333335,-0.08542222222222225,5,0,0,single_centroid,paired same split/seed
+stackoverflow,0.5,mogb_minilm,MOGB-MiniLM,oos_f1,5,-0.03629652838770716,-0.034921679341245127,-0.07496818561127445,0.005911816458218655,1,0,4,single_centroid,paired same split/seed
+stackoverflow,0.5,mogb_minilm,MOGB-MiniLM,f1_all,5,-0.36681606866964717,-0.36060959686261806,-0.38383349634084574,-0.3503572180313198,0,0,5,single_centroid,paired same split/seed
+stackoverflow,0.5,mogb_minilm,MOGB-MiniLM,id_recall,5,-0.6005333333333335,-0.5923333333333334,-0.6240666666666668,-0.5839333333333334,0,0,5,single_centroid,paired same split/seed
+stackoverflow,0.5,mogb_minilm,MOGB-MiniLM,false_accept_rate,5,-0.28913333333333335,-0.284,-0.34940000000000004,-0.2254666666666667,5,0,0,single_centroid,paired same split/seed
+stackoverflow,0.75,mogb_minilm,MOGB-MiniLM,oos_f1,5,-0.2001689811877932,-0.1879296224949824,-0.24463419101121353,-0.16322464254545305,0,0,5,single_centroid,paired same split/seed
+stackoverflow,0.75,mogb_minilm,MOGB-MiniLM,f1_all,5,-0.4814473900934109,-0.48356547098300373,-0.49318645086260104,-0.47005830097694573,0,0,5,single_centroid,paired same split/seed
+stackoverflow,0.75,mogb_minilm,MOGB-MiniLM,id_recall,5,-0.6644888888888889,-0.6735555555555555,-0.6842222222222223,-0.6437333333333334,0,0,5,single_centroid,paired same split/seed
+stackoverflow,0.75,mogb_minilm,MOGB-MiniLM,false_accept_rate,5,-0.32160000000000005,-0.352,-0.3784,-0.26360000000000006,5,0,0,single_centroid,paired same split/seed
+banking77,0.25,mogb_partition_ours_boundary,MOGB partition + s2c boundary,oos_f1,5,0.0688361873268638,0.07623015111080711,0.05109672276436539,0.08657565188936223,5,0,0,single_centroid,paired same split/seed
+banking77,0.25,mogb_partition_ours_boundary,MOGB partition + s2c boundary,f1_all,5,0.018642249526959854,0.017973734647310557,0.00010992813993455641,0.04069201580337265,4,0,1,single_centroid,paired same split/seed
+banking77,0.25,mogb_partition_ours_boundary,MOGB partition + s2c boundary,id_recall,5,-0.22210526315789467,-0.23815789473684212,-0.25026315789473674,-0.19184210526315784,0,0,5,single_centroid,paired same split/seed
+banking77,0.25,mogb_partition_ours_boundary,MOGB partition + s2c boundary,false_accept_rate,5,-0.17818965517241384,-0.1982758620689656,-0.2077586206896552,-0.1472413793103448,5,0,0,single_centroid,paired same split/seed
+banking77,0.5,mogb_partition_ours_boundary,MOGB partition + s2c boundary,oos_f1,5,0.0696946087086833,0.05801316979565907,0.050001991249159716,0.09031876984721927,5,0,0,single_centroid,paired same split/seed
+banking77,0.5,mogb_partition_ours_boundary,MOGB partition + s2c boundary,f1_all,5,-0.09704217805994445,-0.09446838457375761,-0.11339340938638871,-0.08069094673350016,0,0,5,single_centroid,paired same split/seed
+banking77,0.5,mogb_partition_ours_boundary,MOGB partition + s2c boundary,id_recall,5,-0.3282894736842105,-0.33684210526315783,-0.34394736842105267,-0.30907894736842106,0,0,5,single_centroid,paired same split/seed
+banking77,0.5,mogb_partition_ours_boundary,MOGB partition + s2c boundary,false_accept_rate,5,-0.3134615384615385,-0.30833333333333335,-0.34294871794871795,-0.28397435897435896,5,0,0,single_centroid,paired same split/seed
+banking77,0.75,mogb_partition_ours_boundary,MOGB partition + s2c boundary,oos_f1,5,-0.005275503008363025,-0.013080188980399643,-0.033112071520264984,0.03216729860790203,1,0,4,single_centroid,paired same split/seed
+banking77,0.75,mogb_partition_ours_boundary,MOGB partition + s2c boundary,f1_all,5,-0.19604719116889144,-0.19499904854781447,-0.210139346421549,-0.18195503591623388,0,0,5,single_centroid,paired same split/seed
+banking77,0.75,mogb_partition_ours_boundary,MOGB partition + s2c boundary,id_recall,5,-0.40551724137931033,-0.40215517241379306,-0.4277586206896552,-0.38275862068965516,0,0,5,single_centroid,paired same split/seed
+banking77,0.75,mogb_partition_ours_boundary,MOGB partition + s2c boundary,false_accept_rate,5,-0.43947368421052635,-0.41973684210526324,-0.4881578947368421,-0.39763157894736845,5,0,0,single_centroid,paired same split/seed
+clinc150,0.25,mogb_partition_ours_boundary,MOGB partition + s2c boundary,oos_f1,5,-0.0007583127344135577,-8.29472088264005e-05,-0.004654066537711765,0.00313744106888465,2,0,3,single_centroid,paired same split/seed
+clinc150,0.25,mogb_partition_ours_boundary,MOGB partition + s2c boundary,f1_all,5,-0.08276695161193356,-0.08198030874807483,-0.10731950184628594,-0.06050893602992864,0,0,5,single_centroid,paired same split/seed
+clinc150,0.25,mogb_partition_ours_boundary,MOGB partition + s2c boundary,id_recall,5,-0.177719298245614,-0.1824561403508772,-0.2091228070175438,-0.1463157894736842,0,0,5,single_centroid,paired same split/seed
+clinc150,0.25,mogb_partition_ours_boundary,MOGB partition + s2c boundary,false_accept_rate,5,-0.03798245614035088,-0.037500000000000006,-0.046447368421052675,-0.030482456140350844,5,0,0,single_centroid,paired same split/seed
+clinc150,0.5,mogb_partition_ours_boundary,MOGB partition + s2c boundary,oos_f1,5,-0.03387891938240699,-0.033623800270506154,-0.036104697518210105,-0.03222417451860584,0,0,5,single_centroid,paired same split/seed
+clinc150,0.5,mogb_partition_ours_boundary,MOGB partition + s2c boundary,f1_all,5,-0.15671167836785735,-0.15093565417060062,-0.16933577289070798,-0.14863391214075022,0,0,5,single_centroid,paired same split/seed
+clinc150,0.5,mogb_partition_ours_boundary,MOGB partition + s2c boundary,id_recall,5,-0.2541333333333333,-0.2577777777777778,-0.2618666666666667,-0.24542222222222215,0,0,5,single_centroid,paired same split/seed
+clinc150,0.5,mogb_partition_ours_boundary,MOGB partition + s2c boundary,false_accept_rate,5,-0.06318840579710143,-0.0626086956521739,-0.06626086956521736,-0.06017391304347828,5,0,0,single_centroid,paired same split/seed
+clinc150,0.75,mogb_partition_ours_boundary,MOGB partition + s2c boundary,oos_f1,5,-0.09772227525001184,-0.09518216587038464,-0.10376629963555788,-0.09203750529938923,0,0,5,single_centroid,paired same split/seed
+clinc150,0.75,mogb_partition_ours_boundary,MOGB partition + s2c boundary,f1_all,5,-0.2213956497935678,-0.2232277518132857,-0.23827443312329652,-0.20272047698341908,0,0,5,single_centroid,paired same split/seed
+clinc150,0.75,mogb_partition_ours_boundary,MOGB partition + s2c boundary,id_recall,5,-0.3098214285714286,-0.3101190476190476,-0.32172619047619044,-0.2960119047619048,0,0,5,single_centroid,paired same split/seed
+clinc150,0.75,mogb_partition_ours_boundary,MOGB partition + s2c boundary,false_accept_rate,5,-0.08213675213675216,-0.0794871794871795,-0.08991452991452994,-0.07555555555555557,5,0,0,single_centroid,paired same split/seed
+stackoverflow,0.25,mogb_partition_ours_boundary,MOGB partition + s2c boundary,oos_f1,5,0.031175326997604592,0.03446788049047056,-0.0007329299197509354,0.06308358391496012,3,0,2,single_centroid,paired same split/seed
+stackoverflow,0.25,mogb_partition_ours_boundary,MOGB partition + s2c boundary,f1_all,5,-0.07560665095229632,-0.08949257926066057,-0.09156663497847314,-0.04925923536644956,0,0,5,single_centroid,paired same split/seed
+stackoverflow,0.25,mogb_partition_ours_boundary,MOGB partition + s2c boundary,id_recall,5,-0.2650666666666667,-0.246,-0.3217333333333333,-0.2174666666666666,0,0,5,single_centroid,paired same split/seed
+stackoverflow,0.25,mogb_partition_ours_boundary,MOGB partition + s2c boundary,false_accept_rate,5,-0.12924444444444447,-0.14666666666666672,-0.18844444444444447,-0.07004444444444449,5,0,0,single_centroid,paired same split/seed
+stackoverflow,0.5,mogb_partition_ours_boundary,MOGB partition + s2c boundary,oos_f1,5,0.026974668998174557,0.027621753205105515,-0.007655130568060086,0.06962145712564538,4,0,1,single_centroid,paired same split/seed
+stackoverflow,0.5,mogb_partition_ours_boundary,MOGB partition + s2c boundary,f1_all,5,-0.16635464295896576,-0.15605401303467759,-0.19932765230388275,-0.1384321165735345,0,0,5,single_centroid,paired same split/seed
+stackoverflow,0.5,mogb_partition_ours_boundary,MOGB partition + s2c boundary,id_recall,5,-0.36760000000000004,-0.3450000000000001,-0.4138666666666667,-0.33819999999999995,0,0,5,single_centroid,paired same split/seed
+stackoverflow,0.5,mogb_partition_ours_boundary,MOGB partition + s2c boundary,false_accept_rate,5,-0.27846666666666664,-0.26933333333333326,-0.3405999999999999,-0.2192,5,0,0,single_centroid,paired same split/seed
+stackoverflow,0.75,mogb_partition_ours_boundary,MOGB partition + s2c boundary,oos_f1,5,-0.14038112749438325,-0.134882531906502,-0.18903033516019635,-0.10245984865286681,0,0,5,single_centroid,paired same split/seed
+stackoverflow,0.75,mogb_partition_ours_boundary,MOGB partition + s2c boundary,f1_all,5,-0.3165398906879699,-0.3220320318499699,-0.34024071143077367,-0.2928390699451661,0,0,5,single_centroid,paired same split/seed
+stackoverflow,0.75,mogb_partition_ours_boundary,MOGB partition + s2c boundary,id_recall,5,-0.48555555555555563,-0.5048888888888889,-0.5165333333333333,-0.45457777777777786,0,0,5,single_centroid,paired same split/seed
+stackoverflow,0.75,mogb_partition_ours_boundary,MOGB partition + s2c boundary,false_accept_rate,5,-0.3102666666666667,-0.33399999999999996,-0.3694666666666667,-0.24000000000000005,5,0,0,single_centroid,paired same split/seed
+banking77,0.25,ours_partition_mogb_boundary,s2c partition + MOGB boundary,oos_f1,5,0.05504953370196939,0.05873272336721336,0.03677863599319966,0.07332043141073911,5,0,0,single_centroid,paired same split/seed
+banking77,0.25,ours_partition_mogb_boundary,s2c partition + MOGB boundary,f1_all,5,-0.03794784241359728,-0.03554901502311669,-0.06763161291272886,-0.010606885903857744,1,0,4,single_centroid,paired same split/seed
+banking77,0.25,ours_partition_mogb_boundary,s2c partition + MOGB boundary,id_recall,5,-0.30026315789473684,-0.29605263157894746,-0.31578947368421056,-0.2839473684210526,0,0,5,single_centroid,paired same split/seed
+banking77,0.25,ours_partition_mogb_boundary,s2c partition + MOGB boundary,false_accept_rate,5,-0.17327586206896553,-0.1758620689655172,-0.1988793103448276,-0.14508620689655172,5,0,0,single_centroid,paired same split/seed
+banking77,0.5,ours_partition_mogb_boundary,s2c partition + MOGB boundary,oos_f1,5,0.0643145102449226,0.06282213555198635,0.04866157317544488,0.08048828432151249,5,0,0,single_centroid,paired same split/seed
+banking77,0.5,ours_partition_mogb_boundary,s2c partition + MOGB boundary,f1_all,5,-0.08835874369995773,-0.09365497851359372,-0.0956560268278436,-0.0770569569947456,0,0,5,single_centroid,paired same split/seed
+banking77,0.5,ours_partition_mogb_boundary,s2c partition + MOGB boundary,id_recall,5,-0.3176315789473684,-0.3171052631578948,-0.3344736842105263,-0.3007894736842105,0,0,5,single_centroid,paired same split/seed
+banking77,0.5,ours_partition_mogb_boundary,s2c partition + MOGB boundary,false_accept_rate,5,-0.29602564102564105,-0.3121794871794872,-0.32166666666666666,-0.26974358974358975,5,0,0,single_centroid,paired same split/seed
+banking77,0.75,ours_partition_mogb_boundary,s2c partition + MOGB boundary,oos_f1,5,0.014102944614794766,0.010608338855191413,-0.012160748232476126,0.04705828424261366,3,0,2,single_centroid,paired same split/seed
+banking77,0.75,ours_partition_mogb_boundary,s2c partition + MOGB boundary,f1_all,5,-0.12537450953882817,-0.1251019351387519,-0.13054429683680818,-0.12020472224084813,0,0,5,single_centroid,paired same split/seed
+banking77,0.75,ours_partition_mogb_boundary,s2c partition + MOGB boundary,id_recall,5,-0.3285344827586207,-0.32974137931034486,-0.3352586206896552,-0.32181034482758625,0,0,5,single_centroid,paired same split/seed
+banking77,0.75,ours_partition_mogb_boundary,s2c partition + MOGB boundary,false_accept_rate,5,-0.39868421052631586,-0.40263157894736845,-0.4336842105263158,-0.36473684210526325,5,0,0,single_centroid,paired same split/seed
+clinc150,0.25,ours_partition_mogb_boundary,s2c partition + MOGB boundary,oos_f1,5,-0.01569470637994763,-0.015955059284250006,-0.019791776990446874,-0.011597635769448389,0,0,5,single_centroid,paired same split/seed
+clinc150,0.25,ours_partition_mogb_boundary,s2c partition + MOGB boundary,f1_all,5,-0.21769494713959664,-0.22494557918889635,-0.22679797979184763,-0.20732872835954633,0,0,5,single_centroid,paired same split/seed
+clinc150,0.25,ours_partition_mogb_boundary,s2c partition + MOGB boundary,id_recall,5,-0.3605263157894737,-0.35964912280701755,-0.36894736842105263,-0.35333333333333333,0,0,5,single_centroid,paired same split/seed
+clinc150,0.25,ours_partition_mogb_boundary,s2c partition + MOGB boundary,false_accept_rate,5,-0.048552631578947375,-0.050877192982456104,-0.05570175438596494,-0.041271929824561404,5,0,0,single_centroid,paired same split/seed
+clinc150,0.5,ours_partition_mogb_boundary,s2c partition + MOGB boundary,oos_f1,5,-0.05620087538544458,-0.055535604476694145,-0.05911386342550222,-0.053119341954029856,0,0,5,single_centroid,paired same split/seed
+clinc150,0.5,ours_partition_mogb_boundary,s2c partition + MOGB boundary,f1_all,5,-0.2386002903929957,-0.24045611012396362,-0.24439733431608116,-0.23095694066362885,0,0,5,single_centroid,paired same split/seed
+clinc150,0.5,ours_partition_mogb_boundary,s2c partition + MOGB boundary,id_recall,5,-0.36515555555555557,-0.3635555555555556,-0.37075555555555556,-0.3603555555555556,0,0,5,single_centroid,paired same split/seed
+clinc150,0.5,ours_partition_mogb_boundary,s2c partition + MOGB boundary,false_accept_rate,5,-0.07130434782608697,-0.07188405797101449,-0.07553623188405799,-0.06684057971014494,5,0,0,single_centroid,paired same split/seed
+clinc150,0.75,ours_partition_mogb_boundary,s2c partition + MOGB boundary,oos_f1,5,-0.11706120897233767,-0.11821060150532225,-0.12161022593058998,-0.11229508951179894,0,0,5,single_centroid,paired same split/seed
+clinc150,0.75,ours_partition_mogb_boundary,s2c partition + MOGB boundary,f1_all,5,-0.24811956586903108,-0.2493132533586111,-0.2522042320107262,-0.2433615738206746,0,0,5,single_centroid,paired same split/seed
+clinc150,0.75,ours_partition_mogb_boundary,s2c partition + MOGB boundary,id_recall,5,-0.3622619047619048,-0.3625000000000001,-0.36726190476190473,-0.35726190476190484,0,0,5,single_centroid,paired same split/seed
+clinc150,0.75,ours_partition_mogb_boundary,s2c partition + MOGB boundary,false_accept_rate,5,-0.08222222222222224,-0.08247863247863249,-0.0890598290598291,-0.07598290598290595,5,0,0,single_centroid,paired same split/seed
+stackoverflow,0.25,ours_partition_mogb_boundary,s2c partition + MOGB boundary,oos_f1,5,0.011537794241959175,0.011164366503170542,-0.009225120417346022,0.034202637064720466,3,0,2,single_centroid,paired same split/seed
+stackoverflow,0.25,ours_partition_mogb_boundary,s2c partition + MOGB boundary,f1_all,5,-0.11958547025656044,-0.10912510552346932,-0.14203396981939448,-0.10155088823032028,0,0,5,single_centroid,paired same split/seed
+stackoverflow,0.25,ours_partition_mogb_boundary,s2c partition + MOGB boundary,id_recall,5,-0.31466666666666665,-0.32866666666666666,-0.3316,-0.2977333333333333,0,0,5,single_centroid,paired same split/seed
+stackoverflow,0.25,ours_partition_mogb_boundary,s2c partition + MOGB boundary,false_accept_rate,5,-0.10519999999999999,-0.10577777777777769,-0.1476444444444444,-0.06626666666666668,5,0,0,single_centroid,paired same split/seed
+stackoverflow,0.5,ours_partition_mogb_boundary,s2c partition + MOGB boundary,oos_f1,5,-0.031974136146964184,-0.024842233864653673,-0.06754836275891596,0.003600090464987593,1,0,4,single_centroid,paired same split/seed
+stackoverflow,0.5,ours_partition_mogb_boundary,s2c partition + MOGB boundary,f1_all,5,-0.16392694295922894,-0.15720806049282154,-0.17405809099843964,-0.15460865379596533,0,0,5,single_centroid,paired same split/seed
+stackoverflow,0.5,ours_partition_mogb_boundary,s2c partition + MOGB boundary,id_recall,5,-0.32653333333333334,-0.32799999999999996,-0.3334,-0.31973333333333337,0,0,5,single_centroid,paired same split/seed
+stackoverflow,0.5,ours_partition_mogb_boundary,s2c partition + MOGB boundary,false_accept_rate,5,-0.14013333333333333,-0.14866666666666667,-0.192,-0.08826666666666666,5,0,0,single_centroid,paired same split/seed
+stackoverflow,0.75,ours_partition_mogb_boundary,s2c partition + MOGB boundary,oos_f1,5,-0.17125885328198115,-0.1584908481659298,-0.2146496479651014,-0.13513432839975828,0,0,5,single_centroid,paired same split/seed
+stackoverflow,0.75,ours_partition_mogb_boundary,s2c partition + MOGB boundary,f1_all,5,-0.200181398338206,-0.2039474941610897,-0.20526614612266184,-0.19317525761288884,0,0,5,single_centroid,paired same split/seed
+stackoverflow,0.75,ours_partition_mogb_boundary,s2c partition + MOGB boundary,id_recall,5,-0.34124444444444446,-0.3460000000000001,-0.3476888888888888,-0.3320444444444445,0,0,5,single_centroid,paired same split/seed
+stackoverflow,0.75,ours_partition_mogb_boundary,s2c partition + MOGB boundary,false_accept_rate,5,-0.09453333333333333,-0.10533333333333339,-0.14733333333333334,-0.035733333333333325,4,0,1,single_centroid,paired same split/seed

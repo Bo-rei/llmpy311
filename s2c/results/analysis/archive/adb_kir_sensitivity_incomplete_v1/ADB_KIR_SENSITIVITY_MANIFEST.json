@@ -1,0 +1,592 @@
+{
+  "schema_version": 1,
+  "analysis": "adb_kir_sensitivity_v1",
+  "protocol_version": "protocol_v2_textoir_v1",
+  "external_roots": [
+    "/home/bo/bo01/llmpy311/artifacts/s2c/external/adb_gpu_runtime_v2",
+    "/home/bo/bo01/llmpy311/artifacts/s2c/external/adb_gpu_runtime_v1",
+    "/home/bo/bo01/llmpy311/artifacts/s2c/external/adb_gpu_runtime_v3"
+  ],
+  "fair_source": "/home/bo/bo01/llmpy311/s2c/results/analysis/cross_protocol_tradeoff_v1/per_seed.csv",
+  "fair_source_sha256": "31ccdd433b38b86ec92b0cd81b460114a7fe1e7f12b94d4a5d031aab7d703145",
+  "run_manifest_count": 27,
+  "valid_units": 27,
+  "paired_effect_rows": 189,
+  "run_manifests": [
+    {
+      "path": "artifacts/s2c/external/adb_gpu_runtime_v1/stackoverflow/ADB/kir50/seed100/run_manifest.json",
+      "sha256": "78a018efd0eec3c8cda37d6aaf8c8dde9dd0ee15f05f758197d9fab29ace3fde",
+      "status": "complete",
+      "artifact_audit": {
+        "complete": true,
+        "prediction_directories": [
+          "/home/bo/bo01/llmpy311/artifacts/s2c/external/adb_gpu_runtime_v1/stackoverflow/ADB/kir50/seed100/textoir_outputs/open_intent_detection/ADB_stackoverflow_0.5_1.0_bert_100"
+        ],
+        "prediction_directory_count": 1,
+        "results_csv": "/home/bo/bo01/llmpy311/artifacts/s2c/external/adb_gpu_runtime_v1/stackoverflow/ADB/kir50/seed100/results/results.csv",
+        "results_csv_exists": true,
+        "y_pred_sha256": "b5140526c0109c3ac81feb3e075e884fb0a078d2bed266afe3c5a6994aebfc19",
+        "y_true_sha256": "5654e2846c1d51cf121aea63e9a76a879d595f1723339aae14e79a1ebf6ea925"
+      },
+      "split_sha256": {
+        "dev": "83c9fbc1f5eb09ea3dd8488c866c261551a9c13589bca752af4c771877907e52",
+        "test": "c213abf7a6bd1da6fcf26587fa4555761babbe8fa942cb4c9b6fe9caaa60f200",
+        "train": "98eb2f651754e3800e0b6f4b6fa7a150fef207287397fa834bc35a1ae914f77d"
+      }
+    },
+    {
+      "path": "artifacts/s2c/external/adb_gpu_runtime_v1/stackoverflow/ADB/kir50/seed42/run_manifest.json",
+      "sha256": "d4c358a1cb3e568561484a109c3ed4043ce6b45a88e7d64ac5c274e2966cb778",
+      "status": "complete",
+      "artifact_audit": {
+        "complete": true,
+        "prediction_directories": [
+          "/home/bo/bo01/llmpy311/artifacts/s2c/external/adb_gpu_runtime_v1/stackoverflow/ADB/kir50/seed42/textoir_outputs/open_intent_detection/ADB_stackoverflow_0.5_1.0_bert_42"
+        ],
+        "prediction_directory_count": 1,
+        "results_csv": "/home/bo/bo01/llmpy311/artifacts/s2c/external/adb_gpu_runtime_v1/stackoverflow/ADB/kir50/seed42/results/results.csv",
+        "results_csv_exists": true,
+        "y_pred_sha256": "af4f8030982f845f2c6372687b352fa82be776c8e14c6a19cb4c8faf5d9c69c2",
+        "y_true_sha256": "ebc4a64b14beaafaa06004aaccada70ab4b334b22a9e41561b69bd9149e01b57"
+      },
+      "split_sha256": {
+        "dev": "067d8b39d448f101b5078e95f4d5794b87021b1fd7513d1c37529dbe340a7f6b",
+        "test": "a488d555cf47920ad8a41ffa5df37dcbf4cb92862bbcbe6f907191a7a6e94c12",
+        "train": "c6258605b94ae0fd2bda09bfd8aefa5f60086306dc1993ecbb97eed19b4c23b0"
+      }
+    },
+    {
+      "path": "artifacts/s2c/external/adb_gpu_runtime_v1/stackoverflow/ADB/kir50/seed87/run_manifest.json",
+      "sha256": "3cd0f9ee73b912af114749785c3bac25a54e95a8065407cbe16063f97047c568",
+      "status": "complete",
+      "artifact_audit": {
+        "complete": true,
+        "prediction_directories": [
+          "/home/bo/bo01/llmpy311/artifacts/s2c/external/adb_gpu_runtime_v1/stackoverflow/ADB/kir50/seed87/textoir_outputs/open_intent_detection/ADB_stackoverflow_0.5_1.0_bert_87"
+        ],
+        "prediction_directory_count": 1,
+        "results_csv": "/home/bo/bo01/llmpy311/artifacts/s2c/external/adb_gpu_runtime_v1/stackoverflow/ADB/kir50/seed87/results/results.csv",
+        "results_csv_exists": true,
+        "y_pred_sha256": "d92dfb42ba9e1772b89068715ea82ddce5b0fa01290ae7ea3023db63bf029345",
+        "y_true_sha256": "e7fb5a3b7a9c3070f3e03d19e808bf80ddf1b0acadf6dd6cb2f7f77ab826d01e"
+      },
+      "split_sha256": {
+        "dev": "311702ff9e8c113995a0fb3d9cd5c3043502d331a15dc9354a392fdf452d164b",
+        "test": "1fb9ad644d1b42f1167c453ec84c9c98426988315f1f84d26c80d0c4a9e6f7b6",
+        "train": "978fd8cc5f923b4cc4573e8e0a06c9de28fb0f9f81bbf1dbcfa52f6831026acb"
+      }
+    },
+    {
+      "path": "artifacts/s2c/external/adb_gpu_runtime_v2/banking/ADB/kir50/seed100/run_manifest.json",
+      "sha256": "2e7853107caccfd95206e22b8b88cab4c46a55a204cd685ecbd764ee298c42a5",
+      "status": "complete",
+      "artifact_audit": {
+        "complete": true,
+        "prediction_directories": [
+          "/home/bo/bo01/llmpy311/artifacts/s2c/external/adb_gpu_runtime_v2/banking/ADB/kir50/seed100/textoir_outputs/open_intent_detection/ADB_banking_0.5_1.0_bert_100"
+        ],
+        "prediction_directory_count": 1,
+        "results_csv": "/home/bo/bo01/llmpy311/artifacts/s2c/external/adb_gpu_runtime_v2/banking/ADB/kir50/seed100/results/results.csv",
+        "results_csv_exists": true,
+        "y_pred_sha256": "13bff118801eaf0a537c7656dbbf01e0fba45623257166185b52af87f0b64ec1",
+        "y_true_sha256": "cb15845785364fc027ecc6e4b12071270d66d87155d91bd751198eea7af60d99"
+      },
+      "split_sha256": {
+        "dev": "cbdc8fac521f64accadf449a62fadf99470df2b3093da8632586149c028e4c56",
+        "test": "fb8185e2c90d556fa730ad13a2fe5046ef902eb57c26da6afdb41a97d5ce7846",
+        "train": "e9dbb2fa9aad9f77dedf00a18e538badaafd2bfeb889ad8966c2db07ed8774d1"
+      }
+    },
+    {
+      "path": "artifacts/s2c/external/adb_gpu_runtime_v2/banking/ADB/kir50/seed42/run_manifest.json",
+      "sha256": "a077fdebd3b02e4351615e49c3db5829d392d8cfe03bee1163ce0434fce42544",
+      "status": "complete",
+      "artifact_audit": {
+        "complete": true,
+        "prediction_directories": [
+          "/home/bo/bo01/llmpy311/artifacts/s2c/external/adb_gpu_runtime_v2/banking/ADB/kir50/seed42/textoir_outputs/open_intent_detection/ADB_banking_0.5_1.0_bert_42"
+        ],
+        "prediction_directory_count": 1,
+        "results_csv": "/home/bo/bo01/llmpy311/artifacts/s2c/external/adb_gpu_runtime_v2/banking/ADB/kir50/seed42/results/results.csv",
+        "results_csv_exists": true,
+        "y_pred_sha256": "1659326ce05c767de0a3946d719236d464ee0310115042670381b816624ba437",
+        "y_true_sha256": "19c0b163881df2f4fa9bbaedd16e13bb5abcdc998ffe7b8c4de1ed292da85e8a"
+      },
+      "split_sha256": {
+        "dev": "54193b3aed0f55c4e1f567cad1c9b5916e8e67d51057f5ed35a53dd44eaa1fe2",
+        "test": "b4e9270da842175a12060169ee23b184e33880ab37a911348fb665a33e0e855b",
+        "train": "201b4b4e9645d46e52a120077fda218c26f8c74cee3f4a07fa2f3301ee572cfe"
+      }
+    },
+    {
+      "path": "artifacts/s2c/external/adb_gpu_runtime_v2/banking/ADB/kir50/seed87/run_manifest.json",
+      "sha256": "9183e8ee5482bf2ff266d36f27fd2234477fa25ac7fbac4dfc1608c9025d7f67",
+      "status": "complete",
+      "artifact_audit": {
+        "complete": true,
+        "prediction_directories": [
+          "/home/bo/bo01/llmpy311/artifacts/s2c/external/adb_gpu_runtime_v2/banking/ADB/kir50/seed87/textoir_outputs/open_intent_detection/ADB_banking_0.5_1.0_bert_87"
+        ],
+        "prediction_directory_count": 1,
+        "results_csv": "/home/bo/bo01/llmpy311/artifacts/s2c/external/adb_gpu_runtime_v2/banking/ADB/kir50/seed87/results/results.csv",
+        "results_csv_exists": true,
+        "y_pred_sha256": "c3ff968802c2916733149cf6438e3152e618ba42e3544fa8d20c4eb60d097883",
+        "y_true_sha256": "3cc01a047bb18f38d652d265cc17c0613cb9163a265ade0e1c7ea9e0951d66dc"
+      },
+      "split_sha256": {
+        "dev": "6fc9ff8383750b49bb23d6eb2f48e119ce4dc35ab41df94f9d15977a7c2dad0b",
+        "test": "3a59310092ab24cd0c906c9abdfb288194497552558de4cbfb47fe2ba991fd68",
+        "train": "c68a9f48ea95509a6c51ffdc6abdb4893edd3a4c0b212999ae27f9beafdaef0a"
+      }
+    },
+    {
+      "path": "artifacts/s2c/external/adb_gpu_runtime_v2/clinc150/ADB/kir50/seed100/run_manifest.json",
+      "sha256": "276f0d47495ec73fbe4296ebc374ae34c79b71a68b318f8293084e3497426cc6",
+      "status": "complete",
+      "artifact_audit": {
+        "complete": true,
+        "prediction_directories": [
+          "/home/bo/bo01/llmpy311/artifacts/s2c/external/adb_gpu_runtime_v2/clinc150/ADB/kir50/seed100/textoir_outputs/open_intent_detection/ADB_oos_0.5_1.0_bert_100"
+        ],
+        "prediction_directory_count": 1,
+        "results_csv": "/home/bo/bo01/llmpy311/artifacts/s2c/external/adb_gpu_runtime_v2/clinc150/ADB/kir50/seed100/results/results.csv",
+        "results_csv_exists": true,
+        "y_pred_sha256": "bc75493d936494f3b948018b36be6792b9a407338855539841e22b2c17d6a415",
+        "y_true_sha256": "fe275ef11c64bf4c03b3e3b58f66fc0921bebc0ed76cac95a0eb57760c796c6a"
+      },
+      "split_sha256": {
+        "dev": "745f254ca6b4764e7910bf4be40240a9d7f8e23657cf2faab30f3240a2735a5f",
+        "test": "ca8a2a3fcf4dcc21fe60135332757492c44aeb55b470febf0a72c4f0b0542330",
+        "train": "0e51b33c031bfbbc58d1ce5bd2d0657bdd503ed5479f07d9ff82af489a3327d5"
+      }
+    },
+    {
+      "path": "artifacts/s2c/external/adb_gpu_runtime_v2/clinc150/ADB/kir50/seed42/run_manifest.json",
+      "sha256": "1ca7b06dc88ae7c4516a620033796add37adbd00d54f171b04ce660ff12b265e",
+      "status": "complete",
+      "artifact_audit": {
+        "complete": true,
+        "prediction_directories": [
+          "/home/bo/bo01/llmpy311/artifacts/s2c/external/adb_gpu_runtime_v2/clinc150/ADB/kir50/seed42/textoir_outputs/open_intent_detection/ADB_oos_0.5_1.0_bert_42"
+        ],
+        "prediction_directory_count": 1,
+        "results_csv": "/home/bo/bo01/llmpy311/artifacts/s2c/external/adb_gpu_runtime_v2/clinc150/ADB/kir50/seed42/results/results.csv",
+        "results_csv_exists": true,
+        "y_pred_sha256": "dcea0ec7cadf88c32aa20e28310f7dcb285b56ce36b7ef3f7921ca5ac415b514",
+        "y_true_sha256": "7588aa3ebd1fe114c9c593142cab310a3a65b6ba2fb715ca450e16409ac03a80"
+      },
+      "split_sha256": {
+        "dev": "ee520f7cfe4fde172c2c97d121d902e815f5312566ba52e2b7c4d3edd090b0ec",
+        "test": "ae26dea96fd6c60c97680d2dbc27841b8c31c0254469c0402ebce4f934607278",
+        "train": "47ae50f5be7b93cb02f7c5848974d194b809d352b2fc05c2aff446947fcbc798"
+      }
+    },
+    {
+      "path": "artifacts/s2c/external/adb_gpu_runtime_v2/clinc150/ADB/kir50/seed87/run_manifest.json",
+      "sha256": "62f55b8ca6f680eea644f62c92fa8fdc17e2fba141410554d7cc705e4f6e2ca1",
+      "status": "complete",
+      "artifact_audit": {
+        "complete": true,
+        "prediction_directories": [
+          "/home/bo/bo01/llmpy311/artifacts/s2c/external/adb_gpu_runtime_v2/clinc150/ADB/kir50/seed87/textoir_outputs/open_intent_detection/ADB_oos_0.5_1.0_bert_87"
+        ],
+        "prediction_directory_count": 1,
+        "results_csv": "/home/bo/bo01/llmpy311/artifacts/s2c/external/adb_gpu_runtime_v2/clinc150/ADB/kir50/seed87/results/results.csv",
+        "results_csv_exists": true,
+        "y_pred_sha256": "6ad0f80a3039f6ebadc3d9ade645eb0de433e1e1b03ab42d496e66f288484ba7",
+        "y_true_sha256": "4cc247b1ce291a39cde8f8016c058cb7addc12d10a141158ce295974fb7d01a4"
+      },
+      "split_sha256": {
+        "dev": "6bb9387d684090b57c8ada7e70fa6ad1ca554fe4229514ec6e7939b6220be0d2",
+        "test": "01dcc45198ba1df7cbbd0314e85e546054a6de2bb610c0d65fa1f1a94fb830a5",
+        "train": "f34a5f7bbde76aa88f6d319096fbed695d709e375ad1e1e437cc63d8893b6006"
+      }
+    },
+    {
+      "path": "artifacts/s2c/external/adb_gpu_runtime_v3/banking77/ADB/kir_0.25/seed_100/run_manifest.json",
+      "sha256": "5950e58a88c57998928531a49cfc87fcef46b3a02d41cb1dcd7affb9edd3e216",
+      "status": "complete",
+      "artifact_audit": {
+        "complete": true,
+        "prediction_directories": [
+          "/home/bo/bo01/llmpy311/artifacts/s2c/external/adb_gpu_runtime_v3/banking77/ADB/kir_0.25/seed_100/textoir_outputs/open_intent_detection/ADB_banking_0.25_1.0_bert_100"
+        ],
+        "prediction_directory_count": 1,
+        "results_csv": "/home/bo/bo01/llmpy311/artifacts/s2c/external/adb_gpu_runtime_v3/banking77/ADB/kir_0.25/seed_100/results/results.csv",
+        "results_csv_exists": true,
+        "y_pred_sha256": "49afa834c24c83d9914826928cb31eb620c2bb86a85495c67fa1698174449e03",
+        "y_true_sha256": "5e03b8712e46397d54081b61ca4249a10c29e119f06dfff490a076401f9d0c5b"
+      },
+      "split_sha256": {
+        "dev": "43de1b15be3f2dd4740c22e88ec70a11d03083838259c4f7278da6233b350fbf",
+        "test": "85ecfa140d6da58d9f869c6c131c4afe2dc925a3aad1da5dddc1f7d3f8348c82",
+        "train": "d7150e8d6447052ef0b8705e6432d0c7c6a9a5aa046fba64467dff5bbd63f204"
+      }
+    },
+    {
+      "path": "artifacts/s2c/external/adb_gpu_runtime_v3/banking77/ADB/kir_0.25/seed_42/run_manifest.json",
+      "sha256": "3423448f105cef4088e4ef4e6df02aeaf51489e3648ac5d7f14eef0fdc1ef5d7",
+      "status": "complete",
+      "artifact_audit": {
+        "complete": true,
+        "prediction_directories": [
+          "/home/bo/bo01/llmpy311/artifacts/s2c/external/adb_gpu_runtime_v3/banking77/ADB/kir_0.25/seed_42/textoir_outputs/open_intent_detection/ADB_banking_0.25_1.0_bert_42"
+        ],
+        "prediction_directory_count": 1,
+        "results_csv": "/home/bo/bo01/llmpy311/artifacts/s2c/external/adb_gpu_runtime_v3/banking77/ADB/kir_0.25/seed_42/results/results.csv",
+        "results_csv_exists": true,
+        "y_pred_sha256": "463cf89ebeac54749e1e13ca1409b6a068ec4c63192268c7ee89c4427aa630e6",
+        "y_true_sha256": "bbfed9ca9f37094f29b22bd354864378505dba93d940e891b7f2e9ef12cdd09e"
+      },
+      "split_sha256": {
+        "dev": "423335f1c92e316946966ca35d7b837c38a2bcca6ec4811ea078b3ba719142a5",
+        "test": "40ecd7031ba88444ea470f260a8f982d5efb83f788fa2ba996c2cb3c6856c169",
+        "train": "fd0d302a3405b4d262fa35abe857dcc2fc97cf69dc6c2e7836bca8df19a8c455"
+      }
+    },
+    {
+      "path": "artifacts/s2c/external/adb_gpu_runtime_v3/banking77/ADB/kir_0.25/seed_87/run_manifest.json",
+      "sha256": "796f049559fee3f188beac42604c273e876fa640397c6e3f5f60ed45eadab60e",
+      "status": "complete",
+      "artifact_audit": {
+        "complete": true,
+        "prediction_directories": [
+          "/home/bo/bo01/llmpy311/artifacts/s2c/external/adb_gpu_runtime_v3/banking77/ADB/kir_0.25/seed_87/textoir_outputs/open_intent_detection/ADB_banking_0.25_1.0_bert_87"
+        ],
+        "prediction_directory_count": 1,
+        "results_csv": "/home/bo/bo01/llmpy311/artifacts/s2c/external/adb_gpu_runtime_v3/banking77/ADB/kir_0.25/seed_87/results/results.csv",
+        "results_csv_exists": true,
+        "y_pred_sha256": "bee65fc74199d94c1520ccbb7bdb63e4fc6086691fa4c7d76fd8eb6bdb928cfc",
+        "y_true_sha256": "e50f5a0109cc3a99261dcebf23a88a4e1ac5fcc2846aa836aae6c070111e376c"
+      },
+      "split_sha256": {
+        "dev": "136000027f6ee85deb0657073e3e014e6a884fcc4cefaedb1b98f01008cdbe9b",
+        "test": "10fb461496ccda18ffce577010e276b47833cc6f6587d9d53b78746b41c4d275",
+        "train": "363d55305a91513e7dd5575f4647295bc9c474a00b39e2e58c6507446fa16c06"
+      }
+    },
+    {
+      "path": "artifacts/s2c/external/adb_gpu_runtime_v3/banking77/ADB/kir_0.75/seed_100/run_manifest.json",
+      "sha256": "a003ebdfe3bce947da5db8c1ceea49e730d25825a2947fdacbd23f77b951099d",
+      "status": "complete",
+      "artifact_audit": {
+        "complete": true,
+        "prediction_directories": [
+          "/home/bo/bo01/llmpy311/artifacts/s2c/external/adb_gpu_runtime_v3/banking77/ADB/kir_0.75/seed_100/textoir_outputs/open_intent_detection/ADB_banking_0.75_1.0_bert_100"
+        ],
+        "prediction_directory_count": 1,
+        "results_csv": "/home/bo/bo01/llmpy311/artifacts/s2c/external/adb_gpu_runtime_v3/banking77/ADB/kir_0.75/seed_100/results/results.csv",
+        "results_csv_exists": true,
+        "y_pred_sha256": "a0452a30e38394d63479a1e79048026344ceb801c8a193794f8c8b39dc35322d",
+        "y_true_sha256": "5dfc73715e58478e9b107ab17de419599ce47221fd26ec04f66107badd29bb73"
+      },
+      "split_sha256": {
+        "dev": "91559337eb409093a937a3484d35a79b5a6db446cbf81177b5c365c74a3fd86a",
+        "test": "bfa393b656f912959e0240ecd3317cd30bdc090a8b9ae3f9726ceb5903dfbcfd",
+        "train": "dbb89f96becf21ba20d3aaaffa2f3e6814f362e1b2b43defd6db744cc4c84595"
+      }
+    },
+    {
+      "path": "artifacts/s2c/external/adb_gpu_runtime_v3/banking77/ADB/kir_0.75/seed_42/run_manifest.json",
+      "sha256": "19c70adfe75714c066e6308c34c6c3c92d93f02fd24ec9639322fb734171e22a",
+      "status": "complete",
+      "artifact_audit": {
+        "complete": true,
+        "prediction_directories": [
+          "/home/bo/bo01/llmpy311/artifacts/s2c/external/adb_gpu_runtime_v3/banking77/ADB/kir_0.75/seed_42/textoir_outputs/open_intent_detection/ADB_banking_0.75_1.0_bert_42"
+        ],
+        "prediction_directory_count": 1,
+        "results_csv": "/home/bo/bo01/llmpy311/artifacts/s2c/external/adb_gpu_runtime_v3/banking77/ADB/kir_0.75/seed_42/results/results.csv",
+        "results_csv_exists": true,
+        "y_pred_sha256": "44dce30b038bb4b89253be050df488259193e507463f4d54eae02b4bc11d7dd8",
+        "y_true_sha256": "48b17af6cf2d3e342f21a158bd26f612e72d2be825487f6bd58934835d0c6aaf"
+      },
+      "split_sha256": {
+        "dev": "f37b7e9bbe609215091f97f47f565ca079b2c0ba952ac118d809bdc2f776bbb9",
+        "test": "6ef0445812885f401578259f4655ef137a1575f121d0ee739ca81fe4be99626a",
+        "train": "9b03a401851e4bd41590f6ca3addbf7c3dc23b8e4b6e1dc3b908ffb0365876a1"
+      }
+    },
+    {
+      "path": "artifacts/s2c/external/adb_gpu_runtime_v3/banking77/ADB/kir_0.75/seed_87/run_manifest.json",
+      "sha256": "a4e00000f1cc0047577db6662428881874472bc3d3448781bb95f4a49b74c48d",
+      "status": "complete",
+      "artifact_audit": {
+        "complete": true,
+        "prediction_directories": [
+          "/home/bo/bo01/llmpy311/artifacts/s2c/external/adb_gpu_runtime_v3/banking77/ADB/kir_0.75/seed_87/textoir_outputs/open_intent_detection/ADB_banking_0.75_1.0_bert_87"
+        ],
+        "prediction_directory_count": 1,
+        "results_csv": "/home/bo/bo01/llmpy311/artifacts/s2c/external/adb_gpu_runtime_v3/banking77/ADB/kir_0.75/seed_87/results/results.csv",
+        "results_csv_exists": true,
+        "y_pred_sha256": "cffa29608b0afede4f50a43940690a25712147975adcf6698a73f808ed173226",
+        "y_true_sha256": "bf7e7b23c1db21e63ec565d45d9f7e4226ef49666168c88f8c7eded2a80028e3"
+      },
+      "split_sha256": {
+        "dev": "611f670ac42c99025010ac8d1b0564b44f44c25e192aeb9ee5e9676d9a641d49",
+        "test": "62c72b6ad2fac15a6948ca23784d4cf606a30c80701355ce6fc935b344bb9bbf",
+        "train": "5ec7309e2711400daf068853163000447303871ef32c956bc02d5ea524c926c3"
+      }
+    },
+    {
+      "path": "artifacts/s2c/external/adb_gpu_runtime_v3/clinc150/ADB/kir_0.25/seed_100/run_manifest.json",
+      "sha256": "f7b5b1997a57cb3c4f1547b86c0aa8c1678f07be6c853a0f5b640b8b07518169",
+      "status": "complete",
+      "artifact_audit": {
+        "complete": true,
+        "prediction_directories": [
+          "/home/bo/bo01/llmpy311/artifacts/s2c/external/adb_gpu_runtime_v3/clinc150/ADB/kir_0.25/seed_100/textoir_outputs/open_intent_detection/ADB_oos_0.25_1.0_bert_100"
+        ],
+        "prediction_directory_count": 1,
+        "results_csv": "/home/bo/bo01/llmpy311/artifacts/s2c/external/adb_gpu_runtime_v3/clinc150/ADB/kir_0.25/seed_100/results/results.csv",
+        "results_csv_exists": true,
+        "y_pred_sha256": "4bc8e06c03b03aa7482331326da934eadc62747bb12d7c75d1b8905e49f8d7f6",
+        "y_true_sha256": "38d5d4083417c73896b3c35b893208b10ed75e1b6e0a9115bd2a2ffa3a4e87ab"
+      },
+      "split_sha256": {
+        "dev": "8e58ea903935ee47ed07cdce9f15ac8cd36bc23cab4ac0bce768d0b7e081d978",
+        "test": "c6fd122de3802aedb59fc36c82a95dca561b082663987b05045c627857aea290",
+        "train": "063c5d93f7e61de2e7d96c8539885a9308e16fcffbc85691dba3b5b54c506c68"
+      }
+    },
+    {
+      "path": "artifacts/s2c/external/adb_gpu_runtime_v3/clinc150/ADB/kir_0.25/seed_42/run_manifest.json",
+      "sha256": "906f29ca5cdd8686722aa124b164678e46b4c6aa06537a2a1e0e21b4f8e43cb5",
+      "status": "complete",
+      "artifact_audit": {
+        "complete": true,
+        "prediction_directories": [
+          "/home/bo/bo01/llmpy311/artifacts/s2c/external/adb_gpu_runtime_v3/clinc150/ADB/kir_0.25/seed_42/textoir_outputs/open_intent_detection/ADB_oos_0.25_1.0_bert_42"
+        ],
+        "prediction_directory_count": 1,
+        "results_csv": "/home/bo/bo01/llmpy311/artifacts/s2c/external/adb_gpu_runtime_v3/clinc150/ADB/kir_0.25/seed_42/results/results.csv",
+        "results_csv_exists": true,
+        "y_pred_sha256": "a55193487dff2c61c54a0f7d35650f1792cd88f1a31788af84999e137349be2a",
+        "y_true_sha256": "ee8c8f34cea8b20b7afe33eab7f6d2a852da34acf101cf96a937763352b27cc7"
+      },
+      "split_sha256": {
+        "dev": "db26f1e026b439dc645ca87d2e6c6547df073d45ff3038b2e623ad7dc2ee5709",
+        "test": "c4570a33e8e3a49aaab3fb175c7a5ba8a1911d39803ecfffc0d3d56210e5febc",
+        "train": "67a43dfce51d8a0a28c7a8752d24480b1f7a358af7d990c4821ef002240515a6"
+      }
+    },
+    {
+      "path": "artifacts/s2c/external/adb_gpu_runtime_v3/clinc150/ADB/kir_0.25/seed_87/run_manifest.json",
+      "sha256": "b88e5ece8c1e0355a2b7b263832eec8b83d771b428c9fe8bb0255c92c7ae898a",
+      "status": "complete",
+      "artifact_audit": {
+        "complete": true,
+        "prediction_directories": [
+          "/home/bo/bo01/llmpy311/artifacts/s2c/external/adb_gpu_runtime_v3/clinc150/ADB/kir_0.25/seed_87/textoir_outputs/open_intent_detection/ADB_oos_0.25_1.0_bert_87"
+        ],
+        "prediction_directory_count": 1,
+        "results_csv": "/home/bo/bo01/llmpy311/artifacts/s2c/external/adb_gpu_runtime_v3/clinc150/ADB/kir_0.25/seed_87/results/results.csv",
+        "results_csv_exists": true,
+        "y_pred_sha256": "30a0c912543899cdab0aa99e3bd9486f3983fccb041391e0f872a6170aa6f047",
+        "y_true_sha256": "f41313245a5eed12abb450c6add17ea7ae075d7cc1089f3eb52d6b983dc2235f"
+      },
+      "split_sha256": {
+        "dev": "d402885ce297c9f3c4cea8e080fd448857b2b294ebe8847c95c0cbea6b020d5e",
+        "test": "f8fe42ee51d641245a09a9ae37eece3c2ec0dface68a0e4013f46398e157efdc",
+        "train": "d545b8c375451d747148cef1fd334a250f13e9c62dd35c0ccf1f76d8c932c86c"
+      }
+    },
+    {
+      "path": "artifacts/s2c/external/adb_gpu_runtime_v3/clinc150/ADB/kir_0.75/seed_100/run_manifest.json",
+      "sha256": "7c455a3f7df40228bb99215030712a1e27add68b01a6e9e693a875baff6c7def",
+      "status": "complete",
+      "artifact_audit": {
+        "complete": true,
+        "prediction_directories": [
+          "/home/bo/bo01/llmpy311/artifacts/s2c/external/adb_gpu_runtime_v3/clinc150/ADB/kir_0.75/seed_100/textoir_outputs/open_intent_detection/ADB_oos_0.75_1.0_bert_100"
+        ],
+        "prediction_directory_count": 1,
+        "results_csv": "/home/bo/bo01/llmpy311/artifacts/s2c/external/adb_gpu_runtime_v3/clinc150/ADB/kir_0.75/seed_100/results/results.csv",
+        "results_csv_exists": true,
+        "y_pred_sha256": "5c923fda818d4fae4f5074627990134e541738aa394bb21f13ddaea0618bbaeb",
+        "y_true_sha256": "4b5578fa7565cd827ba000a39c0fe61d2bb4fdd38d0894e18171eaa149a81f5b"
+      },
+      "split_sha256": {
+        "dev": "27d59c1a7e43c7a44359baaa09c8db6027de5727c3e8e46c5891217607e376bc",
+        "test": "68231405eff86104836dcd5d6a9c34c884735d10251e2e6e7871e2372d7afaf5",
+        "train": "de41459110e54d7a2dfb0cf8b29fcafc181d82e8063cb97a982d85b2484171d8"
+      }
+    },
+    {
+      "path": "artifacts/s2c/external/adb_gpu_runtime_v3/clinc150/ADB/kir_0.75/seed_42/run_manifest.json",
+      "sha256": "ef38cb2517bee5d7eeb54b02cdd4fd9104e6dde6b3882497cd802b2051add81b",
+      "status": "complete",
+      "artifact_audit": {
+        "complete": true,
+        "prediction_directories": [
+          "/home/bo/bo01/llmpy311/artifacts/s2c/external/adb_gpu_runtime_v3/clinc150/ADB/kir_0.75/seed_42/textoir_outputs/open_intent_detection/ADB_oos_0.75_1.0_bert_42"
+        ],
+        "prediction_directory_count": 1,
+        "results_csv": "/home/bo/bo01/llmpy311/artifacts/s2c/external/adb_gpu_runtime_v3/clinc150/ADB/kir_0.75/seed_42/results/results.csv",
+        "results_csv_exists": true,
+        "y_pred_sha256": "ca7cdb3cb4bb2fd8a6cea5571e125f927d6851ce6fb59d442542c86e27c679ce",
+        "y_true_sha256": "00411f1f89408cca0cc5e1af1f260299afe592780a6be19ad2e18acae6d83234"
+      },
+      "split_sha256": {
+        "dev": "4d3f858fb200b25e276dfa189e2966bd6f55ec616fb7fef97cbdf349bcf2e755",
+        "test": "71b3a1dd91901c6864b8ffb763634cf8809f72670607f273ab6178288ca24c6a",
+        "train": "e56ccf6bf4a090e796577c0c202be886ced02a92b050729233300ffea9efddbb"
+      }
+    },
+    {
+      "path": "artifacts/s2c/external/adb_gpu_runtime_v3/clinc150/ADB/kir_0.75/seed_87/run_manifest.json",
+      "sha256": "b1405b8e659d58885336360d5e27d9e618fb06abc6cfcf63801cefb4fcd36881",
+      "status": "complete",
+      "artifact_audit": {
+        "complete": true,
+        "prediction_directories": [
+          "/home/bo/bo01/llmpy311/artifacts/s2c/external/adb_gpu_runtime_v3/clinc150/ADB/kir_0.75/seed_87/textoir_outputs/open_intent_detection/ADB_oos_0.75_1.0_bert_87"
+        ],
+        "prediction_directory_count": 1,
+        "results_csv": "/home/bo/bo01/llmpy311/artifacts/s2c/external/adb_gpu_runtime_v3/clinc150/ADB/kir_0.75/seed_87/results/results.csv",
+        "results_csv_exists": true,
+        "y_pred_sha256": "530d85c776d0a2445656033205c92fd9e2ff25a31d2dd610e1c99d55d23b423e",
+        "y_true_sha256": "115f20f0fc9c14c5b78c32661bec59790b469b890f0596158a20e8bc3538bb3d"
+      },
+      "split_sha256": {
+        "dev": "b13fdf19909c2dc13132ab2094cb602e538d9fc6734fa1d48827c6a279d48983",
+        "test": "49ed157bf18f5b3267c61fd0b80ab2ac508a1ab08f9e91a4c0cf2a5bc024b6e5",
+        "train": "48ffea1a9fbe252c9763ade5b90941413535a14faef8833e0de0933da2e386d6"
+      }
+    },
+    {
+      "path": "artifacts/s2c/external/adb_gpu_runtime_v3/stackoverflow/ADB/kir_0.25/seed_100/run_manifest.json",
+      "sha256": "5bd5c56a2613e2d25d3d393be2db874fbd20163067e217eaa257685484f28614",
+      "status": "complete",
+      "artifact_audit": {
+        "complete": true,
+        "prediction_directories": [
+          "/home/bo/bo01/llmpy311/artifacts/s2c/external/adb_gpu_runtime_v3/stackoverflow/ADB/kir_0.25/seed_100/textoir_outputs/open_intent_detection/ADB_stackoverflow_0.25_1.0_bert_100"
+        ],
+        "prediction_directory_count": 1,
+        "results_csv": "/home/bo/bo01/llmpy311/artifacts/s2c/external/adb_gpu_runtime_v3/stackoverflow/ADB/kir_0.25/seed_100/results/results.csv",
+        "results_csv_exists": true,
+        "y_pred_sha256": "be3c09fecd13c3665f8529862f7abf45f95d1c6a66f04ad6226873438d35115c",
+        "y_true_sha256": "5997c01801c6588133d532cad0e0a53700c6e8f4d1d607e678b4f9031cf0c84b"
+      },
+      "split_sha256": {
+        "dev": "43f1933680f5551c433f8eed77ff8a4ccf4905f6c056dca5ca8918847a39feb2",
+        "test": "cdcc7bcfdeeb03871932f77014e703fd7bbc7b61e3bedabb96dbdb021c935001",
+        "train": "cca41166eee5db60b5156cfbe5767ffaffb627b37a831fb4358dd037ae584747"
+      }
+    },
+    {
+      "path": "artifacts/s2c/external/adb_gpu_runtime_v3/stackoverflow/ADB/kir_0.25/seed_42/run_manifest.json",
+      "sha256": "3619c9375fbac15171ae85c01c62164d0aaed4491fc22d5fb2d95037b199ebd4",
+      "status": "complete",
+      "artifact_audit": {
+        "complete": true,
+        "prediction_directories": [
+          "/home/bo/bo01/llmpy311/artifacts/s2c/external/adb_gpu_runtime_v3/stackoverflow/ADB/kir_0.25/seed_42/textoir_outputs/open_intent_detection/ADB_stackoverflow_0.25_1.0_bert_42"
+        ],
+        "prediction_directory_count": 1,
+        "results_csv": "/home/bo/bo01/llmpy311/artifacts/s2c/external/adb_gpu_runtime_v3/stackoverflow/ADB/kir_0.25/seed_42/results/results.csv",
+        "results_csv_exists": true,
+        "y_pred_sha256": "4fb8abc0643b058543caf4460ffb4cfd119d62b615459ff3eded0135cf1be73f",
+        "y_true_sha256": "1ace99f78ed6abca5e6f88516cb16fa9faf95fd2d2ee4756f41bd8dfe371699e"
+      },
+      "split_sha256": {
+        "dev": "7f8e0ac5c2793e5b56e146f94908868f3cd725c8703e3cdb36c3f8ea13213279",
+        "test": "6b01ccf576d8a8193ac68e9fe895d7b8fd3d810496bdb9ea5ead93982f0def5f",
+        "train": "e5379c1ff2f94693b2efe3a204b740e77a00532d0a809292e4d4311bcc05ee0a"
+      }
+    },
+    {
+      "path": "artifacts/s2c/external/adb_gpu_runtime_v3/stackoverflow/ADB/kir_0.25/seed_87/run_manifest.json",
+      "sha256": "bf32a8374b521f65db461e23344f5ef88b5b2204492bda42fcf6b26b724ca329",
+      "status": "complete",
+      "artifact_audit": {
+        "complete": true,
+        "prediction_directories": [
+          "/home/bo/bo01/llmpy311/artifacts/s2c/external/adb_gpu_runtime_v3/stackoverflow/ADB/kir_0.25/seed_87/textoir_outputs/open_intent_detection/ADB_stackoverflow_0.25_1.0_bert_87"
+        ],
+        "prediction_directory_count": 1,
+        "results_csv": "/home/bo/bo01/llmpy311/artifacts/s2c/external/adb_gpu_runtime_v3/stackoverflow/ADB/kir_0.25/seed_87/results/results.csv",
+        "results_csv_exists": true,
+        "y_pred_sha256": "9da9cb0e87cef7c95588d6285a5033aa651eb7ecdee6ea26b2119086a2ca4153",
+        "y_true_sha256": "5c82452e63f636ce3f191d6fef4a2d63ca90d35f7b24131704810d3f169a91d2"
+      },
+      "split_sha256": {
+        "dev": "8e9226f22d6f1a6e89cc32f26de54fc11316f76d89d72fbd3750f1ad2929325b",
+        "test": "80e9a6fb42a89edecb39275d5e420a041e481eda630de559ab9ef10a5c1d84e8",
+        "train": "5dcd3ad7a93f8726c143b13c2fa7026f87217a4a8e5666e3e9f40f34a8babd6d"
+      }
+    },
+    {
+      "path": "artifacts/s2c/external/adb_gpu_runtime_v3/stackoverflow/ADB/kir_0.75/seed_100/run_manifest.json",
+      "sha256": "f788843cbc811f5574d1496611ff22bdd6c810f052b1f8a59f4e18fff7442210",
+      "status": "complete",
+      "artifact_audit": {
+        "complete": true,
+        "prediction_directories": [
+          "/home/bo/bo01/llmpy311/artifacts/s2c/external/adb_gpu_runtime_v3/stackoverflow/ADB/kir_0.75/seed_100/textoir_outputs/open_intent_detection/ADB_stackoverflow_0.75_1.0_bert_100"
+        ],
+        "prediction_directory_count": 1,
+        "results_csv": "/home/bo/bo01/llmpy311/artifacts/s2c/external/adb_gpu_runtime_v3/stackoverflow/ADB/kir_0.75/seed_100/results/results.csv",
+        "results_csv_exists": true,
+        "y_pred_sha256": "616dc638801e73428bacda9566086d0b52e13e2c5d37c377b18dc4abb564bc2d",
+        "y_true_sha256": "a207fd60cf10e73b3d2655ee30e72c46b8eee711e8d4f117300e395dc6ee7225"
+      },
+      "split_sha256": {
+        "dev": "320d3d359cef9e487b4e85bac2efaf8ded3f4084c9700fd1aef7c051e14fcd66",
+        "test": "7c4111637c028cd3914db930f1e89939a6cbf8f0c9b2293ace0456830c2ab9c4",
+        "train": "e06a21e71f1d78262a95d2d75bf36371be1298349b2b16114f081552e4d015ac"
+      }
+    },
+    {
+      "path": "artifacts/s2c/external/adb_gpu_runtime_v3/stackoverflow/ADB/kir_0.75/seed_42/run_manifest.json",
+      "sha256": "3caa1268f186dd423266fd8128ecf36cbd9879e77ac74ddfef83e5547042d6f0",
+      "status": "complete",
+      "artifact_audit": {
+        "complete": true,
+        "prediction_directories": [
+          "/home/bo/bo01/llmpy311/artifacts/s2c/external/adb_gpu_runtime_v3/stackoverflow/ADB/kir_0.75/seed_42/textoir_outputs/open_intent_detection/ADB_stackoverflow_0.75_1.0_bert_42"
+        ],
+        "prediction_directory_count": 1,
+        "results_csv": "/home/bo/bo01/llmpy311/artifacts/s2c/external/adb_gpu_runtime_v3/stackoverflow/ADB/kir_0.75/seed_42/results/results.csv",
+        "results_csv_exists": true,
+        "y_pred_sha256": "7ceabae3ca5da12884275eb3ab0926b79911ff634b3b9d6c327c3276602122dd",
+        "y_true_sha256": "880f51ac944ad407eeec271b32e714f27bdcb6df51582278ab68920a85a94da7"
+      },
+      "split_sha256": {
+        "dev": "2631d68a14bfce36b731ac106a42e25eb0d8bca7ce5b64c66d31f2e4ae5b23ad",
+        "test": "3837463ec4f5577dcbe9bfd78f48a5a8117636702741271ae4d816936db0fd52",
+        "train": "249da304a4e7133c0c6c6255cd7eb6fd5a61308c04b57ba7d0c485d90163d5e5"
+      }
+    },
+    {
+      "path": "artifacts/s2c/external/adb_gpu_runtime_v3/stackoverflow/ADB/kir_0.75/seed_87/run_manifest.json",
+      "sha256": "34474d5d6743e5b80a11e5a4e3831dac24d2583b4b4ec729c38ee94c23a78766",
+      "status": "complete",
+      "artifact_audit": {
+        "complete": true,
+        "prediction_directories": [
+          "/home/bo/bo01/llmpy311/artifacts/s2c/external/adb_gpu_runtime_v3/stackoverflow/ADB/kir_0.75/seed_87/textoir_outputs/open_intent_detection/ADB_stackoverflow_0.75_1.0_bert_87"
+        ],
+        "prediction_directory_count": 1,
+        "results_csv": "/home/bo/bo01/llmpy311/artifacts/s2c/external/adb_gpu_runtime_v3/stackoverflow/ADB/kir_0.75/seed_87/results/results.csv",
+        "results_csv_exists": true,
+        "y_pred_sha256": "8c4771e78dd1bd249c21df8caa39a7382b9cf84d281f02ea9aef2b0b407ac2e5",
+        "y_true_sha256": "beba8171e44dc3535d2c64b0dd208fee147e16e618862dba02cdb993cb545413"
+      },
+      "split_sha256": {
+        "dev": "76a79d582057cffb07f71c6a52b399a0223afdbcabd82134a2c82ec398634e34",
+        "test": "dda2f0986b65fe77a7c268b59fe4e2583cd7c7f0a3e99174b290b421eaaa94e5",
+        "train": "e7eb77bf0d0d1de624ff7cc16ebd7d7121bb6185d3f219bd15d8027d96aa559c"
+      }
+    }
+  ],
+  "selection_used_test_oos": false,
+  "metric_source": "y_true.npy/y_pred.npy",
+  "outputs": [
+    "adb_per_seed.csv",
+    "adb_summary.csv",
+    "adb_trainable_paired_effects.csv",
+    "adb_trainable_paired_summary.csv"
+  ]
+}

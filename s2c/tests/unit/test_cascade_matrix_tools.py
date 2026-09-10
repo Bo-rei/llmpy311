@@ -8,6 +8,7 @@ from pathlib import Path
 import json
 
 from tools.eval.run_cascade_matrix import _command
+from tools.train import run_cascade_components as components
 from tools.train.run_cascade_components import _domains, _planned_component
 
 
@@ -64,3 +65,15 @@ def test_single_domain_component_uses_constant_router() -> None:
     assert plan["router_mode"] == "constant"
     assert plan["domains"] == ["stackoverflow"]
     assert all(item["kind"] != "router" for item in plan["commands"])
+
+
+def test_component_plan_uses_requested_kir_without_reusing_kir50_seed42() -> None:
+    original = components.KIR
+    try:
+        components.KIR = 0.25
+        plan = components._planned_component("clinc150", 42)
+        assert "kir25_seed42" in str(plan["data_root"])
+        assert plan["source"] == "gpu_trained_for_cascade_matrix"
+        assert plan["commands"]
+    finally:
+        components.KIR = original

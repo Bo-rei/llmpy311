@@ -1,0 +1,35 @@
+schema_version: 1
+experiment: historical_trainable_checkpoint_selection
+trigger: adaptive_centers_clinc_three_seed_mean_90.99_below_91.96_and_fixed_score_oracle_gap
+protocol: historical_v19_paper_main
+evidence_level: H1 controlled
+dataset: clinc150
+kir: 0.50
+seeds: [13, 42, 87]
+recipes:
+  - {name: last2_long, mode: last2_minilm_plus_projection, backbone_lr: 0.00002}
+  - {name: projection_only, mode: trainable_projection_only, backbone_lr: 0}
+  - {name: lora_long, mode: lora_minilm_plus_projection, backbone_lr: 0.00002}
+existing_checkpoint_control: true
+warmup_epochs: 1
+finetune_epochs: 8
+early_stopping: false
+projection_lr: 0.0002
+batch_size: 64
+max_length: 256
+temperature: 0.07
+intra_weight: 0.1
+inter_weight: 0.1
+classification_weight: 1
+inter_margin: 0.20
+checkpoint_and_recipe_selection: validation_oos_f1_only
+boundary: K1_diagonal_mahalanobis_mean_std
+lambda_values: [0.25, 0.5, 0.75, 1, 1.25, 1.5, 2, 2.5, 3]
+threshold_range: [0.70, 1.30, 0.05]
+acceptance_modes: [nearest_sphere, normalized_union]
+test_access: only_after_all_seed_recipe_and_epoch_selections_locked
+train_oos_used: false
+test_used_for_selection: false
+downstream: fixed_h1_cascade_full_gpu_kir50
+device: cuda
+artifact_root: ../artifacts/s2c/runs/historical_trainable_checkpoint_selection

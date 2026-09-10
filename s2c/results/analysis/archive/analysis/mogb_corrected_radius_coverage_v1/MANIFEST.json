@@ -1,0 +1,43 @@
+{
+  "checkpoint_sha256": "127bd347fe9912f81b771630ae8f5d70bd91348567fb8bfd3b2c418da68dfc22",
+  "dataset": "stackoverflow",
+  "default_metric_replay_equivalent": false,
+  "dev_known_sample_count": 1000,
+  "elapsed_seconds": 86.488201379776,
+  "experiment_id": "mogb_corrected_radius_coverage_v1",
+  "kir": 0.5,
+  "outputs": {
+    "dev_known_radius_thresholds.csv": "35bce9efb8a14f4577738b4eb5cf96b1e8ae69e4d5195a333e9b893365301148",
+    "per_ball_radius_attribution.csv": "daffdd3e3ee379d4cb553417254b74943c1000df1801bbf67b6a1617b51a828e",
+    "replay_check.json": "eac53532a7afc89e87dd96647e5fc7cf0dbffbdcbdabe97b4b9f404927b200ea",
+    "report": "d28a7bda26a1742ec415ef3b0625c29ddcd217383a94af883f7ad47f62040d86",
+    "selected_ball_replay.csv": "1f73371c7e3f6341c6989e6af559e2c6d2154dbf4049b1a978f62be3c9b748ed",
+    "workpoint_metrics.csv": "763b364fc812d0c327301a43accb9ca996c259d53a3ca396e3eb1d5d36fd9e7f"
+  },
+  "reference_selected_ball_count": 33,
+  "replay_seed": 4,
+  "replay_status": "deterministic_fixed_checkpoint_reconstruction",
+  "script_sha256": "fa6d256b88bf2eaf514ae8f999e91a60982519bbde3fee37e25f145269630db2",
+  "seed": 0,
+  "selected_ball_count": 33,
+  "source_experiment_id": "mogb_corrected_subcentroid_loss_v1",
+  "source_final_metrics_sha256": "6da9f9afe28719aadf96c5e053ab1d11e7f595ac0c171734fe15d51c812de7d6",
+  "source_mode": "official_fixed",
+  "source_mode_manifest_sha256": "f9bd1924c634a8f91773e889c20bf7b8dfa8bf67cdda74151528110a29a776ef",
+  "status": "complete",
+  "strict_selected_ball_replay": false,
+  "target_coverages": [
+    0.8,
+    0.85,
+    0.9,
+    0.95
+  ],
+  "test_used_for_selection": false,
+  "workpoints": [
+    "default_mean",
+    "dev_known_coverage_0.80",
+    "dev_known_coverage_0.85",
+    "dev_known_coverage_0.90",
+    "dev_known_coverage_0.95"
+  ]
+}

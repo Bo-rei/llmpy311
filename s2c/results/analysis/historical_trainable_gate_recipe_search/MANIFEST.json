@@ -1,0 +1,22 @@
+{
+  "experiment": "historical_trainable_gate_recipe_search",
+  "protocol": "historical_v19_paper_main",
+  "dataset": "clinc150",
+  "kir": 0.5,
+  "seeds": [
+    13,
+    42,
+    87
+  ],
+  "recipes": [
+    "last2_lr1e5",
+    "last2_temp10",
+    "last2_no_inter",
+    "lora_lr1e5"
+  ],
+  "device": "cuda",
+  "completed_training_units": 12,
+  "completed_confirmation_units": 3,
+  "test_used_for_selection": false,
+  "elapsed_seconds": 670.9509222507477
+}

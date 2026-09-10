@@ -27,8 +27,8 @@ plt.rcParams["axes.unicode_minus"] = False
 ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_EXTERNAL_ROOT = ROOT.parent / "artifacts/s2c/external/adb_gpu_runtime_v2"
 DEFAULT_FAIR = ROOT / "results/analysis/cross_protocol_tradeoff_v1/per_seed.csv"
-DEFAULT_OUTPUT = ROOT / "results/analysis/adb_cross_dataset_v1"
-DEFAULT_FIGURES = ROOT / "figures/adb_cross_dataset_v1"
+DEFAULT_OUTPUT = ROOT / "results/analysis/archive/analysis/adb_cross_dataset_v1"
+DEFAULT_FIGURES = ROOT / "figures/archive/analysis/adb_cross_dataset_v1"
 DATASET_MAP = {"banking": "banking77", "oos": "clinc150", "stackoverflow": "stackoverflow"}
 
 
@@ -212,7 +212,7 @@ def build_report(rows: list[dict[str, object]], paired: list[dict[str, object]])
             "- DA-ADB、DCLOOS 和 MOGB 官方论文值不在本报告中重新排名；它们分别有 invalid、额外 OOS 监督或官方数据/环境合同差异。",
             "- 下一步可在本报告基础上补充 ADB 的 KIR 曲线，但当前不使用测试结果选参。",
             "",
-            "机器可读输出：`results/analysis/adb_cross_dataset_v1/`；图表：`figures/adb_cross_dataset_v1/`。",
+            "机器可读输出：`results/analysis/archive/analysis/adb_cross_dataset_v1/`；图表：`figures/archive/analysis/adb_cross_dataset_v1/`。",
         ]
     )
     return "\n".join(lines) + "\n"

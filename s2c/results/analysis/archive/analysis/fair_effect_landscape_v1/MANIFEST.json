@@ -1,0 +1,44 @@
+{
+  "analysis_id": "fair_effect_landscape_v1",
+  "comparisons": [
+    "single_centroid",
+    "fixed_k2",
+    "random_partition",
+    "mogb_minilm",
+    "mogb_partition_ours_boundary",
+    "ours_partition_mogb_boundary"
+  ],
+  "datasets": [
+    "clinc150",
+    "banking77",
+    "stackoverflow"
+  ],
+  "kirs": [
+    0.25,
+    0.5,
+    0.75
+  ],
+  "metrics": [
+    "oos_f1",
+    "f1_all",
+    "f1_k",
+    "known_recall",
+    "false_accept_rate",
+    "false_reject_rate",
+    "auroc",
+    "aupr_oos"
+  ],
+  "outputs": [
+    "effect_landscape.csv",
+    "effect_landscape_summary.csv",
+    "trainable_oos_f1_effect_heatmap.png",
+    "trainable_oos_fa_effect_landscape.png",
+    "trainable_multimetric_effect_summary.png"
+  ],
+  "protocol_version": "protocol_v2_textoir_v1",
+  "rows": 432,
+  "significance": "95% paired bootstrap CI inherited from statistical_stability_v1; no new model run",
+  "source": "/home/bo/bo01/llmpy311/s2c/results/analysis/archive/analysis/statistical_stability_v1/paired_effects.csv",
+  "source_sha256": "e5e9ce7f4b92ba6a355b159b2e1103fcd8dde718b6dbf4ce8527c5a66d963216",
+  "source_version": "statistical_stability_v1"
+}

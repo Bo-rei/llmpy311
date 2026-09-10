@@ -1,0 +1,2 @@
+dataset,kir,seed,oos_decision_changed,corrected_oos,regressed_oos,projection_scope
+stackoverflow,0.5,42,408,390,18,common PCA fitted on Frozen and Trainable endpoints; descriptive only

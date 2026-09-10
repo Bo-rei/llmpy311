@@ -11,6 +11,7 @@ sys.path.insert(0, str(PROJECT_ROOT))
 
 from scripts.data.active.rebuild_multi_dataset_v19 import (  # noqa: E402
     STACKOVERFLOW_INTENTS,
+    _audit_bundle,
     build_stackoverflow_bundle,
     sync_stackoverflow_source,
     _select_stackoverflow_known_intents,
@@ -267,3 +268,24 @@ def test_evaluate_reports_stackoverflow_heldout_oos_source_bucket():
     assert "heldout_oos" in metrics["oos_by_source"]
     assert metrics["oos_by_source"]["heldout_oos"]["count"] == 1
     assert metrics["oos_by_source"]["heldout_oos"]["gate_oos_rejection"] == 1.0
+
+
+def test_v19_audit_rejects_validation_test_text_overlap():
+    from types import SimpleNamespace
+
+    row = {"text": "same text", "intent": "x", "domain": "d", "label": 0}
+    audit = _audit_bundle(
+        SimpleNamespace(
+            dataset="fixture",
+            dataset_slug="fixture",
+            kir=0.5,
+            seed=42,
+            gate={"train": [], "val": [row], "test": [dict(row)]},
+            router={"train": [], "val": [], "test": []},
+            experts={},
+        )
+    )
+
+    assert audit["gate"]["val_test_overlap"] == 1
+    assert audit["gate"]["text_isolation_ok"] is False
+    assert audit["passed"] is False

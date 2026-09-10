@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "analysis": "cross_kir_contract_atlas_v1",
+  "protocol_version": "protocol_v2_textoir_v1",
+  "fair_source": "/home/bo/bo01/llmpy311/s2c/results/analysis/cross_protocol_tradeoff_v1/summary_mean_std.csv",
+  "fair_source_sha256": "c3f5b5cb9701bfd2e111da85575226393e3baf9c8bcace7df6fc39eb2d396ae8",
+  "adb_source": "/home/bo/bo01/llmpy311/s2c/results/analysis/archive/adb_kir_sensitivity_incomplete_v1/adb_summary.csv",
+  "adb_source_sha256": "fd03fdb3df07be13eb56514a705f495355e2a252e1d3adbe4d253a8486031660",
+  "row_count": 27,
+  "selection_used_test_oos": false,
+  "contracts": {
+    "trainable_k1": "MiniLM known-only fair, 5 seeds",
+    "mogb_minilm": "Frozen MiniLM MOGB component, 5 seeds",
+    "adb": "BERT/TextOIR external compatibility, 3 seeds"
+  }
+}

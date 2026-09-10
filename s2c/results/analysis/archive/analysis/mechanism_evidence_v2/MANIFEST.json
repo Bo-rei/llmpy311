@@ -1,0 +1,31 @@
+{
+  "analysis_id": "mechanism_evidence_v2",
+  "analysis_only": true,
+  "budget_rows": 54,
+  "fair_rows": 63,
+  "figures": [
+    "known_recovery_vs_oos_acceptance.png",
+    "oos_f1_vs_false_acceptance.png",
+    "representation_geometry_vs_k2_risk.png",
+    "score_gap_and_false_acceptance.png"
+  ],
+  "geometry_rows": 9,
+  "interpretation": "descriptive mechanism analysis; no test-derived selection rule",
+  "protocol_version": "protocol_v2_textoir_v1",
+  "source_sha256": {
+    "fair": "c3f5b5cb9701bfd2e111da85575226393e3baf9c8bcace7df6fc39eb2d396ae8",
+    "geometry": "b3f3cf33cf8bbbac52964eed2702d9369dc2ec5289b95928e822452e7ab3a8f9",
+    "geometry_k": "d36690471f654135e53a84ce3c232223bbcc07563700ffdda407ba6f7011ef03",
+    "score_gap": "fbfa3154eec31e486c81c5478aec9ff6f10444065ca8b51ecfc330396d65b385",
+    "trainable_k2": "a1399a79015e71912885ae715be3e33340687161f93453c20f673834cba64ab6"
+  },
+  "sources": {
+    "fair": "results/analysis/cross_protocol_tradeoff_v1/summary_mean_std.csv",
+    "geometry": "results/analysis/archive/analysis/representation_geometry_visuals_v1/geometry_summary.csv",
+    "geometry_k": "results/analysis/archive/analysis/representation_geometry_visuals_v1/k_effects.csv",
+    "score_gap": "results/analysis/archive/analysis/representation_geometry_visuals_v1/score_gap_false_accept.csv",
+    "trainable_k2": "results/diagnostics/minilm_trainable_k2_control_v1/per_seed.csv"
+  },
+  "test_selection": false,
+  "trainable_k2_rows": 9
+}

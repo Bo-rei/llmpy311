@@ -1,0 +1,21 @@
+{
+  "dataset": "banking77_oos",
+  "kir": 0.5,
+  "seed": 42,
+  "ours": {
+    "checkpoint": "/home/bo/bo01/llmpy311/artifacts/s2c/runs/historical_protocol_v2/minilm_k1/banking77_oos/kir50_seed42/trainable_k1/checkpoint.pt",
+    "k": 2,
+    "radius_lambda": 1.0,
+    "threshold": 1.0,
+    "acceptance_mode": "normalized_union"
+  },
+  "variant_names": [
+    "Ours",
+    "Without Gate",
+    "Cascade-MiniLM",
+    "Cascade-SmolLM"
+  ],
+  "threshold_selection": "validation full macro F1; grid .2:.05:.95",
+  "single_domain_smollm_gate": "pretrained SmolLM backbone because router is constant",
+  "test_used_for_selection": false
+}

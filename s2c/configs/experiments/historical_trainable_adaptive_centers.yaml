@@ -1,0 +1,26 @@
+schema_version: 1
+experiment: historical_trainable_adaptive_centers
+protocol: historical_v19_paper_main
+evidence_level: H1 controlled
+datasets: [clinc150, stackoverflow, banking77_oos]
+kir: 0.50
+seeds: [13, 42, 87]
+representation: existing_trainable_last2_minilm_plus_projection
+train_oos_used: false
+ranking_source: train_known_only
+rankings: [mean_distance, variance, sse_reduction]
+split_percentages: [10, 25, 50, 75, 100]
+split_k: [2, 3]
+fixed_baselines: [1, 2, 3]
+radius_rule: mean_std
+covariance_rule: per_sphere_diagonal_variance_plus_1e-6
+lambdas: [0.25, 0.5, 0.75, 1.0, 1.25, 1.5, 2.0, 2.5, 3.0]
+thresholds: {start: 0.70, stop: 1.30, step: 0.05}
+fine_search: each_strategy_validation_winner_same_lambda_mode_threshold_plus_minus_0.04_step_0.01
+acceptance_modes: [nearest_sphere, normalized_union]
+selection: {split: validation, objective: oos_f1_only, guard: none, test_used: false}
+tie_break: fewer_centers_then_lambda_and_threshold_nearer_one_then_mode_and_strategy_order
+test: confirm_every_frozen_candidate_after_selection_lock
+downstream: fixed_existing_h1_cascade_full_gpu_kir50
+direct_confirmation: overall_and_fixed_and_adaptive_validation_winners_if_cuda
+rerun_reason: required_fixed_controls_under_new_oos_only_objective_and_new_train_only_adaptive_assignments

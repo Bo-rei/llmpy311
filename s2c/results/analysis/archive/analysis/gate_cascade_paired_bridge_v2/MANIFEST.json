@@ -1,0 +1,34 @@
+{
+  "analysis_id": "gate_cascade_paired_bridge_v2",
+  "bootstrap_repetitions": 10000,
+  "bootstrap_seed": 20260725,
+  "cascade_methods": [
+    "frozen_k1",
+    "frozen_selected_k",
+    "ce_recon_selected_k",
+    "best_controlled_baseline"
+  ],
+  "datasets": [
+    "clinc150",
+    "banking77",
+    "stackoverflow"
+  ],
+  "gate_only_method": "trainable_k1_gate",
+  "outputs": [
+    "gate_vs_cascade_effects.csv",
+    "cascade_pairwise_effects.csv",
+    "gate_cascade_oos_f1_bridge_forest.png",
+    "cascade_only_oos_accuracy_tradeoff.png",
+    "cascade_router_expert_error_decomposition.png"
+  ],
+  "protocol_version": "protocol_v2_textoir_v1",
+  "seeds": [
+    13,
+    42,
+    87
+  ],
+  "source": "/home/bo/bo01/llmpy311/s2c/results/analysis/archive/analysis/gate_cascade_bridge_v1/per_seed.csv",
+  "source_rows": 45,
+  "source_sha256": "d00dd9425d32c56fde92b557c7bdc4281cf722499c2c20cc5338b6af6b3ee0e5",
+  "warning": "Trainable row is Gate-only; bridge effects are not a unified end-to-end ranking."
+}

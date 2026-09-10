@@ -1,0 +1,35 @@
+{
+  "audit_version": "plan_alignment_audit_v1",
+  "date": "2026-08-11",
+  "protocol_version": "protocol_v2_textoir_v1",
+  "source_attachment": "/home/bo/.codex/attachments/5e4863c4-04b2-43e7-af9c-99bfc009e402/pasted-text-1.txt",
+  "source_previous_plan": "user-provided S2C unified comparison and mechanism visualization plan, stages 1-10",
+  "matrix": "results/analysis/archive/analysis/plan_alignment_audit_v1/requirement_matrix.csv",
+  "matrix_rows": 23,
+  "status_vocabulary": ["已完成", "部分完成", "未完成", "证据不足"],
+  "status_counts": {
+    "已完成": 1,
+    "部分完成": 15,
+    "未完成": 7,
+    "证据不足": 0
+  },
+  "audit_scope": "read-only audit of existing checkout artifacts; no model training or result regeneration",
+  "current_contract_evidence": {
+    "normalized_rows": 2394360,
+    "run_groups": 486,
+    "aligned_method_cells": 441,
+    "external_or_failed_alignment_cells": 45,
+    "fair_summary_rows": 63,
+    "row_level_artifact": "../artifacts/s2c/analysis/unified_prediction_contract_v1/predictions.jsonl.gz"
+  },
+  "overall_verdict": "direction_aligned_but_original_plan_not_complete",
+  "known_blockers": [
+    "missing current final-metrics contracts for KNNCL/OpenMax/DOC/DeepUnk",
+    "DA-ADB is not a complete cross-dataset row-level contract",
+    "DCLOOS fixed-registry final metrics and supervision frontier are missing",
+    "requested S2C-BERT and ADB-MiniLM backbone controls are missing",
+    "no auditable error-aware UMAP embedding artifact",
+    "no low-resource or unified performance-cost Pareto bundle"
+  ],
+  "supplement_plan": "docs/analysis/UNIFIED_COMPARISON_SUPPLEMENT_PLAN_V1.md"
+}

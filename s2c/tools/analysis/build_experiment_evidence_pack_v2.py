@@ -246,7 +246,7 @@ def main() -> None:
     cascade_decomposition()
     manifest = {
         "source_fair_matrix": "results/mogb/fair_matrix.csv",
-        "source_trainable": "results/analysis/minilm_trainable_kir_sweep_v1/mean_std.csv",
+        "source_trainable": "results/analysis/archive/analysis/minilm_trainable_kir_sweep_v1/mean_std.csv",
         "bootstrap_seed": 20260725,
         "bootstrap_resamples": 10000,
         "notes": [

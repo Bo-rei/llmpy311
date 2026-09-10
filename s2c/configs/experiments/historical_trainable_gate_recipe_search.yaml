@@ -1,0 +1,15 @@
+schema_version: 1
+experiment: historical_trainable_gate_recipe_search
+protocol: historical_v19_paper_main
+evidence_level: H1 controlled
+dataset: clinc150
+kir: 0.50
+seeds: [13, 42, 87]
+recipes: [last2_lr1e5, last2_temp10, last2_no_inter, lora_lr1e5]
+warmup_epochs: 1
+finetune_epochs: 8
+selection_objective: validation_oos_f1_only
+train_oos_used: false
+test_used_for_selection: false
+artifact_root: ../artifacts/s2c/runs/historical_trainable_gate_recipe_search
+result_root: results/analysis/historical_trainable_gate_recipe_search

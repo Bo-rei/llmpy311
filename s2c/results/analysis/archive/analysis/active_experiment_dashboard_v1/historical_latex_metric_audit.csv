@@ -1,0 +1,3 @@
+dataset,kir,metric,paper_table_value,json_metrics_value,raw_primary_value,override_source,source,interpretation
+stackoverflow,0.5,oos_f1,0.8971,0.8971,0.5910435149978877,main_table_ours,artifacts/s2c/outputs/paper_results/stackoverflow/kir50_seed42/full_anchor/eval_results.json,历史表面值；不作为当前 Gate-only 公平排名
+stackoverflow,0.5,overall_accuracy,0.8554,0.8554,0.6342237061769616,main_table_ours,artifacts/s2c/outputs/paper_results/stackoverflow/kir50_seed42/full_anchor/eval_results.json,历史表面值；不作为当前 Gate-only 公平排名

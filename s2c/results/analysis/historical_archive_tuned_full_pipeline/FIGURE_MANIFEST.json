@@ -1,0 +1,44 @@
+{
+  "schema_version": "s2c.historical_archive_tuned_full_pipeline.figures.v1",
+  "protocol": "historical_v19_archive_development_tuning",
+  "backend": "python_matplotlib",
+  "datasets": [
+    "clinc150",
+    "stackoverflow",
+    "banking77"
+  ],
+  "seed": 42,
+  "source_data": [
+    "results/analysis/historical_archive_full_pipeline/comparison.csv",
+    "../artifacts/s2c/runs/historical_archive_tuned_full_pipeline_seed42/*/kir50_seed42/per_method.csv",
+    "../artifacts/s2c/runs/historical_archive_gate_search_seed42/*/partial_k1/workpoints.csv",
+    "../artifacts/s2c/runs/historical_archive_gate_search_seed42/*/partial_k1/selected_validation.csv",
+    "fulltex.tex"
+  ],
+  "figures": {
+    "pipeline_gate_full_oos_invariance": [
+      "figures/historical_archive_tuned_full_pipeline/pipeline_gate_full_oos_invariance.png",
+      "figures/historical_archive_tuned_full_pipeline/pipeline_gate_full_oos_invariance.svg",
+      "figures/historical_archive_tuned_full_pipeline/pipeline_gate_full_oos_invariance.pdf"
+    ],
+    "pipeline_oos_f1_vs_paper": [
+      "figures/historical_archive_tuned_full_pipeline/pipeline_oos_f1_vs_paper.png",
+      "figures/historical_archive_tuned_full_pipeline/pipeline_oos_f1_vs_paper.svg",
+      "figures/historical_archive_tuned_full_pipeline/pipeline_oos_f1_vs_paper.pdf"
+    ],
+    "pipeline_error_budget_oos_tradeoff": [
+      "figures/historical_archive_tuned_full_pipeline/pipeline_error_budget_oos_tradeoff.png",
+      "figures/historical_archive_tuned_full_pipeline/pipeline_error_budget_oos_tradeoff.svg",
+      "figures/historical_archive_tuned_full_pipeline/pipeline_error_budget_oos_tradeoff.pdf"
+    ],
+    "pipeline_workpoint_search_frontier": [
+      "figures/historical_archive_tuned_full_pipeline/pipeline_workpoint_search_frontier.png",
+      "figures/historical_archive_tuned_full_pipeline/pipeline_workpoint_search_frontier.svg",
+      "figures/historical_archive_tuned_full_pipeline/pipeline_workpoint_search_frontier.pdf"
+    ]
+  },
+  "test_used_for_selection": false,
+  "oos_used_for_training": false,
+  "raw_text_or_sample_level_data_exported": false,
+  "notes": "The tuned candidate was selected on validation OOS labels and confirmed on test; standard Banking77 is protocol-separated from the paper historical banking77_oos task."
+}

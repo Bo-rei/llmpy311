@@ -5,10 +5,11 @@
     "slug": "clinc150",
     "kir": 0.5,
     "seed": 42,
-    "data_root": "data/multidataset/v19/clinc150/kir50_seed42",
-    "gate_root": "data/multidataset/v19/clinc150/kir50_seed42/gate",
-    "router_root": "data/multidataset/v19/clinc150/kir50_seed42/router",
-    "experts_root": "data/multidataset/v19/clinc150/kir50_seed42/experts"
+    "data_root": "data/v19",
+    "gate_root": "data/v19/gate",
+    "router_root": "data/v19/router",
+    "experts_root": "data/v19/experts",
+    "data_status": "anchor_reconstructed_not_byte_identical_h0"
   },
   "profile": {
     "name": "historical_best",

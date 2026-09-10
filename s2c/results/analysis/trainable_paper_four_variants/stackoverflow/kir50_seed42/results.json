@@ -1,0 +1,50 @@
+[
+  {
+    "dataset": "stackoverflow",
+    "kir": 0.5,
+    "seed": 42,
+    "variant": "Ours",
+    "known_f1": 85.2352338762859,
+    "oos_f1": 91.85441941074524,
+    "overall_accuracy": 88.76460767946578,
+    "f1_all": 85.83697801578222,
+    "known_recall": 85.46608753758771,
+    "false_accept_rate": 2.7360694027360695
+  },
+  {
+    "dataset": "stackoverflow",
+    "kir": 0.5,
+    "seed": 42,
+    "variant": "Without Gate",
+    "known_f1": 76.91057536338386,
+    "oos_f1": 80.16488046166529,
+    "overall_accuracy": 78.36393989983306,
+    "f1_all": 77.20642128140945,
+    "known_recall": 78.71700634814567,
+    "false_accept_rate": 18.88555221888555
+  },
+  {
+    "dataset": "stackoverflow",
+    "kir": 0.5,
+    "seed": 42,
+    "variant": "Cascade-MiniLM",
+    "known_f1": 87.47444245871453,
+    "oos_f1": 91.85441941074524,
+    "overall_accuracy": 89.79966611018364,
+    "f1_all": 87.87262218162643,
+    "known_recall": 85.46608753758771,
+    "false_accept_rate": 2.7360694027360695
+  },
+  {
+    "dataset": "stackoverflow",
+    "kir": 0.5,
+    "seed": 42,
+    "variant": "Cascade-SmolLM",
+    "known_f1": 60.66366533540239,
+    "oos_f1": 6.376262626262625,
+    "overall_accuracy": 44.40734557595994,
+    "f1_all": 55.72844690729878,
+    "known_recall": 97.66120948880722,
+    "false_accept_rate": 96.62996329662997
+  }
+]

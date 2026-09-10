@@ -21,8 +21,8 @@ import pandas as pd
 
 ROOT = Path(__file__).resolve().parents[2]
 ARTIFACT_ROOT = ROOT.parent / "artifacts/s2c/runs/protocol_v2_textoir_v1"
-OUT = ROOT / "results/analysis/minilm_training_dynamics_v1"
-FIG = ROOT / "figures/minilm_training_dynamics_v1"
+OUT = ROOT / "results/analysis/archive/analysis/minilm_training_dynamics_v1"
+FIG = ROOT / "figures/archive/analysis/minilm_training_dynamics_v1"
 TRAINABLE_ROOTS = (ARTIFACT_ROOT / "minilm_trainable_kir_sweep_v1", ARTIFACT_ROOT / "minilm_trainable_kir_sweep_extension_v1")
 DATASETS = ("clinc150", "banking77", "stackoverflow")
 KIRS = (0.25, 0.50, 0.75)
@@ -170,16 +170,16 @@ def _report(runs: pd.DataFrame, history: pd.DataFrame) -> None:
         "",
         "## 4. 文件",
         "",
-        "- `results/analysis/minilm_training_dynamics_v1/run_summary.csv`",
-        "- `results/analysis/minilm_training_dynamics_v1/history.csv`",
-        "- `figures/minilm_training_dynamics_v1/`（含 calibration/test Known Recall、selection dynamics 和 OOS 对齐图）",
+        "- `results/analysis/archive/analysis/minilm_training_dynamics_v1/run_summary.csv`",
+        "- `results/analysis/archive/analysis/minilm_training_dynamics_v1/history.csv`",
+        "- `figures/archive/analysis/minilm_training_dynamics_v1/`（含 calibration/test Known Recall、selection dynamics 和 OOS 对齐图）",
         "",
         "## 5. 结论边界",
         "",
         "- 本阶段是训练选择机制诊断，不是新方法结果，也不是 SOTA 排名。",
         "- 后续如要提高历史协议可比性，应先做同一表示、同一 K、同一阈值监督条件的 bridge baseline，而不是盲目增加训练 epoch。",
     ]
-    (ROOT / "docs/analysis/MINILM_TRAINING_DYNAMICS_V1.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
+    (ROOT / "docs/archive/analysis/MINILM_TRAINING_DYNAMICS_V1.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
 def main() -> int:

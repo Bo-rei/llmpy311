@@ -1,0 +1,9 @@
+gold_oos,correctness_transition,count,fraction_within_gold_type
+False,adb_only_correct,72,0.024
+False,both_correct,2278,0.7593333333333333
+False,both_wrong,460,0.15333333333333332
+False,s2c_only_correct,190,0.06333333333333334
+True,adb_only_correct,172,0.05733333333333333
+True,both_correct,2583,0.861
+True,both_wrong,107,0.035666666666666666
+True,s2c_only_correct,138,0.046

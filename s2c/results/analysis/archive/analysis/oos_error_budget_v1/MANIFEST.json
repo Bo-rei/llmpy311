@@ -1,0 +1,40 @@
+{
+  "analysis_id": "oos_error_budget_v1",
+  "bootstrap_reps": 10000,
+  "bootstrap_seed": 20260808,
+  "datasets": [
+    "clinc150",
+    "banking77",
+    "stackoverflow"
+  ],
+  "kirs": [
+    0.25,
+    0.5,
+    0.75
+  ],
+  "methods": [
+    "trainable_k1",
+    "single_centroid",
+    "fixed_k2",
+    "random_partition",
+    "mogb_partition_ours_boundary",
+    "mogb_minilm",
+    "ours_partition_mogb_boundary"
+  ],
+  "outputs": [
+    "per_seed_reconstructed.csv",
+    "summary.csv",
+    "paired_effects.csv",
+    "oos_precision_recall_workpoints.png",
+    "oos_error_budget_kir050.png",
+    "trainable_oos_error_budget_effects.png"
+  ],
+  "paired_effect_rows": 324,
+  "protocol_version": "protocol_v2_textoir_v1",
+  "reconstruction": "OOS precision and recall reconstructed from audited n_known/n_oos and error rates; OOS F1 checked against source.",
+  "reference": "/home/bo/bo01/llmpy311/s2c/results/analysis/cross_protocol_tradeoff_v1/per_seed.csv",
+  "rows_per_seed": 315,
+  "source": "/home/bo/bo01/llmpy311/s2c/results/analysis/archive/analysis/cross_dataset_error_attribution_v1/method_metrics_per_seed.csv",
+  "source_sha256": "79d2bc7f7ba9d53dc5ae32291f1398fc8fcabc1059cfd092ab29810f11c5e0e1",
+  "summary_rows": 63
+}

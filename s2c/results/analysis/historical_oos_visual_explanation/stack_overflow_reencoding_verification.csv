@@ -1,0 +1,3 @@
+method,test_rows,score_max_abs_delta,decision_mismatch_count,nearest_cluster_mismatch_count
+frozen_k1,5990,2.259556122208295e-07,0,0
+trainable_k1,5990,4.3361082890935876e-07,0,0

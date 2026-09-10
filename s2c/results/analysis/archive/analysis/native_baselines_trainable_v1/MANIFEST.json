@@ -1,0 +1,18 @@
+{
+  "stage": "ANALYSIS_NATIVE_BASELINES_TRAINABLE_V1",
+  "protocol_version": "protocol_v2_textoir_v1",
+  "rows": 36,
+  "gate_rows": 9,
+  "frozen_rows": 36,
+  "methods": [
+    "energy",
+    "knn",
+    "lof",
+    "msp"
+  ],
+  "bootstrap_seed": 20260725,
+  "bootstrap_samples": 10000,
+  "source_artifact_sha256": "76cfb238ee170cebb5ae96632211255f0dca9c5d0a172d2d7d5807b3a3e852a2",
+  "test_used_for_selection": false,
+  "uses_oos_for_training": false
+}

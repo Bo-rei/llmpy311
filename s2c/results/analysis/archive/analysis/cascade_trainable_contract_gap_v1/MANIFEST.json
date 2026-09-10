@@ -1,0 +1,19 @@
+{
+  "analysis_id": "cascade_trainable_contract_gap_v1",
+  "protocol": "protocol_v2_textoir_v1",
+  "sources": {
+    "trainable_manifest": "/home/bo/bo01/llmpy311/artifacts/s2c/runs/protocol_v2_textoir_v1/racal_v1/runs/trainable_k1/seed_42/training_manifest.json",
+    "trainable_manifest_sha256": "2dcb30db0c6281b7dcede9921a99579d770a433fcc7ebe417f63006fdac88cab",
+    "legacy_v19_gate_train": "/home/bo/bo01/llmpy311/assets/datasets/s2c/prepared/data/multidataset/v19/stackoverflow/kir50_seed42/gate/train.json",
+    "legacy_v19_gate_test": "/home/bo/bo01/llmpy311/assets/datasets/s2c/prepared/data/multidataset/v19/stackoverflow/kir50_seed42/gate/test.json",
+    "component_plan": "/home/bo/bo01/llmpy311/artifacts/s2c/outputs/experiments/cascade_full/gpu_kir50/component_plan.json",
+    "component_plan_sha256": "0b358bb4fdf0ae836358419454a71cc5df4ce3a042cf29933bf73b8ae55da50d"
+  },
+  "test_used_for_selection": false,
+  "outputs": [
+    "contract_comparison.csv",
+    "component_manifest.json",
+    "split_count_contract_gap.png",
+    "docs/archive/analysis/CASCADE_TRAINABLE_CONTRACT_GAP_V1.md"
+  ]
+}

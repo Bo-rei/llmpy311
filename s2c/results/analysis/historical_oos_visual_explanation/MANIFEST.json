@@ -1,0 +1,124 @@
+{
+  "schema_version": "s2c.analysis_bundle.v1",
+  "bundle": "historical_oos_visual_explanation",
+  "created_at_utc": "2026-09-10T03:35:29.740779+00:00",
+  "contract_layer": "historical_controlled_gate_H1",
+  "question": "How does Trainable MiniLM reduce OOS false acceptance under the identical H1 v19 K=1 Gate?",
+  "source_experiment": "historical_protocol_reconciliation_20260826",
+  "source_artifact_root": "/home/bo/bo01/llmpy311/artifacts/s2c/runs/historical_protocol_v2/minilm_k1",
+  "data_root": "/home/bo/bo01/llmpy311/assets/datasets/s2c/prepared/data/multidataset/v19",
+  "builder": "tools/analysis/build_historical_oos_visual_explanation.py",
+  "builder_sha256": "0061277e871bc0c27cb11481c9805d47f15a9de31ba6ca9fad1e7d494c64435e",
+  "report": "docs/analysis/RECENT_MECHANISM_ANALYSIS_PRESENTATION_V1.md",
+  "result_files": [
+    {
+      "path": "results/analysis/historical_oos_visual_explanation/analysis_summary.json",
+      "sha256": "137ddc751dba6ac92334133f8676c27e5dd68852f2a186281cb553e4f77bfae4"
+    },
+    {
+      "path": "results/analysis/historical_oos_visual_explanation/corrected_score_decomposition.csv",
+      "sha256": "2cedc90891a37f2e98d69f3f5ac2fa13ace9084d937c6ffd402a900b4e976a76"
+    },
+    {
+      "path": "results/analysis/historical_oos_visual_explanation/cross_dataset_oos_density.csv",
+      "sha256": "0f1b3b68af8898c53b41b0a96b6efd1be7bcc348b06cd7a75ca74ef9249f334f"
+    },
+    {
+      "path": "results/analysis/historical_oos_visual_explanation/h1_performance_run_level.csv",
+      "sha256": "128237b4b3816c7d14f13a91c86ae39f26117257f08525bf34e9ef84d371e6da"
+    },
+    {
+      "path": "results/analysis/historical_oos_visual_explanation/kir50_performance_summary.csv",
+      "sha256": "b17a31cdc0ae9b95e488cbc427b67d84d9b48b4e02bca06abaa6fea46a4aae73"
+    },
+    {
+      "path": "results/analysis/historical_oos_visual_explanation/local_boundary_geometry_3d_summary.csv",
+      "sha256": "f282b99a8257d5da0feaead9f06c46c0e79d06a7d842ca45fb90c7aa626e8b30"
+    },
+    {
+      "path": "results/analysis/historical_oos_visual_explanation/local_boundary_geometry_summary.csv",
+      "sha256": "6b2a782dcb63f34e31198fbfda1fb6264e591e0a95f2e98ebee4ea59d2555606"
+    },
+    {
+      "path": "results/analysis/historical_oos_visual_explanation/oos_margin_difficulty_profile.csv",
+      "sha256": "280a8b7c6a2d6fa22cf9f7da5a19d6c467347bd6a184af3032539f3304d0fc16"
+    },
+    {
+      "path": "results/analysis/historical_oos_visual_explanation/oos_representation_movement_summary.csv",
+      "sha256": "2e8e6628f07ce2ba8791a3ed4833a034241dfe15c344fd860fd90ae56547b834"
+    },
+    {
+      "path": "results/analysis/historical_oos_visual_explanation/oos_subtype_residual_risk.csv",
+      "sha256": "405db816f356d761f39b59fe6d6793f6d72fdb8a17d67ac33210b347106de7b6"
+    },
+    {
+      "path": "results/analysis/historical_oos_visual_explanation/oos_subtype_residual_risk_summary.csv",
+      "sha256": "ae5d0190d8057e2367afaabc167f8efebb357ddd4fb0a6c460cde86338355957"
+    },
+    {
+      "path": "results/analysis/historical_oos_visual_explanation/paired_kir_seed_stability.csv",
+      "sha256": "95f61f5b7a77f600d32268ccf8020e6fe34cd7151cbafb37a33de71c2e63505a"
+    },
+    {
+      "path": "results/analysis/historical_oos_visual_explanation/score_crossing_summary.csv",
+      "sha256": "f7e2fb1ed240221b88f6ea2db4e88942dd65e47e47f13d4596be64749aa572d7"
+    },
+    {
+      "path": "results/analysis/historical_oos_visual_explanation/score_distribution_summary.csv",
+      "sha256": "070341fb5c1291b46780887da8f0ef5fa8d48aef3f900411a6fe86f20451f7f8"
+    },
+    {
+      "path": "results/analysis/historical_oos_visual_explanation/stack_overflow_reencoding_verification.csv",
+      "sha256": "36d59adbdf0b4bf6164d5f8096ec0855c3e1867ea3f7c410017108bf61100a34"
+    }
+  ],
+  "figure_files": [
+    "figures/historical_oos_visual_explanation/paper_style_local_boundary_geometry.png",
+    "figures/historical_oos_visual_explanation/paper_style_local_boundary_geometry.tiff",
+    "figures/historical_oos_visual_explanation/paper_style_local_boundary_geometry.pdf",
+    "figures/historical_oos_visual_explanation/paper_style_local_boundary_geometry.svg",
+    "figures/historical_oos_visual_explanation/paper_style_local_boundary_geometry_3d.png",
+    "figures/historical_oos_visual_explanation/paper_style_local_boundary_geometry_3d.tiff",
+    "figures/historical_oos_visual_explanation/paper_style_local_boundary_geometry_3d.pdf",
+    "figures/historical_oos_visual_explanation/paper_style_local_boundary_geometry_3d.svg",
+    "figures/historical_oos_visual_explanation/paper_style_score_distribution.png",
+    "figures/historical_oos_visual_explanation/paper_style_score_distribution.tiff",
+    "figures/historical_oos_visual_explanation/paper_style_score_distribution.pdf",
+    "figures/historical_oos_visual_explanation/paper_style_score_distribution.svg",
+    "figures/historical_oos_visual_explanation/paired_oos_score_crossing.png",
+    "figures/historical_oos_visual_explanation/paired_oos_score_crossing.tiff",
+    "figures/historical_oos_visual_explanation/paired_oos_score_crossing.pdf",
+    "figures/historical_oos_visual_explanation/paired_oos_score_crossing.svg",
+    "figures/historical_oos_visual_explanation/corrected_oos_score_decomposition.png",
+    "figures/historical_oos_visual_explanation/corrected_oos_score_decomposition.tiff",
+    "figures/historical_oos_visual_explanation/corrected_oos_score_decomposition.pdf",
+    "figures/historical_oos_visual_explanation/corrected_oos_score_decomposition.svg",
+    "figures/historical_oos_visual_explanation/cross_dataset_oos_density.png",
+    "figures/historical_oos_visual_explanation/cross_dataset_oos_density.tiff",
+    "figures/historical_oos_visual_explanation/cross_dataset_oos_density.pdf",
+    "figures/historical_oos_visual_explanation/cross_dataset_oos_density.svg",
+    "figures/historical_oos_visual_explanation/oos_margin_difficulty_profile.png",
+    "figures/historical_oos_visual_explanation/oos_margin_difficulty_profile.tiff",
+    "figures/historical_oos_visual_explanation/oos_margin_difficulty_profile.pdf",
+    "figures/historical_oos_visual_explanation/oos_margin_difficulty_profile.svg",
+    "figures/historical_oos_visual_explanation/paired_kir_seed_stability.png",
+    "figures/historical_oos_visual_explanation/paired_kir_seed_stability.tiff",
+    "figures/historical_oos_visual_explanation/paired_kir_seed_stability.pdf",
+    "figures/historical_oos_visual_explanation/paired_kir_seed_stability.svg",
+    "figures/historical_oos_visual_explanation/oos_subtype_residual_risk.png",
+    "figures/historical_oos_visual_explanation/oos_subtype_residual_risk.tiff",
+    "figures/historical_oos_visual_explanation/oos_subtype_residual_risk.pdf",
+    "figures/historical_oos_visual_explanation/oos_subtype_residual_risk.svg",
+    "figures/historical_oos_visual_explanation/oos_representation_movement_map.png",
+    "figures/historical_oos_visual_explanation/oos_representation_movement_map.tiff",
+    "figures/historical_oos_visual_explanation/oos_representation_movement_map.pdf",
+    "figures/historical_oos_visual_explanation/oos_representation_movement_map.svg"
+  ],
+  "guardrails": {
+    "new_training": false,
+    "threshold_changed": false,
+    "test_oos_used_for_selection": false,
+    "fulltex_modified": false,
+    "per_sample_output_written": false
+  }
+}

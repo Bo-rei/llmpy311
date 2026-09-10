@@ -1,0 +1,39 @@
+{
+  "analysis_only": true,
+  "ball_rows": 127,
+  "contract_warning": "Published references, exact local compatibility cells, five-epoch compatibility runs, MOGB-MiniLM fair components, and S2C Gate/Cascade results are separate contracts.",
+  "exact_cells": 2,
+  "exact_history_rows": 92,
+  "figures": [
+    "figures/archive/analysis/mogb_reproduction_gap_analysis_v2/ball_size_radius_distribution.png",
+    "figures/archive/analysis/mogb_reproduction_gap_analysis_v2/ce_vs_subcentroid_loss.png",
+    "figures/archive/analysis/mogb_reproduction_gap_analysis_v2/dev_accuracy_vs_known_recall.png",
+    "figures/archive/analysis/mogb_reproduction_gap_analysis_v2/five_seed_short_run_stability.png",
+    "figures/archive/analysis/mogb_reproduction_gap_analysis_v2/paper_gap_metrics.png"
+  ],
+  "outputs": [
+    "results/analysis/archive/analysis/mogb_reproduction_gap_analysis_v2/ball_distribution.csv",
+    "results/analysis/archive/analysis/mogb_reproduction_gap_analysis_v2/exact_run_summary.csv",
+    "results/analysis/archive/analysis/mogb_reproduction_gap_analysis_v2/five_seed_compatibility_runs.csv",
+    "results/analysis/archive/analysis/mogb_reproduction_gap_analysis_v2/five_seed_compatibility_summary.csv",
+    "results/analysis/archive/analysis/mogb_reproduction_gap_analysis_v2/loss_trajectory.csv",
+    "results/analysis/archive/analysis/mogb_reproduction_gap_analysis_v2/paper_gap.csv",
+    "results/analysis/archive/analysis/mogb_reproduction_gap_analysis_v2/root_cause_evidence.csv"
+  ],
+  "short_compatibility_rows": 10,
+  "source_sha256": {
+    "artifacts/s2c/external/mogb_exact_reproduction_banking_v1/audit/official_fixed/mode_manifest.json": "76a9c3392d49ec50faa4f0c5d603f0f5d87b9f6cdc01fbc4757c458d4d04c71f",
+    "artifacts/s2c/external/mogb_exact_reproduction_v1/audit/official_fixed/mode_manifest.json": "8ad53b9df709bbca29272ee537c3a8dbca1056ea66e805b82b51647455d033e1",
+    "s2c/results/mogb_exact_reproduction/ball_statistics.csv": "97cdd8a1c276bb4061d892a9556df00222f2d5a0ec7d869dae6c95e100c792aa",
+    "s2c/results/mogb_exact_reproduction/training_history.csv": "6187b8e3facdea9c6e9d52dc89220ee089538aba28b4d42746f0ab2d7ebe971e",
+    "s2c/results/mogb_exact_reproduction_banking/ball_statistics.csv": "95314b4d59ea81d962ac637fa766c7327562e5c09e8b1dff9e25a7e93eed39a7",
+    "s2c/results/mogb_exact_reproduction_banking/training_history.csv": "541623d3a1a44e4eb4143de54fc56ecd3db98c021f28fdac792e8a5261bb11b9",
+    "s2c/third_party/mogb_compat/mogb_runtime.py": "eabfd052222b0d64f4c5386871a254a6230b31190648bd8ff129f0922ce23e0b",
+    "s2c/third_party/mogb_official/init_parameter.py": "0bf893d42a42eb2c48410d62bba965ade07f30f2a686bbfe1f60c1dafbcb6c2f",
+    "s2c/third_party/mogb_official/myloss.py": "140fb4d8aa640c18b1c9f5a00950ce837fb2c00f673790a547aa0467ee8adbd1",
+    "s2c/third_party/mogb_official/pretrain.py": "e849b400ceb612837f586570813aa5adb9ae5e0be9626ed015c8492bfb76bb10",
+    "s2c/tools/analysis/build_mogb_reproduction_gap_analysis_v2.py": "1385d77f0725e6bf0754af429965ef385ad75f5b3edf8d5e8471942b949fdd14"
+  },
+  "stage": "mogb_reproduction_gap_analysis_v2",
+  "training_launched": false
+}

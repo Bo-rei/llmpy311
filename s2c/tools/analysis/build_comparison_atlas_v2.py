@@ -24,10 +24,10 @@ import pandas as pd
 
 ROOT = Path(__file__).resolve().parents[2]
 FAIR = ROOT / "results/analysis/cross_protocol_tradeoff_v1/summary_mean_std.csv"
-EXTERNAL = ROOT / "results/analysis/comparison_atlas_v1/stackoverflow_kir50_external_summary.csv"
-CASCADE = ROOT / "results/analysis/cascade_bridge_v1/summary_mean_std.csv"
-MOGB_GAP = ROOT / "results/analysis/mogb_reproduction_gap_analysis_v2/paper_gap.csv"
-MOGB_EXACT = ROOT / "results/analysis/mogb_reproduction_gap_analysis_v2/exact_run_summary.csv"
+EXTERNAL = ROOT / "results/analysis/archive/analysis/comparison_atlas_v1/stackoverflow_kir50_external_summary.csv"
+CASCADE = ROOT / "results/analysis/archive/analysis/cascade_bridge_v1/summary_mean_std.csv"
+MOGB_GAP = ROOT / "results/analysis/archive/analysis/mogb_reproduction_gap_analysis_v2/paper_gap.csv"
+MOGB_EXACT = ROOT / "results/analysis/archive/analysis/mogb_reproduction_gap_analysis_v2/exact_run_summary.csv"
 DCLOOS = ROOT.parent / "artifacts/s2c/external/dcloos_official_oos_kir75_seed888_reduced_v2/recovery_metrics.json"
 OUT = ROOT / "results/analysis/comparison_atlas_v2"
 FIG = ROOT / "figures/comparison_atlas_v2"

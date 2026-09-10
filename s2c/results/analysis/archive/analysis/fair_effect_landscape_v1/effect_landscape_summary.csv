@@ -1,0 +1,49 @@
+comparison_method,comparison_label,metric,metric_label,mean_effect_pp,std_effect_pp,significant_cells,cells
+fixed_k2,Frozen K=2,aupr_oos,AUPR-OOS,8.303681995857058,9.25268095980033,9,9
+fixed_k2,Frozen K=2,auroc,AUROC,5.764969815381978,4.212467217049579,9,9
+fixed_k2,Frozen K=2,f1_all,F1-All,6.567686627201382,4.897327143837723,9,9
+fixed_k2,Frozen K=2,f1_k,F1-K,6.345139042937053,4.5669343768259365,9,9
+fixed_k2,Frozen K=2,false_accept_rate,False acceptance,17.07151983762205,17.37834845579156,9,9
+fixed_k2,Frozen K=2,false_reject_rate,False rejection,-1.2262255735123189,1.3060762915634694,5,9
+fixed_k2,Frozen K=2,known_recall,Known Recall,-1.22622557351232,1.3060762915634694,5,9
+fixed_k2,Frozen K=2,oos_f1,OOS F1,10.247358303299366,11.034249564990061,9,9
+mogb_minilm,MOGB MiniLM,aupr_oos,AUPR-OOS,12.000292936195896,9.10716173576211,9,9
+mogb_minilm,MOGB MiniLM,auroc,AUROC,7.930177637271402,2.2167608634847062,9,9
+mogb_minilm,MOGB MiniLM,f1_all,F1-All,37.09773795310855,9.344735304618984,9,9
+mogb_minilm,MOGB MiniLM,f1_k,F1-K,38.57302203449973,9.531137121212357,9,9
+mogb_minilm,MOGB MiniLM,false_accept_rate,False acceptance,-7.83000400984093,5.789718035745621,9,9
+mogb_minilm,MOGB MiniLM,false_reject_rate,False rejection,49.006652502904764,8.19697145303752,9,9
+mogb_minilm,MOGB MiniLM,known_recall,Known Recall,49.00665250290477,8.19697145303752,9,9
+mogb_minilm,MOGB MiniLM,oos_f1,OOS F1,12.363126238828567,9.46093672840047,8,9
+mogb_partition_ours_boundary,MOGB partition + ours boundary,aupr_oos,AUPR-OOS,9.374491816727947,9.84926986276373,9,9
+mogb_partition_ours_boundary,MOGB partition + ours boundary,auroc,AUROC,5.775978442510283,3.307785010646659,9,9
+mogb_partition_ours_boundary,MOGB partition + ours boundary,f1_all,F1-All,19.432714237796617,9.23858799453601,9,9
+mogb_partition_ours_boundary,MOGB partition + ours boundary,f1_k,F1-K,20.101351114280167,9.303523453589023,9,9
+mogb_partition_ours_boundary,MOGB partition + ours boundary,false_accept_rate,False acceptance,-6.080750217184102,5.172531724513612,8,9
+mogb_partition_ours_boundary,MOGB partition + ours boundary,false_reject_rate,False rejection,28.00736459603671,9.537317865412021,9,9
+mogb_partition_ours_boundary,MOGB partition + ours boundary,known_recall,Known Recall,28.00736459603671,9.53731786541202,9,9
+mogb_partition_ours_boundary,MOGB partition + ours boundary,oos_f1,OOS F1,8.012979105482241,8.02236522582691,8,9
+ours_partition_mogb_boundary,Ours partition + MOGB boundary,aupr_oos,AUPR-OOS,12.831802706234742,12.211238692878911,9,9
+ours_partition_mogb_boundary,Ours partition + MOGB boundary,auroc,AUROC,10.144906266885819,6.98399353100715,9,9
+ours_partition_mogb_boundary,Ours partition + MOGB boundary,f1_all,F1-All,21.054571199280343,4.7277710913074475,9,9
+ours_partition_mogb_boundary,Ours partition + MOGB boundary,f1_k,F1-K,21.655775056928587,4.5422530854125,9,9
+ours_partition_mogb_boundary,Ours partition + MOGB boundary,false_accept_rate,False acceptance,-1.3865425751661555,8.096022216090901,8,9
+ours_partition_mogb_boundary,Ours partition + MOGB boundary,false_reject_rate,False rejection,30.24079992445993,1.5727661417877778,9,9
+ours_partition_mogb_boundary,Ours partition + MOGB boundary,known_recall,Known Recall,30.24079992445993,1.5727661417877725,9,9
+ours_partition_mogb_boundary,Ours partition + MOGB boundary,oos_f1,OOS F1,9.855753011313096,8.345012234564422,8,9
+random_partition,Random K=2,aupr_oos,AUPR-OOS,5.144816864891921,4.718312759842372,9,9
+random_partition,Random K=2,auroc,AUROC,3.592856344362749,1.597821282836328,9,9
+random_partition,Random K=2,f1_all,F1-All,4.849951321576413,3.1773972272487057,9,9
+random_partition,Random K=2,f1_k,F1-K,4.745647421301064,3.144590126417095,9,9
+random_partition,Random K=2,false_accept_rate,False acceptance,15.121572744142245,9.656616157405207,9,9
+random_partition,Random K=2,false_reject_rate,False rejection,-4.033742369973461,1.1356941369784124,9,9
+random_partition,Random K=2,known_recall,Known Recall,-4.03374236997346,1.1356941369784124,9,9
+random_partition,Random K=2,oos_f1,OOS F1,7.362052928550188,5.507100002101716,9,9
+single_centroid,Frozen K=1,aupr_oos,AUPR-OOS,5.380644649886435,4.81336100785391,9,9
+single_centroid,Frozen K=1,auroc,AUROC,3.752730900017978,1.6434375860523176,9,9
+single_centroid,Frozen K=1,f1_all,F1-All,5.056907748080316,2.9614032767395786,9,9
+single_centroid,Frozen K=1,f1_k,F1-K,4.973854330105474,2.94326432655466,9,9
+single_centroid,Frozen K=1,false_accept_rate,False acceptance,14.279363890554343,9.049034412859866,9,9
+single_centroid,Frozen K=1,false_reject_rate,False rejection,-3.279393855007887,1.044901044057234,9,9
+single_centroid,Frozen K=1,known_recall,Known Recall,-3.279393855007882,1.044901044057233,9,9
+single_centroid,Frozen K=1,oos_f1,OOS F1,7.10925304061277,5.176949843102572,9,9

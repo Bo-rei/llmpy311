@@ -28,6 +28,9 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 PROJECT_ROOT = Path(__file__).resolve().parents[3]
+SOURCE_ROOT = PROJECT_ROOT / "src"
+if str(SOURCE_ROOT) not in sys.path:
+    sys.path.insert(0, str(SOURCE_ROOT))
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
@@ -41,6 +44,12 @@ EVAL_SCRIPT = PROJECT_ROOT / "tools" / "eval" / "eval_system_pipeline_v19.py"
 
 def _run(cmd: List[str]) -> None:
     env = os.environ.copy()
+    source_root = str(PROJECT_ROOT / "src")
+    env["PYTHONPATH"] = os.pathsep.join(
+        value
+        for value in (source_root, str(PROJECT_ROOT), env.get("PYTHONPATH", ""))
+        if value
+    )
     env.setdefault("TOKENIZERS_PARALLELISM", "false")
     env.setdefault("OMP_NUM_THREADS", "1")
     env.setdefault("MKL_NUM_THREADS", "1")
@@ -158,7 +167,7 @@ def main() -> None:
     parser.add_argument(
         "--datasets",
         nargs="+",
-        default=["CLINC150", "BANKING77-OOS", "SNIPS"],
+        default=["CLINC150", "STACKOVERFLOW", "BANKING77-OOS"],
     )
     parser.add_argument("--kir_values", nargs="+", type=float, default=[0.25, 0.5, 0.75])
     parser.add_argument("--seed", type=int, default=42)

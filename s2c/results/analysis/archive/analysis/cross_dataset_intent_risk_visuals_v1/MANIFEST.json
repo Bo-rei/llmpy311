@@ -1,0 +1,37 @@
+{
+  "analysis_id": "cross_dataset_intent_risk_visuals_v1",
+  "datasets": [
+    "clinc150",
+    "banking77",
+    "stackoverflow"
+  ],
+  "kirs": [
+    0.25,
+    0.5,
+    0.75
+  ],
+  "methods": [
+    "trainable_k1",
+    "fixed_k2",
+    "random_partition",
+    "mogb_minilm",
+    "mogb_partition_ours_boundary",
+    "ours_partition_mogb_boundary"
+  ],
+  "outputs": [
+    "top_oos_acceptor_intents.csv",
+    "oos_acceptance_concentration.csv",
+    "intent_error_deltas_vs_trainable.csv",
+    "intent_risk_scatter_kir050.png",
+    "oos_acceptance_concentration_kir050.png",
+    "intent_error_delta_scatter_kir050.png",
+    "fixed_k2_oos_acceptor_rank_curve.png"
+  ],
+  "protocol_version": "protocol_v2_textoir_v1",
+  "source": "/home/bo/bo01/llmpy311/s2c/results/analysis/archive/analysis/cross_dataset_error_attribution_v1/intent_error_attribution_summary.csv",
+  "source_rows": 3978,
+  "source_sha256": "9f88c6e59765835afa100ec5a12c062c9abbc260c9b29829658c191d720bdfa5",
+  "test_usage": "post-hoc attribution only; no selection or tuning",
+  "threshold_selection": "not applicable; consumes frozen summary at formal score<=1",
+  "top_intent_limit": 10
+}

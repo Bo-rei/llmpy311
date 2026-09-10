@@ -1,0 +1,73 @@
+stage: historical_archive_full_pipeline
+protocol: historical_v19_archive
+data_root: ../archives/submissions/s2c-submission/data
+model_root: ../assets/models
+datasets: [clinc150, stackoverflow, banking77]
+kir: 0.50
+pilot_seeds: [42]
+expansion_seeds: [13, 42, 87]
+gate_methods:
+  - frozen_k1
+  - partial_k1
+  - lora_k1
+gate:
+  distance: mahalanobis_diag
+  radius_method: mean_std
+  radius_lambda: 1.0
+  threshold: 1.0
+  semantic_gate_enabled: false
+partial:
+  representation_mode: last2_minilm_plus_projection
+  projection_hidden_dim: 256
+  warmup_epochs: 1
+  finetune_epochs: 3
+  patience: 1
+  batch_size: 64
+  max_length: 256
+  projection_lr: 0.0002
+  backbone_lr: 0.00002
+  temperature: 0.07
+  intra_weight: 0.1
+  inter_weight: 0.1
+  classification_weight: 1.0
+  inter_margin: 0.20
+lora:
+  representation_mode: lora_minilm_plus_projection
+  projection_hidden_dim: 256
+  target_modules: all-linear
+  r: 8
+  lora_alpha: 16
+  lora_dropout: 0.1
+  bias: none
+  task_type: FEATURE_EXTRACTION
+  warmup_epochs: 1
+  finetune_epochs: 3
+  patience: 1
+  batch_size: 64
+  max_length: 256
+  projection_lr: 0.0002
+  lora_lr: 0.00002
+  temperature: 0.07
+  intra_weight: 0.1
+  inter_weight: 0.1
+  classification_weight: 1.0
+  inter_margin: 0.20
+downstream:
+  router_epochs: 10
+  router_batch_size: 32
+  router_lr: 0.0002
+  router_lora_r: 32
+  router_lora_alpha: 64
+  expert_epochs: 15
+  expert_batch_size: 32
+  expert_lr: 0.0002
+  expert_lora_r: 16
+  expert_lora_alpha: 32
+  max_length: 64
+  patience: 5
+selection:
+  checkpoint_metric: calibration_f1_k_plus_0.05_known_recall
+  test_used_for_selection: false
+  oos_used_for_training: false
+success:
+  lora_oos_f1_per_dataset_not_below_partial: true

@@ -44,7 +44,7 @@ from .contracts import (
     validate_bundle,
     rows_hash,
 )
-from .representation import RacalMiniLM, choose_device, encode_rows, set_seed
+from .representation import build_racal_model, choose_device, encode_rows, set_seed
 
 
 def stage_root(paths: ProtocolV2Paths) -> Path:
@@ -206,28 +206,31 @@ def _center_losses(
     return total, {"classification_ce": float(ce.detach().cpu()), "intra_compactness": float(intra.detach().cpu()), "inter_margin": float(inter.detach().cpu()), "total": float(total.detach().cpu())}
 
 
-def _make_optimizer(model: RacalMiniLM, config: RacalConfig, phase: str) -> torch.optim.Optimizer:
+def _make_optimizer(model: torch.nn.Module, config: RacalConfig, phase: str) -> torch.optim.Optimizer:
     if phase == "warmup":
         params = [parameter for parameter in model.projection.parameters() if parameter.requires_grad]
         return torch.optim.AdamW(params, lr=config.projection_lr)
     projection = [parameter for parameter in model.projection.parameters() if parameter.requires_grad]
-    backbone = [parameter for name, parameter in model.named_parameters() if name.startswith("encoder.") and parameter.requires_grad]
-    return torch.optim.AdamW([{"params": projection, "lr": config.projection_lr}, {"params": backbone, "lr": config.backbone_lr}])
+    adapted = [parameter for name, parameter in model.named_parameters() if not name.startswith("projection.") and parameter.requires_grad]
+    return torch.optim.AdamW([{"params": projection, "lr": config.projection_lr}, {"params": adapted, "lr": config.backbone_lr}])
 
 
-def _set_phase(model: RacalMiniLM, phase: str) -> None:
-    for parameter in model.encoder.parameters():
-        parameter.requires_grad_(False)
-    for parameter in model.projection.parameters():
-        parameter.requires_grad_(True)
-    if phase == "finetune":
-        layers = model.encoder.encoder.layer
-        for block in layers[-2:]:
-            for parameter in block.parameters():
+def _set_phase(model: torch.nn.Module, phase: str) -> None:
+    for name, parameter in model.named_parameters():
+        parameter.requires_grad_(name.startswith("projection."))
+    if phase != "finetune":
+        return
+    if getattr(model, "mode", "") == "lora_minilm_plus_projection":
+        for name, parameter in model.named_parameters():
+            if "lora_" in name:
                 parameter.requires_grad_(True)
+        return
+    for block in model.encoder.encoder.layer[-2:]:
+        for parameter in block.parameters():
+            parameter.requires_grad_(True)
 
 
-def _select_checkpoint_score(model: RacalMiniLM, tokenizer: Any, bundle: Any, device: torch.device, config: RacalConfig) -> tuple[float, dict[str, float], np.ndarray, np.ndarray]:
+def _select_checkpoint_score(model: torch.nn.Module, tokenizer: Any, bundle: Any, device: torch.device, config: RacalConfig) -> tuple[float, dict[str, float], np.ndarray, np.ndarray]:
     train_values = encode_rows(model, tokenizer, bundle.views.train, device, config.batch_size, config.max_length)
     calibration_values = encode_rows(model, tokenizer, bundle.views.calibration, device, config.batch_size, config.max_length)
     detector = fit_k1_detector(train_values, bundle.views.train, "mahalanobis_diag")
@@ -251,7 +254,7 @@ def train_trainable_k1(paths: ProtocolV2Paths, config: RacalConfig, seed: int, r
     set_seed(seed)
     device = choose_device(config.device)
     tokenizer = AutoTokenizer.from_pretrained(model_path, local_files_only=True)
-    model = RacalMiniLM(model_path, "last2_minilm_plus_projection", config.projection_hidden_dim).to(device)
+    model = build_racal_model(model_path, config.representation_mode, config.projection_hidden_dim).to(device)
     train_rows, calibration_rows = bundle.views.train, bundle.views.calibration
     label_names = sorted({str(row["intent"]) for row in train_rows})
     label_map = {name: index for index, name in enumerate(label_names)}

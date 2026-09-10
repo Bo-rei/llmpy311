@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "analysis_only": true,
+  "protocol_version": "protocol_v2_textoir_v1",
+  "sources": {
+    "results/analysis/cross_protocol_tradeoff_v1/summary_mean_std.csv": "c3f5b5cb9701bfd2e111da85575226393e3baf9c8bcace7df6fc39eb2d396ae8",
+    "results/analysis/archive/analysis/external_gpu_runtime_comparison_v1/external_same_protocol_cells.csv": "4492442b04306e8cd5ee68883c4636b4fbe94eeb3eaf5679c30eb732e08ac097",
+    "results/analysis/archive/analysis/mogb_reproduction_gap_analysis_v2/exact_run_summary.csv": "f6d7fcc89d2dcce92ef2098b4050b828c5ae620cd65c1b1a2f2b7038c2690aba"
+  },
+  "fair_rows": 63,
+  "external_reference_rows": 6,
+  "outputs": [
+    "results/analysis/archive/analysis/experiment_decision_dashboard_v1/decision_rows.csv",
+    "figures/archive/analysis/experiment_decision_dashboard_v1/decision_dashboard.svg"
+  ],
+  "selection_or_training": false,
+  "notes": "External rows are contract-labelled references and are never merged into fair ranking."
+}

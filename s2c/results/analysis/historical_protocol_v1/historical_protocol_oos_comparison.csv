@@ -1,0 +1,19 @@
+dataset,method,oos_f1_percent,false_accept_rate_percent,source
+CLINC150,"Frozen K=1
+(controlled Gate)",88.163621,6.492308,/home/bo/bo01/llmpy311/artifacts/s2c/runs/historical_protocol_v1/minilm_k1/clinc150/kir50_seed42/frozen_k1/metrics.json
+CLINC150,"Trainable K=1
+(controlled Gate)",89.562482,3.630769,/home/bo/bo01/llmpy311/artifacts/s2c/runs/historical_protocol_v1/minilm_k1/clinc150/kir50_seed42/trainable_k1/metrics.json
+CLINC150,"Paper Ours
+(full Cascade reference)",91.960000,,fulltex.tex:main_results_all/KIR=.50
+StackOverflow,"Frozen K=1
+(controlled Gate)",84.358002,14.614615,/home/bo/bo01/llmpy311/artifacts/s2c/runs/historical_protocol_v1/minilm_k1/stackoverflow/kir50_seed42/frozen_k1/metrics.json
+StackOverflow,"Trainable K=1
+(controlled Gate)",91.493679,2.202202,/home/bo/bo01/llmpy311/artifacts/s2c/runs/historical_protocol_v1/minilm_k1/stackoverflow/kir50_seed42/trainable_k1/metrics.json
+StackOverflow,"Paper Ours
+(full Cascade reference)",89.710000,,fulltex.tex:main_results_all/KIR=.50
+BANKING77-OOS,"Frozen K=1
+(controlled Gate)",86.156033,21.298701,/home/bo/bo01/llmpy311/artifacts/s2c/runs/historical_protocol_v1/minilm_k1/banking77_oos/kir50_seed42/lambda_1.0/frozen_k1/metrics.json
+BANKING77-OOS,"Trainable K=1
+(controlled Gate)",88.854806,15.357143,/home/bo/bo01/llmpy311/artifacts/s2c/runs/historical_protocol_v1/minilm_k1/banking77_oos/kir50_seed42/lambda_1.0/trainable_k1/metrics.json
+BANKING77-OOS,"Paper Ours
+(full Cascade reference)",88.230000,,fulltex.tex:main_results_all/KIR=.50

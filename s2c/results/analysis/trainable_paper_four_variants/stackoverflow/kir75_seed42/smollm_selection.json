@@ -1,0 +1,150 @@
+{
+  "threshold": 0.75,
+  "sweep": [
+    {
+      "threshold": 0.2,
+      "known_f1": 69.98871352987128,
+      "oos_f1": 29.53846153846154,
+      "overall_accuracy": 59.75975975975976,
+      "f1_all": 67.46057278040817,
+      "known_recall": 77.90387182910547,
+      "false_accept_rate": 71.2
+    },
+    {
+      "threshold": 0.25,
+      "known_f1": 72.71232033380481,
+      "oos_f1": 19.922380336351875,
+      "overall_accuracy": 61.91191191191191,
+      "f1_all": 69.41294908396402,
+      "known_recall": 86.91588785046729,
+      "false_accept_rate": 84.6
+    },
+    {
+      "threshold": 0.30000000000000004,
+      "known_f1": 74.46611274014397,
+      "oos_f1": 12.59600614439324,
+      "overall_accuracy": 63.66366366366366,
+      "f1_all": 70.59923107790954,
+      "known_recall": 92.65687583444593,
+      "false_accept_rate": 91.8
+    },
+    {
+      "threshold": 0.35000000000000003,
+      "known_f1": 75.38213197048115,
+      "oos_f1": 7.4324324324324325,
+      "overall_accuracy": 64.5145145145145,
+      "f1_all": 71.1352757493531,
+      "known_recall": 95.32710280373831,
+      "false_accept_rate": 95.6
+    },
+    {
+      "threshold": 0.4,
+      "known_f1": 75.7270929179524,
+      "oos_f1": 4.701627486437613,
+      "overall_accuracy": 65.06506506506507,
+      "f1_all": 71.28800132848274,
+      "known_recall": 97.32977303070761,
+      "false_accept_rate": 97.39999999999999
+    },
+    {
+      "threshold": 0.45,
+      "known_f1": 75.84531744141267,
+      "oos_f1": 1.5267175572519083,
+      "overall_accuracy": 65.26526526526526,
+      "f1_all": 71.20040494865263,
+      "known_recall": 98.6648865153538,
+      "false_accept_rate": 99.2
+    },
+    {
+      "threshold": 0.5,
+      "known_f1": 75.98240124316297,
+      "oos_f1": 0.7751937984496124,
+      "overall_accuracy": 65.41541541541541,
+      "f1_all": 71.28195077786839,
+      "known_recall": 99.06542056074767,
+      "false_accept_rate": 99.6
+    },
+    {
+      "threshold": 0.55,
+      "known_f1": 75.93019996765588,
+      "oos_f1": 0.0,
+      "overall_accuracy": 65.41541541541541,
+      "f1_all": 71.18456246967737,
+      "known_recall": 99.46595460614152,
+      "false_accept_rate": 100.0
+    },
+    {
+      "threshold": 0.6000000000000001,
+      "known_f1": 75.9741420544643,
+      "oos_f1": 0.0,
+      "overall_accuracy": 65.51551551551552,
+      "f1_all": 71.22575817606027,
+      "known_recall": 99.66622162883844,
+      "false_accept_rate": 100.0
+    },
+    {
+      "threshold": 0.65,
+      "known_f1": 76.0439685594552,
+      "oos_f1": 0.0,
+      "overall_accuracy": 65.61561561561562,
+      "f1_all": 71.29122052448923,
+      "known_recall": 99.79973297730307,
+      "false_accept_rate": 100.0
+    },
+    {
+      "threshold": 0.7,
+      "known_f1": 76.08506113861883,
+      "oos_f1": 0.0,
+      "overall_accuracy": 65.66566566566566,
+      "f1_all": 71.32974481745514,
+      "known_recall": 99.86648865153538,
+      "false_accept_rate": 100.0
+    },
+    {
+      "threshold": 0.75,
+      "known_f1": 76.11826675803134,
+      "oos_f1": 0.0,
+      "overall_accuracy": 65.71571571571572,
+      "f1_all": 71.36087508565438,
+      "known_recall": 99.93324432576769,
+      "false_accept_rate": 100.0
+    },
+    {
+      "threshold": 0.8,
+      "known_f1": 76.11826675803134,
+      "oos_f1": 0.0,
+      "overall_accuracy": 65.71571571571572,
+      "f1_all": 71.36087508565438,
+      "known_recall": 99.93324432576769,
+      "false_accept_rate": 100.0
+    },
+    {
+      "threshold": 0.8500000000000001,
+      "known_f1": 76.09498633475093,
+      "oos_f1": 0.0,
+      "overall_accuracy": 65.71571571571572,
+      "f1_all": 71.33904968882898,
+      "known_recall": 100.0,
+      "false_accept_rate": 100.0
+    },
+    {
+      "threshold": 0.9000000000000001,
+      "known_f1": 76.09498633475093,
+      "oos_f1": 0.0,
+      "overall_accuracy": 65.71571571571572,
+      "f1_all": 71.33904968882898,
+      "known_recall": 100.0,
+      "false_accept_rate": 100.0
+    },
+    {
+      "threshold": 0.95,
+      "known_f1": 76.09498633475093,
+      "oos_f1": 0.0,
+      "overall_accuracy": 65.71571571571572,
+      "f1_all": 71.33904968882898,
+      "known_recall": 100.0,
+      "false_accept_rate": 100.0
+    }
+  ],
+  "score": "1-max cosine support"
+}

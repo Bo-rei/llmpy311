@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
-"""为完整 KIR50 Cascade 矩阵准备 Router/Expert 组件。
+"""为完整历史 Cascade 矩阵准备 Router/Expert 组件。
 
 本脚本只负责组件训练和 provenance，不负责 Gate 或最终评价。它把已有的
 seed42 组件作为稳定参考复用，对 seed13/87 只训练缺失组件。这样可以避免把
 同一个 SmolLM checkpoint 隐式复制到多个结果目录，也能让后续 evaluator
 直接读取一份明确的 ``component_manifest.json``。
 
-固定协议：
+默认协议：
     dataset ∈ {clinc150, banking77_oos, stackoverflow}
-    kir = 50
+    kir ∈ {0.25, 0.50, 0.75}
     seed ∈ {13, 42, 87}
 
 运行前请在 ``bo`` 环境中设置 CUDA 动态库路径。默认只做 preflight；传入
@@ -35,6 +35,7 @@ from legacy.runtime import WorkspacePaths  # noqa: E402
 PATHS = WorkspacePaths.discover(PROJECT_ROOT)
 DATA_ROOT = PATHS.prepared_data_root / "multidataset" / "v19"
 ARTIFACT_ROOT = PATHS.artifact_root / "outputs" / "experiments"
+KIR = 0.50
 OUTPUT_ROOT = ARTIFACT_ROOT / "cascade_full" / "gpu_kir50"
 DATASETS = ("clinc150", "banking77_oos", "stackoverflow")
 SEEDS = (13, 42, 87)
@@ -53,7 +54,7 @@ def _sha256(path: Path) -> str:
 
 
 def _dataset_root(dataset: str, seed: int) -> Path:
-    return DATA_ROOT / dataset / f"kir50_seed{seed}"
+    return DATA_ROOT / dataset / f"kir{int(round(KIR * 100)):02d}_seed{seed}"
 
 
 def _seed_output(seed: int) -> Path:
@@ -121,7 +122,7 @@ def _domains(dataset_root: Path) -> list[str]:
 
 def _planned_component(dataset: str, seed: int) -> dict[str, Any]:
     data_root = _dataset_root(dataset, seed)
-    if seed == 42:
+    if seed == 42 and abs(KIR - 0.50) < 1e-9:
         paths = _existing_seed42_paths(dataset)
         return {
             "dataset": dataset,
@@ -271,7 +272,7 @@ def _run_plan(plan: dict[str, Any]) -> None:
     output_dir.mkdir(parents=True, exist_ok=True)
     log_path = output_dir / "component_training.log"
     env = dict(os.environ)
-    env["PYTHONPATH"] = str(PROJECT_ROOT)
+    env["PYTHONPATH"] = os.pathsep.join((str(PROJECT_ROOT), str(PROJECT_ROOT / "src")))
     env["CONDA_DEFAULT_ENV"] = "bo"
     with log_path.open("a", encoding="utf-8") as log:
         if plan.get("router_mode") == "constant":
@@ -355,8 +356,12 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--dataset", choices=DATASETS, action="append")
     parser.add_argument("--seed", type=int, choices=SEEDS, action="append")
+    parser.add_argument("--kir", type=float, choices=(0.25, 0.50, 0.75), default=0.50)
     parser.add_argument("--execute", action="store_true")
     args = parser.parse_args()
+    global KIR, OUTPUT_ROOT
+    KIR = float(args.kir)
+    OUTPUT_ROOT = ARTIFACT_ROOT / "cascade_full" / f"gpu_kir{int(round(KIR * 100)):02d}"
     datasets = tuple(args.dataset or DATASETS)
     seeds = tuple(args.seed or SEEDS)
     plans = [_planned_component(dataset, seed) for dataset in datasets for seed in seeds]
@@ -377,7 +382,7 @@ def main() -> int:
     merged_plan_records = _merge_plan_records(plans, plan_path)
     payload: dict[str, Any] = {
         "schema_version": 1,
-        "protocol": "cascade_full_kir50_downstream_components",
+        "protocol": f"cascade_full_kir{int(round(KIR * 100)):02d}_downstream_components",
         "execute": bool(args.execute),
         "requested_datasets": list(datasets),
         "requested_seeds": list(seeds),

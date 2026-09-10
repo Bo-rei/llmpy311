@@ -23,11 +23,11 @@ import seaborn as sns
 
 
 ROOT = Path(__file__).resolve().parents[2]
-TRAINABLE_PATH = ROOT / "results/analysis/minilm_trainable_5seed_fair_v1/trainable_per_seed.csv"
+TRAINABLE_PATH = ROOT / "results/analysis/archive/analysis/minilm_trainable_5seed_fair_v1/trainable_per_seed.csv"
 MOGB_PATH = ROOT / "../artifacts/s2c/runs/protocol_v2_textoir_v1/mogb_ablation_v1/summary/boundary_component_runs.csv"
-OUT = ROOT / "results/analysis/trainable_vs_mogb_ablation_v1"
-FIG = ROOT / "figures/trainable_vs_mogb_ablation_v1"
-REPORT = ROOT / "docs/analysis/TRAINABLE_VS_MOGB_ABLATION_V1.md"
+OUT = ROOT / "results/analysis/archive/analysis/trainable_vs_mogb_ablation_v1"
+FIG = ROOT / "figures/archive/analysis/trainable_vs_mogb_ablation_v1"
+REPORT = ROOT / "docs/archive/analysis/TRAINABLE_VS_MOGB_ABLATION_V1.md"
 DATASETS = ("clinc150", "banking77", "stackoverflow")
 KIRS = (0.25, 0.50, 0.75)
 SEEDS = (13, 42, 87, 100, 123)
@@ -273,8 +273,8 @@ def _report(summary: pd.DataFrame, effects: pd.DataFrame, mechanism: pd.DataFram
             "",
             "## 5. 证据与边界",
             "",
-            "- 输入：`results/analysis/minilm_trainable_5seed_fair_v1/trainable_per_seed.csv` 和 `../artifacts/s2c/runs/protocol_v2_textoir_v1/mogb_ablation_v1/summary/boundary_component_runs.csv`。",
-            "- 输出：`results/analysis/trainable_vs_mogb_ablation_v1/` 和 `figures/trainable_vs_mogb_ablation_v1/`。",
+            "- 输入：`results/analysis/archive/analysis/minilm_trainable_5seed_fair_v1/trainable_per_seed.csv` 和 `../artifacts/s2c/runs/protocol_v2_textoir_v1/mogb_ablation_v1/summary/boundary_component_runs.csv`。",
+            "- 输出：`results/analysis/archive/analysis/trainable_vs_mogb_ablation_v1/` 和 `figures/archive/analysis/trainable_vs_mogb_ablation_v1/`。",
             "- 不包含历史 `fulltex.tex`、官方 BERT MOGB、DCLOOS 外部 OOS 监督；这些仍需按监督条件和系统层级单独报告。",
             "- 不使用 test 指标选择参数；所有输出为对已完成运行的分析。",
         ]

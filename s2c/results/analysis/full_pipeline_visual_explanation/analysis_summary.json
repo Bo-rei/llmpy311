@@ -1,0 +1,21 @@
+{
+  "schema_version": "s2c.full_pipeline_visual_explanation.v1",
+  "protocol": "historical_v19_paper_main__H1_controlled_gate_to_router_to_expert",
+  "primary_comparison": "cached Frozen K=1 vs current H1 Trainable K=1 with the same cascade_full downstream components",
+  "datasets": [
+    "clinc150",
+    "stackoverflow",
+    "banking77_oos"
+  ],
+  "seeds": [
+    13,
+    42,
+    87
+  ],
+  "cached_full_pipeline_units": 36,
+  "current_trainable_full_pipeline_units": 9,
+  "test_used_for_selection": false,
+  "oos_used_for_training": false,
+  "raw_predictions_written": false,
+  "representation_boundary": "current Trainable uses last2_minilm_plus_projection; cached CE-Recon is a separate reference variant"
+}
