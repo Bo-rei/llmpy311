@@ -1,0 +1,59 @@
+[
+  {
+    "dataset": "stackoverflow",
+    "kir": 0.25,
+    "recipe": "existing",
+    "config": {
+      "k": 1,
+      "distance": "euclidean",
+      "boundary": "center_quantile_0.99",
+      "rule": "normalized_union",
+      "fusion_weight": 1.0,
+      "threshold": 1.7
+    },
+    "utility": 0.7466666666666667,
+    "checkpoints": [
+      "/home/bo/bo01/llmpy311/artifacts/s2c/runs/historical_protocol_v2/minilm_k1/stackoverflow/kir25_seed13/trainable_k1/checkpoint.pt",
+      "/home/bo/bo01/llmpy311/artifacts/s2c/runs/historical_protocol_v2/minilm_k1/stackoverflow/kir25_seed42/trainable_k1/checkpoint.pt",
+      "/home/bo/bo01/llmpy311/artifacts/s2c/runs/historical_protocol_v2/minilm_k1/stackoverflow/kir25_seed87/trainable_k1/checkpoint.pt"
+    ]
+  },
+  {
+    "dataset": "stackoverflow",
+    "kir": 0.25,
+    "recipe": "compact_margin",
+    "config": {
+      "k": 1,
+      "distance": "euclidean",
+      "boundary": "intent_quantile_0.95",
+      "rule": "nearest_sphere",
+      "fusion_weight": 1.0,
+      "threshold": 1.6
+    },
+    "utility": 0.7453333333333334,
+    "checkpoints": [
+      "/home/bo/bo01/llmpy311/artifacts/s2c/runs/historical_known_training/stackoverflow_kir25_seed13_compact_margin/checkpoint.pt",
+      "/home/bo/bo01/llmpy311/artifacts/s2c/runs/historical_known_training/stackoverflow_kir25_seed42_compact_margin/checkpoint.pt",
+      "/home/bo/bo01/llmpy311/artifacts/s2c/runs/historical_known_training/stackoverflow_kir25_seed87_compact_margin/checkpoint.pt"
+    ]
+  },
+  {
+    "dataset": "stackoverflow",
+    "kir": 0.25,
+    "recipe": "no_projection",
+    "config": {
+      "k": 2,
+      "distance": "euclidean",
+      "boundary": "intent_quantile_0.9",
+      "rule": "nearest_sphere",
+      "fusion_weight": 1.0,
+      "threshold": 1.95
+    },
+    "utility": 0.7433333333333333,
+    "checkpoints": [
+      "/home/bo/bo01/llmpy311/artifacts/s2c/runs/historical_known_training/stackoverflow_kir25_seed13_no_projection/checkpoint.pt",
+      "/home/bo/bo01/llmpy311/artifacts/s2c/runs/historical_known_training/stackoverflow_kir25_seed42_no_projection/checkpoint.pt",
+      "/home/bo/bo01/llmpy311/artifacts/s2c/runs/historical_known_training/stackoverflow_kir25_seed87_no_projection/checkpoint.pt"
+    ]
+  }
+]

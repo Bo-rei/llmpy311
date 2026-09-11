@@ -1,0 +1,59 @@
+[
+  {
+    "dataset": "banking77_oos",
+    "kir": 0.75,
+    "recipe": "existing",
+    "config": {
+      "k": 2,
+      "distance": "euclidean",
+      "boundary": "intent_quantile_0.9",
+      "rule": "nearest_sphere",
+      "fusion_weight": 1.0,
+      "threshold": 1.8
+    },
+    "utility": 0.5975430707728805,
+    "checkpoints": [
+      "/home/bo/bo01/llmpy311/artifacts/s2c/runs/historical_protocol_v2/minilm_k1/banking77_oos/kir75_seed13/trainable_k1/checkpoint.pt",
+      "/home/bo/bo01/llmpy311/artifacts/s2c/runs/historical_protocol_v2/minilm_k1/banking77_oos/kir75_seed42/trainable_k1/checkpoint.pt",
+      "/home/bo/bo01/llmpy311/artifacts/s2c/runs/historical_protocol_v2/minilm_k1/banking77_oos/kir75_seed87/trainable_k1/checkpoint.pt"
+    ]
+  },
+  {
+    "dataset": "banking77_oos",
+    "kir": 0.75,
+    "recipe": "lr_high",
+    "config": {
+      "k": 2,
+      "distance": "euclidean",
+      "boundary": "mean_std_3.0",
+      "rule": "nearest_sphere",
+      "fusion_weight": 2.0,
+      "threshold": 2.4
+    },
+    "utility": 0.6599162168140125,
+    "checkpoints": [
+      "/home/bo/bo01/llmpy311/artifacts/s2c/runs/historical_known_training/banking77_oos_kir75_seed13_lr_high/checkpoint.pt",
+      "/home/bo/bo01/llmpy311/artifacts/s2c/runs/historical_known_training/banking77_oos_kir75_seed42_lr_high/checkpoint.pt",
+      "/home/bo/bo01/llmpy311/artifacts/s2c/runs/historical_known_training/banking77_oos_kir75_seed87_lr_high/checkpoint.pt"
+    ]
+  },
+  {
+    "dataset": "banking77_oos",
+    "kir": 0.75,
+    "recipe": "all6",
+    "config": {
+      "k": 1,
+      "distance": "euclidean",
+      "boundary": "intent_quantile_0.99",
+      "rule": "nearest_sphere",
+      "fusion_weight": 1.0,
+      "threshold": 1.75
+    },
+    "utility": 0.6709550770522866,
+    "checkpoints": [
+      "/home/bo/bo01/llmpy311/artifacts/s2c/runs/historical_known_training/banking77_oos_kir75_seed13_all6/checkpoint.pt",
+      "/home/bo/bo01/llmpy311/artifacts/s2c/runs/historical_known_training/banking77_oos_kir75_seed42_all6/checkpoint.pt",
+      "/home/bo/bo01/llmpy311/artifacts/s2c/runs/historical_known_training/banking77_oos_kir75_seed87_all6/checkpoint.pt"
+    ]
+  }
+]

@@ -1,0 +1,44 @@
+[
+  {
+    "kir": 0.5,
+    "seed": 13,
+    "checkpoint": "/home/bo/bo01/llmpy311/artifacts/s2c/runs/historical_known_representation/kir50_seed13/checkpoint.pt",
+    "epoch": 3,
+    "validation_known_f1": 0.9739628296056035
+  },
+  {
+    "kir": 0.5,
+    "seed": 42,
+    "checkpoint": "/home/bo/bo01/llmpy311/artifacts/s2c/runs/historical_known_representation/kir50_seed42/checkpoint.pt",
+    "epoch": 9,
+    "validation_known_f1": 0.9690365935519154
+  },
+  {
+    "kir": 0.5,
+    "seed": 87,
+    "checkpoint": "/home/bo/bo01/llmpy311/artifacts/s2c/runs/historical_known_representation/kir50_seed87/checkpoint.pt",
+    "epoch": 9,
+    "validation_known_f1": 0.9846265682799701
+  },
+  {
+    "kir": 0.75,
+    "seed": 13,
+    "checkpoint": "/home/bo/bo01/llmpy311/artifacts/s2c/runs/historical_known_representation/kir75_seed13/checkpoint.pt",
+    "epoch": 7,
+    "validation_known_f1": 0.9766518893791619
+  },
+  {
+    "kir": 0.75,
+    "seed": 42,
+    "checkpoint": "/home/bo/bo01/llmpy311/artifacts/s2c/runs/historical_known_representation/kir75_seed42/checkpoint.pt",
+    "epoch": 9,
+    "validation_known_f1": 0.9700302669749827
+  },
+  {
+    "kir": 0.75,
+    "seed": 87,
+    "checkpoint": "/home/bo/bo01/llmpy311/artifacts/s2c/runs/historical_known_representation/kir75_seed87/checkpoint.pt",
+    "epoch": 8,
+    "validation_known_f1": 0.9711005733909703
+  }
+]

@@ -1,0 +1,25 @@
+{
+  "dataset": "banking77_oos",
+  "kir": 0.75,
+  "seed": 13,
+  "name": "all6",
+  "recipe": {
+    "layers": 6,
+    "projection": 256,
+    "projection_enabled": true,
+    "temperature": 0.07,
+    "intra": 0.1,
+    "inter": 0.1,
+    "margin": 0.2,
+    "lr": 2e-05,
+    "projection_lr": 0.0002,
+    "epochs": 9
+  },
+  "epoch": 9,
+  "known_validation_f1": 0.9135996863224429,
+  "checkpoint": "/home/bo/bo01/llmpy311/artifacts/s2c/runs/historical_known_training/banking77_oos_kir75_seed13_all6/checkpoint.pt",
+  "device": "cuda",
+  "test_read": false,
+  "real_oos_used": false,
+  "pseudo_oos_used": false
+}

@@ -1,5 +1,15 @@
 # 当前研究状态
 
+2026-09-11 Known-only 搜索已得到数值上的 **9/9 OOS-F1 优势**：CLINC150、StackOverflow、BANKING77-OOS 在 KIR=.25/.50/.75 均超过当前最强外部参照。CLINC150 三格为 `95.19±0.48/92.13±0.81/86.80±1.55`，相对差值 `+1.63/+2.03/+0.80 pp`。汇总见[Known-only 9/9 结果](analysis/historical_known_best_9of9.md)。所有选择仅使用 Known 训练/验证，未使用 pseudo-OOS；但该汇总合并了两轮最终评估，StackOverflow 固定合同确定前已有探索性 test artifact 被查看，因此仍需一次预注册全部九格锁定后的 fresh rerun，才能作为干净的 untouched-holdout 论文主表结果。
+
+2026-09-11 前置搜索记录：`historical_known_geometry` 完成 27/27 个 Known-only 验证单元，`historical_known_training` 完成 11 配方筛选及三 seed 扩展；随后由锁定配置完成九格 test 评估并形成上述汇总。
+
+2026-09-11 严格 Known-only 搜索记录：`historical_known_geometry` 覆盖三数据集 × 三 KIR × 三 seed，禁止真实及 pseudo-OOS 选参，仅以 Known 正确接收率减去四倍错误接收率选择 K、距离、半径、acceptance 与 margin fusion；该阶段不读取 test。
+
+2026-09-10 Known-only 实验收口：CLINC 校准九单元和新表示训练六单元均已完成 CUDA。新表示 OOS F1 在 KIR=.50/.75 为 **89.64±0.77 / 81.37±0.54**，距离表中外部最好值仍差 **0.46 / 4.63 pp**，9/9 目标未达成。两种 Known-only 校准规则均未改善旧固定阈值。详见[实验结果](analysis/historical_known_validation.md)。本轮为 Gate-only，尚无 full-pipeline 确认。
+
+2026-09-10 Known-only validation follow-up：用户当前要求改为仅 Known validation 选择，优先 CLINC。已启动[CLINC 校准实验](analysis/historical_known_validation.md)：三 KIR × 三 seed，固定现有 Known-only checkpoint、K=1 和距离，以 Known macro F1 为主选择规则，95% Known 覆盖率为预定对照。全部阈值锁定后评估 test，当前尚无完成结果。下方 validation OOS F1 only 描述属于历史阶段。
+
 2026-09-09 paper-style Trainable Gate extension：按论文的 K=2、CLINC λ=.5、其余 λ=1、threshold=1、normalized boundary 和 seed42 完成 9 个 CUDA 单元。该扩展使用当前 H1 fixed Router/Expert，因为论文原始部分 checkpoint 路径无法完整恢复；结果单独见[论文设置 Trainable Gate 扩展](analysis/historical_paper_style_trainable_gate_ablation_report.md)，不能写成严格论文 H0 消融。
 
 2026-09-09 current Trainable Gate four-variant ablation：按论文表格结构完成 Ours、Without Gate、Cascade-MiniLM、Cascade-SmolLM 的 36/36 CUDA 单元（3 数据集 × 3 KIR × seed42）。Ours 使用当前 Trainable Gate；结果见[Trainable Gate 四变体消融](analysis/trainable_paper_four_variants.md)。该表是当前 H1 matched ablation，历史论文四变体 artifact 继续单独保留。

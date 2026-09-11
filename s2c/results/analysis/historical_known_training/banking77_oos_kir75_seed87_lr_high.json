@@ -1,0 +1,25 @@
+{
+  "dataset": "banking77_oos",
+  "kir": 0.75,
+  "seed": 87,
+  "name": "lr_high",
+  "recipe": {
+    "layers": 2,
+    "projection": 256,
+    "projection_enabled": true,
+    "temperature": 0.07,
+    "intra": 0.1,
+    "inter": 0.1,
+    "margin": 0.2,
+    "lr": 4e-05,
+    "projection_lr": 0.0004,
+    "epochs": 9
+  },
+  "epoch": 9,
+  "known_validation_f1": 0.9148318108685569,
+  "checkpoint": "/home/bo/bo01/llmpy311/artifacts/s2c/runs/historical_known_training/banking77_oos_kir75_seed87_lr_high/checkpoint.pt",
+  "device": "cuda",
+  "test_read": false,
+  "real_oos_used": false,
+  "pseudo_oos_used": false
+}

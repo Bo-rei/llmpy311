@@ -1,0 +1,15 @@
+{
+  "status": "complete",
+  "device": "cuda",
+  "protocol": "historical_v19_paper_main",
+  "coverage_target": 0.9,
+  "selection": "mean Known validation utility at fixed Known coverage across three seeds",
+  "real_oos_used_for_selection": false,
+  "pseudo_oos_used": false,
+  "test_used_for_selection": false,
+  "test_read": true,
+  "full_pipeline_verified": false,
+  "completed_test_units": 27,
+  "wins": 6,
+  "std_ddof": 0
+}

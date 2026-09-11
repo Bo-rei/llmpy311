@@ -1,0 +1,119 @@
+[
+  {
+    "dataset": "clinc150",
+    "kir": 0.25,
+    "seed": 13,
+    "checkpoint": "/home/bo/bo01/llmpy311/artifacts/s2c/runs/historical_protocol_v2/minilm_k1/clinc150/kir25_seed13/trainable_k1/checkpoint.pt",
+    "detector": "/home/bo/bo01/llmpy311/s2c/results/analysis/historical_known_validation/kir25_seed13_detector.json",
+    "thresholds": {
+      "known_macro_f1": 1.4626368740675997,
+      "known_coverage_95": 1.1914535846868302
+    },
+    "validation_known_f1": 0.9732965853545387,
+    "validation_known_count": 760
+  },
+  {
+    "dataset": "clinc150",
+    "kir": 0.25,
+    "seed": 42,
+    "checkpoint": "/home/bo/bo01/llmpy311/artifacts/s2c/runs/historical_protocol_v2/minilm_k1/clinc150/kir25_seed42/trainable_k1/checkpoint.pt",
+    "detector": "/home/bo/bo01/llmpy311/s2c/results/analysis/historical_known_validation/kir25_seed42_detector.json",
+    "thresholds": {
+      "known_macro_f1": 1.3484001553180682,
+      "known_coverage_95": 1.2457222762824205
+    },
+    "validation_known_f1": 0.9534027136209375,
+    "validation_known_count": 760
+  },
+  {
+    "dataset": "clinc150",
+    "kir": 0.25,
+    "seed": 87,
+    "checkpoint": "/home/bo/bo01/llmpy311/artifacts/s2c/runs/historical_protocol_v2/minilm_k1/clinc150/kir25_seed87/trainable_k1/checkpoint.pt",
+    "detector": "/home/bo/bo01/llmpy311/s2c/results/analysis/historical_known_validation/kir25_seed87_detector.json",
+    "thresholds": {
+      "known_macro_f1": 1.4577979113650024,
+      "known_coverage_95": 1.210702988851041
+    },
+    "validation_known_f1": 0.9736566400656507,
+    "validation_known_count": 760
+  },
+  {
+    "dataset": "clinc150",
+    "kir": 0.5,
+    "seed": 13,
+    "checkpoint": "/home/bo/bo01/llmpy311/artifacts/s2c/runs/historical_protocol_v2/minilm_k1/clinc150/kir50_seed13/trainable_k1/checkpoint.pt",
+    "detector": "/home/bo/bo01/llmpy311/s2c/results/analysis/historical_known_validation/kir50_seed13_detector.json",
+    "thresholds": {
+      "known_macro_f1": 1.2320003091263196,
+      "known_coverage_95": 1.1765482669669864
+    },
+    "validation_known_f1": 0.9373269907185481,
+    "validation_known_count": 1500
+  },
+  {
+    "dataset": "clinc150",
+    "kir": 0.5,
+    "seed": 42,
+    "checkpoint": "/home/bo/bo01/llmpy311/artifacts/s2c/runs/historical_protocol_v2/minilm_k1/clinc150/kir50_seed42/trainable_k1/checkpoint.pt",
+    "detector": "/home/bo/bo01/llmpy311/s2c/results/analysis/historical_known_validation/kir50_seed42_detector.json",
+    "thresholds": {
+      "known_macro_f1": 1.246263968366638,
+      "known_coverage_95": 1.2529239378260602
+    },
+    "validation_known_f1": 0.9335077087566259,
+    "validation_known_count": 1500
+  },
+  {
+    "dataset": "clinc150",
+    "kir": 0.5,
+    "seed": 87,
+    "checkpoint": "/home/bo/bo01/llmpy311/artifacts/s2c/runs/historical_protocol_v2/minilm_k1/clinc150/kir50_seed87/trainable_k1/checkpoint.pt",
+    "detector": "/home/bo/bo01/llmpy311/s2c/results/analysis/historical_known_validation/kir50_seed87_detector.json",
+    "thresholds": {
+      "known_macro_f1": 1.2433207073181483,
+      "known_coverage_95": 1.2008154704405882
+    },
+    "validation_known_f1": 0.9416675264326958,
+    "validation_known_count": 1500
+  },
+  {
+    "dataset": "clinc150",
+    "kir": 0.75,
+    "seed": 13,
+    "checkpoint": "/home/bo/bo01/llmpy311/artifacts/s2c/runs/historical_protocol_v2/minilm_k1/clinc150/kir75_seed13/trainable_k1/checkpoint.pt",
+    "detector": "/home/bo/bo01/llmpy311/s2c/results/analysis/historical_known_validation/kir75_seed13_detector.json",
+    "thresholds": {
+      "known_macro_f1": 1.2477041459035239,
+      "known_coverage_95": 1.2019366999103966
+    },
+    "validation_known_f1": 0.93812117312114,
+    "validation_known_count": 2240
+  },
+  {
+    "dataset": "clinc150",
+    "kir": 0.75,
+    "seed": 42,
+    "checkpoint": "/home/bo/bo01/llmpy311/artifacts/s2c/runs/historical_protocol_v2/minilm_k1/clinc150/kir75_seed42/trainable_k1/checkpoint.pt",
+    "detector": "/home/bo/bo01/llmpy311/s2c/results/analysis/historical_known_validation/kir75_seed42_detector.json",
+    "thresholds": {
+      "known_macro_f1": 1.161667774498813,
+      "known_coverage_95": 1.1799598049540838
+    },
+    "validation_known_f1": 0.9178741632856736,
+    "validation_known_count": 2240
+  },
+  {
+    "dataset": "clinc150",
+    "kir": 0.75,
+    "seed": 87,
+    "checkpoint": "/home/bo/bo01/llmpy311/artifacts/s2c/runs/historical_protocol_v2/minilm_k1/clinc150/kir75_seed87/trainable_k1/checkpoint.pt",
+    "detector": "/home/bo/bo01/llmpy311/s2c/results/analysis/historical_known_validation/kir75_seed87_detector.json",
+    "thresholds": {
+      "known_macro_f1": 1.2461034699803863,
+      "known_coverage_95": 1.2154626923861778
+    },
+    "validation_known_f1": 0.9326499714654071,
+    "validation_known_count": 2240
+  }
+]

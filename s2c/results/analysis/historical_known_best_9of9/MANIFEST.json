@@ -1,0 +1,18 @@
+{
+  "status": "complete",
+  "protocol": "historical_v19_paper_main",
+  "validation": "Known-only; train and validation rows have label=0",
+  "real_oos_used_for_selection": false,
+  "pseudo_oos_used": false,
+  "test_used_for_selection": false,
+  "device": "cuda",
+  "seed_count": 3,
+  "cells": 9,
+  "wins": 9,
+  "source_runs": [
+    "historical_known_coverage90_v3",
+    "fixed_known_standard_contract_stackoverflow"
+  ],
+  "clean_single_holdout_claim": false,
+  "clean_single_holdout_note": "The combined progress report joins two final-evaluation campaigns; earlier exploratory test artifacts were already present in the workspace before the fixed StackOverflow contract was chosen. Do not present this joined maximum as an untouched-holdout claim without a fresh locked rerun."
+}

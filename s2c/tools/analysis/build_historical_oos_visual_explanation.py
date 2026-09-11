@@ -766,11 +766,14 @@ def plot_local_boundary_geometry_3d(
         ax = axes[column]
         train_xy = displayed_train[method]
         oos_xy = displayed[method]
-        rejected = decisions[method]
-        accepted = ~rejected
+        # Fig.1 explains the selected local sphere only.  Do not overlay the
+        # full Gate union decision here: other centers can accept an OOS sample
+        # even when it lies outside this displayed sphere.
+        local_inside = local_scores[method] <= 1.0
+        local_outside = ~local_inside
         ax.scatter(train_xy[:, 0], train_xy[:, 1], train_xy[:, 2], s=7, color="#4477AA", alpha=0.30, linewidths=0, depthshade=False, zorder=3, rasterized=True)
-        ax.scatter(oos_xy[rejected, 0], oos_xy[rejected, 1], oos_xy[rejected, 2], s=5, color="#CC6677", alpha=0.10, marker="o", linewidths=0, depthshade=False, zorder=2, rasterized=True)
-        ax.scatter(oos_xy[accepted, 0], oos_xy[accepted, 1], oos_xy[accepted, 2], s=16, facecolors="none", edgecolors="#CC6677", alpha=0.75, marker="o", linewidths=0.7, depthshade=False, zorder=4)
+        ax.scatter(oos_xy[local_outside, 0], oos_xy[local_outside, 1], oos_xy[local_outside, 2], s=5, color="#CC6677", alpha=0.10, marker="o", linewidths=0, depthshade=False, zorder=2, rasterized=True)
+        ax.scatter(oos_xy[local_inside, 0], oos_xy[local_inside, 1], oos_xy[local_inside, 2], s=18, facecolors="none", edgecolors="#CC6677", alpha=0.85, marker="o", linewidths=0.8, depthshade=False, zorder=4)
         boundary = projected_surfaces[method]
         ax.plot_surface(boundary[:, :, 0], boundary[:, :, 1], boundary[:, :, 2], color="#9ABAD0", alpha=0.055, linewidth=0, shade=False, zorder=1)
         ax.plot_wireframe(boundary[:, :, 0], boundary[:, :, 1], boundary[:, :, 2], rstride=9, cstride=12, color="#9AB0C0", alpha=0.35, linewidth=0.45, zorder=1)
@@ -797,7 +800,7 @@ def plot_local_boundary_geometry_3d(
         ax.text2D(
             0.02,
             0.94,
-            f"Inside: {int((local_scores[method] <= 1).sum()):,}   |   Outside: {int((local_scores[method] > 1).sum()):,}",
+            f"Inside: {int(local_inside.sum()):,}   |   Outside: {int(local_outside.sum()):,}",
             transform=ax.transAxes,
             fontsize=9,
             color=DARK,
@@ -809,8 +812,8 @@ def plot_local_boundary_geometry_3d(
 
     handles = [
         Line2D([], [], marker="o", linestyle="none", color="#4477AA", markersize=5, label="Known"),
-        Line2D([], [], marker="o", linestyle="none", color="#CC6677", markersize=5, label="OOS rejected"),
-        Line2D([], [], marker="o", linestyle="none", markerfacecolor="none", markeredgecolor="#CC6677", markersize=6, label="OOS accepted"),
+        Line2D([], [], marker="o", linestyle="none", color="#CC6677", markersize=5, label="OOS outside sphere"),
+        Line2D([], [], marker="o", linestyle="none", markerfacecolor="none", markeredgecolor="#CC6677", markersize=6, label="OOS inside sphere"),
         Line2D([], [], marker="*", linestyle="none", color="#334155", markersize=8, label="Center"),
     ]
     fig.legend(handles=handles, loc="lower center", bbox_to_anchor=(0.5, 0.015), ncol=4, fontsize=10.5, handlelength=1.2, columnspacing=1.6, frameon=False)

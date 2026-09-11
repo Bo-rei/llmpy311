@@ -1,0 +1,31 @@
+{
+  "protocol": "historical_v19_paper_main",
+  "evidence": "H1 Gate-only",
+  "status": "complete",
+  "device": "cuda",
+  "datasets": [
+    "clinc150"
+  ],
+  "kirs": [
+    0.25,
+    0.5,
+    0.75
+  ],
+  "seeds": [
+    13,
+    42,
+    87
+  ],
+  "checkpoint_selection": "existing known_only_validation_for_checkpoint",
+  "primary": "known_macro_f1",
+  "secondary": "known_coverage_95",
+  "k": 1,
+  "radius_lambda": 1.0,
+  "acceptance_mode": "nearest_sphere",
+  "validation_oos_used": false,
+  "test_used_for_selection": false,
+  "test_access": "after_all_nine_calibration_locks",
+  "rerun_reason": "new Known-only calibration replacing fixed threshold 1",
+  "completed_units": 9,
+  "full_pipeline_verified": false
+}

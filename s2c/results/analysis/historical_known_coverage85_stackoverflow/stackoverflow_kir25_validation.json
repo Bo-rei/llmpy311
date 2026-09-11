@@ -1,0 +1,77 @@
+[
+  {
+    "dataset": "stackoverflow",
+    "kir": 0.25,
+    "recipe": "existing",
+    "config": {
+      "k": 1,
+      "distance": "euclidean",
+      "boundary": "center_quantile_0.7",
+      "rule": "nearest_sphere",
+      "fusion": "inverse_margin",
+      "fusion_weight": 0.5
+    },
+    "utility": 0.7486666666666667,
+    "known_coverage": 0.852,
+    "checkpoints": [
+      "/home/bo/bo01/llmpy311/artifacts/s2c/runs/historical_protocol_v2/minilm_k1/stackoverflow/kir25_seed13/trainable_k1/checkpoint.pt",
+      "/home/bo/bo01/llmpy311/artifacts/s2c/runs/historical_protocol_v2/minilm_k1/stackoverflow/kir25_seed42/trainable_k1/checkpoint.pt",
+      "/home/bo/bo01/llmpy311/artifacts/s2c/runs/historical_protocol_v2/minilm_k1/stackoverflow/kir25_seed87/trainable_k1/checkpoint.pt"
+    ],
+    "validation_thresholds": [
+      5.641032750416887,
+      5.332003098102279,
+      2.713951573984833
+    ]
+  },
+  {
+    "dataset": "stackoverflow",
+    "kir": 0.25,
+    "recipe": "compact_margin",
+    "config": {
+      "k": 1,
+      "distance": "euclidean",
+      "boundary": "intent_quantile_0.9",
+      "rule": "nearest_sphere",
+      "fusion": "inverse_margin",
+      "fusion_weight": 1.0
+    },
+    "utility": 0.7553333333333333,
+    "known_coverage": 0.852,
+    "checkpoints": [
+      "/home/bo/bo01/llmpy311/artifacts/s2c/runs/historical_known_training/stackoverflow_kir25_seed13_compact_margin/checkpoint.pt",
+      "/home/bo/bo01/llmpy311/artifacts/s2c/runs/historical_known_training/stackoverflow_kir25_seed42_compact_margin/checkpoint.pt",
+      "/home/bo/bo01/llmpy311/artifacts/s2c/runs/historical_known_training/stackoverflow_kir25_seed87_compact_margin/checkpoint.pt"
+    ],
+    "validation_thresholds": [
+      2.260253966018066,
+      1.9271243728170897,
+      3.7533595468383014
+    ]
+  },
+  {
+    "dataset": "stackoverflow",
+    "kir": 0.25,
+    "recipe": "no_projection",
+    "config": {
+      "k": 4,
+      "distance": "euclidean",
+      "boundary": "mean_std_0.0",
+      "rule": "nearest_sphere",
+      "fusion": "inverse_margin",
+      "fusion_weight": 0.5
+    },
+    "utility": 0.7586666666666666,
+    "known_coverage": 0.852,
+    "checkpoints": [
+      "/home/bo/bo01/llmpy311/artifacts/s2c/runs/historical_known_training/stackoverflow_kir25_seed13_no_projection/checkpoint.pt",
+      "/home/bo/bo01/llmpy311/artifacts/s2c/runs/historical_known_training/stackoverflow_kir25_seed42_no_projection/checkpoint.pt",
+      "/home/bo/bo01/llmpy311/artifacts/s2c/runs/historical_known_training/stackoverflow_kir25_seed87_no_projection/checkpoint.pt"
+    ],
+    "validation_thresholds": [
+      8.931986955566753,
+      7.96916851146271,
+      5.846856255280681
+    ]
+  }
+]

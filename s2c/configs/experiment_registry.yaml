@@ -736,6 +736,96 @@ analysis_catalog_policy:
   git_policy: "commit only closed evidence bundles and their reproducible source"
 
 analysis_bundles:
+  historical_known_final:
+    status: planned
+    contract_layer: historical_v19_paper_main_h1_controlled
+    question: "Do nine configurations selected using only Known validation beat the historical table references?"
+    source_experiments: []
+    runner: scripts/experiments/finalize_historical_known_search.py
+    builder: scripts/experiments/finalize_historical_known_search.py
+    result_dir: results/analysis/historical_known_final
+    figure_dir: null
+    report: docs/analysis/historical_known_geometry.md
+    manifest: results/analysis/historical_known_final/MANIFEST.json
+    aliases: []
+    supersedes: []
+    selected_for_main_report: false
+    commit_policy: closed_evidence
+  historical_known_best_9of9:
+    status: complete
+    contract_layer: historical_v19_paper_main_h1_known_only_exploration
+    question: "What is the highest observed OOS F1 across the nine dataset/KIR cells under Known-only selection contracts?"
+    source_experiments: [analysis.historical_known_final]
+    runner: scripts/experiments/finalize_historical_known_coverage.py
+    builder: scripts/experiments/finalize_historical_known_coverage.py
+    result_dir: results/analysis/historical_known_best_9of9
+    figure_dir: null
+    report: docs/analysis/historical_known_best_9of9.md
+    manifest: results/analysis/historical_known_best_9of9/MANIFEST.json
+    aliases: []
+    supersedes: []
+    selected_for_main_report: false
+    commit_policy: closed_evidence
+  historical_known_training:
+    status: active
+    contract_layer: historical_v19_paper_main_h1_controlled
+    question: "Which MiniLM recipes improve Known-only validation classification?"
+    source_experiments: []
+    runner: scripts/experiments/search_historical_known_training.py
+    builder: scripts/experiments/search_historical_known_training.py
+    result_dir: results/analysis/historical_known_training
+    figure_dir: null
+    report: docs/analysis/historical_known_geometry.md
+    manifest: results/analysis/historical_known_training/MANIFEST.json
+    aliases: []
+    supersedes: []
+    selected_for_main_report: false
+    commit_policy: closed_evidence
+  historical_known_geometry:
+    status: active
+    contract_layer: historical_v19_paper_main_h1_controlled
+    question: "Can strict Known-only selective classification identify better geometry?"
+    source_experiments: []
+    runner: scripts/experiments/search_historical_known_geometry.py
+    builder: scripts/experiments/search_historical_known_geometry.py
+    result_dir: results/analysis/historical_known_geometry
+    figure_dir: null
+    report: docs/analysis/historical_known_geometry.md
+    manifest: results/analysis/historical_known_geometry/MANIFEST.json
+    aliases: []
+    supersedes: []
+    selected_for_main_report: false
+    commit_policy: closed_evidence
+  historical_known_representation:
+    status: active
+    contract_layer: historical_v19_paper_main_h1_controlled
+    question: "Does longer Known-only representation training improve CLINC OOS F1?"
+    source_experiments: []
+    runner: scripts/experiments/run_historical_known_representation.py
+    builder: scripts/experiments/run_historical_known_representation.py
+    result_dir: results/analysis/historical_known_representation
+    figure_dir: null
+    report: docs/analysis/historical_known_validation.md
+    manifest: results/analysis/historical_known_representation/MANIFEST.json
+    aliases: []
+    supersedes: []
+    selected_for_main_report: false
+    commit_policy: closed_evidence
+  historical_known_validation:
+    status: active
+    contract_layer: historical_v19_paper_main_h1_controlled
+    question: "Can Known-only calibration recover CLINC Known coverage and OOS F1?"
+    source_experiments: []
+    runner: scripts/experiments/run_historical_known_validation.py
+    builder: scripts/experiments/run_historical_known_validation.py
+    result_dir: results/analysis/historical_known_validation
+    figure_dir: null
+    report: docs/analysis/historical_known_validation.md
+    manifest: results/analysis/historical_known_validation/MANIFEST.json
+    aliases: []
+    supersedes: []
+    selected_for_main_report: false
+    commit_policy: closed_evidence
   trainable_paper_four_variants:
     status: active
     contract_layer: historical_v19_current_trainable_four_variants

@@ -1,0 +1,77 @@
+[
+  {
+    "dataset": "clinc150",
+    "kir": 0.75,
+    "recipe": "existing",
+    "config": {
+      "k": 1,
+      "distance": "euclidean",
+      "boundary": "center_quantile_0.99",
+      "rule": "nearest_sphere",
+      "fusion": "inverse_margin",
+      "fusion_weight": 0.5
+    },
+    "utility": 0.8744047619047618,
+    "known_coverage": 0.9004464285714285,
+    "checkpoints": [
+      "/home/bo/bo01/llmpy311/artifacts/s2c/runs/historical_protocol_v2/minilm_k1/clinc150/kir75_seed13/trainable_k1/checkpoint.pt",
+      "/home/bo/bo01/llmpy311/artifacts/s2c/runs/historical_protocol_v2/minilm_k1/clinc150/kir75_seed42/trainable_k1/checkpoint.pt",
+      "/home/bo/bo01/llmpy311/artifacts/s2c/runs/historical_protocol_v2/minilm_k1/clinc150/kir75_seed87/trainable_k1/checkpoint.pt"
+    ],
+    "validation_thresholds": [
+      4.551660507481438,
+      5.793228636385418,
+      4.694214677855917
+    ]
+  },
+  {
+    "dataset": "clinc150",
+    "kir": 0.75,
+    "recipe": "all6",
+    "config": {
+      "k": 1,
+      "distance": "euclidean",
+      "boundary": "mean_std_2.0",
+      "rule": "nearest_sphere",
+      "fusion": "max_ratio",
+      "fusion_weight": 2.0
+    },
+    "utility": 0.8840773809523809,
+    "known_coverage": 0.9004464285714285,
+    "checkpoints": [
+      "/home/bo/bo01/llmpy311/artifacts/s2c/runs/historical_known_training/clinc150_kir75_seed13_all6/checkpoint.pt",
+      "/home/bo/bo01/llmpy311/artifacts/s2c/runs/historical_known_training/clinc150_kir75_seed42_all6/checkpoint.pt",
+      "/home/bo/bo01/llmpy311/artifacts/s2c/runs/historical_known_training/clinc150_kir75_seed87_all6/checkpoint.pt"
+    ],
+    "validation_thresholds": [
+      1.3492564632090769,
+      1.3733766372177987,
+      1.6757998425491818
+    ]
+  },
+  {
+    "dataset": "clinc150",
+    "kir": 0.75,
+    "recipe": "last4",
+    "config": {
+      "k": 4,
+      "distance": "euclidean",
+      "boundary": "mean_std_1.5",
+      "rule": "nearest_sphere",
+      "fusion": "max_ratio",
+      "fusion_weight": 2.0
+    },
+    "utility": 0.8811011904761905,
+    "known_coverage": 0.9004464285714285,
+    "checkpoints": [
+      "/home/bo/bo01/llmpy311/artifacts/s2c/runs/historical_known_training/clinc150_kir75_seed13_last4/checkpoint.pt",
+      "/home/bo/bo01/llmpy311/artifacts/s2c/runs/historical_known_training/clinc150_kir75_seed42_last4/checkpoint.pt",
+      "/home/bo/bo01/llmpy311/artifacts/s2c/runs/historical_known_training/clinc150_kir75_seed87_last4/checkpoint.pt"
+    ],
+    "validation_thresholds": [
+      1.5406226334102642,
+      1.5324828077208845,
+      1.4690924869347348
+    ]
+  }
+]

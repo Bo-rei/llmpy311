@@ -1,5 +1,7 @@
 # s2c 项目知识库
 
+> GPT-6 适配变更说明：去掉每次回复加载 Skill、所有修改追加历史日志和固定全量验证；保留数据准入、协议隔离、产物追溯及梯度约束。按任务读取证据，自主修复普通错误后完成定向验证。
+
 ## HERO：反过度防御
 
 === 范围约束（约束你提议什么修法，不约束你找什么）===
@@ -23,8 +25,7 @@
 另有两种长得像上面、但不是的。这些要报：
   ✓  用摘要比对来跳过重读一个你已经有的大文件
   ✓  本项目自己的文档示例就会产生的那种“听起来罕见”的输入
-跑任何检查之前先回答：这次运行会检测出什么具体的失败？真出现了我下一步会做什么不同的事？
-答不上来就别跑。
+运行检查前说明它要验证的具体失败，以及失败后会改变的下一步；没有明确作用就跳过该检查。
 对的就说对。不要为了交差硬找问题。
 
 ## 当前边界
@@ -33,9 +34,8 @@
 文档和轻量公开结果均在 `s2c/`；本地原始产物在 `../artifacts/s2c/`，数据和基础模型
 在 `../assets/`，独立 TextOIR 仓库在 `../textoir/`。
 
-每次回复、写代码、审查或报告状态前，先加载并执行
-`/home/bo/.codex/skills/response-discipline/SKILL.md`。它是本项目的通用表达与实现约束：
-先给结果，保持改动最小，不为假设中的问题增加防御性说明或代码。
+执行与 Skill 优先级遵循上级 `../AGENTS.md`。先给结果，保持改动最小；
+根据任务读取相关证据，不要求每次回复重新加载通用 Skill。
 
 当前文档入口只有：
 
@@ -106,9 +106,9 @@ figures/archive/analysis/
 
 ## 维护规则
 
-- 所有 Codex 或其他智能体的实质性修改都必须同步追加
-  `docs/archive/protocol_and_data/DEVELOPMENT_LOG.md`；纯只读且不产生文件的任务可以例外。日志必须记录
-  base commit、修改文件、数据影响、artifact 影响、测试、风险和下一步。
+- 改变实验协议、数据或研究结论时，在已有研究记录中记录 base commit、相关文件、
+  数据/artifact 影响及验证证据。普通代码、提示词和文档维护由 Git diff 与最终验证报告留痕，
+  不要求向历史开发日志重复追加。
 - 不运行训练来完成工作区整理，不修改或重命名 `../artifacts` 原始实验目录。
 - 不把 Gate-only 的 Frozen/CE/SupCon 结果写成完整 Pipeline 结果。
 - 不提交模型、checkpoint、embedding、Parquet、逐样本 scores 或运行日志。
@@ -120,9 +120,10 @@ figures/archive/analysis/
   不自动删除或移动结果；归档必须是显式、可恢复、逐项登记的操作。
 - 分析代码按职责放置：`scripts/experiments/` 负责运行，`tools/analysis/` 负责已有结果的后处理，
   `tools/maintenance/` 负责审计；不要为同一张表重复创建新的入口脚本。
-- 涉及实验、指标、数据协议或论文论断的任务，开始前必须读取
-  `docs/CURRENT_STATUS.md`、`EXPERIMENT_LEDGER.csv` 和 `docs/archive/protocol_and_data/DECISION_LOG.md`，结束前运行
-  `python tools/maintenance/check_research_state.py` 并追加状态台账、开发日志和阶段 closeout。
+- 实验、指标、数据协议或论文论断任务先读 `docs/CURRENT_STATUS.md`，按涉及的实验查询
+  `docs/EXPERIMENT_LEDGER.csv`；历史决策有疑义时再查 `docs/archive/protocol_and_data/DECISION_LOG.md`。
+  新实验或研究状态变更更新相应台账/状态并运行 `python tools/maintenance/check_research_state.py`；
+  只读状态查询不启动实验、不追加台账、不要求阶段 closeout。
 - 新计划若与 ledger 中 `do_not_repeat` 且已完成的 protocol/dataset/KIR/seed/representation/K/distance/
   partition/boundary 完全相同，必须拒绝为 `duplicate_completed_experiment`；只有带明确 rerun reason
   的显式覆盖才允许继续。
@@ -140,11 +141,16 @@ figures/archive/analysis/
 
 ## 最小验证
 
-```bash
-pytest tests/unit -q
-python -m py_compile tools/maintenance/export_public_results.py
-python tools/analysis/audit_experiment_registry.py
-python tools/maintenance/export_public_results.py --verify
-```
+从 `s2c/` 按改动选择，不默认全部执行：
+
+- 提示词/文档：检查 Git diff、文件引用和规则一致性。
+- 代码行为：运行受影响的 `tests/` 测试；Gate/指标契约改变须有相应回归测试。
+- 实验注册关系：`python tools/analysis/audit_experiment_registry.py`。
+- 公开导出逻辑或白名单：`python tools/maintenance/export_public_results.py --verify`，
+  修改导出脚本时另做语法/相关测试检查。
+- 研究状态或台账：`python tools/maintenance/check_research_state.py`。
+
+失败先修复并重跑相关检查；通过后报告实际命令与结果。缺少数据时说明无法验证的项，
+不得伪造通过、修改冻结结果或改换实验协议来消除失败。
 
 任何公开结果数字都必须能通过 `results/MANIFEST.csv` 或对应 artifact manifest 追溯。

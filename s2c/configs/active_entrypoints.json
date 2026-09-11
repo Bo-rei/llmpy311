@@ -85,6 +85,12 @@
     "tools/legacy/analysis_v19/validate_router_confidence_threshold_v19.py"
   ],
   "historical_retained_for_compatibility": [
+    "scripts/experiments/finalize_historical_known_coverage.py",
+    "scripts/experiments/finalize_historical_known_search.py",
+    "scripts/experiments/run_historical_known_representation.py",
+    "scripts/experiments/run_historical_known_validation.py",
+    "scripts/experiments/search_historical_known_geometry.py",
+    "scripts/experiments/search_historical_known_training.py",
     "tools/analysis/benchmark_historical_deployment.py",
     "tools/analysis/build_historical_archive_full_pipeline_summary.py",
     "tools/analysis/build_historical_archive_tuned_full_pipeline_summary.py",

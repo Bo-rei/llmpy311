@@ -1,0 +1,77 @@
+[
+  {
+    "dataset": "banking77_oos",
+    "kir": 0.25,
+    "recipe": "existing",
+    "config": {
+      "k": 4,
+      "distance": "euclidean",
+      "boundary": "intent_quantile_0.5",
+      "rule": "nearest_sphere",
+      "fusion": "inverse_margin",
+      "fusion_weight": 0.25
+    },
+    "utility": 0.8384956675163616,
+    "known_coverage": 0.9013497432431765,
+    "checkpoints": [
+      "/home/bo/bo01/llmpy311/artifacts/s2c/runs/historical_protocol_v2/minilm_k1/banking77_oos/kir25_seed13/trainable_k1/checkpoint.pt",
+      "/home/bo/bo01/llmpy311/artifacts/s2c/runs/historical_protocol_v2/minilm_k1/banking77_oos/kir25_seed42/trainable_k1/checkpoint.pt",
+      "/home/bo/bo01/llmpy311/artifacts/s2c/runs/historical_protocol_v2/minilm_k1/banking77_oos/kir25_seed87/trainable_k1/checkpoint.pt"
+    ],
+    "validation_thresholds": [
+      3.2626248170396916,
+      4.418287831577597,
+      4.257295900883217
+    ]
+  },
+  {
+    "dataset": "banking77_oos",
+    "kir": 0.25,
+    "recipe": "all6",
+    "config": {
+      "k": 4,
+      "distance": "euclidean",
+      "boundary": "mean_std_0.0",
+      "rule": "nearest_sphere",
+      "fusion": "inverse_margin",
+      "fusion_weight": 1.0
+    },
+    "utility": 0.8656509428384939,
+    "known_coverage": 0.9013497432431765,
+    "checkpoints": [
+      "/home/bo/bo01/llmpy311/artifacts/s2c/runs/historical_known_training/banking77_oos_kir25_seed13_all6/checkpoint.pt",
+      "/home/bo/bo01/llmpy311/artifacts/s2c/runs/historical_known_training/banking77_oos_kir25_seed42_all6/checkpoint.pt",
+      "/home/bo/bo01/llmpy311/artifacts/s2c/runs/historical_known_training/banking77_oos_kir25_seed87_all6/checkpoint.pt"
+    ],
+    "validation_thresholds": [
+      4.2872591767366774,
+      9.252482570640526,
+      5.002357056222368
+    ]
+  },
+  {
+    "dataset": "banking77_oos",
+    "kir": 0.25,
+    "recipe": "last4",
+    "config": {
+      "k": 3,
+      "distance": "euclidean",
+      "boundary": "center_quantile_0.9",
+      "rule": "nearest_sphere",
+      "fusion": "ratio",
+      "fusion_weight": 2.0
+    },
+    "utility": 0.8611464383339893,
+    "known_coverage": 0.9013497432431765,
+    "checkpoints": [
+      "/home/bo/bo01/llmpy311/artifacts/s2c/runs/historical_known_training/banking77_oos_kir25_seed13_last4/checkpoint.pt",
+      "/home/bo/bo01/llmpy311/artifacts/s2c/runs/historical_known_training/banking77_oos_kir25_seed42_last4/checkpoint.pt",
+      "/home/bo/bo01/llmpy311/artifacts/s2c/runs/historical_known_training/banking77_oos_kir25_seed87_last4/checkpoint.pt"
+    ],
+    "validation_thresholds": [
+      2.6447162269390523,
+      2.7972916540075765,
+      2.64556668620538
+    ]
+  }
+]

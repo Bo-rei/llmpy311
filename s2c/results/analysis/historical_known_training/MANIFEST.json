@@ -1,0 +1,188 @@
+{
+  "status": "validation_complete",
+  "protocol": "historical_v19_paper_main",
+  "evidence": "H1",
+  "recipes": {
+    "last2": {
+      "layers": 2,
+      "projection": 256,
+      "projection_enabled": true,
+      "temperature": 0.07,
+      "intra": 0.1,
+      "inter": 0.1,
+      "margin": 0.2,
+      "lr": 2e-05,
+      "projection_lr": 0.0002,
+      "epochs": 9
+    },
+    "last4": {
+      "layers": 4,
+      "projection": 256,
+      "projection_enabled": true,
+      "temperature": 0.07,
+      "intra": 0.1,
+      "inter": 0.1,
+      "margin": 0.2,
+      "lr": 2e-05,
+      "projection_lr": 0.0002,
+      "epochs": 9
+    },
+    "all6": {
+      "layers": 6,
+      "projection": 256,
+      "projection_enabled": true,
+      "temperature": 0.07,
+      "intra": 0.1,
+      "inter": 0.1,
+      "margin": 0.2,
+      "lr": 2e-05,
+      "projection_lr": 0.0002,
+      "epochs": 9
+    },
+    "last1": {
+      "layers": 1,
+      "projection": 256,
+      "projection_enabled": true,
+      "temperature": 0.07,
+      "intra": 0.1,
+      "inter": 0.1,
+      "margin": 0.2,
+      "lr": 2e-05,
+      "projection_lr": 0.0002,
+      "epochs": 9
+    },
+    "no_projection": {
+      "layers": 2,
+      "projection": 256,
+      "projection_enabled": false,
+      "temperature": 0.07,
+      "intra": 0.1,
+      "inter": 0.1,
+      "margin": 0.2,
+      "lr": 2e-05,
+      "projection_lr": 0.0002,
+      "epochs": 9
+    },
+    "projection128": {
+      "layers": 2,
+      "projection": 128,
+      "projection_enabled": true,
+      "temperature": 0.07,
+      "intra": 0.1,
+      "inter": 0.1,
+      "margin": 0.2,
+      "lr": 2e-05,
+      "projection_lr": 0.0002,
+      "epochs": 9
+    },
+    "temperature10": {
+      "layers": 2,
+      "projection": 256,
+      "projection_enabled": true,
+      "temperature": 0.1,
+      "intra": 0.1,
+      "inter": 0.1,
+      "margin": 0.2,
+      "lr": 2e-05,
+      "projection_lr": 0.0002,
+      "epochs": 9
+    },
+    "compact_margin": {
+      "layers": 2,
+      "projection": 256,
+      "projection_enabled": true,
+      "temperature": 0.07,
+      "intra": 0.5,
+      "inter": 0.5,
+      "margin": 0.4,
+      "lr": 2e-05,
+      "projection_lr": 0.0002,
+      "epochs": 9
+    },
+    "classification_only": {
+      "layers": 2,
+      "projection": 256,
+      "projection_enabled": true,
+      "temperature": 0.07,
+      "intra": 0.0,
+      "inter": 0.0,
+      "margin": 0.2,
+      "lr": 2e-05,
+      "projection_lr": 0.0002,
+      "epochs": 9
+    },
+    "lr_low": {
+      "layers": 2,
+      "projection": 256,
+      "projection_enabled": true,
+      "temperature": 0.07,
+      "intra": 0.1,
+      "inter": 0.1,
+      "margin": 0.2,
+      "lr": 1e-05,
+      "projection_lr": 0.0001,
+      "epochs": 9
+    },
+    "lr_high": {
+      "layers": 2,
+      "projection": 256,
+      "projection_enabled": true,
+      "temperature": 0.07,
+      "intra": 0.1,
+      "inter": 0.1,
+      "margin": 0.2,
+      "lr": 4e-05,
+      "projection_lr": 0.0004,
+      "epochs": 9
+    }
+  },
+  "cells": [
+    [
+      "clinc150",
+      0.75
+    ],
+    [
+      "stackoverflow",
+      0.5
+    ],
+    [
+      "clinc150",
+      0.25
+    ],
+    [
+      "clinc150",
+      0.5
+    ],
+    [
+      "stackoverflow",
+      0.25
+    ],
+    [
+      "stackoverflow",
+      0.75
+    ],
+    [
+      "banking77_oos",
+      0.25
+    ],
+    [
+      "banking77_oos",
+      0.5
+    ],
+    [
+      "banking77_oos",
+      0.75
+    ]
+  ],
+  "screening_seed": 42,
+  "expansion_seeds": [
+    13,
+    87
+  ],
+  "top_recipes": 2,
+  "selection": "Known validation macro F1; stable recipe ties",
+  "real_oos_used": false,
+  "pseudo_oos_used": false,
+  "test_read": false,
+  "device": "cuda"
+}

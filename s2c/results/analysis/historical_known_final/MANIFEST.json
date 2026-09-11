@@ -1,0 +1,13 @@
+{
+  "status": "complete",
+  "device": "cuda",
+  "protocol": "historical_v19_paper_main",
+  "real_oos_used_for_selection": false,
+  "pseudo_oos_used": false,
+  "test_used_for_selection": false,
+  "selection": "mean Known selective utility across three seeds; shared recipe and geometry per dataset/KIR",
+  "full_pipeline_verified": false,
+  "wins": 3,
+  "completed_test_units": 27,
+  "std_ddof": 0
+}

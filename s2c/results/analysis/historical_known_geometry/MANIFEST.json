@@ -1,0 +1,13 @@
+{
+  "status": "validation_complete",
+  "protocol": "historical_v19_paper_main",
+  "device": "cuda",
+  "selection": "known_correct_accept_minus_4_wrong_accept",
+  "real_oos_used": false,
+  "pseudo_oos_used": false,
+  "test_read": false,
+  "source_checkpoint": "known_only_validation_for_checkpoint",
+  "planned_units": 27,
+  "base_commit": "d0b10e267a3ca41c2130b804e26900c1e5c53077",
+  "completed_units": 27
+}

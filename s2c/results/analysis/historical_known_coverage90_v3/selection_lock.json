@@ -1,0 +1,227 @@
+[
+  {
+    "dataset": "clinc150",
+    "kir": 0.75,
+    "recipe": "all6",
+    "config": {
+      "k": 1,
+      "distance": "euclidean",
+      "boundary": "mean_std_2.0",
+      "rule": "nearest_sphere",
+      "fusion": "max_ratio",
+      "fusion_weight": 2.0
+    },
+    "utility": 0.8840773809523809,
+    "known_coverage": 0.9004464285714285,
+    "checkpoints": [
+      "/home/bo/bo01/llmpy311/artifacts/s2c/runs/historical_known_training/clinc150_kir75_seed13_all6/checkpoint.pt",
+      "/home/bo/bo01/llmpy311/artifacts/s2c/runs/historical_known_training/clinc150_kir75_seed42_all6/checkpoint.pt",
+      "/home/bo/bo01/llmpy311/artifacts/s2c/runs/historical_known_training/clinc150_kir75_seed87_all6/checkpoint.pt"
+    ],
+    "validation_thresholds": [
+      1.3492564632090769,
+      1.3733766372177987,
+      1.6757998425491818
+    ]
+  },
+  {
+    "dataset": "stackoverflow",
+    "kir": 0.5,
+    "recipe": "no_projection",
+    "config": {
+      "k": 4,
+      "distance": "euclidean",
+      "boundary": "mean_std_0.0",
+      "rule": "nearest_sphere",
+      "fusion": "inverse_margin",
+      "fusion_weight": 0.25
+    },
+    "utility": 0.8022712090848363,
+    "known_coverage": 0.9008016032064128,
+    "checkpoints": [
+      "/home/bo/bo01/llmpy311/artifacts/s2c/runs/historical_known_training/stackoverflow_kir50_seed13_no_projection/checkpoint.pt",
+      "/home/bo/bo01/llmpy311/artifacts/s2c/runs/historical_known_training/stackoverflow_kir50_seed42_no_projection/checkpoint.pt",
+      "/home/bo/bo01/llmpy311/artifacts/s2c/runs/historical_known_training/stackoverflow_kir50_seed87_no_projection/checkpoint.pt"
+    ],
+    "validation_thresholds": [
+      4.889212057650926,
+      4.765244905195782,
+      5.516957095019446
+    ]
+  },
+  {
+    "dataset": "clinc150",
+    "kir": 0.25,
+    "recipe": "last4",
+    "config": {
+      "k": 2,
+      "distance": "euclidean",
+      "boundary": "mean_std_0.0",
+      "rule": "nearest_sphere",
+      "fusion": "ratio",
+      "fusion_weight": 1.0
+    },
+    "utility": 0.8947368421052632,
+    "known_coverage": 0.9013157894736842,
+    "checkpoints": [
+      "/home/bo/bo01/llmpy311/artifacts/s2c/runs/historical_known_training/clinc150_kir25_seed13_last4/checkpoint.pt",
+      "/home/bo/bo01/llmpy311/artifacts/s2c/runs/historical_known_training/clinc150_kir25_seed42_last4/checkpoint.pt",
+      "/home/bo/bo01/llmpy311/artifacts/s2c/runs/historical_known_training/clinc150_kir25_seed87_last4/checkpoint.pt"
+    ],
+    "validation_thresholds": [
+      2.0913229501416652,
+      2.2714813870433166,
+      2.103917860350272
+    ]
+  },
+  {
+    "dataset": "clinc150",
+    "kir": 0.5,
+    "recipe": "all6",
+    "config": {
+      "k": 2,
+      "distance": "euclidean",
+      "boundary": "intent_quantile_0.7",
+      "rule": "nearest_sphere",
+      "fusion": "inverse_margin",
+      "fusion_weight": 0.5
+    },
+    "utility": 0.8851111111111112,
+    "known_coverage": 0.9006666666666666,
+    "checkpoints": [
+      "/home/bo/bo01/llmpy311/artifacts/s2c/runs/historical_known_training/clinc150_kir50_seed13_all6/checkpoint.pt",
+      "/home/bo/bo01/llmpy311/artifacts/s2c/runs/historical_known_training/clinc150_kir50_seed42_all6/checkpoint.pt",
+      "/home/bo/bo01/llmpy311/artifacts/s2c/runs/historical_known_training/clinc150_kir50_seed87_all6/checkpoint.pt"
+    ],
+    "validation_thresholds": [
+      3.0612127760871277,
+      2.403394441294548,
+      2.8318622181710573
+    ]
+  },
+  {
+    "dataset": "stackoverflow",
+    "kir": 0.25,
+    "recipe": "compact_margin",
+    "config": {
+      "k": 1,
+      "distance": "euclidean",
+      "boundary": "mean_std_0.0",
+      "rule": "nearest_sphere",
+      "fusion": "inverse_margin",
+      "fusion_weight": 2.0
+    },
+    "utility": 0.762,
+    "known_coverage": 0.902,
+    "checkpoints": [
+      "/home/bo/bo01/llmpy311/artifacts/s2c/runs/historical_known_training/stackoverflow_kir25_seed13_compact_margin/checkpoint.pt",
+      "/home/bo/bo01/llmpy311/artifacts/s2c/runs/historical_known_training/stackoverflow_kir25_seed42_compact_margin/checkpoint.pt",
+      "/home/bo/bo01/llmpy311/artifacts/s2c/runs/historical_known_training/stackoverflow_kir25_seed87_compact_margin/checkpoint.pt"
+    ],
+    "validation_thresholds": [
+      6.424807064888397,
+      5.854479873768461,
+      12.451823121672694
+    ]
+  },
+  {
+    "dataset": "stackoverflow",
+    "kir": 0.75,
+    "recipe": "no_projection",
+    "config": {
+      "k": 1,
+      "distance": "euclidean",
+      "boundary": "center_quantile_0.5",
+      "rule": "nearest_sphere",
+      "fusion": "inverse_margin",
+      "fusion_weight": 0.5
+    },
+    "utility": 0.7981753449043169,
+    "known_coverage": 0.9005340453938585,
+    "checkpoints": [
+      "/home/bo/bo01/llmpy311/artifacts/s2c/runs/historical_known_training/stackoverflow_kir75_seed13_no_projection/checkpoint.pt",
+      "/home/bo/bo01/llmpy311/artifacts/s2c/runs/historical_known_training/stackoverflow_kir75_seed42_no_projection/checkpoint.pt",
+      "/home/bo/bo01/llmpy311/artifacts/s2c/runs/historical_known_training/stackoverflow_kir75_seed87_no_projection/checkpoint.pt"
+    ],
+    "validation_thresholds": [
+      9.337142003098307,
+      9.168043510706191,
+      7.232928500849179
+    ]
+  },
+  {
+    "dataset": "banking77_oos",
+    "kir": 0.25,
+    "recipe": "all6",
+    "config": {
+      "k": 4,
+      "distance": "euclidean",
+      "boundary": "mean_std_0.0",
+      "rule": "nearest_sphere",
+      "fusion": "inverse_margin",
+      "fusion_weight": 1.0
+    },
+    "utility": 0.8656509428384939,
+    "known_coverage": 0.9013497432431765,
+    "checkpoints": [
+      "/home/bo/bo01/llmpy311/artifacts/s2c/runs/historical_known_training/banking77_oos_kir25_seed13_all6/checkpoint.pt",
+      "/home/bo/bo01/llmpy311/artifacts/s2c/runs/historical_known_training/banking77_oos_kir25_seed42_all6/checkpoint.pt",
+      "/home/bo/bo01/llmpy311/artifacts/s2c/runs/historical_known_training/banking77_oos_kir25_seed87_all6/checkpoint.pt"
+    ],
+    "validation_thresholds": [
+      4.2872591767366774,
+      9.252482570640526,
+      5.002357056222368
+    ]
+  },
+  {
+    "dataset": "banking77_oos",
+    "kir": 0.5,
+    "recipe": "compact_margin",
+    "config": {
+      "k": 1,
+      "distance": "euclidean",
+      "boundary": "mean_std_0.0",
+      "rule": "nearest_sphere",
+      "fusion": "inverse_margin",
+      "fusion_weight": 1.0
+    },
+    "utility": 0.7544709284363716,
+    "known_coverage": 0.9011414630302873,
+    "checkpoints": [
+      "/home/bo/bo01/llmpy311/artifacts/s2c/runs/historical_known_training/banking77_oos_kir50_seed13_compact_margin/checkpoint.pt",
+      "/home/bo/bo01/llmpy311/artifacts/s2c/runs/historical_known_training/banking77_oos_kir50_seed42_compact_margin/checkpoint.pt",
+      "/home/bo/bo01/llmpy311/artifacts/s2c/runs/historical_known_training/banking77_oos_kir50_seed87_compact_margin/checkpoint.pt"
+    ],
+    "validation_thresholds": [
+      6.749317237258335,
+      5.090497841859582,
+      7.796187027800742
+    ]
+  },
+  {
+    "dataset": "banking77_oos",
+    "kir": 0.75,
+    "recipe": "lr_high",
+    "config": {
+      "k": 1,
+      "distance": "euclidean",
+      "boundary": "mean_std_0.0",
+      "rule": "nearest_sphere",
+      "fusion": "inverse_margin",
+      "fusion_weight": 1.0
+    },
+    "utility": 0.671901167709079,
+    "known_coverage": 0.90049279262976,
+    "checkpoints": [
+      "/home/bo/bo01/llmpy311/artifacts/s2c/runs/historical_known_training/banking77_oos_kir75_seed13_lr_high/checkpoint.pt",
+      "/home/bo/bo01/llmpy311/artifacts/s2c/runs/historical_known_training/banking77_oos_kir75_seed42_lr_high/checkpoint.pt",
+      "/home/bo/bo01/llmpy311/artifacts/s2c/runs/historical_known_training/banking77_oos_kir75_seed87_lr_high/checkpoint.pt"
+    ],
+    "validation_thresholds": [
+      9.11295339117679,
+      10.39576975918917,
+      10.08772774515583
+    ]
+  }
+]

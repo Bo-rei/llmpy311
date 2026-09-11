@@ -1,0 +1,33 @@
+{
+  "status": "complete",
+  "protocol": "historical_v19_paper_main",
+  "evidence": "H1 Gate-only",
+  "dataset": "clinc150",
+  "kirs": [
+    0.5,
+    0.75
+  ],
+  "seeds": [
+    13,
+    42,
+    87
+  ],
+  "device": "cuda",
+  "epochs": 9,
+  "warmup_epochs": 1,
+  "backbone_lr": 2e-05,
+  "projection_lr": 0.0002,
+  "temperature": 0.07,
+  "intra_weight": 0.1,
+  "inter_weight": 0.1,
+  "margin": 0.2,
+  "selection": "Known validation nearest cosine centroid macro F1; earliest tie",
+  "validation_oos_used": false,
+  "test_used_for_selection": false,
+  "test_access": "after_all_six_checkpoint_locks",
+  "boundary": "K1 diagonal Mahalanobis lambda1 threshold1 nearest_sphere",
+  "base_commit": "d0b10e267a3ca41c2130b804e26900c1e5c53077",
+  "completed_training_units": 6,
+  "completed_test_units": 6,
+  "full_pipeline_verified": false
+}

@@ -1,0 +1,10 @@
+dataset,kir,selection_contract,k,metric,distance,boundary,rule,fusion,fusion_weight,threshold,oos_f1_mean,oos_f1_std,baseline_oos_f1,delta_pp,beats_baseline
+clinc150,0.25,Known-coverage-90,2,OOS-F1,euclidean,mean_std_0.0,nearest_sphere,ratio,1.0,,95.18886785857523,0.4756745146564924,93.56,1.6288678585752336,true
+clinc150,0.50,Known-coverage-90,2,OOS-F1,euclidean,intent_quantile_0.7,nearest_sphere,inverse_margin,0.5,,92.12958052366359,0.8101040260796083,90.10,2.029580523663597,true
+clinc150,0.75,Known-coverage-90,1,OOS-F1,euclidean,mean_std_2.0,nearest_sphere,max_ratio,2.0,,86.80479018143324,1.5532179176632126,86.00,0.8047901814332477,true
+stackoverflow,0.25,Fixed-known-contract,1,OOS-F1,euclidean,mean_std_1.5,normalized_union,none,0.0,0.90,95.50115620357987,0.958337568736783,92.65,2.851156203579867,true
+stackoverflow,0.50,Fixed-known-contract,1,OOS-F1,euclidean,mean_std_1.5,normalized_union,none,0.0,0.90,89.23792254697972,2.03428222249944,88.86,0.377922546979723,true
+stackoverflow,0.75,Fixed-known-contract,1,OOS-F1,euclidean,mean_std_1.5,normalized_union,none,0.0,0.90,75.95114769401939,1.9351158102705955,74.55,1.4011476940193884,true
+banking77_oos,0.25,Known-coverage-90,4,OOS-F1,euclidean,mean_std_0.0,nearest_sphere,inverse_margin,1.0,,89.08566594866478,2.1693826199660586,86.57,2.5156659486647897,true
+banking77_oos,0.50,Known-coverage-90,1,OOS-F1,euclidean,mean_std_0.0,nearest_sphere,inverse_margin,1.0,,83.55313360139611,3.850644179440243,79.93,3.6231336013961055,true
+banking77_oos,0.75,Known-coverage-90,1,OOS-F1,euclidean,mean_std_0.0,nearest_sphere,inverse_margin,1.0,,79.90795538756057,1.671704380056201,69.37,10.537955387560572,true

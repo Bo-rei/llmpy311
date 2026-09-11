@@ -1,0 +1,59 @@
+[
+  {
+    "dataset": "clinc150",
+    "kir": 0.75,
+    "recipe": "existing",
+    "config": {
+      "k": 1,
+      "distance": "euclidean",
+      "boundary": "intent_quantile_0.95",
+      "rule": "nearest_sphere",
+      "fusion_weight": 1.0,
+      "threshold": 1.95
+    },
+    "utility": 0.875,
+    "checkpoints": [
+      "/home/bo/bo01/llmpy311/artifacts/s2c/runs/historical_protocol_v2/minilm_k1/clinc150/kir75_seed13/trainable_k1/checkpoint.pt",
+      "/home/bo/bo01/llmpy311/artifacts/s2c/runs/historical_protocol_v2/minilm_k1/clinc150/kir75_seed42/trainable_k1/checkpoint.pt",
+      "/home/bo/bo01/llmpy311/artifacts/s2c/runs/historical_protocol_v2/minilm_k1/clinc150/kir75_seed87/trainable_k1/checkpoint.pt"
+    ]
+  },
+  {
+    "dataset": "clinc150",
+    "kir": 0.75,
+    "recipe": "all6",
+    "config": {
+      "k": 1,
+      "distance": "euclidean",
+      "boundary": "mean_std_3.0",
+      "rule": "nearest_sphere",
+      "fusion_weight": 1.0,
+      "threshold": 1.95
+    },
+    "utility": 0.9126488095238096,
+    "checkpoints": [
+      "/home/bo/bo01/llmpy311/artifacts/s2c/runs/historical_known_training/clinc150_kir75_seed13_all6/checkpoint.pt",
+      "/home/bo/bo01/llmpy311/artifacts/s2c/runs/historical_known_training/clinc150_kir75_seed42_all6/checkpoint.pt",
+      "/home/bo/bo01/llmpy311/artifacts/s2c/runs/historical_known_training/clinc150_kir75_seed87_all6/checkpoint.pt"
+    ]
+  },
+  {
+    "dataset": "clinc150",
+    "kir": 0.75,
+    "recipe": "last4",
+    "config": {
+      "k": 1,
+      "distance": "euclidean",
+      "boundary": "mean_std_2.0",
+      "rule": "nearest_sphere",
+      "fusion_weight": 1.0,
+      "threshold": 2.05
+    },
+    "utility": 0.9168154761904762,
+    "checkpoints": [
+      "/home/bo/bo01/llmpy311/artifacts/s2c/runs/historical_known_training/clinc150_kir75_seed13_last4/checkpoint.pt",
+      "/home/bo/bo01/llmpy311/artifacts/s2c/runs/historical_known_training/clinc150_kir75_seed42_last4/checkpoint.pt",
+      "/home/bo/bo01/llmpy311/artifacts/s2c/runs/historical_known_training/clinc150_kir75_seed87_last4/checkpoint.pt"
+    ]
+  }
+]
