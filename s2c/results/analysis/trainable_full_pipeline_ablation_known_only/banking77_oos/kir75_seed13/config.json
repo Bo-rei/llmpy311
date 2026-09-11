@@ -1,0 +1,28 @@
+{
+  "dataset": "banking77_oos",
+  "kir": 0.75,
+  "seed": 13,
+  "ours_source": "historical_known_coverage90_v3 lock",
+  "ours_checkpoint": "/home/bo/bo01/llmpy311/artifacts/s2c/runs/historical_known_training/banking77_oos_kir75_seed13_lr_high/checkpoint.pt",
+  "ours_config": {
+    "k": 1,
+    "distance": "euclidean",
+    "boundary": "mean_std_0.0",
+    "rule": "nearest_sphere",
+    "fusion": "inverse_margin",
+    "fusion_weight": 1.0,
+    "threshold": 9.11295339117679
+  },
+  "selection_contract": "Known-only validation; 90% Known coverage for auxiliary thresholds",
+  "real_oos_used_for_training": false,
+  "real_oos_used_for_selection": false,
+  "pseudo_oos_used": false,
+  "test_used_for_selection": false,
+  "variant_names": [
+    "Ours",
+    "Frozen MiniLM",
+    "Without Gate",
+    "Cascade-MiniLM",
+    "Cascade-SmolLM"
+  ]
+}

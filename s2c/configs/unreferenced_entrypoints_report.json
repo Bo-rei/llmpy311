@@ -1,7 +1,7 @@
 {
   "action": "report_only",
-  "count": 330,
-  "generated_at": "2026-09-10T23:55:38.121496+00:00",
+  "count": 331,
+  "generated_at": "2026-09-11T04:59:24.177470+00:00",
   "paths": [
     "scripts/data/active/audit_v19_2_data.py",
     "scripts/data/active/build_known_intents_ratio_splits_v19.py",
@@ -313,6 +313,7 @@
     "tools/eval/eval_single_model_ood_v19.py",
     "tools/eval/eval_smollm_cascade_v19.py",
     "tools/eval/eval_system_pipeline_v19.py",
+    "tools/eval/run_known_only_full_pipeline_ablation.py",
     "tools/eval/run_trainable_paper_four_variants.py",
     "tools/experiments/__init__.py",
     "tools/experiments/cluster_separability/__init__.py",

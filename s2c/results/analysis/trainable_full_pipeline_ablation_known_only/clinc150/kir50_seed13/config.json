@@ -1,0 +1,28 @@
+{
+  "dataset": "clinc150",
+  "kir": 0.5,
+  "seed": 13,
+  "ours_source": "historical_known_coverage90_v3 lock",
+  "ours_checkpoint": "/home/bo/bo01/llmpy311/artifacts/s2c/runs/historical_known_training/clinc150_kir50_seed13_all6/checkpoint.pt",
+  "ours_config": {
+    "k": 2,
+    "distance": "euclidean",
+    "boundary": "intent_quantile_0.7",
+    "rule": "nearest_sphere",
+    "fusion": "inverse_margin",
+    "fusion_weight": 0.5,
+    "threshold": 3.0612127760871277
+  },
+  "selection_contract": "Known-only validation; 90% Known coverage for auxiliary thresholds",
+  "real_oos_used_for_training": false,
+  "real_oos_used_for_selection": false,
+  "pseudo_oos_used": false,
+  "test_used_for_selection": false,
+  "variant_names": [
+    "Ours",
+    "Frozen MiniLM",
+    "Without Gate",
+    "Cascade-MiniLM",
+    "Cascade-SmolLM"
+  ]
+}

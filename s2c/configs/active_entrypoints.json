@@ -423,6 +423,7 @@
     "tools/eval/eval_single_model_ood_v19.py",
     "tools/eval/eval_smollm_cascade_v19.py",
     "tools/eval/eval_system_pipeline_v19.py",
+    "tools/eval/run_known_only_full_pipeline_ablation.py",
     "tools/eval/run_trainable_paper_four_variants.py",
     "tools/experiments/__init__.py",
     "tools/experiments/cluster_separability/__init__.py",

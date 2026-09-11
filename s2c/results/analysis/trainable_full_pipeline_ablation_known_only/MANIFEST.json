@@ -1,0 +1,37 @@
+{
+  "status": "complete",
+  "protocol": "historical_v19_paper_main__H1_current_full_pipeline_known_only_ablation",
+  "datasets": [
+    "clinc150",
+    "stackoverflow",
+    "banking77_oos"
+  ],
+  "kirs": [
+    0.25,
+    0.5,
+    0.75
+  ],
+  "seeds": [
+    13,
+    42,
+    87
+  ],
+  "variants": [
+    "Ours",
+    "Frozen MiniLM",
+    "Without Gate",
+    "Cascade-MiniLM",
+    "Cascade-SmolLM"
+  ],
+  "device": "cuda",
+  "validation": "Known rows only; auxiliary thresholds use 90% Known coverage quantile",
+  "real_oos_used_for_training": false,
+  "real_oos_used_for_selection": false,
+  "pseudo_oos_used": false,
+  "test_used_for_selection": false,
+  "raw_predictions_written": false,
+  "expected_units": 135,
+  "completed_units": 135,
+  "cascade_minilm_reconciled": true,
+  "cascade_minilm_contract": "Frozen MiniLM Gate and Known-only MiniLM logistic Router/Experts"
+}

@@ -41,6 +41,40 @@ def test_compute_metrics_separates_gate_router_and_expert_errors() -> None:
     assert metrics["gate_accept_known_count"] == 2
 
 
+def test_accepted_oos_is_a_false_negative_regardless_of_known_intent_assignment() -> None:
+    rows = [
+        {"label": 0, "intent": "known_a", "domain": "domain_a"},
+        {"label": 0, "intent": "known_b", "domain": "domain_a"},
+        {"label": 1, "intent": "held_out_a", "domain": "unknown"},
+        {"label": 1, "intent": "held_out_b", "domain": "unknown"},
+    ]
+    predictions = [
+        dict(is_oos=False, gate_score=0.2, intent="known_a", domain="domain_a"),
+        dict(is_oos=False, gate_score=0.3, intent="known_b", domain="domain_a"),
+        dict(is_oos=True, gate_score=1.4, intent="__oos__", domain="unknown"),
+        dict(is_oos=False, gate_score=0.8, intent="known_a", domain="domain_a"),
+    ]
+    baseline, stages = MODULE.compute_metrics(rows, predictions)
+    # TP=1, FP=0, FN=1: the leaked OOS is included in the denominator.
+    assert np.isclose(baseline["oos_f1"], 2 / 3)
+    assert stages["oos_accepted_by_gate"] == 1
+    assert np.isclose(baseline["false_accept_rate"], 0.5)
+
+    changed = [dict(p) for p in predictions]
+    changed[3]["intent"] = "known_b"
+    changed[0]["intent"] = "known_b"
+    downstream_changed, _ = MODULE.compute_metrics(rows, changed)
+    assert downstream_changed["oos_f1"] == baseline["oos_f1"]
+    assert downstream_changed["overall_accuracy"] < baseline["overall_accuracy"]
+
+    # A real downstream rejection must change the final decision, not just
+    # substitute one Known class for another.
+    changed[3].update(is_oos=True, intent="__oos__")
+    rejected, stages = MODULE.compute_metrics(rows, changed)
+    assert rejected["oos_f1"] == 1.0
+    assert stages["oos_accepted_by_gate"] == 0
+
+
 def test_detector_state_adapter_preserves_h1_signature_contract() -> None:
     signature = {
         "radius_method": "mean_std",

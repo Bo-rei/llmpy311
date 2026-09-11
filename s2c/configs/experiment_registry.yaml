@@ -827,7 +827,7 @@ analysis_bundles:
     selected_for_main_report: false
     commit_policy: closed_evidence
   trainable_paper_four_variants:
-    status: active
+    status: closed
     contract_layer: historical_v19_current_trainable_four_variants
     question: "Evaluate Ours with Trainable Gate versus Without Gate and homogeneous MiniLM/SmolLM cascades on matched current splits."
     source_experiments: [pipeline.historical_trainable_parameter_full_pipeline]
@@ -836,6 +836,22 @@ analysis_bundles:
     result_dir: results/analysis/trainable_paper_four_variants
     report: docs/analysis/trainable_paper_four_variants.md
     manifest: results/analysis/trainable_paper_four_variants/MANIFEST.json
+    selected_for_main_report: false
+    commit_policy: closed_evidence
+
+  trainable_full_pipeline_ablation_known_only:
+    status: closed
+    contract_layer: historical_v19_current_trainable_full_pipeline_known_only_ablation
+    question: "Do the current full-pipeline ablation variants preserve their conclusions when every calibration decision uses Known-only validation?"
+    source_experiments: [pipeline.historical_trainable_parameter_full_pipeline]
+    runner: tools/eval/run_known_only_full_pipeline_ablation.py
+    builder: tools/eval/run_known_only_full_pipeline_ablation.py
+    result_dir: results/analysis/trainable_full_pipeline_ablation_known_only
+    figure_dir: null
+    report: docs/analysis/trainable_full_pipeline_ablation_known_only.md
+    manifest: results/analysis/trainable_full_pipeline_ablation_known_only/MANIFEST.json
+    aliases: []
+    supersedes: [trainable_paper_four_variants]
     selected_for_main_report: true
     commit_policy: closed_evidence
 

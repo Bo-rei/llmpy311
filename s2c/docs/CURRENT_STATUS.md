@@ -1,5 +1,7 @@
 # 当前研究状态
 
+2026-09-11 严格 Known-only 三 seed 消融已完成：`trainable_full_pipeline_ablation_known_only` 完成 135/135 CUDA 变体单元。Cascade-MiniLM 已修正为独立 Frozen MiniLM Gate + Known-only 阈值 + Frozen MiniLM 下游头；Ours 在九个 dataset×KIR 设置的 OOS F1 和 Accuracy 均高于四个消融。漏检计数回归测试 4 项通过：误放行 OOS 计为 FN，下游仅更换 Known 标签不改变该 FN；再次拒识才改变最终 OOS F1。详见[消融核对](analysis/trainable_full_pipeline_ablation_known_only.md)。
+
 2026-09-11 Known-only 搜索已得到数值上的 **9/9 OOS-F1 优势**：CLINC150、StackOverflow、BANKING77-OOS 在 KIR=.25/.50/.75 均超过当前最强外部参照。CLINC150 三格为 `95.19±0.48/92.13±0.81/86.80±1.55`，相对差值 `+1.63/+2.03/+0.80 pp`。汇总见[Known-only 9/9 结果](analysis/historical_known_best_9of9.md)。所有选择仅使用 Known 训练/验证，未使用 pseudo-OOS；但该汇总合并了两轮最终评估，StackOverflow 固定合同确定前已有探索性 test artifact 被查看，因此仍需一次预注册全部九格锁定后的 fresh rerun，才能作为干净的 untouched-holdout 论文主表结果。
 
 2026-09-11 前置搜索记录：`historical_known_geometry` 完成 27/27 个 Known-only 验证单元，`historical_known_training` 完成 11 配方筛选及三 seed 扩展；随后由锁定配置完成九格 test 评估并形成上述汇总。

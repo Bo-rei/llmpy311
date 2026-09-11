@@ -1,0 +1,103 @@
+[
+  {
+    "dataset": "stackoverflow",
+    "kir": 0.5,
+    "seed": 87,
+    "variant": "Ours",
+    "selection": "locked Known-only Gate config",
+    "checkpoint": "/home/bo/bo01/llmpy311/artifacts/s2c/runs/historical_protocol_v2/minilm_k1/stackoverflow/kir50_seed87/trainable_k1/checkpoint.pt",
+    "gate_config": {
+      "k": 1,
+      "distance": "euclidean",
+      "boundary": "mean_std_1.5",
+      "rule": "normalized_union",
+      "fusion_weight": 0.0,
+      "threshold": 0.9
+    },
+    "threshold": 0.9,
+    "known_f1": 83.21229884747422,
+    "oos_f1": 86.60496833901607,
+    "overall_accuracy": 84.7746243739566,
+    "f1_all": 83.52072334670528,
+    "known_recall": 83.43353373413494,
+    "false_accept_rate": 10.981308411214954
+  },
+  {
+    "dataset": "stackoverflow",
+    "kir": 0.5,
+    "seed": 87,
+    "variant": "Frozen MiniLM",
+    "selection": "Known validation 90% coverage quantile",
+    "checkpoint": "pretrained all-MiniLM-L6-v2",
+    "gate_config": {
+      "k": 1,
+      "distance": "euclidean",
+      "boundary": "mean_std_1.5",
+      "rule": "normalized_union",
+      "fusion_weight": 0.0,
+      "threshold": 0.9
+    },
+    "threshold": 0.9859530788463257,
+    "known_f1": 74.45208225107926,
+    "oos_f1": 69.7172034564022,
+    "overall_accuracy": 71.40233722871453,
+    "f1_all": 74.02163872429045,
+    "known_recall": 89.27855711422845,
+    "false_accept_rate": 40.7543391188251
+  },
+  {
+    "dataset": "stackoverflow",
+    "kir": 0.5,
+    "seed": 87,
+    "variant": "Without Gate",
+    "selection": "Known validation 90% coverage quantile",
+    "checkpoint": "fixed Router/Expert",
+    "gate_config": "intent confidence rejection",
+    "threshold": 0.4389501214027405,
+    "known_f1": 71.87779363162164,
+    "oos_f1": 57.28491137051448,
+    "overall_accuracy": 64.72454090150251,
+    "f1_all": 70.55116797152098,
+    "known_recall": 89.81295925183701,
+    "false_accept_rate": 55.7743658210948
+  },
+  {
+    "dataset": "stackoverflow",
+    "kir": 0.5,
+    "seed": 87,
+    "variant": "Cascade-MiniLM",
+    "selection": "Known validation 90% coverage quantile for frozen MiniLM Gate",
+    "checkpoint": "Known-only MiniLM logistic heads",
+    "gate_config": {
+      "k": 1,
+      "distance": "euclidean",
+      "boundary": "mean_std_1.5",
+      "rule": "normalized_union",
+      "fusion_weight": 0.0,
+      "threshold": 0.9859530788463257
+    },
+    "threshold": 0.9859530788463257,
+    "known_f1": 77.70987271683695,
+    "oos_f1": 69.7172034564022,
+    "overall_accuracy": 72.52086811352254,
+    "f1_all": 76.9832664204338,
+    "known_recall": 89.27855711422845,
+    "false_accept_rate": 40.7543391188251
+  },
+  {
+    "dataset": "stackoverflow",
+    "kir": 0.5,
+    "seed": 87,
+    "variant": "Cascade-SmolLM",
+    "selection": "Known validation 90% coverage quantile",
+    "checkpoint": "pretrained/fixed SmolLM prototype Gate",
+    "gate_config": "SmolLM prototype cosine support",
+    "threshold": 0.26640987396240234,
+    "known_f1": 62.49528668993509,
+    "oos_f1": 20.891441071916873,
+    "overall_accuracy": 47.31218697829716,
+    "f1_all": 58.71311890647889,
+    "known_recall": 90.6813627254509,
+    "false_accept_rate": 87.24966622162884
+  }
+]
