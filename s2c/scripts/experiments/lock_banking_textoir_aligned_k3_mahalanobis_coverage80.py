@@ -46,6 +46,7 @@ GEOMETRY = {
     "fusion": "none",
     "fusion_weight": 0.0,
 }
+RECIPE_MAP: dict[str, str] = {}
 
 
 def dump(path: Path, value: object) -> None:
@@ -57,7 +58,7 @@ def dump(path: Path, value: object) -> None:
 
 def recipe_record(kir: float, seed: int) -> tuple[str, dict]:
     selection = read(RECIPE_ROOT / f"selection_kir{round(kir * 100):02d}.json")
-    recipe = str(selection["winner"])
+    recipe = RECIPE_MAP.get(str(kir), str(selection["winner"]))
     for expanded in selection["expanded"]:
         if str(expanded["recipe"]) == recipe:
             for record in expanded["records"]:
@@ -67,7 +68,7 @@ def recipe_record(kir: float, seed: int) -> tuple[str, dict]:
 
 
 def main() -> None:
-    global OUT, COVERAGE_TARGET, GEOMETRY
+    global OUT, COVERAGE_TARGET, GEOMETRY, RECIPE_MAP
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--device", choices=("cpu", "cuda"), default="cpu")
     parser.add_argument("--output", type=Path, default=OUT)
@@ -79,6 +80,10 @@ def main() -> None:
     parser.add_argument("--fusion", choices=("none", "ratio", "inverse_margin", "max_ratio"), default=GEOMETRY["fusion"])
     parser.add_argument("--fusion-weight", type=float, default=GEOMETRY["fusion_weight"])
     parser.add_argument("--fixed-threshold", type=float)
+    parser.add_argument(
+        "--recipe-map",
+        help="JSON object mapping KIR strings to an already expanded Known-only recipe",
+    )
     args = parser.parse_args()
     if not 0.0 < args.coverage <= 1.0 or args.k < 1:
         raise ValueError("coverage must be in (0, 1] and k must be positive")
@@ -92,6 +97,11 @@ def main() -> None:
         "fusion": str(args.fusion),
         "fusion_weight": float(args.fusion_weight),
     }
+    if args.recipe_map:
+        parsed = json.loads(args.recipe_map)
+        if not isinstance(parsed, dict):
+            raise ValueError("--recipe-map must be a JSON object")
+        RECIPE_MAP = {str(float(key)): str(value) for key, value in parsed.items()}
     if OUT.exists():
         raise FileExistsError(f"refusing to overwrite {OUT}")
     OUT.mkdir(parents=True, exist_ok=False)
@@ -113,6 +123,7 @@ def main() -> None:
         "fixed_threshold": args.fixed_threshold,
         "geometry": GEOMETRY,
         "recipe_selection": "existing Known-dev-only winner for each KIR",
+        "recipe_override": RECIPE_MAP,
         "threshold_selection": (
             "fixed pre-declared normalized score threshold"
             if args.fixed_threshold is not None
