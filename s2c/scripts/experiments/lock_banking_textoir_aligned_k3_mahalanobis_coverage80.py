@@ -78,6 +78,7 @@ def main() -> None:
     parser.add_argument("--rule", choices=("nearest_sphere", "normalized_union"), default=GEOMETRY["rule"])
     parser.add_argument("--fusion", choices=("none", "ratio", "inverse_margin", "max_ratio"), default=GEOMETRY["fusion"])
     parser.add_argument("--fusion-weight", type=float, default=GEOMETRY["fusion_weight"])
+    parser.add_argument("--fixed-threshold", type=float)
     args = parser.parse_args()
     if not 0.0 < args.coverage <= 1.0 or args.k < 1:
         raise ValueError("coverage must be in (0, 1] and k must be positive")
@@ -109,9 +110,14 @@ def main() -> None:
         "kirs": list(KIRS),
         "seeds": list(SEEDS),
         "coverage_target": COVERAGE_TARGET,
+        "fixed_threshold": args.fixed_threshold,
         "geometry": GEOMETRY,
         "recipe_selection": "existing Known-dev-only winner for each KIR",
-        "threshold_selection": "per-seed higher quantile on Known validation scores",
+        "threshold_selection": (
+            "fixed pre-declared normalized score threshold"
+            if args.fixed_threshold is not None
+            else "per-seed higher quantile on Known validation scores"
+        ),
         "hypothesis_source": "pre-declared Known-only geometry/coverage candidate",
         "real_oos_used_for_training": False,
         "real_oos_used_for_selection": False,
@@ -138,8 +144,10 @@ def main() -> None:
             detector, output = coverage._fit_and_score(
                 train_values, train, validation_values, GEOMETRY
             )
-            threshold = float(
-                np.quantile(output["score"], COVERAGE_TARGET, method="higher")
+            threshold = (
+                float(args.fixed_threshold)
+                if args.fixed_threshold is not None
+                else float(np.quantile(output["score"], COVERAGE_TARGET, method="higher"))
             )
             accepted = output["score"] <= threshold
             known = np.asarray([str(row["intent"]) for row in validation])
@@ -169,8 +177,9 @@ def main() -> None:
                         np.mean(accepted & (owners != known))
                     ),
                     "selection_rule": (
-                        "fixed K=3 diagonal Mahalanobis mean+1sigma no fusion; "
-                        "80% Known-dev coverage"
+                        "fixed geometry and pre-declared normalized score threshold"
+                        if args.fixed_threshold is not None
+                        else "fixed geometry and 80% Known-dev coverage"
                     ),
                     "test_read": False,
                 },
