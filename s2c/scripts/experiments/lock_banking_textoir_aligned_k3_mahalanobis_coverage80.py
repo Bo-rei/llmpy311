@@ -1,9 +1,10 @@
-"""Lock the pre-declared K=3 diagonal-Mahalanobis Banking77 candidate.
+"""Lock a pre-declared Known-only Banking77 geometry candidate.
 
-This candidate reproduces the known-only operating-point hypothesis used by
-the earlier Banking77 holdout campaign, but on the canonical TextOIR-aligned
-standard Banking77 views.  It reads only Known train/dev rows.  The 80-percent
-Known-dev coverage target and the geometry are fixed before test evaluation.
+The default candidate reproduces the K=3 diagonal-Mahalanobis operating-point
+hypothesis used by the earlier Banking77 holdout campaign, but on the
+canonical TextOIR-aligned standard Banking77 views.  Geometry and coverage can
+be changed only as explicitly pre-declared command-line candidates.  The
+script reads only Known train/dev rows; test evaluation is a separate step.
 """
 
 from __future__ import annotations
@@ -66,9 +67,30 @@ def recipe_record(kir: float, seed: int) -> tuple[str, dict]:
 
 
 def main() -> None:
+    global OUT, COVERAGE_TARGET, GEOMETRY
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--device", choices=("cpu", "cuda"), default="cpu")
+    parser.add_argument("--output", type=Path, default=OUT)
+    parser.add_argument("--coverage", type=float, default=COVERAGE_TARGET)
+    parser.add_argument("--k", type=int, default=GEOMETRY["k"])
+    parser.add_argument("--distance", choices=("euclidean", "mahalanobis_diag"), default=GEOMETRY["distance"])
+    parser.add_argument("--boundary", default=GEOMETRY["boundary"])
+    parser.add_argument("--rule", choices=("nearest_sphere", "normalized_union"), default=GEOMETRY["rule"])
+    parser.add_argument("--fusion", choices=("none", "ratio", "inverse_margin", "max_ratio"), default=GEOMETRY["fusion"])
+    parser.add_argument("--fusion-weight", type=float, default=GEOMETRY["fusion_weight"])
     args = parser.parse_args()
+    if not 0.0 < args.coverage <= 1.0 or args.k < 1:
+        raise ValueError("coverage must be in (0, 1] and k must be positive")
+    OUT = args.output.resolve()
+    COVERAGE_TARGET = float(args.coverage)
+    GEOMETRY = {
+        "k": int(args.k),
+        "distance": str(args.distance),
+        "boundary": str(args.boundary),
+        "rule": str(args.rule),
+        "fusion": str(args.fusion),
+        "fusion_weight": float(args.fusion_weight),
+    }
     if OUT.exists():
         raise FileExistsError(f"refusing to overwrite {OUT}")
     OUT.mkdir(parents=True, exist_ok=False)
@@ -78,7 +100,7 @@ def main() -> None:
     torch.set_num_threads(4)
     manifest = {
         "status": "locking",
-        "experiment": "banking77_textoir_aligned_fixed_k3_mahalanobis_coverage80_known_only",
+        "experiment": "banking77_textoir_aligned_geometry_candidate_known_only",
         "dataset": "banking77",
         "dataset_variant": "standard_77_intent",
         "protocol": "protocol_v2_textoir_v1",
@@ -90,7 +112,7 @@ def main() -> None:
         "geometry": GEOMETRY,
         "recipe_selection": "existing Known-dev-only winner for each KIR",
         "threshold_selection": "per-seed higher quantile on Known validation scores",
-        "hypothesis_source": "pre-declared K=3 diagonal-Mahalanobis 80-percent Known coverage control",
+        "hypothesis_source": "pre-declared Known-only geometry/coverage candidate",
         "real_oos_used_for_training": False,
         "real_oos_used_for_selection": False,
         "pseudo_oos_used": False,
