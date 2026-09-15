@@ -173,14 +173,13 @@ Thus, the main contributions are as follows:
 \end{enumerate}
 
 
-\section{Related Work new}
+\section{Related Work}
 The open intent detection methods can be mainly categorized into three types, i.e., statistical methods, deep-learning methods and LLM-embedding methods, according to the problem settings and the types of classifiers.   
 
 \subsection{Statistical Methods for Intent Detection}
-\label{sec: cascade}
 The statistical methods mainly relied on lexical patterns and statistical classifiers to detect the intent classes. Among them, \citet{gorin1997how} identify the corresponding call type by learning salient lexical patterns from labeled spoken requests, but these methods hardly capture diverse expressions of the same intent. Then \citet{wang2002combination} propose a method combining rule-based grammars with statistical classifiers, but the grammar-based components remain domain-dependent and require domain-specific adaptation. To reduce the dependence, \citet{haffner2003optimizing} use salient grammar fragments as input features for SVMs and optimize the combination of binary classifiers for multi-class call classification. But these methods still rely on manually designed features. Thus, \citet{tur2010what} proposes an n-gram method to model local contextual dependencies, but feature sparsity limits its effectiveness on diverse intent expressions. Thus, \citet{sarikaya2011deep} introduce Deep Belief Networks to learn multi-layer representations from unlabeled data and fine-tune the model for natural language call routing, which moves intent detection from feature-based statistical models toward learned representations.
 
-\subsection{Deep-Learning Methods for Intent Detection}
+\subsection{Deep learning Methods for Intent Detection}
 Then, deep-learning methods learn semantic representations directly from utterances instead of relying on predefined lexical features. E.g., \citet{liu2016attention} use RNN to capture the sequential dependencies for joint intent detection and slot filling, and \citet{goo2018slot} propose a slot-gated model that explicitly uses intent information to guide slot filling. Moreover, \citet{chen2019bert} introduce BERT for intent detection by using pretrained contextual representations. These methods improve the in-distribution accuracy, but the classification mode is still closed-set, and the classifier can only identify unknown utterances with known intent labels, and cannot reject the OOS intents~\citep{hendrycks2017baseline, guo2017calibration}. 
 
 Thus, several methods introduce explicit rejection mechanisms for unknown inputs. \citet{hendrycks2017baseline} use the maximum softmax probability as a confidence score and reject inputs with low confidence. Moreover, \citet{lee2018simple} model class-conditional features with Gaussian distributions and use Mahalanobis distance to construct an OOD confidence score. However, these methods mainly derive the rejection decision from classifier scores and predefined feature-distribution assumptions. Then, \citet{shu2017doc} propose Deep Open Classification (DOC), which uses sigmoid classifiers and rejection thresholds for open intent detection. \citet{zeng2021modeling} further use supervised contrastive learning to reduce intra-class variance and enlarge inter-class variance. However, these methods hardly learn geometric acceptance regions for known intents. Thus, \citet{zhang2021adaptive} propose Adaptive Decision Boundary (ADB), which learns an adaptive spherical boundary for each known class. \citet{zhang2023learning} further introduce distance-aware representation learning before boundary optimization. But these methods still represent each known class with a single centroid and spherical boundary. To model more complex intent distributions, \citet{li2025multi} propose Multi-granularity Open Intent Classification via Adaptive Granular-Ball Decision Boundary (MOGB), which uses adaptive granular-ball clustering and multiple local centroids and radii to construct multi-granularity decision regions for each intent.
@@ -195,9 +194,7 @@ Thus, the existing methods still face two problems. (i) the OOS intent detection
 \section{Method}
 
 \subsection{Cascade Workflow for Intent Detection}
-\label{sec:cascade}
-
-The proposed method uses a three-stage cascade: Gate $\rightarrow$ Router $\rightarrow$ Expert, as shown in Figure~\ref{fig:model_architecture}. Given an input utterance $x$, the Gate first determines whether $x$ belongs to the Known intent space or should be rejected as OOS. If $x$ is rejected, the Gate directly outputs an OOS label. Otherwise, $x$ is passed to the following modules. The Router predicts a coarse-grained domain, and the corresponding Expert assigns a Known intent label. Both downstream modules are closed-set classifiers trained on Known-intent observations, although their inference inputs may include OOS utterances misaccepted by the Gate. The Router and Experts use SmolLM-135M with low-rank adaptation (LoRA)~\citep{hu2022lora}.
+The proposed method uses a three-stage cascade: gate $\rightarrow$ router $\rightarrow$ expert, as shown in figure~\ref{fig:model_architecture}. Given an input utterance $x$, the gate module first determines the OOS rejection. If $x$ is rejected, the gate module outputs an OOS label, otherwise, $x$ is inputted into the following modules. Then, the router module discriminates the coarse-grained class domain for the remained known intents. Then the utterance $x$ is delivered to an expert module w.r.t the class domain for fine-grained discrimination of a few classes. Note that, due to the fact that the known intent classification is close-set, all intents for training is known, thus the router and experts are all parametrized by SmolLM-135M, that is supervisedly fine-tuned through low-rank adaptation (LoRA)~\citep{hu2022lora} technique on the observation data of known intents.
 
 \begin{figure*}[t]
     \centering
@@ -218,7 +215,7 @@ where $\mathcal{D}$ is the domain set. Then, the corresponding Expert $E_d(\cdot
 \begin{equation}
 y=E_d(x),\quad y\in\mathcal{Y}_d\subseteq\mathcal{Y}_{\mathrm{K}},
 \end{equation}
-where $\mathcal{Y}_{\mathrm{K}}$ is the Known intent label set and $\mathcal{Y}_d$ is the intent subset for domain $d$. Gate-accepted inputs can include misaccepted OOS utterances. The closed-set Router and Experts assign these inputs a Known label without further rejection, so each remains a false negative for the OOS class.
+where $\mathcal{Y}_{\mathrm{K}}$ is the Known intent label set and $\mathcal{Y}_d$ is the intent subset for domain $d$.
 
 The proposed cascade separates OOS detection from Known-intent classification. The Gate only determines whether an input is supported by the Known intent space, while the Router and Experts further discriminate the accepted Known intents. Thus, OOS rejection does not need to be jointly optimized with the following fine-grained intent classifier, and a lightweight representation model can be used for the Gate stage.
 
@@ -269,43 +266,43 @@ where $c_{y,k},k=1,\dots,K_y$, denotes the $k$-th centroid of Known intent $y$, 
 
 The centroid representation defines local semantic regions for Known intents, and OOS detection is therefore formulated as a boundary learning problem in the embedding space. For each centroid, the Gate estimates a local boundary from its assigned Known samples. An input supported by at least one Known-intent region is accepted, while an input outside all learned regions is rejected as OOS.
 
-For each centroid $c_{y,k}$, the Gate estimates a local radius $r_{y,k}$ from the training samples assigned to the corresponding region:
+For each centroid $c_{y,k}$, the Gate estimates a local radius $r_{y,k}$ from the Known training samples assigned to the corresponding region. One radius estimator is defined as:
 \begin{equation}
 r_{y,k}=\mu_{y,k}+\lambda\sigma_{y,k},
 \label{eq:lambda}
 \end{equation}
-where $\mu_{y,k}$ and $\sigma_{y,k}$ are the mean and standard deviation of the distances from the assigned samples to $c_{y,k}$, and $\lambda$ controls the boundary width.
+where $\mu_{y,k}$ and $\sigma_{y,k}$ are the mean and standard deviation of the within-region distances, and $\lambda$ controls the boundary width. Moreover, quantile-based radii are considered to reduce the dependence on a fixed distributional form. They estimate the local boundary from a selected quantile of the within-cluster or within-intent training distances.
 
-The distance function is a diagonal Mahalanobis distance. For an embedding $\bar{e}$ and a centroid $c_{y,k}$, the distance is computed as:
+The distance between an embedding $\bar{e}$ and a centroid $c_{y,k}$ can be measured by Euclidean distance or diagonal Mahalanobis distance. The latter is defined as:
 \begin{equation}
-d(\bar{e},c_{y,k})=\sqrt{\sum_j\frac{(\bar{e}_j-c_{y,k,j})^2}{\sigma_{y,k,j}^{2}+\epsilon}},
+d_{\mathrm{M}}(\bar{e},c_{y,k})=\sqrt{\sum_j\frac{(\bar{e}_j-c_{y,k,j})^2}{\sigma_{y,k,j}^{2}+\epsilon}},
 \end{equation}
-where $\bar{e}_j$ and $c_{y,k,j}$ denote the $j$-th components of the embedding and centroid, respectively. Moreover, $\sigma_{y,k,j}^{2}$ is the corresponding feature-wise variance estimated from the samples assigned to the local region, and $\epsilon$ is a small regularization constant. Compared with an unweighted distance, the diagonal Mahalanobis distance reduces the influence of dimensions with large within-region variation without estimating a full covariance matrix.
+where $\sigma_{y,k,j}^{2}$ denotes the feature-wise variance estimated from the training samples assigned to the local region, and $\epsilon$ is a small regularization constant. The diagonal Mahalanobis distance accounts for feature-wise variation without estimating a full covariance matrix.
 
-For an incoming utterance, the Gate compares its normalized embedding with all Known-intent centroids and computes the normalized nearest-boundary score:
+For an incoming utterance, the Gate first computes the normalized distance to each local region. Two acceptance rules are considered. The nearest-sphere rule first identifies the centroid with the minimum raw distance and normalizes its distance by the corresponding radius, while the normalized-union rule directly selects the minimum normalized distance:
 \begin{equation}
-s(\bar{e})=\min_{y\in\mathcal{Y}_{\mathrm{K}},\,1\leq k\leq K_y}\frac{d(\bar{e},c_{y,k})}{r_{y,k}},
+s_{\mathrm{union}}(\bar{e})=\min_{y\in\mathcal{Y}_{\mathrm{K}},\,1\leq k\leq K_y}\frac{d(\bar{e},c_{y,k})}{r_{y,k}}.
 \label{eq:ryk}
 \end{equation}
-where $c_{y,k}$ denotes the $k$-th local centroid of Known intent $y$, and $r_{y,k}$ denotes the corresponding local boundary radius. The ratio in Eq.~(\ref{eq:ryk}) measures the distance from $\bar{e}$ to the nearest centroid relative to its learned boundary size.
 
-The Gate decision is:
+Moreover, semantically ambiguous samples can be close to more than one Known intent. Thus, we additionally consider the relative distance between the nearest and second-nearest intent regions. Let $d_1$ and $d_2$ denote the nearest and second-nearest distances, respectively. Their ratio $d_1/d_2$ and inverse margin $d_1/(d_2-d_1)$ are used as optional margin terms and can be combined with the normalized boundary score. The candidate fusion rules include the normalized score alone, additive ratio fusion, additive inverse-margin fusion and max-ratio fusion.
+
+The final Gate decision is:
 \begin{equation}
 G(x)=
 \begin{cases}
-\mathrm{Known}, & s(\bar{e})\leq1,\\
-\mathrm{OOS}, & s(\bar{e})>1.
+\mathrm{Known}, & s(\bar{e})\leq\tau,\\
+\mathrm{OOS}, & s(\bar{e})>\tau,
 \end{cases}
 \end{equation}
-The threshold is one because each distance is normalized by its corresponding radius. If $s(\bar{e})\leq1$, the input falls inside at least one learned Known-intent region and is accepted. Otherwise, the input lies outside all learned regions and is rejected as OOS. The Gate only determines whether an input belongs to the Known-intent space and does not assign a specific intent label.
+where $s(\bar{e})$ denotes the selected boundary score and $\tau$ denotes the corresponding rejection threshold. The centroid number, distance metric, radius estimator, acceptance rule, fusion function and threshold are selected using Known validation samples. Thus, real or pseudo OOS samples are not required for boundary selection.
 
-For $M$ Known intents, $K$ centroids per intent and an embedding dimension of $h$, the boundary scoring requires $O(MKh)$ distance operations for each input, while storing the centroids and their diagonal variances requires $O(MKh)$ additional space. In the main configuration, $K=1$, so the additional boundary computation and storage grow linearly with the number of Known intents.
+For $M$ Known intents, $K$ centroids per intent and an embedding dimension of $h$, the basic boundary search requires $O(MKh)$ distance operations for each input, while storing the centroids and their diagonal statistics requires $O(MKh)$ additional space.
 
 
 \section{Experiments}
 \subsection{Datasets}
-
-Three datasets are used for performance evaluation, as shown in Table~\ref{tab:dataset_stats}. The datasets are divided into training, validation and test sets according to their corresponding experimental protocols, and different Known Intent Ratios (KIRs) are used to construct the open intent detection settings.
+Three datasets are used for performance evaluation, as shown in Table~\ref{tab:dataset_stats}. For each dataset, they are split into training, validation and test sets under 6:1:3.
 
 \textbf{CLINC150} is a large-scale multi-domain dataset with 150 in-scope intents and explicit OOS samples~\citep{larson2019evaluation}. The data source is available at \url{https://github.com/clinc/oos-eval}.
 
@@ -313,7 +310,7 @@ Three datasets are used for performance evaluation, as shown in Table~\ref{tab:d
 
 \textbf{Banking77} is a fine-grained, single-domain dataset with 77 intent classes. It focuses on high-granularity classification in the financial domain. The data source is available at \url{https://github.com/PolyAI-LDN/task-specific-datasets}.
 
-\begin{table}[H]
+\begin{table}[t]
 \centering
 \renewcommand{\arraystretch}{1.05}
 \resizebox{\columnwidth}{!}{
@@ -332,12 +329,11 @@ Banking77 & 77 & 13083 & Banking \\
 \end{table}
 
 \subsection{Baselines and Experimental Settings}
-
-This work defines Known Intent Ratio (KIR) to describe the proportion of all intent classes that are treated as Known intents during training, as follows:
+This work defines Known Intent Ratio (KIR) to describe the percent of all intent classes that are treated as Known intents during training, as follows:
 \begin{equation}
 \mathrm{KIR}=\frac{|\mathcal{Y}_{\mathrm{K}}|}{|\mathcal{Y}|},
 \end{equation}
-where $\mathcal{Y}$ is the full intent label set and $\mathcal{Y}_{\mathrm{K}}$ is the subset of intents treated as Known during training.
+where $\mathcal{Y}$ is the full intent label set and $\mathcal{Y}_{\mathrm{K}}$ is the subset of intents treated as known.
 
 Moreover, the following representative methods are selected as baselines:
 
@@ -355,9 +351,10 @@ Moreover, the following representative methods are selected as baselines:
 
 \textbf{DA-ADB}~\citep{zhang2023learning} improves ADB with distance-aware representation learning and adaptive boundary learning.
 
-\textbf{MOGB}~\citep{li2025multi} models each Known intent with adaptive granular-ball representations and constructs multiple local decision boundaries. Since MOGB also considers local structures within each intent, we further compare it with the proposed boundary learning method in the ablation experiments.
+\textbf{MOGB}~\citep{li2025multi} models each Known intent with adaptive granular-ball representations and constructs multiple local decision boundaries.
 
-Moreover, for the proposed cascade workflow, the Gate uses the 22M-parameter \texttt{all-MiniLM-L6-v2}, while the Router and Expert modules use the 135M-parameter \texttt{SmolLM-135M}. For the Gate, only the last two Transformer blocks and the residual projection are trainable, resulting in about 3.75M trainable parameters. The Gate is optimized by AdamW with learning rates of $2\times10^{-4}$ and $2\times10^{-5}$ for the projection and MiniLM blocks, respectively, and the batch size is 64. In Eq.~(\ref{eq:rep_loss}), the intra-class and inter-class weights are both set as 0.1, the temperature is 0.07, and the margin is 0.20. For the Router and Expert, the LoRA ranks are set as 32 and 16, and the scaling factors are 64 and 32, respectively. Their batch size is 32 and the learning rate is $2\times10^{-4}$. The embedding dimension is set as $h=384$. The boundary configuration is selected for each dataset and KIR setting from the candidate centroid numbers, distance functions and boundary parameters using Known validation samples. The Gate is trained and selected without using real or pseudo OOS samples. The main results are repeated with three random seeds, i.e., 13, 42 and 87, and all experiments are conducted on an NVIDIA RTX 5070 GPU.
+Moreover, the Gate uses the 22M-parameter \texttt{all-MiniLM-L6-v2}, while the Router and Expert use \texttt{SmolLM-135M}. For the Gate, only the last two Transformer blocks and the residual projection are trainable, with learning rates of $2\times10^{-5}$ and $2\times10^{-4}$, respectively. The intra-class and inter-class weights in Eq.~(\ref{eq:rep_loss}) are both set to 0.1, with temperature 0.07 and margin 0.20. For the Router and Expert, the LoRA ranks are 32 and 16, respectively, and the learning rate is $2\times10^{-4}$. All main experiments use only Known intent samples for training and validation. All main results are averaged over three random seeds, i.e., 13, 42 and 87.
+
 
 \subsection{Evaluation Metrics}
 
@@ -367,7 +364,7 @@ To evaluate and compare the performances of all methods, Known F1 score, OOS F1 
 \begin{equation}
 \mathrm{Known\ F1}=\frac{1}{|\mathcal{Y}_{\mathrm{K}}|}\sum_{y\in\mathcal{Y}_{\mathrm{K}}}\frac{2P_yR_y}{P_y+R_y},
 \end{equation}
-where $\mathcal{Y}_{\mathrm{K}}$ denotes the Known-intent label set, and $P_y$ and $R_y$ denote the precision and recall of class $y$, respectively. The precision is calculated from the complete open-set test predictions, so OOS samples incorrectly accepted as Known intents are also counted as false positives of the corresponding Known classes.
+where $\mathcal{Y}_{\mathrm{K}}$ denotes the Known-intent label set, and $P_y$ and $R_y$ denote the precision and recall of class $y$ respectively. The precision is computed over all open-set test predictions. OOS samples predicted as Known are counted as false positives for the predicted Known classes.
 
 \textbf{OOS F1 score}~\citep{wang2021texsmart,zawbaa2024improved} is calculated for evaluating OOS detection performance, as follows:
 \begin{equation}
@@ -389,7 +386,8 @@ $\mathrm{TP}_{\mathrm{OOS}}$, $\mathrm{FP}_{\mathrm{OOS}}$ and $\mathrm{FN}_{\ma
 where $N$ is the size of the test set, $y_i$ and $\hat{y}_i$ are the ground truth and predicted labels of the $i$-th sample, respectively, and $\mathbb{I}(\cdot)$ is the indicator function.
 
 \subsection{Performance on OOS Intent Detection}
-The performance on OOS intent detection is presented in Table~\ref{tab:main_results_all}. For different datasets and KIR settings, the proposed method selects the boundary configuration on the validation set while retaining the same Trainable MiniLM Gate and Gate--Router--Expert cascade workflow. The results of our method are reported over three random seeds.
+
+The performance on OOS intent detection is presented in Table~\ref{tab:main_results_all}. The results show that the proposed method achieves the highest OOS F1 among the compared methods in all nine settings. Compared with the strongest baseline in each setting, the proposed method improves OOS F1 by 0.38$\sim$17.23 percentage points.
 
 \begin{table*}[!t]
 \centering
@@ -411,7 +409,7 @@ The performance on OOS intent detection is presented in Table~\ref{tab:main_resu
 & KNNCL & 78.85 & 93.56 & 89.87 & 41.79 & 15.26 & 28.65 & 65.54 & 79.34 & 73.01\\
 & ADB & 77.85 & 92.36 & 88.30 & 77.62 & 90.96 & 86.75 & 70.92 & 85.05 & 79.33\\
 & DA-ADB & \textbf{79.57} & 93.20 & 89.48 & 80.87 & 92.65 & 89.07 & \textbf{73.05} & 86.57 & 81.19\\
-& \textbf{Ours} & 78.41$\pm$1.63 & \textbf{95.18$\pm$0.48} & \textbf{91.18$\pm$0.65} & 80.27$\pm$0.37 & \textbf{95.50$\pm$0.96} & \textbf{91.76$\pm$0.87} & 53.64$\pm$3.79 & \textbf{89.07$\pm$2.16} & \textbf{81.66$\pm$3.17}\\
+& \textbf{Ours} & 75.39$\pm$1.65 & \textbf{95.19$\pm$0.48} & \textbf{91.19$\pm$0.27} & \textbf{82.61$\pm$0.13} & \textbf{95.50$\pm$0.96} & \textbf{91.58$\pm$0.92} & 62.83$\pm$2.41 & \textbf{92.58$\pm$0.89} & \textbf{86.91$\pm$1.36}\\
 \midrule
 \multirow{8}{*}{$0.50$}
 & MSP & 72.82 & 63.71 & 66.68 & 66.28 & 26.94 & 53.23 & 73.20 & 46.29 & 61.67\\
@@ -420,8 +418,8 @@ The performance on OOS intent detection is presented in Table~\ref{tab:main_resu
 & DeepUnk & 83.30 & 87.48 & 84.95 & 67.67 & 35.80 & 55.46 & 75.61 & 67.80 & 71.01\\
 & KNNCL & 83.25 & 87.85 & 85.32 & 61.50 & 8.50 & 45.38 & 75.16 & 67.21 & 70.41\\
 & ADB & 85.12 & 88.60 & 86.54 & 85.32 & 87.70 & 86.49 & 81.39 & 79.43 & 79.61\\
-& DA-ADB & \textbf{85.58} & 90.10 & 87.93 & \textbf{86.71} & 88.86 & \textbf{87.78} & \textbf{82.54} & 79.93 & \textbf{81.51}\\
-& \textbf{Ours} & 82.98$\pm$0.79 & \textbf{92.13$\pm$0.81} & \textbf{88.23$\pm$0.87} & 83.13$\pm$1.50 & \textbf{89.23$\pm$2.04} & 86.33$\pm$1.59 & 61.86$\pm$4.26 & \textbf{83.55$\pm$3.85} & 75.69$\pm$4.68\\
+& DA-ADB & \textbf{85.58} & 90.10 & \textbf{87.93} & \textbf{86.71} & 88.86 & \textbf{87.78} & \textbf{82.54} & 79.93 & \textbf{81.51}\\
+& \textbf{Ours} & 76.98$\pm$0.92 & \textbf{92.13$\pm$0.81} & 84.96$\pm$0.81 & 83.38$\pm$1.60 & \textbf{89.24$\pm$2.03} & 85.89$\pm$1.80 & 65.86$\pm$1.29 & \textbf{88.47$\pm$0.67} & 81.25$\pm$0.72\\
 \midrule
 \multirow{8}{*}{$0.75$}
 & MSP & 83.65 & 63.86 & 76.19 & 81.42 & 37.86 & 73.20 & 84.99 & 46.05 & 77.08\\
@@ -430,121 +428,103 @@ The performance on OOS intent detection is presented in Table~\ref{tab:main_resu
 & DeepUnk & 86.57 & 82.67 & 84.61 & 80.51 & 34.38 & 71.56 & 81.65 & 50.57 & 74.73\\
 & KNNCL & 86.14 & 82.05 & 84.12 & 76.16 & 7.19 & 65.01 & 81.76 & 51.42 & 74.78\\
 & ADB & \textbf{88.97} & 84.85 & 86.99 & 86.91 & 74.10 & 82.89 & \textbf{86.44} & 67.34 & \textbf{81.39}\\
-& DA-ADB & 88.43 & \textbf{86.00} & \textbf{87.39} & \textbf{87.66} & 74.55 & \textbf{83.56} & 85.93 & 69.37 & 81.12\\
-& \textbf{Ours} & 84.71$\pm$0.64 & \textbf{86.80$\pm$1.55} & 85.58$\pm$1.07 & 85.04$\pm$1.06 & \textbf{75.94$\pm$1.93} & 82.28$\pm$0.96 & 66.34$\pm$0.80 & \textbf{79.91$\pm$1.67} & 73.28$\pm$1.51\\
+& DA-ADB & 88.43 & 86.00 & \textbf{87.39} & \textbf{87.66} & 74.55 & \textbf{83.56} & 85.93 & 69.37 & 81.12\\
+& \textbf{Ours} & 78.05$\pm$0.38 & \textbf{86.80$\pm$1.55} & 79.56$\pm$0.51 & 84.24$\pm$0.91 & \textbf{75.95$\pm$1.94} & 81.92$\pm$0.96 & 70.09$\pm$0.25 & \textbf{86.60$\pm$0.42} & 79.44$\pm$0.38\\
 \bottomrule
 \end{tabular}
 }
-\caption{Performance comparison under different KIRs. For our method, the best validation-selected results within the proposed Trainable MiniLM cascade framework are reported over three random seeds.}
+\caption{Performance comparison under different KIRs. All results of our method are reported over three random seeds.}
 \label{tab:main_results_all}
 \end{table*}
 
-As shown in Table~\ref{tab:main_results_all}, the OOS F1 scores of most methods decrease as KIR increases, indicating that OOS rejection becomes more difficult when more intent classes are included in the Known intent space. But the proposed method maintains competitive OOS detection performance under different KIRs and achieves the highest OOS F1 among the compared methods in all nine settings.
+As shown in Table~\ref{tab:main_results_all}, the OOS F1 of the proposed method decreases as KIR increases on all three datasets. That means OOS rejection becomes more difficult when more intent classes are treated as Known. But the proposed method still achieves the best OOS F1 under different KIRs. A possible reason is that the gate learns the known intent regions independently. Samples outside these regions are rejected before fine-grained intent classification.
 
-Moreover, the proposed method does not always achieve the highest Known F1. This indicates that OOS rejection and fine-grained Known-intent classification have different optimization objectives. In the proposed cascade, the Gate is responsible for detecting whether an utterance is supported by the Known-intent space, while the Router and Experts further classify the accepted samples. Thus, the downstream classifier can be replaced by a stronger Known-intent classification method without changing the OOS detection mechanism.
+Moreover, \clr{the proposed method achieves outstanding performance on Banking77 dataset when KIR=0.25, but ranks second or third on known intent detection task.} That means the current Router and Experts still have room for improvement on Known-intent classification. But we think it still provides some insights for known intent detection task, though it is not the main contribution of this work. And the cascade workflow actually separates the OOS rejection and known intent detection process. Thus, if the other baseline methods can perform better than ours, it is easy to replace the router-experts pipeline with that method.
+
 
 \subsection{Interpretability Analysis for Gate Stage}
-
-The quantitative results show the final OOS rejection performance, but they do not directly explain how representation adaptation changes the Gate decision. Thus, we first visualize a representative local boundary on StackOverflow when KIR$=0.50$, as shown in Figure~\ref{fig:local_boundary_geometry}.
-
-\begin{figure*}[t]
+ 
+\begin{figure}[t]
     \centering
-    \includegraphics[width=0.88\textwidth]{figures/paper_style_local_boundary_geometry_3d.png}
-    \caption{Local boundary visualization on StackOverflow when KIR$=0.50$. The translucent surface denotes the normalized boundary $s(\bar{e})=1$. The three-dimensional coordinates are used only for visualization, while the actual Known/OOS decisions are obtained from the original 384-dimensional embeddings.}
+    \includegraphics[width=\columnwidth]
+    {figures/paper_style_local_boundary_geometry_3d.png}
+    \caption{Local boundary geometry of Frozen and Trainable MiniLM on StackOverflow at KIR$=0.50$. The surface denotes $s(\bar{e})=1$.}
     \label{fig:local_boundary_geometry}
-\end{figure*}
-
-As shown in Figure~\ref{fig:local_boundary_geometry}, some OOS samples are close to the Known-intent support region under the frozen MiniLM representation. After representation adaptation, the relative positions between these samples and the corresponding Known-intent boundary change, and more OOS samples fall outside the acceptance region. Note that, the dimensionality reduction is only used to display the local geometry and does not participate in the actual Gate decision.
-
-A more direct observation can be obtained from the normalized Gate score, as shown in Figure~\ref{fig:gate_score_distribution}. Both Frozen and Trainable MiniLM use the same rejection threshold $s(\bar{e})=1$. Thus, the score distribution reflects whether representation adaptation changes the positions of OOS samples relative to the same decision boundary.
+\end{figure}
 
 \begin{figure}[t]
     \centering
     \includegraphics[width=\columnwidth]{figures/paper_style_score_distribution.png}
-    \caption{Gate score distributions of Frozen and Trainable MiniLM on StackOverflow when KIR$=0.50$. The dashed line denotes the fixed normalized threshold $s(\bar{e})=1$.}
+    \caption{Gate score distributions on StackOverflow at KIR$=0.50$. The dashed line denotes $s(\bar{e})=1$.}
     \label{fig:gate_score_distribution}
 \end{figure}
 
-As shown in Figure~\ref{fig:gate_score_distribution}, the Trainable MiniLM moves more OOS samples to the rejection side of the fixed boundary. Thus, the improvement does not simply result from changing the rejection threshold. Instead, the Known-only representation adaptation changes the normalized distances between the utterance embeddings and the learned Known-intent regions. But some overlap still remains around the threshold. Thus, OOS samples close to Known-intent boundaries remain a difficult case for the proposed method.
+Figure~\ref{fig:local_boundary_geometry} shows the local boundary on StackOverflow with KIR$=0.50$. With Frozen MiniLM, many OOS samples overlap with the Known region and are therefore accepted by the boundary. After training, the Known representations become more compact, while most OOS samples fall outside the boundary. Since only Known samples are used for training, this result indicates that adapting the Known-intent representation can improve its separation from unseen OOS samples without direct OOS supervision.
 
-The error analysis further shows that near-OOS samples are substantially more difficult than OOS samples that are far from the Known-intent space. This pattern appears across all three datasets, while StackOverflow shows a particularly weak local separation between semantically adjacent intents. This is consistent with its larger performance degradation when KIR increases. Therefore, the remaining errors mainly arise from semantically adjacent Known and OOS samples rather than from clearly separated OOS samples.
+Figure~\ref{fig:gate_score_distribution} further examines whether this local separation is reflected in the complete Gate. The decision threshold remains fixed at $1$, but the OOS score distribution moves mainly to the rejection side after training. As a result, the false acceptance rate decreases from 14.6\% to 2.2\%. Thus, the improvement does not come from changing the decision threshold, but from learning a representation that provides clearer support regions for Known intents and better separates unseen OOS samples.
 
-\subsection{System Ablation under Known-only Selection}
+\subsection{MiniLM Selection for Gate Stage}
 
-We first examine whether the explicit Gate and the Trainable MiniLM representation are necessary for the cascade workflow. Table~\ref{tab:ablation_all_kir} reports a fresh full-pipeline ablation under strict Known-only selection over seeds 13, 42 and 87. \textbf{Without Gate} removes the explicit geometric Gate and performs OOS rejection using downstream Expert confidence; its threshold is calibrated from Known validation samples only. \textbf{Frozen MiniLM} keeps the SmolLM Router/Expert components but replaces the Trainable Gate representation with the pretrained MiniLM. \textbf{Cascade-MiniLM} is the homogeneous MiniLM cascade: both its Gate and its closed-set Router/Expert heads use the Frozen MiniLM representation. \textbf{Cascade-SmolLM} uses a SmolLM prototype Gate and the fixed SmolLM downstream components. No real or pseudo OOS samples, and no test samples, are used for training or selection; auxiliary thresholds are selected by 90\% Known validation coverage.
+The ablation studies for MiniLM selection of the Gate stage are conducted, as shown in Table~\ref{tab:ablation_all_kir}. \textbf{Frozen MiniLM} means that the MiniLM encoder in the Gate is fixed without representation adaptation. \textbf{Without Gate} means to cancel the gate stage in our full pipeline, and instead conduct OOS rejection in the router module. \textbf{Cascade-MiniLM} and \textbf{Cascade-SmolLM} use MiniLM and SmolLM for the cascade modules, respectively.
 
 \begin{table*}[t]
 \centering
-\small
-\setlength{\tabcolsep}{0pt}
-\renewcommand{\arraystretch}{1.0}
-\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}clcccccc@{}}
+\footnotesize
+\setlength{\tabcolsep}{3.3pt}
+\renewcommand{\arraystretch}{0.95}
+\begin{tabular}{lccc|ccc|ccc}
 \toprule
-\multirow{2}{*}{\textbf{KIR}} & \multirow{2}{*}{\textbf{Variant}} & \multicolumn{2}{c}{\textbf{CLINC150}} & \multicolumn{2}{c}{\textbf{StackOverflow}} & \multicolumn{2}{c}{\textbf{Banking77}}\\
-\cmidrule(lr){3-4}
-\cmidrule(lr){5-6}
-\cmidrule(lr){7-8}
-& & \textbf{Acc} & \textbf{OOS F1} & \textbf{Acc} & \textbf{OOS F1} & \textbf{Acc} & \textbf{OOS F1}\\
+\multirow{2}{*}{\textbf{Variant}}
+& \multicolumn{3}{c|}{\textbf{CLINC150}}
+& \multicolumn{3}{c|}{\textbf{StackOverflow}}
+& \multicolumn{3}{c}{\textbf{Banking77}} \\
+\cmidrule(lr){2-4}
+\cmidrule(lr){5-7}
+\cmidrule(lr){8-10}
+& .25 & .50 & .75
+& .25 & .50 & .75
+& .25 & .50 & .75 \\
 \midrule
-\multirow{5}{*}{$0.25$}
-& Ours & \textbf{91.18$\pm$0.65} & \textbf{95.18$\pm$0.48} & \textbf{91.76$\pm$0.87} & \textbf{95.50$\pm$0.96} & \textbf{81.66$\pm$3.17} & \textbf{89.07$\pm$2.16}\\
-& Frozen MiniLM & 84.39$\pm$1.69 & 90.52$\pm$0.97 & 86.08$\pm$3.05 & 91.60$\pm$2.21 & 70.74$\pm$6.36 & 80.98$\pm$5.00\\
-& Without Gate & 54.15$\pm$5.00 & 61.96$\pm$5.78 & 51.41$\pm$6.52 & 56.22$\pm$7.94 & 62.04$\pm$3.30 & 73.64$\pm$3.03\\
-& Cascade-MiniLM & 85.58$\pm$1.40 & 90.52$\pm$0.97 & 86.69$\pm$3.18 & 91.60$\pm$2.21 & 71.08$\pm$6.43 & 80.98$\pm$5.00\\
-& Cascade-SmolLM & 68.34$\pm$2.80 & 77.25$\pm$2.36 & 29.38$\pm$1.63 & 21.41$\pm$2.03 & 32.39$\pm$1.28 & 40.74$\pm$1.91\\
-\midrule
-\multirow{5}{*}{$0.50$}
-& Ours & \textbf{88.23$\pm$0.87} & \textbf{92.13$\pm$0.81} & \textbf{86.33$\pm$1.59} & \textbf{89.23$\pm$2.04} & \textbf{75.69$\pm$4.68} & \textbf{83.55$\pm$3.85}\\
-& Frozen MiniLM & 80.18$\pm$0.36 & 84.40$\pm$0.50 & 75.51$\pm$3.52 & 76.83$\pm$5.51 & 61.80$\pm$2.22 & 70.48$\pm$2.21\\
-& Without Gate & 66.13$\pm$1.65 & 66.33$\pm$2.38 & 64.50$\pm$0.26 & 58.10$\pm$0.58 & 66.05$\pm$4.37 & 74.34$\pm$4.21\\
-& Cascade-MiniLM & 82.25$\pm$0.45 & 84.40$\pm$0.50 & 76.78$\pm$3.52 & 76.83$\pm$5.51 & 62.63$\pm$2.15 & 70.48$\pm$2.21\\
-& Cascade-SmolLM & 64.08$\pm$1.50 & 64.36$\pm$2.20 & 45.44$\pm$1.52 & 18.14$\pm$2.32 & 40.43$\pm$0.81 & 43.52$\pm$0.79\\
-\midrule
-\multirow{5}{*}{$0.75$}
-& Ours & \textbf{85.58$\pm$1.07} & \textbf{86.80$\pm$1.55} & \textbf{82.28$\pm$0.96} & \textbf{75.94$\pm$1.93} & \textbf{73.28$\pm$1.51} & \textbf{79.91$\pm$1.67}\\
-& Frozen MiniLM & 76.08$\pm$0.49 & 72.72$\pm$0.80 & 76.63$\pm$0.92 & 63.51$\pm$3.78 & 61.13$\pm$1.70 & 65.72$\pm$2.51\\
-& Without Gate & 71.52$\pm$1.64 & 60.93$\pm$3.50 & 75.00$\pm$0.86 & 54.01$\pm$4.06 & 67.58$\pm$1.24 & 73.03$\pm$1.44\\
-& Cascade-MiniLM & 78.53$\pm$0.19 & 72.72$\pm$0.80 & 78.12$\pm$0.97 & 63.51$\pm$3.78 & 62.45$\pm$1.66 & 65.72$\pm$2.51\\
-& Cascade-SmolLM & 70.42$\pm$1.52 & 60.85$\pm$3.40 & 62.80$\pm$1.18 & 14.93$\pm$2.86 & 48.99$\pm$0.52 & 48.60$\pm$1.03\\
+\textbf{Ours}
+& \textbf{95.19} & \textbf{92.13} & \textbf{86.80}
+& \textbf{95.50} & \textbf{89.24} & \textbf{75.95}
+& \textbf{92.58} & \textbf{88.47} & \textbf{86.60} \\
+Frozen
+& 90.52 & 84.40 & 72.72
+& 91.60 & 76.83 & 63.51
+& 80.98 & 70.48 & 65.72 \\
+w/o Gate
+& 61.96 & 66.33 & 60.93
+& 56.22 & 58.10 & 54.01
+& 73.64 & 74.34 & 73.03 \\
+Casc.-MiniLM
+& 90.52 & 84.40 & 72.72
+& 91.60 & 76.83 & 63.51
+& 80.98 & 70.48 & 65.72 \\
+Casc.-SmolLM
+& 77.25 & 64.36 & 60.85
+& 21.41 & 18.14 & 14.93
+& 40.74 & 43.52 & 48.60 \\
 \bottomrule
-\end{tabular*}
-\caption{Full-pipeline ablation under strict Known-only validation. Values are mean$\pm$std over seeds 13, 42 and 87. Bold numbers are column-wise maxima among the five variants.}
+\end{tabular}
+\caption{OOS F1 ablation results under different KIRs.}
 \label{tab:ablation_all_kir}
 \end{table*}
 
-As shown in Table~\ref{tab:ablation_all_kir}, removing the Gate causes a clear degradation in OOS detection, showing that downstream confidence alone is a weaker rejection mechanism. The homogeneous Cascade-MiniLM is also consistently below Ours because it uses the frozen MiniLM representation for both the Gate and the closed-set cascade. Cascade-SmolLM performs substantially worse in most settings, so a larger backbone does not guarantee a better boundary representation. These results isolate two effects: Trainable MiniLM improves the Gate geometry, while the downstream cascade determines the classification quality of samples accepted by that Gate. Gate-accepted OOS samples remain OOS false negatives even when a Router or Expert assigns them a Known label.
+As shown in Table~\ref{tab:ablation_all_kir}, the results that the full pipeline of ours achieves the state-of-the-art performance, compared the ablation variants. That means, (i) the gate stage is essential for OOS rejection, (ii) hybrid MiniLMs in ours have more advantages.
 
-The Frozen MiniLM comparison further isolates the effect of representation adaptation. Its main difference appears in OOS false acceptance rather than a substantial increase in Known coverage. In particular, the improvement on StackOverflow becomes larger as KIR increases, where the frozen representation admits substantially more OOS samples into the Known region. Thus, fine-tuning the MiniLM representation mainly improves the geometry used by the boundary instead of merely shifting the rejection threshold.
+Moreover, we first use the 135M-parameter \texttt{SmolLM-135M} for all stages actually. But after that, we replace it with the 22M-parameter \texttt{all-MiniLM-L6-v2} for gate stage, and the performance is improved. That means, it is not essential to use models with large parameters, which refers to our insight on LLMs in section Related Work.
 
-Then, we investigate whether increasing the number of centroids consistently improves the boundary. Table~\ref{tab:k_ablation} reports the Gate-level OOS F1 when $K$ varies from 1 to 5 under KIR$=0.50$.
+Then, we investigate the influence of the centroid number $K$. Figure~\ref{fig:k_ablation} reports the Gate-level OOS F1 with $K$ varying from 1 to 5 under KIR$=0.50$. For each distance metric, the other settings are fixed.
 
-\begin{table*}[t]
-\centering
-\small
-\setlength{\tabcolsep}{4.0pt}
-\renewcommand{\arraystretch}{1.05}
-\begin{tabular}{llccccc}
-\toprule
-\textbf{Dataset} & \textbf{Distance} & $K=1$ & $K=2$ & $K=3$ & $K=4$ & $K=5$\\
-\midrule
-CLINC150 & Euclidean & 87.70$\pm$1.33 & \textbf{88.42$\pm$1.27} & 88.18$\pm$0.69 & 87.45$\pm$0.58 & 87.08$\pm$0.37\\
-CLINC150 & Diag. Mahalanobis & 88.02$\pm$1.00 & \textbf{88.07$\pm$1.06} & 87.33$\pm$0.61 & 86.12$\pm$0.61 & 85.39$\pm$0.46\\
-Banking77 & Euclidean & 80.06$\pm$1.40 & 82.26$\pm$1.83 & 83.58$\pm$0.90 & 84.54$\pm$0.55 & \textbf{85.60$\pm$0.59}\\
-Banking77 & Diag. Mahalanobis & 84.82$\pm$1.44 & 85.57$\pm$1.37 & 87.72$\pm$0.48 & 89.25$\pm$0.57 & \textbf{89.78$\pm$0.64}\\
-StackOverflow & Euclidean & \textbf{77.36$\pm$5.91} & 64.80$\pm$7.49 & 55.19$\pm$2.70 & 52.90$\pm$5.54 & 55.67$\pm$4.88\\
-StackOverflow & Diag. Mahalanobis & \textbf{79.02$\pm$4.63} & 72.80$\pm$7.02 & 66.21$\pm$5.27 & 65.02$\pm$7.58 & 66.80$\pm$5.46\\
-\bottomrule
-\end{tabular}
-\caption{OOS F1 (\%) with different numbers of centroids under KIR$=0.50$.}
-\label{tab:k_ablation}
-\end{table*}
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=\columnwidth]{figures/k_ablation_compact.png}
+    \caption{OOS F1 with different centroid numbers $K$ at KIR$=0.50$. Error bars denote the standard deviation over three seeds.}
+    \label{fig:k_ablation}
+\end{figure}
 
-As shown in Table~\ref{tab:k_ablation}, the influence of $K$ is strongly dataset dependent. On CLINC150, increasing $K$ provides only a limited improvement before the performance decreases, while StackOverflow consistently degrades when more local centers are introduced. In contrast, Banking77 benefits from additional centers under this setting. This difference indicates that increasing $K$ changes not only the representation granularity but also the total acceptance region of the Gate. When the additional local regions mainly improve the coverage of heterogeneous Known samples, multiple centers can be beneficial; but when they expand toward nearby OOS samples, false acceptance increases instead. Thus, a fixed $K$ is not suitable for all datasets, which motivates selecting the boundary configuration according to the validation distribution rather than assuming that more centers are always better.
-
-Moreover, MOGB~\citep{li2025multi} also represents Known intents with multiple local regions. To reduce the influence of different encoders, we further compare the two boundary designs under the same MiniLM representation at KIR$=0.50$. In this controlled comparison, the Trainable $K=1$ boundary obtains OOS F1 scores of 90.44\%, 87.67\% and 83.56\% on CLINC150, StackOverflow and Banking77, respectively, while the corresponding MOGB-MiniLM component obtains 81.32\%, 72.92\% and 74.99\%. Thus, the performance difference cannot be explained only by whether multiple local centers are used. But this comparison controls the representation backbone and boundary component rather than reproducing the complete original MOGB system, so it is not used for an unconditional superiority claim.
-
-Finally, the Trainable MiniLM Gate contains about 22.9M parameters with approximately 3.75M trainable parameters. On the NVIDIA RTX 5070 used in our experiments, the measured batch-1 Gate latency is approximately 3.02 ms, 3.07 ms and 2.68 ms on CLINC150, StackOverflow and Banking77, respectively. Together with the $O(MKh)$ boundary complexity, these results characterize the additional computational cost introduced by the Gate. However, the measured latency is device-specific and is not used to claim universal deployment superiority.
-
+As shown in Figure~\ref{fig:k_ablation}, the effect of $K$ varies across datasets. CLINC150 remains relatively stable, while Banking77 generally benefits from more centroids. In contrast, increasing $K$ substantially degrades StackOverflow, especially with Euclidean distance. Thus, more centroids do not consistently improve OOS detection, and their effectiveness depends on both the dataset and the distance metric.
 
 \section{Conclusion}
 
