@@ -172,6 +172,7 @@ def main():
     parser.add_argument(
         "--patience", type=int, default=5, help="Early-stop patience (val acc)"
     )
+    parser.add_argument('--defer_test', action='store_true')
     args = parser.parse_args()
 
     set_seed(args.seed)
@@ -218,7 +219,7 @@ def main():
     val_ds = ExpertDataset(
         str(domain_data_dir / "val.json"), tokenizer, args.max_length
     )
-    test_ds = ExpertDataset(
+    test_ds = [] if args.defer_test else ExpertDataset(
         str(domain_data_dir / "test.json"), tokenizer, args.max_length
     )
     log.info(f"Train {len(train_ds)} | Val {len(val_ds)} | Test {len(test_ds)}")
@@ -333,6 +334,9 @@ def main():
 
     # ------------------------------------------------------------------
     # Final test evaluation on best checkpoint
+    if args.defer_test:
+        log.info('Known-only checkpoint saved; test evaluation deferred')
+        return
     log.info("Loading best checkpoint for test evaluation ...")
     model.load_state_dict(torch.load(output_dir / "best_model.pt", map_location=device))
     test_loss, test_acc = evaluate(model, test_loader, device)

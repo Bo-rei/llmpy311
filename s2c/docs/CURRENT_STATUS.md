@@ -1,5 +1,32 @@
 # 当前研究状态
 
+2026-09-15 最终标准协议与 MOGB 矩阵已闭环：`results/final_paper_main/MANIFEST.json`
+报告 `36/36` 完成，所有 36 个单元的保存指标均由 predictions 重新计算通过；标准
+Banking77 的 Ours 为 Trainable MiniLM `Gate -> Router -> Expert`，OOS F1
+为 `.25/.50/.75 = 91.78±0.58 / 86.39±0.99 / 70.62±1.15`。三行均为
+Known-only train/dev selection，`pseudo_oos_used=false`、`test_used_for_selection=false`；
+`banking77_oos` 只保留为历史 archive。Ours 与官方兼容 MOGB 在标准 Banking77
+共享 test rows 的 OOS F1 差值为 `+1.06/+7.93/+16.54` pp。
+
+官方 MOGB 矩阵已完成 `27/27`：CLINC150/StackOverflow/Banking77 各三 KIR、三 seed，
+固定官方仓库 commit `5b689e2a03de0d86ec41212825e5db8d7f0e5c02`、BERT-base-uncased、
+CUDA、Known-dev checkpoint selection、common evaluator。最终判定为
+`official-compatible` 而非 strict；与公开论文值在高 KIR 有明显差异，不能宣称
+byte-identical reproduction。完整结论见 `docs/analysis/final_paper_experiment_closeout.md`。
+
+以下较早日期条目保留为历史过程记录；其中的 `running`、旧 holdout 合同和固定控制
+数字不覆盖本段的最终 manifest。
+
+2026-09-14 固定 Known-only K1 对照已完成 **9/9 CUDA full pipelines**：标准 BANKING77 `.25/.50/.75` OOS F1 **90.70±0.87 / 82.50±0.15 / 73.24±3.42**；相对 coverage_repair 提升约 1.14/1.63/3.60pp，尚未恢复历史 Banking77-OOS 数值。三个 KIR 固定相同 K1/diagonal Mahalanobis/no fusion/90% Known-dev coverage，所有九个锁先于 test。完整指标与配置见 `results/final_paper_main/fixed_known_control/summary.csv` 和对应 `config_lock.json`；原主源不替换。TextOIR 单点及 MOGB 续跑由 `s2c-goal-recovery.service` 顺序执行，单元实际状态查 systemd；实验负载与窗口分离已经验证，不能据此保证 Windows GUI 永不崩溃。
+
+2026-09-14 运行恢复：CUDA 在非受限运行环境下通过真实张量分配（TextOIR Python3.9 / torch2.8 / RTX5070）；此前 device_count=0 不能直接归因于环境损坏。实验改由 user systemd 服务串行托管，单阶段 MemoryMax=10GiB、MemorySwapMax=512MiB；服务状态/退出原因优先于遗留 running manifest。MOGB runner 增加 CUDA 强制验证、心跳及失败终止，TextOIR 增加矩阵前 CUDA 预检和 KIR/seed 筛选。新增标准 Banking77 固定 K1/diagonal Mahalanobis/no fusion/90% Known-dev coverage 对照，全部九个 lock 写完再评价；不使用 pseudo-OOS，复用有完整 Known-only 训练记录的 outer checkpoints。源目录 `../artifacts/s2c/analysis/banking_fixed_known`，汇总单独放 `results/final_paper_main/fixed_known_control`，不能按测试最好值替换当前主源。当前处于校准/执行阶段，尚不声称恢复 SOTA；6 项指标、holdout selector、shared split 回归测试通过。恢复入口：`scripts/experiments/resume_banking_mogb.sh`。
+
+2026-09-14 标准 BANKING77 与完整 MOGB 闭环正在执行（base `c2090269f63c9b2ecc2efece7bf8618877f67211`，保留既有工作区修改）。新的 Banking 选择合同在测试前固定：三档 KIR 的 seed42 各三折 Known-intent holdout，每折从基础 MiniLM 重新训练；留出 intents 不进入该折训练或 checkpoint 选择。最终九单元使用全部 Known 数据。此合同使用内部 pseudo-OOS validation，区别于此前纯 Known-dev selection。MOGB 直接使用 pinned 官方训练循环、原始 BertAdam 0.6.2、BERT 和原始球/损失逻辑；首次 SDPA 长度55兼容失败已保存，采用对应旧 BERT 的 eager attention 后进入训练。唯一候选出口为 `results/final_paper_main/MANIFEST.json`，其 incomplete 状态不能当作实验完成。详细证据见 `docs/analysis/final_paper_experiment_closeout.md`。本轮不修改论文。
+
+2026-09-13 密集 KIR 选参回归已定位：新 runner 误用旧的不限覆盖率 Known utility，未沿用历史 90% Known 覆盖率校准。修复后标准 BANKING77 的 **11 KIR×3 seed=33/33 完整 pipeline** 已完成；KIR=.25/.50/.75 的 OOS F1 为 **89.56±0.73 / 80.87±2.11 / 69.64±4.23**，初始 Gate 对应为 27.43±34.57 / 79.28±2.45 / 70.70±7.81。.25 崩塌已恢复，.75 未改善。旧 artifacts 保留，修复结果位于 `coverage_repair/`。本轮为已观察测试集上的公开修复评估，不是新的 untouched holdout，不证明 9/9 SOTA。见[实施与修复记录](analysis/kir_sensitivity_known_only.md)。
+
+2026-09-11 标准 BANKING77 替换与密集 KIR 实验已开始实施：99 个共享数据划分已生成并验证 JSON/TSV 样本一致、train/dev 仅 Known；TextOIR Known 列表运行时覆盖已修复。旧 BANKING77-OOS 不再作为本轮 Banking 结果。
+
 2026-09-11 严格 Known-only 三 seed 消融已完成：`trainable_full_pipeline_ablation_known_only` 完成 135/135 CUDA 变体单元。Cascade-MiniLM 已修正为独立 Frozen MiniLM Gate + Known-only 阈值 + Frozen MiniLM 下游头；Ours 在九个 dataset×KIR 设置的 OOS F1 和 Accuracy 均高于四个消融。漏检计数回归测试 4 项通过：误放行 OOS 计为 FN，下游仅更换 Known 标签不改变该 FN；再次拒识才改变最终 OOS F1。详见[消融核对](analysis/trainable_full_pipeline_ablation_known_only.md)。
 
 2026-09-11 Known-only 搜索已得到数值上的 **9/9 OOS-F1 优势**：CLINC150、StackOverflow、BANKING77-OOS 在 KIR=.25/.50/.75 均超过当前最强外部参照。CLINC150 三格为 `95.19±0.48/92.13±0.81/86.80±1.55`，相对差值 `+1.63/+2.03/+0.80 pp`。汇总见[Known-only 9/9 结果](analysis/historical_known_best_9of9.md)。所有选择仅使用 Known 训练/验证，未使用 pseudo-OOS；但该汇总合并了两轮最终评估，StackOverflow 固定合同确定前已有探索性 test artifact 被查看，因此仍需一次预注册全部九格锁定后的 fresh rerun，才能作为干净的 untouched-holdout 论文主表结果。

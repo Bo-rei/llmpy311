@@ -116,7 +116,7 @@ print(json.dumps({
         check=False,
         capture_output=True,
         text=True,
-        timeout=90,
+        timeout=600,
     )
     if completed.returncode != 0:
         detail = (completed.stderr or completed.stdout).strip()
@@ -253,6 +253,19 @@ def select_known_labels(
     count = round(len(labels) * ratio)
     state = np.random.RandomState(seed)
     return state.choice(np.asarray(labels), count, replace=False).tolist()
+
+
+def install_known_labels(detection_root: Path, known_labels: list[str]) -> None:
+    """Override sampling inside the isolated runtime, not just its manifest."""
+    if not known_labels or len(set(known_labels)) != len(known_labels):
+        raise ValueError("Known labels must be nonempty and unique")
+    source = detection_root / "dataloaders/base.py"
+    original = source.read_text()
+    marker = "self.known_label_list = list(self.known_label_list)"
+    if original.count(marker) != 1:
+        raise ValueError("Cannot locate TextOIR Known-label assignment")
+    source.write_text(original.replace(marker, marker + "\n        self.known_label_list = "
+        + repr(known_labels) + "\n        self.n_known_cls = len(self.known_label_list)"))
 
 
 def require_clean_worktree(status_porcelain: str, *, dry_run: bool) -> None:
@@ -709,7 +722,7 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument("--dataset", choices=DATASETS, required=True)
     parser.add_argument("--method", choices=tuple(METHODS), required=True)
-    parser.add_argument("--known-cls-ratio", type=float, choices=(0.25, 0.5, 0.75), required=True)
+    parser.add_argument("--known-cls-ratio", type=float, required=True)
     parser.add_argument("--seed", type=int, required=True)
     parser.add_argument("--gpu-id", default="0")
     parser.add_argument(
@@ -720,6 +733,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--python-executable", default=sys.executable)
     parser.add_argument("--timeout", type=int, default=None, help="Optional timeout in seconds")
     parser.add_argument("--dry-run", action="store_true")
+    parser.add_argument("--defer-test", action="store_true",
+                        help="Save the selected method state without accessing test examples")
     return parser.parse_args()
 
 
@@ -727,6 +742,8 @@ def main() -> int:
     """创建 manifest，执行隔离子进程，并在结束后复查 clone/overlay 状态。"""
 
     args = parse_args()
+    if not 0 < args.known_cls_ratio < 1:
+        raise ValueError("known-cls-ratio must be between zero and one")
     args.textoir_root = args.textoir_root.resolve()
     if args.data_root is not None:
         args.data_root = args.data_root.resolve()
@@ -796,6 +813,28 @@ def main() -> int:
         args.seed,
         args.known_labels_file,
     )
+    if args.known_labels_file is not None and not args.dry_run:
+        install_known_labels(detection_root, known_labels)
+    if args.defer_test and not args.dry_run:
+        loader = detection_root / 'dataloaders/bert_loader.py'
+        code = loader.read_text()
+        marker = "self.test_examples = get_examples(args, base_attrs, 'test')"
+        if code.count(marker) != 1:
+            raise ValueError('Cannot isolate TextOIR test loading')
+        loader.write_text(code.replace(marker, "self.test_examples = self.eval_examples"))
+        runner = detection_root / 'run.py'
+        code = runner.read_text()
+        marker = "    logger.info('Testing begin...')"
+        if code.count(marker) != 1:
+            raise ValueError('Cannot locate final TextOIR testing entry')
+        checkpoint = str(run_dir / 'selected_method.pt')
+        code = code.replace(marker,
+            "    import torch\n    method.optimizer = None\n    method.scheduler = None\n"
+            "    torch.save({'method': method, 'args': args, 'data': data}, "
+            + repr(checkpoint) + ")\n    return\n" + marker)
+        runner.write_text(code)
+    if not args.dry_run:
+        overlay_provenance['overlay_tree_sha256'] = _tree_hash(detection_root)
     environment_provenance = None
     method_preflight = None
     if not args.dry_run:
@@ -904,6 +943,10 @@ def main() -> int:
         if return_code == 0 and artifact_audit["complete"]
         else ("timed_out" if timed_out else "failed")
     )
+    if args.defer_test:
+        manifest['test_deferred'] = True
+        manifest['status'] = ('selection_complete' if return_code == 0 and
+            (run_dir / 'selected_method.pt').is_file() else 'failed')
     manifest["finished_at_utc"] = dt.datetime.now(dt.timezone.utc).isoformat()
     # 同时证明两个边界：上游 clone 仍干净，且 runtime overlay 的
     # 源码在运行期间未被上游脚本自修改。
@@ -919,7 +962,7 @@ def main() -> int:
     )
     write_json(run_dir / "run_manifest.json", manifest)
     print(run_dir)
-    if manifest["status"] == "complete":
+    if manifest["status"] in {"complete", "selection_complete"}:
         return 0
     return return_code if return_code != 0 else 3
 

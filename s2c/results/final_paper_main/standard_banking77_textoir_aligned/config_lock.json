@@ -1,0 +1,473 @@
+{
+  "components_manifest": "/home/bo/bo01/llmpy311/artifacts/s2c/analysis/banking_textoir_aligned/components_manifest.json",
+  "dataset": "banking77",
+  "dataset_variant": "standard_77_intent",
+  "downstream": {
+    "expert": "SmolLM-135M + LoRA, Known train/dev checkpoint selection, test deferred",
+    "expert_batch_size": 32,
+    "expert_epochs": 15,
+    "expert_lora_alpha": 32,
+    "expert_lora_r": 16,
+    "expert_patience": 5,
+    "router": "single-domain constant router"
+  },
+  "geometry_locks": [
+    {
+      "cell": "kir25_seed13",
+      "lock": {
+        "checkpoint": "/home/bo/bo01/llmpy311/artifacts/s2c/analysis/banking_textoir_aligned/recipe_search_corrected/checkpoints/banking77_kir25_seed13_no_projection/checkpoint.pt",
+        "dataset": "banking77",
+        "dataset_variant": "standard_77_intent",
+        "geometry": {
+          "boundary": "mean_std_1.0",
+          "coverage": 0.9,
+          "distance": "euclidean",
+          "fusion": "ratio",
+          "fusion_weight": 2.0,
+          "k": 1,
+          "rule": "nearest_sphere",
+          "threshold": 2.8522046972500257
+        },
+        "kir": 0.25,
+        "protocol": "protocol_v2_textoir_v1",
+        "pseudo_oos_used": false,
+        "real_oos_used_for_selection": false,
+        "real_oos_used_for_training": false,
+        "recipe": {
+          "epochs": 9,
+          "inter": 0.1,
+          "intra": 0.1,
+          "layers": 2,
+          "lr": 2e-05,
+          "margin": 0.2,
+          "projection": 256,
+          "projection_enabled": false,
+          "projection_lr": 0.0002,
+          "temperature": 0.07
+        },
+        "recipe_name": "no_projection",
+        "scoring_family": "coverage",
+        "seed": 13,
+        "selection_evidence": {
+          "geometry_selection": "/home/bo/bo01/llmpy311/artifacts/s2c/analysis/banking_textoir_aligned/final_selection/validation/banking77_kir25_geometry_choice.json",
+          "known_dev_coverage": 0.9008264462809917,
+          "known_dev_utility_mean": 0.8944126174866721,
+          "known_dev_wrong_accept_rate": 0.004132231404958678,
+          "known_validation_f1": 0.967540895682243,
+          "recipe_selection": "/home/bo/bo01/llmpy311/artifacts/s2c/analysis/banking_textoir_aligned/recipe_search_corrected/selection_kir25.json"
+        },
+        "test_read": false,
+        "test_used_for_selection": false
+      }
+    },
+    {
+      "cell": "kir25_seed42",
+      "lock": {
+        "checkpoint": "/home/bo/bo01/llmpy311/artifacts/s2c/analysis/banking_textoir_aligned/recipe_search_corrected/checkpoints/banking77_kir25_seed42_no_projection/checkpoint.pt",
+        "dataset": "banking77",
+        "dataset_variant": "standard_77_intent",
+        "geometry": {
+          "boundary": "mean_std_1.0",
+          "coverage": 0.9,
+          "distance": "euclidean",
+          "fusion": "ratio",
+          "fusion_weight": 2.0,
+          "k": 1,
+          "rule": "nearest_sphere",
+          "threshold": 2.7327202781354916
+        },
+        "kir": 0.25,
+        "protocol": "protocol_v2_textoir_v1",
+        "pseudo_oos_used": false,
+        "real_oos_used_for_selection": false,
+        "real_oos_used_for_training": false,
+        "recipe": {
+          "epochs": 9,
+          "inter": 0.1,
+          "intra": 0.1,
+          "layers": 2,
+          "lr": 2e-05,
+          "margin": 0.2,
+          "projection": 256,
+          "projection_enabled": false,
+          "projection_lr": 0.0002,
+          "temperature": 0.07
+        },
+        "recipe_name": "no_projection",
+        "scoring_family": "coverage",
+        "seed": 42,
+        "selection_evidence": {
+          "geometry_selection": "/home/bo/bo01/llmpy311/artifacts/s2c/analysis/banking_textoir_aligned/final_selection/validation/banking77_kir25_geometry_choice.json",
+          "known_dev_coverage": 0.9011857707509882,
+          "known_dev_utility_mean": 0.8944126174866721,
+          "known_dev_wrong_accept_rate": 0.0,
+          "known_validation_f1": 1.0,
+          "recipe_selection": "/home/bo/bo01/llmpy311/artifacts/s2c/analysis/banking_textoir_aligned/recipe_search_corrected/selection_kir25.json"
+        },
+        "test_read": false,
+        "test_used_for_selection": false
+      }
+    },
+    {
+      "cell": "kir25_seed87",
+      "lock": {
+        "checkpoint": "/home/bo/bo01/llmpy311/artifacts/s2c/analysis/banking_textoir_aligned/recipe_search_corrected/checkpoints/banking77_kir25_seed87_no_projection/checkpoint.pt",
+        "dataset": "banking77",
+        "dataset_variant": "standard_77_intent",
+        "geometry": {
+          "boundary": "mean_std_1.0",
+          "coverage": 0.9,
+          "distance": "euclidean",
+          "fusion": "ratio",
+          "fusion_weight": 2.0,
+          "k": 1,
+          "rule": "nearest_sphere",
+          "threshold": 2.688901607728229
+        },
+        "kir": 0.25,
+        "protocol": "protocol_v2_textoir_v1",
+        "pseudo_oos_used": false,
+        "real_oos_used_for_selection": false,
+        "real_oos_used_for_training": false,
+        "recipe": {
+          "epochs": 9,
+          "inter": 0.1,
+          "intra": 0.1,
+          "layers": 2,
+          "lr": 2e-05,
+          "margin": 0.2,
+          "projection": 256,
+          "projection_enabled": false,
+          "projection_lr": 0.0002,
+          "temperature": 0.07
+        },
+        "recipe_name": "no_projection",
+        "scoring_family": "coverage",
+        "seed": 87,
+        "selection_evidence": {
+          "geometry_selection": "/home/bo/bo01/llmpy311/artifacts/s2c/analysis/banking_textoir_aligned/final_selection/validation/banking77_kir25_geometry_choice.json",
+          "known_dev_coverage": 0.9018867924528302,
+          "known_dev_utility_mean": 0.8944126174866721,
+          "known_dev_wrong_accept_rate": 0.0,
+          "known_validation_f1": 0.9881433051227101,
+          "recipe_selection": "/home/bo/bo01/llmpy311/artifacts/s2c/analysis/banking_textoir_aligned/recipe_search_corrected/selection_kir25.json"
+        },
+        "test_read": false,
+        "test_used_for_selection": false
+      }
+    },
+    {
+      "cell": "kir50_seed13",
+      "lock": {
+        "checkpoint": "/home/bo/bo01/llmpy311/artifacts/s2c/analysis/banking_textoir_aligned/recipe_search_corrected/checkpoints/banking77_kir50_seed13_temperature014/checkpoint.pt",
+        "dataset": "banking77",
+        "dataset_variant": "standard_77_intent",
+        "geometry": {
+          "boundary": "mean_std_3.0",
+          "coverage": 0.9,
+          "distance": "euclidean",
+          "fusion": "ratio",
+          "fusion_weight": 2.0,
+          "k": 2,
+          "rule": "nearest_sphere",
+          "threshold": 2.3782987732858176
+        },
+        "kir": 0.5,
+        "protocol": "protocol_v2_textoir_v1",
+        "pseudo_oos_used": false,
+        "real_oos_used_for_selection": false,
+        "real_oos_used_for_training": false,
+        "recipe": {
+          "epochs": 9,
+          "inter": 0.1,
+          "intra": 0.1,
+          "layers": 2,
+          "lr": 2e-05,
+          "margin": 0.2,
+          "projection": 256,
+          "projection_enabled": true,
+          "projection_lr": 0.0002,
+          "temperature": 0.14
+        },
+        "recipe_name": "temperature014",
+        "scoring_family": "coverage",
+        "seed": 13,
+        "selection_evidence": {
+          "geometry_selection": "/home/bo/bo01/llmpy311/artifacts/s2c/analysis/banking_textoir_aligned/final_selection/validation/banking77_kir50_geometry_choice.json",
+          "known_dev_coverage": 0.9008097165991903,
+          "known_dev_utility_mean": 0.8737788171035925,
+          "known_dev_wrong_accept_rate": 0.008097165991902834,
+          "known_validation_f1": 0.9613227282900089,
+          "recipe_selection": "/home/bo/bo01/llmpy311/artifacts/s2c/analysis/banking_textoir_aligned/recipe_search_corrected/selection_kir50.json"
+        },
+        "test_read": false,
+        "test_used_for_selection": false
+      }
+    },
+    {
+      "cell": "kir50_seed42",
+      "lock": {
+        "checkpoint": "/home/bo/bo01/llmpy311/artifacts/s2c/analysis/banking_textoir_aligned/recipe_search_corrected/checkpoints/banking77_kir50_seed42_temperature014/checkpoint.pt",
+        "dataset": "banking77",
+        "dataset_variant": "standard_77_intent",
+        "geometry": {
+          "boundary": "mean_std_3.0",
+          "coverage": 0.9,
+          "distance": "euclidean",
+          "fusion": "ratio",
+          "fusion_weight": 2.0,
+          "k": 2,
+          "rule": "nearest_sphere",
+          "threshold": 2.4834332797297756
+        },
+        "kir": 0.5,
+        "protocol": "protocol_v2_textoir_v1",
+        "pseudo_oos_used": false,
+        "real_oos_used_for_selection": false,
+        "real_oos_used_for_training": false,
+        "recipe": {
+          "epochs": 9,
+          "inter": 0.1,
+          "intra": 0.1,
+          "layers": 2,
+          "lr": 2e-05,
+          "margin": 0.2,
+          "projection": 256,
+          "projection_enabled": true,
+          "projection_lr": 0.0002,
+          "temperature": 0.14
+        },
+        "recipe_name": "temperature014",
+        "scoring_family": "coverage",
+        "seed": 42,
+        "selection_evidence": {
+          "geometry_selection": "/home/bo/bo01/llmpy311/artifacts/s2c/analysis/banking_textoir_aligned/final_selection/validation/banking77_kir50_geometry_choice.json",
+          "known_dev_coverage": 0.901010101010101,
+          "known_dev_utility_mean": 0.8737788171035925,
+          "known_dev_wrong_accept_rate": 0.00808080808080808,
+          "known_validation_f1": 0.9818399992708174,
+          "recipe_selection": "/home/bo/bo01/llmpy311/artifacts/s2c/analysis/banking_textoir_aligned/recipe_search_corrected/selection_kir50.json"
+        },
+        "test_read": false,
+        "test_used_for_selection": false
+      }
+    },
+    {
+      "cell": "kir50_seed87",
+      "lock": {
+        "checkpoint": "/home/bo/bo01/llmpy311/artifacts/s2c/analysis/banking_textoir_aligned/recipe_search_corrected/checkpoints/banking77_kir50_seed87_temperature014/checkpoint.pt",
+        "dataset": "banking77",
+        "dataset_variant": "standard_77_intent",
+        "geometry": {
+          "boundary": "mean_std_3.0",
+          "coverage": 0.9,
+          "distance": "euclidean",
+          "fusion": "ratio",
+          "fusion_weight": 2.0,
+          "k": 2,
+          "rule": "nearest_sphere",
+          "threshold": 2.2568923236532235
+        },
+        "kir": 0.5,
+        "protocol": "protocol_v2_textoir_v1",
+        "pseudo_oos_used": false,
+        "real_oos_used_for_selection": false,
+        "real_oos_used_for_training": false,
+        "recipe": {
+          "epochs": 9,
+          "inter": 0.1,
+          "intra": 0.1,
+          "layers": 2,
+          "lr": 2e-05,
+          "margin": 0.2,
+          "projection": 256,
+          "projection_enabled": true,
+          "projection_lr": 0.0002,
+          "temperature": 0.14
+        },
+        "recipe_name": "temperature014",
+        "scoring_family": "coverage",
+        "seed": 87,
+        "selection_evidence": {
+          "geometry_selection": "/home/bo/bo01/llmpy311/artifacts/s2c/analysis/banking_textoir_aligned/final_selection/validation/banking77_kir50_geometry_choice.json",
+          "known_dev_coverage": 0.9004065040650406,
+          "known_dev_utility_mean": 0.8737788171035925,
+          "known_dev_wrong_accept_rate": 0.0,
+          "known_validation_f1": 0.9775562741438463,
+          "recipe_selection": "/home/bo/bo01/llmpy311/artifacts/s2c/analysis/banking_textoir_aligned/recipe_search_corrected/selection_kir50.json"
+        },
+        "test_read": false,
+        "test_used_for_selection": false
+      }
+    },
+    {
+      "cell": "kir75_seed13",
+      "lock": {
+        "checkpoint": "/home/bo/bo01/llmpy311/artifacts/s2c/analysis/banking_textoir_aligned/recipe_search_corrected/checkpoints/banking77_kir75_seed13_epoch12/checkpoint.pt",
+        "dataset": "banking77",
+        "dataset_variant": "standard_77_intent",
+        "geometry": {
+          "boundary": "mean_std_1.0",
+          "coverage": 0.9,
+          "distance": "euclidean",
+          "fusion": "max_ratio",
+          "fusion_weight": 2.0,
+          "k": 4,
+          "rule": "nearest_sphere",
+          "threshold": 1.7209444256081783
+        },
+        "kir": 0.75,
+        "protocol": "protocol_v2_textoir_v1",
+        "pseudo_oos_used": false,
+        "real_oos_used_for_selection": false,
+        "real_oos_used_for_training": false,
+        "recipe": {
+          "epochs": 12,
+          "inter": 0.1,
+          "intra": 0.1,
+          "layers": 2,
+          "lr": 2e-05,
+          "margin": 0.2,
+          "projection": 256,
+          "projection_enabled": true,
+          "projection_lr": 0.0002,
+          "temperature": 0.07
+        },
+        "recipe_name": "epoch12",
+        "scoring_family": "coverage",
+        "seed": 13,
+        "selection_evidence": {
+          "geometry_selection": "/home/bo/bo01/llmpy311/artifacts/s2c/analysis/banking_textoir_aligned/final_selection/validation/banking77_kir75_geometry_choice.json",
+          "known_dev_coverage": 0.9001349527665317,
+          "known_dev_utility_mean": 0.8248954176536554,
+          "known_dev_wrong_accept_rate": 0.021592442645074223,
+          "known_validation_f1": 0.9484085602535256,
+          "recipe_selection": "/home/bo/bo01/llmpy311/artifacts/s2c/analysis/banking_textoir_aligned/recipe_search_corrected/selection_kir75.json"
+        },
+        "test_read": false,
+        "test_used_for_selection": false
+      }
+    },
+    {
+      "cell": "kir75_seed42",
+      "lock": {
+        "checkpoint": "/home/bo/bo01/llmpy311/artifacts/s2c/analysis/banking_textoir_aligned/recipe_search_corrected/checkpoints/banking77_kir75_seed42_epoch12/checkpoint.pt",
+        "dataset": "banking77",
+        "dataset_variant": "standard_77_intent",
+        "geometry": {
+          "boundary": "mean_std_1.0",
+          "coverage": 0.9,
+          "distance": "euclidean",
+          "fusion": "max_ratio",
+          "fusion_weight": 2.0,
+          "k": 4,
+          "rule": "nearest_sphere",
+          "threshold": 1.6810768860767273
+        },
+        "kir": 0.75,
+        "protocol": "protocol_v2_textoir_v1",
+        "pseudo_oos_used": false,
+        "real_oos_used_for_selection": false,
+        "real_oos_used_for_training": false,
+        "recipe": {
+          "epochs": 12,
+          "inter": 0.1,
+          "intra": 0.1,
+          "layers": 2,
+          "lr": 2e-05,
+          "margin": 0.2,
+          "projection": 256,
+          "projection_enabled": true,
+          "projection_lr": 0.0002,
+          "temperature": 0.07
+        },
+        "recipe_name": "epoch12",
+        "scoring_family": "coverage",
+        "seed": 42,
+        "selection_evidence": {
+          "geometry_selection": "/home/bo/bo01/llmpy311/artifacts/s2c/analysis/banking_textoir_aligned/final_selection/validation/banking77_kir75_geometry_choice.json",
+          "known_dev_coverage": 0.9009247027741083,
+          "known_dev_utility_mean": 0.8248954176536554,
+          "known_dev_wrong_accept_rate": 0.017173051519154558,
+          "known_validation_f1": 0.9544957184956618,
+          "recipe_selection": "/home/bo/bo01/llmpy311/artifacts/s2c/analysis/banking_textoir_aligned/recipe_search_corrected/selection_kir75.json"
+        },
+        "test_read": false,
+        "test_used_for_selection": false
+      }
+    },
+    {
+      "cell": "kir75_seed87",
+      "lock": {
+        "checkpoint": "/home/bo/bo01/llmpy311/artifacts/s2c/analysis/banking_textoir_aligned/recipe_search_corrected/checkpoints/banking77_kir75_seed87_epoch12/checkpoint.pt",
+        "dataset": "banking77",
+        "dataset_variant": "standard_77_intent",
+        "geometry": {
+          "boundary": "mean_std_1.0",
+          "coverage": 0.9,
+          "distance": "euclidean",
+          "fusion": "max_ratio",
+          "fusion_weight": 2.0,
+          "k": 4,
+          "rule": "nearest_sphere",
+          "threshold": 1.7266837086479259
+        },
+        "kir": 0.75,
+        "protocol": "protocol_v2_textoir_v1",
+        "pseudo_oos_used": false,
+        "real_oos_used_for_selection": false,
+        "real_oos_used_for_training": false,
+        "recipe": {
+          "epochs": 12,
+          "inter": 0.1,
+          "intra": 0.1,
+          "layers": 2,
+          "lr": 2e-05,
+          "margin": 0.2,
+          "projection": 256,
+          "projection_enabled": true,
+          "projection_lr": 0.0002,
+          "temperature": 0.07
+        },
+        "recipe_name": "epoch12",
+        "scoring_family": "coverage",
+        "seed": 87,
+        "selection_evidence": {
+          "geometry_selection": "/home/bo/bo01/llmpy311/artifacts/s2c/analysis/banking_textoir_aligned/final_selection/validation/banking77_kir75_geometry_choice.json",
+          "known_dev_coverage": 0.9002624671916011,
+          "known_dev_utility_mean": 0.8248954176536554,
+          "known_dev_wrong_accept_rate": 0.006561679790026247,
+          "known_validation_f1": 0.955922745687195,
+          "recipe_selection": "/home/bo/bo01/llmpy311/artifacts/s2c/analysis/banking_textoir_aligned/recipe_search_corrected/selection_kir75.json"
+        },
+        "test_read": false,
+        "test_used_for_selection": false
+      }
+    }
+  ],
+  "geometry_manifest": "/home/bo/bo01/llmpy311/artifacts/s2c/analysis/banking_textoir_aligned/final_selection/MANIFEST.json",
+  "kirs": [
+    0.25,
+    0.5,
+    0.75
+  ],
+  "protocol": "protocol_v2_textoir_v1",
+  "recipe_manifest": "/home/bo/bo01/llmpy311/artifacts/s2c/analysis/banking_textoir_aligned/recipe_search_corrected/MANIFEST.json",
+  "recipe_winners": {
+    "0.25": "no_projection",
+    "0.5": "temperature014",
+    "0.75": "epoch12"
+  },
+  "seeds": [
+    13,
+    42,
+    87
+  ],
+  "selection_flags": {
+    "pseudo_oos_used": false,
+    "real_oos_used_for_selection": false,
+    "test_used_for_selection": false
+  },
+  "status": "locked",
+  "test_policy": "test predictions are final evaluation only; no test score enters selection"
+}

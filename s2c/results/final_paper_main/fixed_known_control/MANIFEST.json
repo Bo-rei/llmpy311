@@ -1,0 +1,16 @@
+{
+  "status": "incomplete",
+  "completed_units": 12,
+  "planned_units": 36,
+  "protocol": "shared_known_labels_textoir_source",
+  "dataset_audit": "results/final_paper_main/fixed_known_control/dataset_audit.json",
+  "selection_root": "../artifacts/s2c/analysis/banking_fixed_known",
+  "mogb_root": "/home/bo/bo01/llmpy311/artifacts/s2c/analysis/mogb_shared_official",
+  "primary_banking_source": "summary.csv; only complete three-seed Ours rows",
+  "historical_banking77_oos_excluded": true,
+  "test_used_for_selection": false,
+  "test_previously_observed": true,
+  "std_ddof": 0,
+  "units": "percent except counts and scores",
+  "reference_policy": "reported baselines are separate; shared-seed superiority requires matched predictions"
+}

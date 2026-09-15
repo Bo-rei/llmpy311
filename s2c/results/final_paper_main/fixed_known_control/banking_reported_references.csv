@@ -1,0 +1,22 @@
+dataset,method,kir,known_f1,oos_f1,accuracy,source,comparison,supervision,backbone
+banking77,ADB,0.25,70.92,85.05,79.33,/home/bo/bo01/llmpy311/textoir/open_intent_detection/results/results.md,reported reference; not shared-seed rerun,not yet audited per method,not yet audited per method
+banking77,ADB,0.5,81.39,79.43,79.61,/home/bo/bo01/llmpy311/textoir/open_intent_detection/results/results.md,reported reference; not shared-seed rerun,not yet audited per method,not yet audited per method
+banking77,ADB,0.75,86.44,67.34,81.39,/home/bo/bo01/llmpy311/textoir/open_intent_detection/results/results.md,reported reference; not shared-seed rerun,not yet audited per method,not yet audited per method
+banking77,DA-ADB,0.25,73.05,86.57,81.19,/home/bo/bo01/llmpy311/textoir/open_intent_detection/results/results.md,reported reference; not shared-seed rerun,not yet audited per method,not yet audited per method
+banking77,DA-ADB,0.5,82.54,81.93,81.51,/home/bo/bo01/llmpy311/textoir/open_intent_detection/results/results.md,reported reference; not shared-seed rerun,not yet audited per method,not yet audited per method
+banking77,DA-ADB,0.75,85.93,69.37,81.12,/home/bo/bo01/llmpy311/textoir/open_intent_detection/results/results.md,reported reference; not shared-seed rerun,not yet audited per method,not yet audited per method
+banking77,DOC,0.25,65.16,76.64,70.31,/home/bo/bo01/llmpy311/textoir/open_intent_detection/results/results.md,reported reference; not shared-seed rerun,not yet audited per method,not yet audited per method
+banking77,DOC,0.5,78.38,72.66,74.6,/home/bo/bo01/llmpy311/textoir/open_intent_detection/results/results.md,reported reference; not shared-seed rerun,not yet audited per method,not yet audited per method
+banking77,DOC,0.75,84.14,63.51,78.94,/home/bo/bo01/llmpy311/textoir/open_intent_detection/results/results.md,reported reference; not shared-seed rerun,not yet audited per method,not yet audited per method
+banking77,DeepUnk,0.25,64.97,76.98,70.68,/home/bo/bo01/llmpy311/textoir/open_intent_detection/results/results.md,reported reference; not shared-seed rerun,not yet audited per method,not yet audited per method
+banking77,DeepUnk,0.5,75.61,67.8,71.01,/home/bo/bo01/llmpy311/textoir/open_intent_detection/results/results.md,reported reference; not shared-seed rerun,not yet audited per method,not yet audited per method
+banking77,DeepUnk,0.75,81.65,50.57,74.73,/home/bo/bo01/llmpy311/textoir/open_intent_detection/results/results.md,reported reference; not shared-seed rerun,not yet audited per method,not yet audited per method
+banking77,KNNCL,0.25,65.54,79.34,73.01,/home/bo/bo01/llmpy311/textoir/open_intent_detection/results/results.md,reported reference; not shared-seed rerun,not yet audited per method,not yet audited per method
+banking77,KNNCL,0.5,75.16,67.21,70.41,/home/bo/bo01/llmpy311/textoir/open_intent_detection/results/results.md,reported reference; not shared-seed rerun,not yet audited per method,not yet audited per method
+banking77,KNNCL,0.75,81.76,51.42,74.78,/home/bo/bo01/llmpy311/textoir/open_intent_detection/results/results.md,reported reference; not shared-seed rerun,not yet audited per method,not yet audited per method
+banking77,MSP,0.25,50.47,39.42,42.19,/home/bo/bo01/llmpy311/textoir/open_intent_detection/results/results.md,reported reference; not shared-seed rerun,not yet audited per method,not yet audited per method
+banking77,MSP,0.5,73.2,46.29,61.67,/home/bo/bo01/llmpy311/textoir/open_intent_detection/results/results.md,reported reference; not shared-seed rerun,not yet audited per method,not yet audited per method
+banking77,MSP,0.75,84.99,46.05,77.08,/home/bo/bo01/llmpy311/textoir/open_intent_detection/results/results.md,reported reference; not shared-seed rerun,not yet audited per method,not yet audited per method
+banking77,OpenMax,0.25,53.42,48.52,47.76,/home/bo/bo01/llmpy311/textoir/open_intent_detection/results/results.md,reported reference; not shared-seed rerun,not yet audited per method,not yet audited per method
+banking77,OpenMax,0.5,75.16,55.03,65.53,/home/bo/bo01/llmpy311/textoir/open_intent_detection/results/results.md,reported reference; not shared-seed rerun,not yet audited per method,not yet audited per method
+banking77,OpenMax,0.75,85.5,53.02,78.32,/home/bo/bo01/llmpy311/textoir/open_intent_detection/results/results.md,reported reference; not shared-seed rerun,not yet audited per method,not yet audited per method

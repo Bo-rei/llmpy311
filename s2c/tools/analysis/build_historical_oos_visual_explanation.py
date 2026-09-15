@@ -729,7 +729,7 @@ def plot_local_boundary_geometry_3d(
         projected_surfaces[method] -= origin
         projected_centers[method][:] = 0
         np.testing.assert_allclose(np.linalg.norm(projected[method], axis=1), local_scores[method], atol=1e-10)
-    display_radius = 1.28
+    display_radius = 1.16
 
     def display_points(points: np.ndarray, radii: np.ndarray) -> np.ndarray:
         lengths = np.linalg.norm(points, axis=1)
@@ -754,10 +754,10 @@ def plot_local_boundary_geometry_3d(
     fig, axes = plt.subplots(
         1,
         2,
-        figsize=(9.0, 5.4),
+        figsize=(9.6, 5.50),
         subplot_kw={"projection": "3d", "computed_zorder": False},
     )
-    fig.subplots_adjust(left=0.03, right=0.94, bottom=0.13, top=0.90, wspace=0.13)
+    fig.subplots_adjust(left=0.005, right=0.995, bottom=0.28, top=0.99, wspace=0.01)
     decisions: dict[str, np.ndarray] = {
         "frozen_k1": encoded["scores"]["frozen_k1"]["test"]["pred"][test_mask].astype(bool),
         "trainable_k1": encoded["scores"]["trainable_k1"]["test"]["pred"][test_mask].astype(bool),
@@ -782,29 +782,21 @@ def plot_local_boundary_geometry_3d(
         ax.set_xlim(-display_radius, display_radius)
         ax.set_ylim(-display_radius, display_radius)
         ax.set_zlim(-display_radius, display_radius)
-        ax.set_box_aspect((1, 1, 1), zoom=1.10)
+        ax.set_box_aspect((1, 1, 1), zoom=1.55)
         ax.set_proj_type("ortho")
         # View the point cloud obliquely from its side, rather than through the sphere.
         mean_direction = np.mean(np.vstack(list(displayed.values())), axis=0)
         azimuth = np.degrees(np.arctan2(mean_direction[1], mean_direction[0])) + 55
         ax.view_init(elev=20, azim=azimuth)
-        ax.set_xlabel(r"$u_1$", labelpad=0, fontsize=11)
-        ax.set_ylabel(r"$u_2$", labelpad=0, fontsize=11)
+        ax.set_xlabel(r"$u_1$", labelpad=-1, fontsize=22)
+        ax.set_ylabel(r"$u_2$", labelpad=-1, fontsize=22)
         ax.set_zlabel("")
-        ax.text2D(0.96, 0.56, r"$u_3$", transform=ax.transAxes, fontsize=11, color="#64748B")
+        ax.text2D(0.93, 0.56, r"$u_3$", transform=ax.transAxes, fontsize=22, color="#64748B")
         for axis in (ax.xaxis, ax.yaxis, ax.zaxis):
             axis.set_ticks([-1, 0, 1])
             axis.line.set_color("#9BA7B4")
-        ax.tick_params(axis="both", which="major", pad=0, labelsize=8, colors="#64748B")
-        ax.set_title(METHOD_LABELS[method], fontweight="bold", fontsize=15, pad=12)
-        ax.text2D(
-            0.02,
-            0.94,
-            f"Inside: {int(local_inside.sum()):,}   |   Outside: {int(local_outside.sum()):,}",
-            transform=ax.transAxes,
-            fontsize=9,
-            color=DARK,
-        )
+        for axis_name in ("x", "y", "z"):
+            ax.tick_params(axis=axis_name, which="major", pad=0, labelsize=20, colors="#64748B")
         ax.grid(False)
         ax.xaxis.pane.fill = False
         ax.yaxis.pane.fill = False
@@ -812,11 +804,20 @@ def plot_local_boundary_geometry_3d(
 
     handles = [
         Line2D([], [], marker="o", linestyle="none", color="#4477AA", markersize=5, label="Known"),
-        Line2D([], [], marker="o", linestyle="none", color="#CC6677", markersize=5, label="OOS outside sphere"),
-        Line2D([], [], marker="o", linestyle="none", markerfacecolor="none", markeredgecolor="#CC6677", markersize=6, label="OOS inside sphere"),
+        Line2D([], [], marker="o", linestyle="none", color="#CC6677", markersize=5, label="OOS outside"),
+        Line2D([], [], marker="o", linestyle="none", markerfacecolor="none", markeredgecolor="#CC6677", markersize=6, label="OOS inside"),
         Line2D([], [], marker="*", linestyle="none", color="#334155", markersize=8, label="Center"),
     ]
-    fig.legend(handles=handles, loc="lower center", bbox_to_anchor=(0.5, 0.015), ncol=4, fontsize=10.5, handlelength=1.2, columnspacing=1.6, frameon=False)
+    fig.legend(
+        handles=handles,
+        loc="lower center",
+        bbox_to_anchor=(0.5, 0.018),
+        ncol=4,
+        fontsize=20,
+        handlelength=1.2,
+        columnspacing=1.6,
+        frameon=False,
+    )
     save_figure(fig, "paper_style_local_boundary_geometry_3d")
 
     summary = {
@@ -933,8 +934,8 @@ def plot_paper_score_distribution(
     population_colors = {"Known": BLUE, "OOS": RED}
     rows: list[dict[str, Any]] = []
 
-    fig, axes = plt.subplots(1, 2, figsize=(7.2, 3.0), sharex=True, sharey=True)
-    fig.subplots_adjust(left=0.075, right=0.995, bottom=0.21, top=0.70, wspace=0.20)
+    fig, axes = plt.subplots(1, 2, figsize=(8.4, 3.40), sharex=True, sharey=True)
+    fig.subplots_adjust(left=0.095, right=0.995, bottom=0.24, top=0.96, wspace=0.16)
     for column, method in enumerate(METHODS):
         ax = axes[column]
         for population in ("Known", "OOS"):
@@ -958,26 +959,24 @@ def plot_paper_score_distribution(
                         "overflow_in_last_bin": overflow,
                     }
                 )
-        oos_values = populations[(method, "OOS")]
-        false_accept = float(np.mean(oos_values <= 1.0)) * 100.0
         ax.axvline(1.0, color=DARK, linestyle="--", linewidth=0.9)
-        ax.text(1.0, 0.98, "1", transform=ax.get_xaxis_transform(), ha="center", va="top", fontsize=5.8, color=DARK)
-        ax.text(0.97, 0.89, f"false accept {false_accept:.1f}%", transform=ax.transAxes, ha="right", va="top", color=RED, fontsize=6.2)
-        ax.set_title(f"{chr(ord('a') + column)}   {METHOD_LABELS[method]}", loc="left", fontweight="bold", pad=4)
-        ax.set_xlabel("Gate score (normalized)")
+        ax.set_xlabel("Gate score (normalized)", fontsize=19, labelpad=2)
         ax.set_xlim(0.0, display_max)
         style_axis(ax)
+        ax.tick_params(axis="both", which="major", labelsize=18, pad=2)
         ax.grid(False)
-    axes[0].set_ylabel("density")
+    axes[0].set_ylabel("density", fontsize=19, labelpad=2)
     handles, labels = axes[0].get_legend_handles_labels()
-    fig.legend(handles, labels, loc="upper center", bbox_to_anchor=(0.54, 0.86), ncol=3, handlelength=1.7, columnspacing=1.1, frameon=False)
-    fig.text(0.075, 0.965, "Known / OOS score around the fixed boundary", fontsize=7.9, fontweight="bold", va="top")
-    fig.text(
-        0.075,
-        0.04,
-        "StackOverflow, KIR=.50, seed=42. OOS is the primary curve; the boundary is score=1. Fixed-bin density with light smoothing.",
-        fontsize=6.0,
-        color="#555B61",
+    axes[0].legend(
+        handles,
+        labels,
+        loc="upper left",
+        bbox_to_anchor=(0.02, 0.98),
+        ncol=1,
+        fontsize=17,
+        handlelength=1.4,
+        columnspacing=1.0,
+        frameon=False,
     )
     save_figure(fig, "paper_style_score_distribution")
     density_frame = pd.DataFrame(rows)

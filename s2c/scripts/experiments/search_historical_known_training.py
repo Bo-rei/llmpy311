@@ -48,6 +48,21 @@ def configure(model, recipe, warmup):
         p.requires_grad_(recipe['projection_enabled'])
     # A disabled zero-initialized residual projection remains exactly identity.
     if not warmup or not recipe['projection_enabled']:
+        # ``layers=0`` is the explicit projection-only control.  Python's
+        # ``layer[-0:]`` would otherwise select every Transformer block.
+        if recipe['layers'] == 0:
+            return torch.optim.AdamW(
+                [
+                    dict(
+                        params=[
+                            p
+                            for n, p in model.named_parameters()
+                            if n.startswith('projection.') and p.requires_grad
+                        ],
+                        lr=recipe['projection_lr'],
+                    )
+                ]
+            )
         for layer in model.encoder.encoder.layer[-recipe['layers']:]:
             for p in layer.parameters():
                 p.requires_grad_(True)

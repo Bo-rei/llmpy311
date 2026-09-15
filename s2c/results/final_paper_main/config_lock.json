@@ -1,0 +1,42 @@
+{
+  "selection_contract": "/home/bo/bo01/llmpy311/artifacts/s2c/analysis/banking_textoir_aligned/fixed_k1_mahalanobis_threshold1_known_only/MANIFEST.json",
+  "status": "locked",
+  "selection": {
+    "data_root": "/home/bo/bo01/llmpy311/artifacts/s2c/analysis/banking_textoir_aligned/data",
+    "dataset": "banking77",
+    "dataset_variant": "standard_77_intent",
+    "device": "cuda",
+    "experiment": "banking77_textoir_aligned_fixed_k1_mahalanobis_threshold1_known_only",
+    "geometry": {
+      "boundary": "mean_std_1.0",
+      "distance": "mahalanobis_diag",
+      "fusion": "none",
+      "fusion_weight": 0.0,
+      "k": 1,
+      "rule": "nearest_sphere",
+      "threshold": 1.0
+    },
+    "kirs": [
+      0.25,
+      0.5,
+      0.75
+    ],
+    "protocol": "protocol_v2_textoir_v1",
+    "pseudo_oos_used": false,
+    "real_oos_used_for_selection": false,
+    "real_oos_used_for_training": false,
+    "recipe_root": "/home/bo/bo01/llmpy311/artifacts/s2c/analysis/banking_textoir_aligned/recipe_search_corrected",
+    "recipe_selection": "existing Known-dev-only winner for each KIR",
+    "seeds": [
+      13,
+      42,
+      87
+    ],
+    "status": "locked",
+    "test_read": false,
+    "test_used_for_selection": false,
+    "threshold_selection": "fixed historical normalized score threshold s=1; not selected from test",
+    "units": 9
+  },
+  "per_seed_lock_root": "/home/bo/bo01/llmpy311/artifacts/s2c/analysis/banking_textoir_aligned/fixed_k1_mahalanobis_threshold1_known_only/locks"
+}

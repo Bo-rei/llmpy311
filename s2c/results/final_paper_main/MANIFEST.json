@@ -1,0 +1,19 @@
+{
+  "status": "complete",
+  "completed_units": 36,
+  "planned_units": 36,
+  "protocol": "shared_known_labels_textoir_source",
+  "dataset_audit": "/home/bo/bo01/llmpy311/s2c/results/final_paper_main/dataset_audit.json",
+  "selection_root": "/home/bo/bo01/llmpy311/artifacts/s2c/analysis/banking_textoir_aligned/fixed_k1_mahalanobis_threshold1_known_only",
+  "mogb_root": "/home/bo/bo01/llmpy311/artifacts/s2c/analysis/mogb_shared_official_aligned",
+  "primary_banking_source": "summary.csv; only complete three-seed Ours rows",
+  "historical_banking77_oos_excluded": true,
+  "test_used_for_selection": false,
+  "test_previously_observed": true,
+  "std_ddof": 0,
+  "units": "percent except counts and scores",
+  "reference_policy": "reported baselines are separate; shared-seed superiority requires matched predictions",
+  "comparison_csv": "/home/bo/bo01/llmpy311/s2c/results/final_paper_main/comparison.csv",
+  "mogb_public_comparison_csv": "/home/bo/bo01/llmpy311/s2c/results/final_paper_main/mogb_public_comparison.csv",
+  "mogb_public_source": "https://ojs.aaai.org/index.php/AAAI/article/view/34630/36785"
+}

@@ -45,6 +45,7 @@ LAMBDA_VALUES = (0.0, 0.25, 0.5, 0.75, 1.0, 1.5, 2.0, 3.0)
 BOUNDARY_QUANTILES = (0.5, 0.7, 0.8, 0.9, 0.95, 0.99)
 FUSION_WEIGHTS = (0.0, 0.25, 0.5, 1.0, 2.0)
 FUSIONS = ("none", "ratio", "inverse_margin", "max_ratio")
+KNOWN_WRONG_ACCEPT_PENALTY = 4.0
 GEOMETRY_FIELDS = (
     "k",
     "distance",
@@ -261,7 +262,13 @@ def search_known(train_values, validation_values, train_rows, validation_rows):
                         )
                         accepted = scores <= thresholds[None, :]
                         utilities = np.mean(
-                            accepted * np.where(correct[:, None], 1.0, -4.0), axis=0
+                            accepted
+                            * np.where(
+                                correct[:, None],
+                                1.0,
+                                -KNOWN_WRONG_ACCEPT_PENALTY,
+                            ),
+                            axis=0,
                         )
                         coverages = np.mean(accepted, axis=0)
                         correct_rates = np.mean(accepted & correct[:, None], axis=0)

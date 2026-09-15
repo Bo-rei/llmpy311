@@ -1,0 +1,14 @@
+{
+  "selection_contract": "../artifacts/s2c/analysis/banking_fixed_known/selection_contract.json",
+  "status": "locked",
+  "selection": {
+    "k": 1,
+    "distance": "mahalanobis_diag",
+    "boundary": "mean_std_1.0",
+    "rule": "normalized_union",
+    "fusion": "none",
+    "fusion_weight": 0.0,
+    "coverage": 0.9
+  },
+  "per_seed_lock_root": "../artifacts/s2c/analysis/banking_fixed_known/locks"
+}

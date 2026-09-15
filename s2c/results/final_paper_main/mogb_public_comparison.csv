@@ -1,0 +1,7 @@
+dataset,method,kir,oos_f1,metric,source,source_table,comparison_class,eligible_for_aligned_main,note
+stackoverflow,MOGB-public-paper,0.25,94.42,F1-U,https://ojs.aaai.org/index.php/AAAI/article/view/34630/36785,AAAI 2025 Table 2,published_reference,false,Published MOGB contract; not a matched-seed rerun under this canonical split
+stackoverflow,MOGB-public-paper,0.5,89.71,F1-U,https://ojs.aaai.org/index.php/AAAI/article/view/34630/36785,AAAI 2025 Table 2,published_reference,false,Published MOGB contract; not a matched-seed rerun under this canonical split
+stackoverflow,MOGB-public-paper,0.75,75.52,F1-U,https://ojs.aaai.org/index.php/AAAI/article/view/34630/36785,AAAI 2025 Table 2,published_reference,false,Published MOGB contract; not a matched-seed rerun under this canonical split
+banking77,MOGB-public-paper,0.25,88.29,F1-U,https://ojs.aaai.org/index.php/AAAI/article/view/34630/36785,AAAI 2025 Table 2,published_reference,false,Published MOGB contract; not a matched-seed rerun under this canonical split
+banking77,MOGB-public-paper,0.5,81.04,F1-U,https://ojs.aaai.org/index.php/AAAI/article/view/34630/36785,AAAI 2025 Table 2,published_reference,false,Published MOGB contract; not a matched-seed rerun under this canonical split
+banking77,MOGB-public-paper,0.75,71.27,F1-U,https://ojs.aaai.org/index.php/AAAI/article/view/34630/36785,AAAI 2025 Table 2,published_reference,false,Published MOGB contract; not a matched-seed rerun under this canonical split
