@@ -1,14 +1,14 @@
 {
   "schema_version": "s2c.analysis_bundle.v1",
   "bundle": "historical_oos_visual_explanation",
-  "created_at_utc": "2026-09-14T14:12:38+00:00",
+  "created_at_utc": "2026-09-15T01:27:11+00:00",
   "contract_layer": "historical_controlled_gate_H1",
   "question": "How does Trainable MiniLM reduce OOS false acceptance under the identical H1 v19 K=1 Gate?",
   "source_experiment": "historical_protocol_reconciliation_20260826",
   "source_artifact_root": "/home/bo/bo01/llmpy311/artifacts/s2c/runs/historical_protocol_v2/minilm_k1",
   "data_root": "/home/bo/bo01/llmpy311/assets/datasets/s2c/prepared/data/multidataset/v19",
   "builder": "tools/analysis/build_historical_oos_visual_explanation.py",
-  "builder_sha256": "e38f68b77d5a9c180e2b4e24470f7adfecf2e669eca45553cbafa3a31bf1c79d",
+  "builder_sha256": "a20e5870b658e1f8b470ca41b5cc7bb1bc29921bc52850d34283fc15d80dd852",
   "report": "docs/analysis/RECENT_MECHANISM_ANALYSIS_PRESENTATION_V1.md",
   "result_files": [
     {

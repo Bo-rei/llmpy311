@@ -2,6 +2,74 @@
 
 更新时间：2026-09-11。范围：只整理当前仓库已有的代码、results、artifact manifest 和分析报告；不重跑实验，不把事后最高值改写成主结果。
 
+## 0A. 2026-09-15 current audit addendum（优先于下文冲突口径）
+
+本文件下文保留 2026-09-11 的历史事实包。以下 addendum 是对当前仓库最新状态的只读审计；凡与下文冲突，以本段和 `docs/CURRENT_STATUS.md`、`results/final_paper_main/` 为准。
+
+**结论：当前没有一组覆盖三数据集、三 KIR、同一 candidate space、同一 Known-only selection rule、完整 Gate→Router→Expert 且可无条件称为 9/9 SOTA 的主表结果。** 先前的“9/9”是数值上把历史 H1 CLINC150/StackOverflow 与标准 `banking77` 或历史 `banking77_oos` 结果合并后的结论，不能作为统一 protocol 的主表数字。
+
+### Current standard Banking77 evidence
+
+`results/final_paper_main/MANIFEST.json` 的 `36/36` 只包含标准 `banking77` 的 Ours 9 cells 和 official-compatible MOGB 27 cells；它不包含当前 protocol-v2 下 CLINC150/StackOverflow 的完整 Ours 3×3 矩阵。标准 Banking77 Ours 的 locked final bundle 为：
+
+| KIR | OOS F1 | Known F1 | Accuracy | Known Recall | False Acceptance |
+|---:|---:|---:|---:|---:|---:|
+| .25 | 91.782±0.577 | 76.485±2.187 | 87.359±0.976 | 81.711 | 10.101 |
+| .50 | 86.395±0.989 | 81.200±0.892 | 83.766±1.107 | 80.746 | 9.658 |
+| .75 | 70.620±1.151 | 82.131±0.186 | 78.680±0.432 | 80.043 | 12.105 |
+
+这些行来自同一批 full-pipeline predictions，selection 为 Known train/dev only，`pseudo_oos_used=false`、`real_oos_used_for_selection=false`、`test_used_for_selection=false`。root manifest 同时记录 `test_previously_observed=true`，所以它是 locked Known-only result，但不能宣称 untouched-holdout。
+
+### Absolute best observed is not a legal merged result
+
+在所有当前标准 Banking77 Ours full-pipeline JSON 中逐 campaign 聚合得到的最高观察值为 `.25=94.023±0.163`（coverage70 campaign）、`.50=86.395±0.989`（final threshold1 bundle）、`.75=73.236±3.425`（fixed-known control）。三者来自不同 selection contract，不能拼接成一行 Ours；coverage70/fixed-known 还记录了既有 test artifact。其余 11-point Banking77 KIR sweep 的结果属于 `coverage_repair`，可用于 sensitivity 诊断，但不是一个新的 untouched-holdout 主表。
+
+历史 H1 full-pipeline 的 CLINC150 `95.185/92.130/86.805` 和 StackOverflow `95.501/89.232/75.944`（均值，KIR=.25/.50/.75）仍可作为历史 H1 结果；它们与标准 Banking77 final 不得混排。历史 `banking77_oos` 也必须单独报告。
+
+### K dependence audit
+
+K 不是普遍最优为 1：历史 CLINC150 `.25/.50` 选择过 `K=2`；标准 Banking77 `coverage_repair` 的 Known-only selector 在多个 KIR 选择过 `K=3/4/5`；StackOverflow 的既有 K-sweep 则显示 `K>1` 退化。由于这些证据来自不同 campaign，当前只能支持“最优 K 具有 dataset/KIR dependence”，不能支持把各 cell 的 test 最高 K 拼成最终 Ours。
+
+### Paper-eligibility resolution
+
+- **条件可写入**：标准 Banking77 `results/final_paper_main/summary.csv` 的 3 个 Ours rows，以及 27-cell MOGB official-compatible matrix；均须保留 protocol、selection 和 MOGB compatibility caveat。
+- **历史/诊断**：`historical_known_best_9of9`、`trainable_full_pipeline_ablation_known_only`、`coverage_repair` 和各 adaptive/geometry search；不得冒充当前统一主表。
+- **当前缺口**：没有一份同时覆盖 CLINC150、StackOverflow、标准 Banking77 的 current-protocol 3×3 Ours full-pipeline bundle，且所有 cell 共享同一 candidate space、selection rule 和 test-before-lock barrier。因此当前不能输出一个审计意义上的统一 9/9 paper-eligible table。
+
+证据入口：`results/final_paper_main/MANIFEST.json`、`results/final_paper_main/summary.csv`、`results/analysis/trainable_full_pipeline_ablation_known_only/summary.csv`、`results/analysis/kir_sensitivity_known_only/coverage_repair/summary.csv`、`docs/analysis/final_paper_experiment_closeout.md`。
+
+**优先级说明：下文原有的“Final Ours=K=1”是 2026-09-11 历史统一合同建议；它不覆盖本次不预设 K 的逐 cell 审计，也不能把 K=1 事后提升为所有 dataset/KIR 的最终最优配置。**
+
+### Existing-cell audit snapshot（标准 Banking77）
+
+以下是当前仓库已有标准 `banking77` full-pipeline 结果中，每个 KIR 的最高观察值；百分比均来自同一 cell 的同一批三 seed predictions。`coverage_repair` 的选择分数是 Known-dev utility 的跨 seed 均值；其余 contract 没有可与该分数直接比较的统一导出分数。
+
+| KIR | OOS F1 | Known F1 | Acc | Known Recall | FA | selected recipe / geometry | validation evidence | paper-eligible in unified 3-dataset table |
+|---:|---:|---:|---:|---:|---:|---|---|:---:|
+| .10 | 93.509±1.239 | 63.272±4.628 | 88.755±1.995 | 86.667±3.076 | 10.809±2.125 | last2; K1 Euclidean mean+0; ratio | coverage_repair utility=.905806 | no |
+| .20 | 88.149±3.832 | 69.114±4.038 | 82.154±5.132 | 86.944±1.499 | 18.468±6.516 | last4; K1 Euclidean mean+0; inverse-margin | coverage_repair utility=.901877 | no |
+| .25 | 94.023±0.163 | 76.893±0.739 | 90.206±0.276 | 71.272±0.926 | 2.931±0.153 | last2; K1 Euclidean mean+0; no fusion; coverage=.70 | geometry score not exported | no; separate coverage70 campaign |
+| .30 | 84.607±2.670 | 73.171±2.816 | 79.329±3.047 | 87.826±1.161 | 22.762±4.545 | compact_margin; K4 Euclidean center-quantile .5; max-ratio | coverage_repair utility=.884211 | no |
+| .40 | 84.585±0.846 | 78.944±0.762 | 81.212±0.889 | 88.629±0.302 | 21.087±1.350 | last1; K4 Euclidean mean+0; inverse-margin | coverage_repair utility=.876114 | no |
+| .50 | 86.395±0.989 | 81.200±0.892 | 83.766±1.107 | 80.746±1.080 | 9.658±2.413 | temperature014; K1 diagonal Mahalanobis mean+1; no fusion; threshold=1 | Known-dev F1 mean=.973573 | conditional; final threshold1 bundle |
+| .60 | 75.511±2.820 | 81.497±0.577 | 78.593±1.434 | 89.674±0.672 | 29.919±4.730 | temperature10; K3 Euclidean intent-quantile .99; inverse-margin | coverage_repair utility=.847953 | no |
+| .70 | 71.377±3.783 | 83.571±0.533 | 79.578±1.378 | 90.093±0.587 | 31.377±6.431 | lr_high; K5 Euclidean mean+1.5; inverse-margin | coverage_repair utility=.827348 | no |
+| .75 | 73.236±3.425 | 84.533±0.770 | 81.353±1.180 | 88.807±0.739 | 22.281±6.436 | last2+projection; K1 diagonal Mahalanobis mean+1; normalized-union | fixed Known-dev coverage=.90 | no; separate fixed-known campaign |
+| .80 | 61.305±3.872 | 84.674±0.067 | 79.816±0.866 | 89.879±0.846 | 37.278±4.304 | all6; K1 Euclidean mean+1.5; inverse-margin | coverage_repair utility=.820735 | no |
+| .90 | 53.253±2.719 | 86.089±1.079 | 81.807±1.298 | 90.266±1.124 | 33.333±3.118 | lr_high; K2 Euclidean mean+0; max-ratio | coverage_repair utility=.796506 | no |
+
+The source for rows `.10/.20/.30/.40/.60/.70/.80/.90` is `artifacts/s2c/analysis/kir_sensitivity_known_only/coverage_repair/`; `.25` is `.../banking_known_recipe_geometry_search/coverage70/`, `.50` is `.../banking_textoir_aligned/fixed_k1_mahalanobis_threshold1_known_only/`, and `.75` is `.../banking_fixed_known/`. The result manifest for the dense sweep is `partial` (43/495 summary units) and documents prior test artifacts; these rows are therefore not a clean unified paper table even when their selection fields say no test selection.
+
+### Current dataset×KIR coverage matrix
+
+| Dataset / data key | .10 | .20 | .25 | .30 | .40 | .50 | .60 | .70 | .75 | .80 | .90 |
+|---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| CLINC150 | — | — | full pipeline, coverage_repair | — | — | full pipeline, coverage_repair | — | — | full pipeline, coverage_repair | — | — |
+| StackOverflow | — | — | Gate-only / historical full pipeline only | — | — | current bridge only; no search lock | — | — | Gate-only / historical full pipeline only | — | — |
+| standard Banking77 | full pipeline, coverage_repair | full pipeline, coverage_repair | full pipeline, multiple contracts | full pipeline, coverage_repair | full pipeline, coverage_repair | full pipeline, final bundle | full pipeline, coverage_repair | full pipeline, coverage_repair | full pipeline, multiple contracts | full pipeline, coverage_repair | full pipeline, coverage_repair |
+
+Thus the only current full-pipeline dense-KIR source is standard Banking77; CLINC150 has three anchor cells under the repair campaign, and StackOverflow has no current-protocol full-pipeline search matrix. Missing cells must remain missing rather than receive historical or Gate-only numbers.
+
 ## 0. 先给最终口径
 
 **修订稿的 Ours 应定义为：`Gate → Router → Expert` 不变，Gate 采用 Known-only Trainable `all-MiniLM-L6-v2`，只解冻最后两个 Transformer blocks 加 residual projection，最终使用单中心 `K=1`、对角 Mahalanobis、`mean+1 std` 半径和固定 normalized score threshold `1`；Router/Expert 使用对应 H1 v19 的 `SmolLM-135M` LoRA 组件。`K>1` 不属于最终 Ours，而属于可配置扩展及 controlled ablation/analysis。**

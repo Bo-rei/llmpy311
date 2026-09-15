@@ -1,0 +1,21 @@
+stage: minilm_trainable_k_sweep_v1
+protocol_version: protocol_v2_textoir_v1
+datasets: [clinc150, banking77, stackoverflow]
+kir: 0.50
+seeds: [13, 42, 87, 100, 123]
+k_values: [1, 2, 3, 4, 5]
+model_path: ../assets/models/all-MiniLM-L6-v2
+representation_mode: last2_minilm_plus_projection
+projection_hidden_dim: 256
+batch_size: 64
+max_length: 256
+distance: mahalanobis_diag
+radius_method: mean_std
+radius_lambda: 1.0
+threshold: 1.0
+device: auto
+source_stage_primary: minilm_trainable_kir_sweep_v1/kir_0.50
+source_stage_extension: minilm_trainable_kir_sweep_extension_v1/kir_0.50
+selection: known_calibration_only
+test_used_for_selection: false
+oos_used_for_training: false

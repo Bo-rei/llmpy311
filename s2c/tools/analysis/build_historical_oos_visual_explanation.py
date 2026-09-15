@@ -729,7 +729,7 @@ def plot_local_boundary_geometry_3d(
         projected_surfaces[method] -= origin
         projected_centers[method][:] = 0
         np.testing.assert_allclose(np.linalg.norm(projected[method], axis=1), local_scores[method], atol=1e-10)
-    display_radius = 1.16
+    display_radius = 1.10
 
     def display_points(points: np.ndarray, radii: np.ndarray) -> np.ndarray:
         lengths = np.linalg.norm(points, axis=1)
@@ -782,7 +782,7 @@ def plot_local_boundary_geometry_3d(
         ax.set_xlim(-display_radius, display_radius)
         ax.set_ylim(-display_radius, display_radius)
         ax.set_zlim(-display_radius, display_radius)
-        ax.set_box_aspect((1, 1, 1), zoom=1.55)
+        ax.set_box_aspect((1, 1, 1), zoom=1.35)
         ax.set_proj_type("ortho")
         # View the point cloud obliquely from its side, rather than through the sphere.
         mean_direction = np.mean(np.vstack(list(displayed.values())), axis=0)

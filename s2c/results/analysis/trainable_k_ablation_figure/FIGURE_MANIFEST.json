@@ -1,0 +1,27 @@
+{
+  "claim": "The effect of the centroid number K is dataset-dependent under the Trainable MiniLM Gate.",
+  "archetype": "quantitative trend figure",
+  "backend": "python_matplotlib",
+  "source_data": "/home/bo/bo01/llmpy311/artifacts/s2c/runs/protocol_v2_textoir_v1/minilm_trainable_k_sweep_v1/summary.csv",
+  "source_data_copy": "/home/bo/bo01/llmpy311/s2c/results/analysis/trainable_k_ablation_figure/figure_source_data.csv",
+  "metric": "Gate-level OOS F1 (%)",
+  "kir": 0.5,
+  "distance": "mahalanobis_diag",
+  "representation": "last2_minilm_plus_projection",
+  "n_seeds": 5,
+  "spread": "standard deviation across seeds",
+  "exclusions": "none; all 15 dataset-by-K rows from summary.csv are plotted",
+  "field_mapping": {
+    "x": "k",
+    "y": "100 * oos_f1_mean",
+    "error": "100 * oos_f1_std",
+    "group": "dataset"
+  },
+  "outputs": [
+    "/home/bo/bo01/llmpy311/s2c/figures/k_ablation_compact.pdf",
+    "/home/bo/bo01/llmpy311/s2c/figures/k_ablation_compact.png",
+    "/home/bo/bo01/llmpy311/s2c/figures/k_ablation_compact.svg",
+    "/home/bo/bo01/llmpy311/s2c/figures/k_ablation_compact.tiff"
+  ],
+  "review_risk": "K is evaluated on the test split for descriptive ablation only; it must not be selected from this figure."
+}
