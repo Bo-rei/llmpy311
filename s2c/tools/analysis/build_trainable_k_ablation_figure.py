@@ -132,7 +132,7 @@ def build_figure(frame: pd.DataFrame) -> plt.Figure:
         )
 
     ax.set_xlabel("Number of centroids ($K$)", labelpad=5)
-    ax.set_ylabel("Gate OOS F1 (%)", labelpad=7)
+    ax.set_ylabel("OOS F1 (%)", labelpad=7)
     ax.set_xticks(k_values, ["1", "2", "3", "4", "5"])
     ax.set_xlim(0.75, 5.35)
     ax.set_ylim(52.0, 94.0)
@@ -174,7 +174,7 @@ def write_manifest(frame: pd.DataFrame, outputs: list[Path]) -> None:
         "backend": "python_matplotlib",
         "source_data": str(SOURCE),
         "source_data_copy": str(RESULT_ROOT / "figure_source_data.csv"),
-        "metric": "Gate-level OOS F1 (%)",
+        "metric": "OOS F1 (%)",
         "kir": 0.50,
         "distance": "mahalanobis_diag",
         "representation": "last2_minilm_plus_projection",

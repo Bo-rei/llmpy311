@@ -17,13 +17,31 @@ from typing import Any, Iterable
 
 DATASETS = ("banking", "oos", "stackoverflow")
 SPLITS = ("train", "dev", "test")
-EXPECTED_METHODS = ("MSP", "DOC", "ADB", "OpenMax", "KNNCL", "DA-ADB")
+EXPECTED_METHODS = (
+    "MSP",
+    "OpenMax",
+    "DOC",
+    "DeepUnk",
+    "KNNCL",
+    "ADB",
+    "DA-ADB",
+)
 METHOD_CONTRACTS = {
     "MSP": {"backbone": "bert", "config": "MSP", "loss": "CrossEntropyLoss"},
+    "OpenMax": {
+        "backbone": "bert",
+        "config": "OpenMax",
+        "loss": "CrossEntropyLoss",
+    },
     "DOC": {
         "backbone": "bert_doc",
         "config": "DOC",
         "loss": "Binary_CrossEntropyLoss",
+    },
+    "DeepUnk": {
+        "backbone": "bert_norm",
+        "config": "DeepUnk",
+        "loss": "CosineFaceLoss",
     },
     "ADB": {
         "backbone": "bert",
@@ -31,11 +49,6 @@ METHOD_CONTRACTS = {
         "loss": "CrossEntropyLoss",
         "pretrain": True,
         "save_model": True,
-    },
-    "OpenMax": {
-        "backbone": "bert",
-        "config": "OpenMax",
-        "loss": "CrossEntropyLoss",
     },
     "KNNCL": {"backbone": "bert_knncl", "config": "KNNCL", "loss": "KNNCLoss"},
     "DA-ADB": {

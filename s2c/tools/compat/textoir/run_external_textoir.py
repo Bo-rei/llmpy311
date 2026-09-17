@@ -204,7 +204,10 @@ print(json.dumps({
         check=False,
         capture_output=True,
         text=True,
-        timeout=90,
+        # Importing the legacy TextOIR registry can page in a large torch/
+        # transformers stack.  Keep this a preflight-only timeout so slow WSL
+        # storage cannot be mistaken for a method/runtime incompatibility.
+        timeout=600,
     )
     payload = {
         "complete": completed.returncode == 0,
@@ -286,6 +289,19 @@ def resolve_bert_model(value: Path | None, *, dry_run: bool) -> Path | None:
     return path
 
 
+def resolve_libmr_extension(value: Path | None, *, dry_run: bool) -> Path | None:
+    """Resolve an optional Python-ABI-compatible OpenMax libMR extension."""
+
+    if value is None:
+        return None
+    path = value.expanduser().resolve()
+    if not path.is_file():
+        if dry_run:
+            return path
+        raise FileNotFoundError(f"OpenMax libMR extension not found: {path}")
+    return path
+
+
 def _tree_hash(root: Path) -> str:
     digest = hashlib.sha256()
     for path in sorted(item for item in root.rglob("*") if item.is_file()):
@@ -303,6 +319,10 @@ def prepare_runtime_overlay(
     run_dir: Path,
     config_name: str,
     bert_model: Path,
+    official_da_adb: bool = False,
+    libmr_extension: Path | None = None,
+    max_epochs: int | None = None,
+    patience: int | None = None,
 ) -> tuple[Path, dict]:
     """构建一次性 detection overlay，并返回可审计的修改 provenance。
 
@@ -321,6 +341,13 @@ def prepare_runtime_overlay(
         overlay_root,
         ignore=shutil.ignore_patterns("__pycache__", "*.pyc"),
     )
+    added_runtime_files: list[str] = []
+    if libmr_extension is not None:
+        if config_name != "OpenMax":
+            raise ValueError("--libmr-extension is only valid for OpenMax")
+        libmr_target = overlay_root / "methods" / "OpenMax" / "libMR" / libmr_extension.name
+        shutil.copy2(libmr_extension, libmr_target)
+        added_runtime_files.append(libmr_target.relative_to(overlay_root).as_posix())
 
     relative_config = Path("configs") / f"{config_name}.py"
     source_config = source_root / relative_config
@@ -337,6 +364,20 @@ def prepare_runtime_overlay(
         raise ValueError(
             f"Expected one bert_model assignment in {source_config}, found {replacements}"
         )
+    budget_caps = {key: value for key, value in {
+        "num_train_epochs": max_epochs, "wait_patient": patience,
+    }.items() if value is not None}
+    if budget_caps:
+        if any(value <= 0 for value in budget_caps.values()):
+            raise ValueError("Training budget caps must be positive")
+        marker = "        return hyper_parameters"
+        if patched_text.count(marker) != 1:
+            raise ValueError(f"Expected one config return in {source_config}")
+        assignments = "".join(
+            f"        hyper_parameters[{key!r}] = min(hyper_parameters[{key!r}], {value})\n"
+            for key, value in budget_caps.items()
+        )
+        patched_text = patched_text.replace(marker, assignments + marker)
     overlay_config.write_text(patched_text, encoding="utf-8")
 
     # 上游 __init__.py 会急切 import 所有可选 Llama 方法。即使本次选择 MSP，
@@ -401,6 +442,16 @@ def prepare_runtime_overlay(
     if base_text.count(old_adamw_import) != 1:
         raise ValueError(f"Expected one legacy AdamW import in {base_source}")
     base_text = base_text.replace(old_adamw_import, new_adamw_import)
+    if config_name == "KNNCL":
+        # KNNCL has two BERT encoders rather than the single ``model.bert``
+        # attribute used by the generic freeze helper.  The upstream utility
+        # already contains the intended two-encoder freezing rule; route this
+        # method to it without changing the optimizer or model implementation.
+        old_knncl_freeze_route = "        if args.method == 'KCL':"
+        new_knncl_freeze_route = "        if args.method in {'KCL', 'KNNCL'}:"
+        if base_text.count(old_knncl_freeze_route) != 1:
+            raise ValueError(f"Expected one KNNCL freeze route in {base_source}")
+        base_text = base_text.replace(old_knncl_freeze_route, new_knncl_freeze_route)
     base_overlay.write_text(base_text, encoding="utf-8")
     compatibility_patches.append(
         {
@@ -411,6 +462,16 @@ def prepare_runtime_overlay(
             "correct_bias": "accepted for API compatibility; torch optimizer semantics apply",
         }
     )
+    if config_name == "KNNCL":
+        compatibility_patches.append(
+            {
+                "file": base_relative.as_posix(),
+                "reason": "route KNNCL to upstream two-encoder freeze helper",
+                "source_sha256": sha256_file(base_source),
+                "overlay_sha256": sha256_file(base_overlay),
+                "status": "reachability_compatibility",
+            }
+        )
 
     # 当前 upstream main 只把 ``bert_con`` 注册到 dataloader map，导致 README
     # 中 MSP/DOC/ADB 等官方命令全部在 DataManager 初始化时 KeyError。所有 BERT
@@ -467,7 +528,7 @@ def prepare_runtime_overlay(
 
     analysis_run_relative = Path("run.py")
     analysis_compatibility_files: list[str] = []
-    if config_name in {"ADB", "DA-ADB"}:
+    if config_name in {"ADB", "DA-ADB"} and not official_da_adb:
         # Only the ADB family needs the numeric-only native boundary hook.
         analysis_run_source = source_root / analysis_run_relative
         analysis_run_overlay = overlay_root / analysis_run_relative
@@ -498,7 +559,7 @@ def prepare_runtime_overlay(
 
     method_compatibility_files: list[str] = []
 
-    if config_name in {"ADB", "DA-ADB"}:
+    if config_name in {"ADB", "DA-ADB"} and not official_da_adb:
         # 官方 ADB 命令启用 --save_model，但 upstream 会把 CUDA tensor list
         # 直接交给 np.save，导致训练完成后、测试前崩溃。这里只修复诊断轨迹的
         # device 转换；用于决策的 best delta/centroid 和训练过程均不改变。
@@ -528,33 +589,39 @@ def prepare_runtime_overlay(
         )
 
     if config_name == "KNNCL":
-        # The upstream KNNCL backbone reads a misspelled anum_labels field,
-        # while DataManager correctly exposes num_labels.  Fix only this
-        # reachability typo in the isolated overlay; the model and loss are
-        # otherwise unchanged.
-        knncl_relative = Path("backbones/bert.py")
+        # A recent upstream commit removed the ``anum_labels`` assignment that
+        # the KNNCL head still consumes.  Restore the historical DataManager
+        # contract (known classes plus the explicit unknown slot) rather than
+        # changing the KNNCL model's output dimension.
+        knncl_relative = Path("dataloaders/base.py")
         knncl_source = source_root / knncl_relative
         knncl_overlay = overlay_root / knncl_relative
         knncl_text = knncl_overlay.read_text(encoding="utf-8")
-        old_label_alias = "        self.number_labels = args.anum_labels"
-        new_label_alias = "        self.number_labels = args.num_labels"
-        if knncl_text.count(old_label_alias) != 1:
-            raise ValueError(f"Expected one KNNCL label alias in {knncl_source}")
+        old_label_list = (
+            "        args.label_list = self.label_list = "
+            "self.known_label_list + [self.unseen_label]"
+        )
+        new_label_list = (
+            old_label_list
+            + "\n        self.anum_labels = args.anum_labels = len(self.label_list)"
+        )
+        if knncl_text.count(old_label_list) != 1:
+            raise ValueError(f"Expected one KNNCL label-list assignment in {knncl_source}")
         knncl_overlay.write_text(
-            knncl_text.replace(old_label_alias, new_label_alias), encoding="utf-8"
+            knncl_text.replace(old_label_list, new_label_list), encoding="utf-8"
         )
         method_compatibility_files.append(knncl_relative.as_posix())
         compatibility_patches.append(
             {
                 "file": knncl_relative.as_posix(),
-                "reason": "fix upstream KNNCL args.anum_labels typo to DataManager's args.num_labels",
+                "reason": "restore upstream KNNCL anum_labels contract removed from DataManager",
                 "source_sha256": sha256_file(knncl_source),
                 "overlay_sha256": sha256_file(knncl_overlay),
-                "status": "reachability_compatibility",
+                "status": "historical_contract_restoration",
             }
         )
 
-    if config_name == "DA-ADB":
+    if config_name == "DA-ADB" and not official_da_adb:
         # The disaware branch exponentiates the gap between the nearest and
         # second-nearest centroid.  With current torch/transformers this can
         # overflow before CrossEntropyLoss sees the logits, producing a
@@ -617,7 +684,8 @@ def prepare_runtime_overlay(
         for path in overlay_root.rglob("*")
         if path.is_file() and "__pycache__" not in path.parts and path.suffix != ".pyc"
     }
-    if source_files.keys() != overlay_files.keys():
+    expected_overlay_files = set(source_files) | set(added_runtime_files)
+    if set(overlay_files) != expected_overlay_files:
         raise RuntimeError("Runtime overlay file set differs from the source repository")
     changed_files = sorted(
         relative for relative in source_files if source_files[relative] != overlay_files[relative]
@@ -649,7 +717,11 @@ def prepare_runtime_overlay(
         "config_changed_files": [relative_config.as_posix()],
         "compatibility_changed_files": compatibility_files,
         "compatibility_patches": compatibility_patches,
+        "added_runtime_files": added_runtime_files,
+        "libmr_extension": str(libmr_extension) if libmr_extension is not None else None,
         "bert_model": str(bert_model),
+        "official_da_adb": official_da_adb,
+        "training_budget_caps": budget_caps,
     }
     return overlay_root, provenance
 
@@ -731,8 +803,24 @@ def parse_args() -> argparse.Namespace:
         help="Local pretrained BERT directory; required unless --dry-run is used",
     )
     parser.add_argument("--python-executable", default=sys.executable)
+    parser.add_argument(
+        "--libmr-extension",
+        type=Path,
+        default=None,
+        help="Optional Python-ABI-compatible libMR extension for OpenMax.",
+    )
     parser.add_argument("--timeout", type=int, default=None, help="Optional timeout in seconds")
+    parser.add_argument("--max-epochs", type=int, default=None)
+    parser.add_argument("--patience", type=int, default=None)
     parser.add_argument("--dry-run", action="store_true")
+    parser.add_argument(
+        "--official-da-adb",
+        action="store_true",
+        help=(
+            "For DA-ADB, keep the upstream method and omit s2c's historical "
+            "analysis/numerical-safety adaptations; retain only interface compatibility."
+        ),
+    )
     parser.add_argument("--defer-test", action="store_true",
                         help="Save the selected method state without accessing test examples")
     return parser.parse_args()
@@ -744,6 +832,8 @@ def main() -> int:
     args = parse_args()
     if not 0 < args.known_cls_ratio < 1:
         raise ValueError("known-cls-ratio must be between zero and one")
+    if args.official_da_adb and args.method != "DA-ADB":
+        raise ValueError("--official-da-adb is only valid with --method DA-ADB")
     args.textoir_root = args.textoir_root.resolve()
     if args.data_root is not None:
         args.data_root = args.data_root.resolve()
@@ -754,6 +844,9 @@ def main() -> int:
     upstream_status = git_output(args.textoir_root, "status", "--porcelain")
     require_clean_worktree(upstream_status, dry_run=args.dry_run)
     bert_model = resolve_bert_model(args.bert_model, dry_run=args.dry_run)
+    libmr_extension = resolve_libmr_extension(
+        args.libmr_extension, dry_run=args.dry_run
+    )
     data_root = (args.data_root or (args.textoir_root / "data")).resolve()
     dataset_root = data_root / args.dataset
     missing_data = [
@@ -796,6 +889,8 @@ def main() -> int:
             "patched_config": f"configs/{METHODS[args.method]['config']}.py",
             "source_config_sha256": sha256_file(source_config),
             "bert_model": str(bert_model) if bert_model is not None else None,
+            "official_da_adb": args.official_da_adb,
+            "libmr_extension": str(libmr_extension) if libmr_extension is not None else None,
         }
     else:
         assert bert_model is not None
@@ -804,6 +899,10 @@ def main() -> int:
             run_dir,
             METHODS[args.method]["config"],
             bert_model,
+            official_da_adb=args.official_da_adb,
+            libmr_extension=libmr_extension,
+            max_epochs=args.max_epochs,
+            patience=args.patience,
         )
     command = build_command(args, run_dir, detection_root)
     known_labels = select_known_labels(
@@ -856,6 +955,7 @@ def main() -> int:
         "upstream_remote": git_output(args.textoir_root, "remote", "get-url", "origin"),
         "upstream_clean_before_run": not bool(upstream_status),
         "bert_model": str(bert_model) if bert_model is not None else None,
+        "libmr_extension": str(libmr_extension) if libmr_extension is not None else None,
         "data_root": str(data_root),
         "known_labels_file": (
             str(args.known_labels_file) if args.known_labels_file is not None else None
@@ -869,6 +969,14 @@ def main() -> int:
         "known_labels": known_labels,
         "unknown_label": "oos" if args.dataset == "oos" else "<UNK>",
         "unknown_label_id": len(known_labels),
+        "official_da_adb": args.official_da_adb,
+        "training_budget_caps": {
+            "num_train_epochs": args.max_epochs, "wait_patient": args.patience,
+        },
+        "training_protocol": (
+            "user_requested_reduced_budget" if args.max_epochs or args.patience
+            else "upstream_defaults"
+        ),
         "split_sha256": {
             split: sha256_file(data_root / args.dataset / f"{split}.tsv")
             for split in SPLITS
@@ -911,7 +1019,7 @@ def main() -> int:
     environment["PYTHONPATH"] = os.pathsep.join(
         item for item in (str(project_root), existing_pythonpath) if item
     )
-    if args.method in {"ADB", "DA-ADB"}:
+    if args.method in {"ADB", "DA-ADB"} and not args.official_da_adb:
         environment["S2C_TEXTOIR_ANALYSIS"] = "1"
     # 不在 overlay 内生成 pyc，否则运行后 tree hash 会受解释器缓存干扰。
     environment["PYTHONDONTWRITEBYTECODE"] = "1"
@@ -935,6 +1043,17 @@ def main() -> int:
             return_code = 124
             log.write("\n[s2c compat] TEXTOIR subprocess timed out.\n")
     artifact_audit = audit_run_artifacts(run_dir)
+    epochs_by_stage = []
+    for log_path in sorted((run_dir / "logs").glob("*.log")):
+        previous = 0
+        for value in re.findall(r"\*+ Epoch: (\d+):", log_path.read_text()):
+            epoch = int(value)
+            if epoch <= previous:
+                epochs_by_stage.append(previous)
+            previous = epoch
+        if previous:
+            epochs_by_stage.append(previous)
+    manifest["epochs_completed_by_stage"] = epochs_by_stage
     manifest["return_code"] = return_code
     manifest["timed_out"] = timed_out
     manifest["artifact_audit"] = artifact_audit

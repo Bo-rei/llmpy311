@@ -13,14 +13,18 @@ from scripts.experiments.run_kir_sensitivity_known_only import ART, KIRS, SEEDS,
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--datasets', nargs='+', default=['banking77','clinc150','stackoverflow'])
+    parser.add_argument('--data-root', type=Path, default=ART / 'data')
+    parser.add_argument('--components-root', type=Path, default=ART / 'components')
     args = parser.parse_args()
+    data_root = args.data_root.resolve()
+    components_root = args.components_root.resolve()
     env = dict(os.environ, CONDA_DEFAULT_ENV='bo', PYTHONPATH=os.pathsep.join((str(ROOT), str(ROOT/'src'))))
     for dataset in args.datasets:
         for kir in KIRS:
             for seed in SEEDS:
                 tag = f'kir{round(100*kir):02d}_seed{seed}'
-                data = ART / 'data' / dataset / tag
-                out = ART / 'components' / dataset / tag
+                data = data_root / dataset / tag
+                out = components_root / dataset / tag
                 out.mkdir(parents=True, exist_ok=True)
                 domains = sorted(p.name for p in (data/'experts').iterdir() if p.is_dir())
                 experts = out/'experts'

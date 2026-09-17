@@ -27,7 +27,7 @@ except ImportError:  # Direct script execution.
 FIRST_BATCH_METHODS = ("MSP", "DOC", "ADB", "OpenMax")
 METHODS = METHOD_CONTRACTS
 KIRS = (0.25, 0.5, 0.75)
-SEEDS = (0, 1, 2)
+SEEDS = (13, 42, 87)
 PROJECT_ROOT = Path(__file__).resolve().parents[3]
 
 
@@ -58,7 +58,31 @@ def unit_directory(output_root: Path, unit: dict) -> Path:
     )
 
 
-def audit_attempt(attempt_dir: Path, expected_unit: dict | None = None) -> dict:
+def uses_upstream_default_budget(manifest: dict) -> bool:
+    """确认 attempt 没有覆盖 TextOIR 配置中的训练轮数或 early-stop patience。"""
+
+    protocol = manifest.get("training_protocol")
+    if protocol not in (None, "upstream_defaults", "official_default"):
+        return False
+
+    caps = manifest.get("training_budget_caps")
+    if caps is None:
+        command = manifest.get("command")
+        if not isinstance(command, list):
+            return False
+        options = {str(token).split("=", 1)[0] for token in command}
+        return not options.intersection({"--max-epochs", "--patience"})
+    if not isinstance(caps, dict):
+        return False
+    expected = ("num_train_epochs", "wait_patient")
+    return all(key in caps and caps[key] is None for key in expected)
+
+
+def audit_attempt(
+    attempt_dir: Path,
+    expected_unit: dict | None = None,
+    require_upstream_default_budget: bool = False,
+) -> dict:
     """验证 attempt 的上游产物、clone 边界和 s2c 导入结果。"""
 
     manifest_path = attempt_dir / "run_manifest.json"
@@ -85,6 +109,8 @@ def audit_attempt(attempt_dir: Path, expected_unit: dict | None = None) -> dict:
                 reasons.append("runtime overlay changed during run")
             if not manifest.get("artifact_audit", {}).get("complete"):
                 reasons.append("upstream prediction artifacts are incomplete")
+            if require_upstream_default_budget and not uses_upstream_default_budget(manifest):
+                reasons.append("training budget is not verified as upstream default")
             if expected_unit is not None:
                 for key in ("dataset", "method", "known_cls_ratio", "seed"):
                     if manifest.get(key) != expected_unit[key]:
@@ -124,19 +150,31 @@ def next_attempt_directory(unit_dir: Path) -> Path:
     return unit_dir / "attempts" / f"attempt_{number:04d}"
 
 
-def completed_attempt(unit_dir: Path, expected_unit: dict | None = None) -> Path | None:
+def completed_attempt(
+    unit_dir: Path,
+    expected_unit: dict | None = None,
+    require_upstream_default_budget: bool = False,
+) -> Path | None:
     for attempt in reversed(attempt_directories(unit_dir)):
-        if audit_attempt(attempt, expected_unit)["complete"]:
+        if audit_attempt(
+            attempt, expected_unit, require_upstream_default_budget
+        )["complete"]:
             return attempt
     return None
 
 
-def matrix_status(output_root: Path, matrix: list[dict]) -> dict:
+def matrix_status(
+    output_root: Path,
+    matrix: list[dict],
+    require_upstream_default_budget: bool = False,
+) -> dict:
     rows = []
     for unit in matrix:
         directory = unit_directory(output_root, unit)
         attempts = attempt_directories(directory)
-        complete = completed_attempt(directory, unit)
+        complete = completed_attempt(
+            directory, unit, require_upstream_default_budget
+        )
         rows.append(
             {
                 **unit,
@@ -158,7 +196,10 @@ def matrix_status(output_root: Path, matrix: list[dict]) -> dict:
     }
 
 
-def discover_completed_runs(output_root: Path) -> list[tuple[dict, Path]]:
+def discover_completed_runs(
+    output_root: Path,
+    require_upstream_default_budget: bool = False,
+) -> list[tuple[dict, Path]]:
     """发现输出根目录下的全部成功单元，而非仅查看本次命令的子矩阵。
 
     TextOIR 的训练按方法串行执行，实际使用时经常以 ``--methods ADB`` 之类的
@@ -183,32 +224,58 @@ def discover_completed_runs(output_root: Path) -> list[tuple[dict, Path]]:
         except (ValueError, TypeError):
             # 非协议目录可能由人工分析产生；汇总器应忽略它，而不是阻断续跑。
             continue
-        attempt = completed_attempt(unit_dir, unit)
+        attempt = completed_attempt(
+            unit_dir, unit, require_upstream_default_budget
+        )
         if attempt is not None:
             discovered.append((unit, attempt))
     return discovered
 
 
-def export_metric_summaries(output_root: Path) -> None:
+def result_source(unit: dict) -> str:
+    """标记矩阵启动前已有结果与本轮新增结果。"""
+
+    dataset = unit["dataset"]
+    method = unit["method"]
+    ratio = unit["known_cls_ratio"]
+    if dataset == "stackoverflow" and (ratio == 0.5 or method == "ADB"):
+        return "reused"
+    if method == "ADB" and dataset == "oos" and ratio == 0.5:
+        return "reused"
+    return "new_run"
+
+
+def export_metric_summaries(
+    output_root: Path,
+    require_upstream_default_budget: bool = False,
+) -> None:
     """从全部已完成 attempt 重建逐 seed 指标与同协议 mean/std。"""
 
     metric_names = ("accuracy", "known_macro_f1", "open_oos_f1", "macro_f1")
     raw_rows = []
-    for unit, attempt in discover_completed_runs(output_root):
+    for unit, attempt in discover_completed_runs(
+        output_root, require_upstream_default_budget
+    ):
         imported = json.loads(
             (attempt / "imported" / "import_summary.json").read_text(encoding="utf-8")
         )
+        manifest = json.loads((attempt / "run_manifest.json").read_text(encoding="utf-8"))
         raw_rows.append(
             {
                 **unit,
                 **{name: imported["metrics"][name] for name in metric_names},
                 "attempt_dir": str(attempt.resolve()),
+                "training_protocol": manifest.get("training_protocol", "upstream_defaults"),
+                "epochs_completed_by_stage": json.dumps(manifest.get("epochs_completed_by_stage")),
+                "result_source": result_source(unit),
             }
         )
 
     raw_path = output_root / "textoir_results_by_seed.csv"
     with raw_path.open("w", encoding="utf-8", newline="") as handle:
-        fields = ["dataset", "method", "known_cls_ratio", "seed", *metric_names, "attempt_dir"]
+        fields = ["dataset", "method", "known_cls_ratio", "seed", *metric_names,
+                  "attempt_dir", "training_protocol", "epochs_completed_by_stage",
+                  "result_source"]
         writer = csv.DictWriter(handle, fieldnames=fields)
         writer.writeheader()
         writer.writerows(raw_rows)
@@ -225,6 +292,10 @@ def export_metric_summaries(output_root: Path) -> None:
             "method": method,
             "known_cls_ratio": ratio,
             "seeds": len(rows),
+            "result_sources": ";".join(sorted({row["result_source"] for row in rows})),
+            "training_protocols": ";".join(
+                sorted({row["training_protocol"] for row in rows})
+            ),
         }
         for name in metric_names:
             values = [float(row[name]) for row in rows]
@@ -234,7 +305,10 @@ def export_metric_summaries(output_root: Path) -> None:
         summary_rows.append(summary)
     summary_path = output_root / "textoir_baseline_summary.csv"
     with summary_path.open("w", encoding="utf-8", newline="") as handle:
-        fields = ["dataset", "method", "known_cls_ratio", "seeds"] + [
+        fields = [
+            "dataset", "method", "known_cls_ratio", "seeds",
+            "result_sources", "training_protocols",
+        ] + [
             f"{name}_{suffix}" for name in metric_names for suffix in ("mean", "std")
         ]
         writer = csv.DictWriter(handle, fieldnames=fields)
@@ -268,15 +342,31 @@ def build_external_command(args: argparse.Namespace, unit: dict, attempt_dir: Pa
         # ``resolve()``，否则会绕过 venv 自己安装的 easydict/site-packages。
         str(args.python_executable.absolute()),
     ]
+    libmr_extension = getattr(args, "libmr_extension", None)
+    if libmr_extension is not None and unit["method"] == "OpenMax":
+        command.extend(["--libmr-extension", str(libmr_extension.absolute())])
     if args.timeout is not None:
         command.extend(["--timeout", str(args.timeout)])
+    for option in ("max_epochs", "patience"):
+        value = getattr(args, option, None)
+        if value is not None:
+            command.extend(["--" + option.replace("_", "-"), str(value)])
+    if unit["method"] == "DA-ADB":
+        # Keep the official DA-ADB method/data/evaluator contract when it is
+        # included in a later matrix continuation.  The runner still applies
+        # only the shared reachability/interface overlay.
+        command.append("--official-da-adb")
     return command
 
 
 def run_unit(args: argparse.Namespace, unit: dict) -> dict:
     directory = unit_directory(args.output_root, unit)
-    complete = completed_attempt(directory, unit)
-    if complete is not None:
+    require_default_budget = getattr(args, "require_upstream_default_budget", False)
+    force_new_attempt = getattr(args, "force_new_attempt", False)
+    if force_new_attempt and not args.resume:
+        raise ValueError("--force-new-attempt requires --resume")
+    complete = completed_attempt(directory, unit, require_default_budget)
+    if complete is not None and not force_new_attempt:
         if not args.resume:
             raise FileExistsError(
                 f"Completed unit already exists; use --resume to skip it: {directory}"
@@ -339,6 +429,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--output-root", type=Path, required=True)
     parser.add_argument("--bert-model", type=Path, required=True)
     parser.add_argument("--python-executable", type=Path, required=True)
+    parser.add_argument("--libmr-extension", type=Path, default=None)
     parser.add_argument("--datasets", nargs="+", choices=DATASETS, default=list(DATASETS))
     parser.add_argument(
         "--methods", nargs="+", choices=tuple(METHODS), default=list(FIRST_BATCH_METHODS)
@@ -349,7 +440,21 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--seeds", nargs="+", type=int, choices=SEEDS, default=list(SEEDS))
     parser.add_argument("--gpu-id", default="0")
     parser.add_argument("--timeout", type=int, default=None)
+    parser.add_argument("--max-epochs", type=int, default=None)
+    parser.add_argument("--patience", type=int, default=None)
+    parser.add_argument("--skip-units", nargs="*", default=[],
+                        help="Already completed elsewhere: dataset/method/kirNN/seedNN")
     parser.add_argument("--resume", action="store_true")
+    parser.add_argument(
+        "--force-new-attempt",
+        action="store_true",
+        help="Append a new attempt even when the unit already has a complete result",
+    )
+    parser.add_argument(
+        "--require-upstream-default-budget",
+        action="store_true",
+        help="Reuse and aggregate only attempts without epoch/patience overrides",
+    )
     mode = parser.add_mutually_exclusive_group()
     mode.add_argument("--dry-run", action="store_true")
     mode.add_argument(
@@ -363,6 +468,8 @@ def parse_args() -> argparse.Namespace:
 def main() -> int:
     args = parse_args()
     matrix = build_matrix(args.datasets, args.methods, args.known_cls_ratios, args.seeds)
+    matrix = [unit for unit in matrix
+              if str(unit_directory(Path('.'), unit)) not in args.skip_units]
     if args.dry_run:
         print(json.dumps({"units": len(matrix), "matrix": matrix}, indent=2, sort_keys=True))
         return 0
@@ -370,9 +477,11 @@ def main() -> int:
     args.output_root = args.output_root.resolve()
     args.output_root.mkdir(parents=True, exist_ok=True)
     if args.audit_only:
-        status = matrix_status(args.output_root, matrix)
+        status = matrix_status(
+            args.output_root, matrix, args.require_upstream_default_budget
+        )
         write_json(args.output_root / "matrix_status.json", status)
-        export_metric_summaries(args.output_root)
+        export_metric_summaries(args.output_root, args.require_upstream_default_budget)
         print(json.dumps(status, indent=2, sort_keys=True))
         return 0 if status["missing_units"] == 0 else 2
     manifest = {
@@ -383,24 +492,40 @@ def main() -> int:
         "textoir_root": str(args.textoir_root.resolve()),
         "bert_model": str(args.bert_model.resolve()),
         "python_executable": str(args.python_executable.absolute()),
+        "libmr_extension": (
+            str(args.libmr_extension.resolve())
+            if args.libmr_extension is not None
+            else None
+        ),
         "gpu_id": args.gpu_id,
+        "training_budget_caps_for_new_runs": {
+            "num_train_epochs": args.max_epochs, "wait_patient": args.patience,
+        },
+        "skip_units_completed_elsewhere": args.skip_units,
+        "require_upstream_default_budget": args.require_upstream_default_budget,
+        "force_new_attempt": args.force_new_attempt,
     }
     write_json(args.output_root / "matrix_manifest.json", manifest)
 
     for index, unit in enumerate(matrix, start=1):
         result = run_unit(args, unit)
         print(f"[{index}/{len(matrix)}] {unit}: {result['status']}", flush=True)
-        write_json(args.output_root / "matrix_status.json", matrix_status(args.output_root, matrix))
-        export_metric_summaries(args.output_root)
+        write_json(
+            args.output_root / "matrix_status.json",
+            matrix_status(args.output_root, matrix, args.require_upstream_default_budget),
+        )
+        export_metric_summaries(args.output_root, args.require_upstream_default_budget)
 
-    status = matrix_status(args.output_root, matrix)
+    status = matrix_status(
+        args.output_root, matrix, args.require_upstream_default_budget
+    )
     manifest["status"] = "complete" if status["missing_units"] == 0 else "partial"
     manifest["finished_at_utc"] = dt.datetime.now(dt.timezone.utc).isoformat()
     manifest["complete_units"] = status["complete_units"]
     manifest["missing_units"] = status["missing_units"]
     write_json(args.output_root / "matrix_manifest.json", manifest)
     write_json(args.output_root / "matrix_status.json", status)
-    export_metric_summaries(args.output_root)
+    export_metric_summaries(args.output_root, args.require_upstream_default_budget)
     return 0 if status["missing_units"] == 0 else 2
 
 

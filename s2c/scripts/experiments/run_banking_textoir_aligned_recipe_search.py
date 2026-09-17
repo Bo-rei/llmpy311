@@ -1,4 +1,4 @@
-"""Search Trainable MiniLM recipes on TextOIR-aligned standard Banking77.
+"""Search Trainable MiniLM recipes on a TextOIR-aligned dataset.
 
 Only Known train/dev labels are opened by this stage.  Test files are
 materialized by the data-preparation stage but are intentionally not read
@@ -148,11 +148,25 @@ def train_cell(dataset: str, kir: float, seed: int, name: str, device: torch.dev
 def main() -> None:
     import argparse
 
+    global DATASET, ART_ROOT, DATA_ROOT, OUT, CHECKPOINTS
     parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--dataset", choices=("banking77", "stackoverflow", "clinc150"), default=DATASET)
+    parser.add_argument("--art-root", type=Path, default=ART_ROOT)
+    parser.add_argument(
+        "--data-root",
+        type=Path,
+        default=None,
+        help="Canonical prepared view root. Defaults to <art-root>/data.",
+    )
     parser.add_argument("--kirs", nargs="+", type=float, default=list(KIRS))
     parser.add_argument("--screening-seed", type=int, default=SCREENING_SEED)
     parser.add_argument("--top-n", type=int, default=TOP_N)
     args = parser.parse_args()
+    DATASET = args.dataset
+    ART_ROOT = args.art_root.resolve()
+    DATA_ROOT = args.data_root.resolve() if args.data_root is not None else ART_ROOT / "data"
+    OUT = ART_ROOT / "recipe_search_corrected"
+    CHECKPOINTS = OUT / "checkpoints"
     kirs = tuple(args.kirs)
     screening_seed = int(args.screening_seed)
     top_n = int(args.top_n)

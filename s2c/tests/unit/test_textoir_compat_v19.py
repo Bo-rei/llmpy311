@@ -20,6 +20,21 @@ from tools.compat.textoir import run_textoir_matrix as matrix_runner
 from tools.compat.textoir._common import default_textoir_root
 
 
+@pytest.mark.parametrize(
+    ("unit", "expected"),
+    [
+        ({"dataset": "stackoverflow", "method": "MSP", "known_cls_ratio": 0.5}, "reused"),
+        ({"dataset": "stackoverflow", "method": "ADB", "known_cls_ratio": 0.25}, "reused"),
+        ({"dataset": "stackoverflow", "method": "ADB", "known_cls_ratio": 0.75}, "reused"),
+        ({"dataset": "oos", "method": "ADB", "known_cls_ratio": 0.5}, "reused"),
+        ({"dataset": "banking", "method": "ADB", "known_cls_ratio": 0.25}, "new_run"),
+        ({"dataset": "oos", "method": "MSP", "known_cls_ratio": 0.5}, "new_run"),
+    ],
+)
+def test_matrix_result_source_marks_preexisting_cells(unit: dict, expected: str) -> None:
+    assert matrix_runner.result_source(unit) == expected
+
+
 def test_migrated_textoir_clone_has_expected_provenance_and_protocol() -> None:
     textoir_root = default_textoir_root()
     if not textoir_root.is_dir():
@@ -62,6 +77,21 @@ def test_known_label_selection_is_deterministic_and_split_hashes_are_bytes_exact
 def test_dirty_worktree_guard_blocks_execution_but_allows_dry_run() -> None:
     with pytest.raises(ValueError, match="dirty TEXTOIR worktree"):
         runner.require_clean_worktree("?? local-output.txt", dry_run=False)
+
+
+@pytest.mark.parametrize("method", ["MSP", "KNNCL", "DA-ADB"])
+def test_training_caps_apply_after_dataset_overrides(tmp_path: Path, method: str) -> None:
+    overlay, provenance = runner.prepare_runtime_overlay(
+        default_textoir_root(), tmp_path / "run", method, tmp_path / "bert",
+        official_da_adb=method == "DA-ADB", max_epochs=40, patience=10,
+    )
+    namespace = {}
+    exec((overlay / "configs" / f"{method}.py").read_text(), namespace)
+    for dataset in ("banking", "oos", "stackoverflow"):
+        params = namespace["Param"](SimpleNamespace(dataset=dataset, known_cls_ratio=0.5)).hyper_param
+        assert params["num_train_epochs"] == 40
+        assert params["wait_patient"] <= 10
+    assert provenance["training_budget_caps"] == {"num_train_epochs": 40, "wait_patient": 10}
 
     runner.require_clean_worktree("?? local-output.txt", dry_run=True)
     runner.require_clean_worktree("", dry_run=False)
@@ -229,32 +259,91 @@ def test_da_adb_overlay_guards_reachability_and_cosnorm_zero_division(tmp_path: 
     assert any("CosNorm" in patch["reason"] for patch in da_patches)
 
 
-def test_knncl_overlay_repairs_only_upstream_label_alias(tmp_path: Path) -> None:
+def test_da_adb_official_overlay_omits_adapted_numeric_and_analysis_patches(
+    tmp_path: Path,
+) -> None:
     textoir_root = default_textoir_root()
     if not textoir_root.is_dir():
         pytest.skip("Migrated TEXTOIR clone is not available")
     model = tmp_path / "local-bert"
     model.mkdir()
 
-    source = textoir_root / "open_intent_detection" / "backbones" / "bert.py"
+    overlay, provenance = runner.prepare_runtime_overlay(
+        textoir_root,
+        tmp_path / "run",
+        "DA-ADB",
+        model.resolve(),
+        official_da_adb=True,
+    )
+
+    source_backbone = (
+        textoir_root / "open_intent_detection" / "backbones" / "bert.py"
+    ).read_text(encoding="utf-8")
+    overlay_backbone = (overlay / "backbones" / "bert.py").read_text(encoding="utf-8")
+    assert overlay_backbone == source_backbone
+    assert provenance["official_da_adb"] is True
+    assert provenance["changed_files"] == [
+        "backbones/__init__.py",
+        "backbones/base.py",
+        "configs/DA-ADB.py",
+        "dataloaders/__init__.py",
+        "methods/__init__.py",
+    ]
+    assert "backbones/bert.py" not in provenance["compatibility_changed_files"]
+    assert "methods/ADB/manager.py" not in provenance["compatibility_changed_files"]
+    assert "run.py" not in provenance["compatibility_changed_files"]
+
+
+def test_knncl_overlay_restores_upstream_label_cardinality_contract(tmp_path: Path) -> None:
+    textoir_root = default_textoir_root()
+    if not textoir_root.is_dir():
+        pytest.skip("Migrated TEXTOIR clone is not available")
+    model = tmp_path / "local-bert"
+    model.mkdir()
+
+    source = textoir_root / "open_intent_detection" / "dataloaders" / "base.py"
     source_text = source.read_text(encoding="utf-8")
     overlay, provenance = runner.prepare_runtime_overlay(
         textoir_root, tmp_path / "run", "KNNCL", model.resolve()
     )
-    patched_text = (overlay / "backbones" / "bert.py").read_text(encoding="utf-8")
+    patched_text = (overlay / "dataloaders" / "base.py").read_text(encoding="utf-8")
 
-    assert "self.number_labels = args.num_labels" in patched_text
-    assert "self.number_labels = args.anum_labels" in source_text
-    assert "self.number_labels = args.anum_labels" not in patched_text
+    assert "self.anum_labels = args.anum_labels = len(self.label_list)" in patched_text
+    assert "self.anum_labels = args.anum_labels = len(self.label_list)" not in source_text
     assert source.read_text(encoding="utf-8") == source_text
-    assert "backbones/bert.py" in provenance["compatibility_changed_files"]
+    assert "dataloaders/base.py" in provenance["compatibility_changed_files"]
     patch = next(
         item
         for item in provenance["compatibility_patches"]
-        if item["file"] == "backbones/bert.py"
-        and item["status"] == "reachability_compatibility"
+        if item["file"] == "dataloaders/base.py"
+        and item["status"] == "historical_contract_restoration"
     )
     assert "anum_labels" in patch["reason"]
+
+
+def test_knncl_overlay_routes_freezing_to_two_encoder_helper(tmp_path: Path) -> None:
+    textoir_root = default_textoir_root()
+    if not textoir_root.is_dir():
+        pytest.skip("Migrated TEXTOIR clone is not available")
+    model = tmp_path / "local-bert"
+    model.mkdir()
+
+    source = textoir_root / "open_intent_detection" / "backbones" / "base.py"
+    source_text = source.read_text(encoding="utf-8")
+    overlay, provenance = runner.prepare_runtime_overlay(
+        textoir_root, tmp_path / "run", "KNNCL", model.resolve()
+    )
+    patched_text = (overlay / "backbones" / "base.py").read_text(encoding="utf-8")
+
+    assert "if args.method in {'KCL', 'KNNCL'}:" in patched_text
+    assert "if args.method == 'KCL':" in source_text
+    patch = next(
+        item
+        for item in provenance["compatibility_patches"]
+        if item["file"] == "backbones/base.py"
+        and item.get("status") == "reachability_compatibility"
+    )
+    assert patch["source_sha256"] != patch["overlay_sha256"]
 
 
 def test_external_artifact_audit_requires_predictions_and_results(tmp_path: Path) -> None:
@@ -306,6 +395,7 @@ def _write_complete_matrix_attempt(attempt_dir: Path, unit: dict) -> None:
                 **unit,
                 "status": "complete",
                 "return_code": 0,
+                "command": ["python", "run.py"],
                 "upstream_clean_after_run": True,
                 "runtime_overlay": {"overlay_unchanged_after_run": True},
                 "artifact_audit": {"complete": True},
@@ -339,8 +429,102 @@ def test_textoir_first_batch_matrix_has_108_units_and_resumes_by_attempt(
     matrix_runner.export_metric_summaries(tmp_path)
     raw = (tmp_path / "textoir_results_by_seed.csv").read_text(encoding="utf-8")
     summary = (tmp_path / "textoir_baseline_summary.csv").read_text(encoding="utf-8")
-    assert "banking,MSP,0.25,0,0.5,0.6,0.7,0.8" in raw
-    assert "banking,MSP,0.25,1,0.5,0.0,0.6,0.0,0.7,0.0,0.8,0.0" in summary
+    assert "banking,MSP,0.25,13,0.5,0.6,0.7,0.8" in raw
+    assert "banking,MSP,0.25,1,new_run,upstream_defaults,0.5,0.0,0.6,0.0,0.7,0.0,0.8,0.0" in summary
+
+
+def test_default_budget_resume_excludes_and_retries_capped_attempts(
+    tmp_path: Path,
+) -> None:
+    unit = {
+        "dataset": "banking",
+        "method": "MSP",
+        "known_cls_ratio": 0.5,
+        "seed": 13,
+    }
+    unit_dir = matrix_runner.unit_directory(tmp_path, unit)
+    capped = unit_dir / "attempts" / "attempt_0001"
+    _write_complete_matrix_attempt(capped, unit)
+    manifest_path = capped / "run_manifest.json"
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    manifest["training_budget_caps"] = {
+        "num_train_epochs": 40,
+        "wait_patient": 10,
+    }
+    manifest["training_protocol"] = "user_requested_reduced_budget"
+    manifest_path.write_text(json.dumps(manifest) + "\n", encoding="utf-8")
+
+    status = matrix_runner.matrix_status(
+        tmp_path, [unit], require_upstream_default_budget=True
+    )
+    assert status["complete_units"] == 0
+    assert status["missing_units"] == 1
+    assert matrix_runner.completed_attempt(
+        unit_dir, unit, require_upstream_default_budget=True
+    ) is None
+    assert matrix_runner.next_attempt_directory(unit_dir).name == "attempt_0002"
+    matrix_runner.export_metric_summaries(
+        tmp_path, require_upstream_default_budget=True
+    )
+    raw = (tmp_path / "textoir_results_by_seed.csv").read_text(encoding="utf-8")
+    assert raw.splitlines() == [
+        "dataset,method,known_cls_ratio,seed,accuracy,known_macro_f1,open_oos_f1,macro_f1,attempt_dir,training_protocol,epochs_completed_by_stage,result_source"
+    ]
+
+    default = unit_dir / "attempts" / "attempt_0002"
+    _write_complete_matrix_attempt(default, unit)
+    default_path = default / "run_manifest.json"
+    default_manifest = json.loads(default_path.read_text(encoding="utf-8"))
+    default_manifest["training_budget_caps"] = {
+        "num_train_epochs": None,
+        "wait_patient": None,
+    }
+    default_manifest["training_protocol"] = "upstream_defaults"
+    default_path.write_text(json.dumps(default_manifest) + "\n", encoding="utf-8")
+
+    assert matrix_runner.completed_attempt(
+        unit_dir, unit, require_upstream_default_budget=True
+    ) == default
+    matrix_runner.export_metric_summaries(
+        tmp_path, require_upstream_default_budget=True
+    )
+    raw = (tmp_path / "textoir_results_by_seed.csv").read_text(encoding="utf-8")
+    assert raw.count("\nbanking,MSP,0.5,13,") == 1
+    assert str(default.resolve()) in raw
+
+
+def test_force_new_attempt_preserves_completed_attempt(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    unit = {
+        "dataset": "oos",
+        "method": "MSP",
+        "known_cls_ratio": 0.5,
+        "seed": 13,
+    }
+    unit_dir = matrix_runner.unit_directory(tmp_path, unit)
+    first = unit_dir / "attempts" / "attempt_0001"
+    _write_complete_matrix_attempt(first, unit)
+
+    monkeypatch.setattr(matrix_runner, "build_external_command", lambda *_: ["fake"])
+    monkeypatch.setattr(
+        matrix_runner.subprocess,
+        "run",
+        lambda *_args, **_kwargs: subprocess.CompletedProcess(["fake"], 1, "", ""),
+    )
+    args = SimpleNamespace(
+        output_root=tmp_path,
+        resume=True,
+        force_new_attempt=True,
+        require_upstream_default_budget=False,
+    )
+
+    result = matrix_runner.run_unit(args, unit)
+
+    assert result["status"] == "failed"
+    second = unit_dir / "attempts" / "attempt_0002"
+    assert second.is_dir()
+    assert matrix_runner.completed_attempt(unit_dir, unit) == first
 
 
 def test_metric_export_keeps_completed_runs_outside_current_resume_subset(

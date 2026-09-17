@@ -4,7 +4,7 @@
   "backend": "python_matplotlib",
   "source_data": "/home/bo/bo01/llmpy311/artifacts/s2c/runs/protocol_v2_textoir_v1/minilm_trainable_k_sweep_v1/summary.csv",
   "source_data_copy": "/home/bo/bo01/llmpy311/s2c/results/analysis/trainable_k_ablation_figure/figure_source_data.csv",
-  "metric": "Gate-level OOS F1 (%)",
+  "metric": "OOS F1 (%)",
   "kir": 0.5,
   "distance": "mahalanobis_diag",
   "representation": "last2_minilm_plus_projection",

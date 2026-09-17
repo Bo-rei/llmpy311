@@ -1,5 +1,36 @@
 # 当前研究状态
 
+2026-09-17 TextOIR 论文 baseline error-bar 阶段完成（六方法范围）：MSP、OpenMax、DOC、
+DeepUnk、KNNCL、ADB 共 162/162 个单元，54 个 dataset×KIR cell 均含 seed 13/42/87。
+逐 seed 与 mean±population-std 汇总、复用来源和逐次预算见
+`../artifacts/s2c/external/textoir_table_baselines_errorbars_v1/`。六方法来源为 27 个 reused、
+135 个 new_run；ADB 是 12 个复用、15 个新跑。所有选中 manifest 指向 TextOIR commit
+`dffe2b1b848a069a6808f8089b4cb9bd16e2062b`。记录到的预算分别为 118 个 40/10、19 个
+100/10、18 个未带预算字段、7 个 `null/null`；这 7 个是已完成的 `upstream_defaults` attempts，
+按“不重跑已完成结果”保留。因而不能将整表描述成统一 40/10 或官方默认轮数。
+
+Banking/DOC/.25 的三个首轮 40/10 attempt 均在验证分数仍提升时触及上限；原 attempt 保留，
+追加 100/10 后选中 epoch 89/59/77。三 seed OOS/known/Acc 为
+`78.53±5.88 / 63.63±1.95 / 72.13±5.94`。代表性 CLINC150/.50 与 TextOIR README 的
+OOS F1 接近：除 MSP 差值 +5.35 pp 外，其余五种方法差值在 −0.82 至 +1.25 pp。
+
+按 `new_polish.tex` 的 Ours 值逐 cell 比较，六种新补 baseline 的 OOS F1 均值在九格都低于
+Ours；加入工作区已有的 MOGB 与 DA-ADB 多 seed 结果后，各格最强可用 baseline 仍低
+1.04–12.09 pp。该比较是点估计核对，不作统计显著性结论。论文表格中的 Banking77 是标准
+`banking77`，不是历史 `banking77_oos`；`results/final_paper_main/dataset_audit.json` 记录
+9/9 个 Banking77 cell 来自 TextOIR `data/banking`，且 `shared_textoir_export_exact_match=true`，
+因此该数据集的 test export 与本轮 TextOIR baseline 对齐。此结论不外推到 CLINC150 和
+StackOverflow 的 Ours v19 test view。另有一项未在本轮消解的数值来源差异：论文表格 Banking77/.75
+为 `73.24±3.42`，而 `results/final_paper_main/summary.csv` 的 Ours/.75 为 `70.62±1.15`；上面的
+baseline 对比按当前 `new_polish.tex` 打印值计算，不代表该差异已核清。
+
+DA-ADB StackOverflow/.50 原有三 seed OOS F1 为 `87.47±0.69`，低于论文 Ours `89.23±2.04`；
+这三个 seed 未重跑。表格目标协议下的 DA-ADB（seeds 13/42/87）仅覆盖 StackOverflow 三个 KIR；
+CLINC150 与标准 Banking77 的六个 dataset×KIR 格子尚无多 seed 结果，因此论文中所有 baseline
+的 error bar 还没有全部补齐。另有一条 StackOverflow/.50 protocol-v2 兼容性结果使用 seeds
+42/87/100，不与目标 seeds 或表格协议混用。MOGB 已有独立 27/27 结果，九格 mean±std 见
+`results/final_paper_main/summary.csv`，本阶段未重跑。论文 `.tex` 未修改。
+
 2026-09-15 最终标准协议与 MOGB 矩阵已闭环：`results/final_paper_main/MANIFEST.json`
 报告 `36/36` 完成，所有 36 个单元的保存指标均由 predictions 重新计算通过；标准
 Banking77 的 Ours 为 Trainable MiniLM `Gate -> Router -> Expert`，OOS F1
@@ -84,15 +115,16 @@ byte-identical reproduction。完整结论见 `docs/analysis/final_paper_experim
 - 新增[完整主实验与论文设置消融报告](analysis/historical_paper_ablation_report.md)：论文设置的 `3 数据集 × 3 KIR × 4 变体 = 36/36` 个历史 anchor 单元已完成审计；当前 H1 Trainable full pipeline 也按 KIR 汇总。两类结果分开标记，历史消融不冒充本轮 CUDA H1 重跑。
 - 所有上述结果属于 `historical_v19_paper_main` 的 **H1 controlled**；`fulltex.tex` Ours 是历史数值参考，不是同模型链严格 H0 对照。
 
-## Banking 数据集命名锁定
+## Banking77 数据键：当前论文表与历史口径
 
 | 实验线 | 实际数据键 | 报告名称 | 用途 |
 |---|---|---|---|
-| 当前 H1 / 历史 Ours artifact | `banking77_oos` | `BANKING77-OOS` 或论文表头 `Banking77` | 当前 Trainable/Frozen、历史 Ours、full pipeline 与机制图 |
+| 当前论文表 / 标准 Banking77 结果 | `banking77` | `Banking77` | `new_polish.tex` 当前主表及 `final_paper_main` 标准数据结果 |
+| 历史 H1 / v19 Ours artifacts | `banking77_oos` | `BANKING77-OOS` | 旧 Trainable/Frozen、历史 Ours、full pipeline 与机制分析 |
 | archive / protocol_v2 参考 | `banking77` | `Banking77` | archive Gate→Router→Expert、MOGB-Fair 和 current fair matrix |
-| archive full pipeline / 当前 protocol_v2 参考 | `banking77` | `Banking77` | 本轮 archive Gate→Router→Expert、MOGB-Fair 和 current fair matrix |
 
-后续文档和图注必须使用实际数据键；不能仅写裸 `Banking77` 来跨两条实验线比较。
+此前“论文表头 Banking77 实际使用 `banking77_oos`”的结论已被当前标准 Banking77 论文表替代。
+历史 `banking77_oos` 结果仍保留，但不得并入当前标准 Banking77 结果；跨实验比较应记录实际数据键。
 
 ## 先看哪里
 

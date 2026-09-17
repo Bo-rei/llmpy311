@@ -19,10 +19,14 @@ def main():
     parser.add_argument('--selection-root', type=Path, default=ART/'coverage_repair')
     parser.add_argument('--data-root', type=Path, default=ART/'data')
     parser.add_argument('--components-root', type=Path, default=ART/'components')
+    parser.add_argument('--banking-components-root', type=Path, default=None)
+    parser.add_argument('--stackoverflow-components-root', type=Path, default=None)
     args=parser.parse_args()
     selection_root=args.selection_root
     data_root=args.data_root
     components_root=args.components_root
+    banking_components_root=args.banking_components_root.resolve() if args.banking_components_root else None
+    stackoverflow_components_root=args.stackoverflow_components_root.resolve() if args.stackoverflow_components_root else None
     import numpy as np
     import torch
     from sklearn.metrics import f1_score,accuracy_score
@@ -38,7 +42,13 @@ def main():
         tag=f'kir{round(k*100):02d}_seed{s}'
         assert (selection_root/'locks'/f'{d}_{tag}.json').exists(), 'Missing Gate selection'
         if not args.gate_only:
-            assert (components_root/d/tag/'selection_complete.json').exists(), 'Missing downstream selection'
+            if d == 'banking77' and banking_components_root:
+                active_components_root = banking_components_root
+            elif d == 'stackoverflow' and stackoverflow_components_root:
+                active_components_root = stackoverflow_components_root
+            else:
+                active_components_root = components_root
+            assert (active_components_root/d/tag/'selection_complete.json').exists(), 'Missing downstream selection'
     device=torch.device('cuda')
     torch.set_num_threads(4)
     models=ROOT.parent/'assets/models'
@@ -77,7 +87,13 @@ def main():
             del encoder
             torch.cuda.empty_cache()
             continue
-        component=json.loads((components_root/d/tag/'selection_complete.json').read_text())
+        if d == 'banking77' and banking_components_root:
+            active_components_root = banking_components_root
+        elif d == 'stackoverflow' and stackoverflow_components_root:
+            active_components_root = stackoverflow_components_root
+        else:
+            active_components_root = components_root
+        component=json.loads((active_components_root/d/tag/'selection_complete.json').read_text())
         paths=PipelinePaths(model_path=models/'smollm135m',gate_encoder_path=models/'all-MiniLM-L6-v2',
             gate_detector_path=data/'unused_detector.json',router_ckpt_path=Path(component['router']),
             experts_root=Path(component['experts']),experts_data_root=data/'experts',
