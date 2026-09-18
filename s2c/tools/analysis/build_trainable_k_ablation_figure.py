@@ -144,16 +144,22 @@ def build_figure(frame: pd.DataFrame) -> plt.Figure:
         ax.spines[spine].set_color(DARK)
 
     # Direct labels avoid a separate legend and preserve the style of the
-    # existing paper figures while keeping the plot area compact.
-    label_x = 4.05
-    offsets = {"clinc150": 1.15, "banking77": 0.90, "stackoverflow": 1.00}
+    # existing paper figures while keeping the plot area compact.  Anchor each
+    # label at the final marker and move it into the right-side gutter so that
+    # neither the line nor its marker/error bar runs through the text.
+    label_offsets = {
+        "clinc150": (20.0, 4.0),
+        "banking77": (20.0, 4.0),
+        "stackoverflow": (20.0, 4.0),
+    }
     for dataset in DATASET_ORDER:
         part = frame.loc[frame["dataset"] == dataset].sort_values("k")
         last_mean = 100.0 * float(part.iloc[-1]["oos_f1_mean"])
-        ax.text(
-            label_x,
-            last_mean + offsets[dataset],
+        ax.annotate(
             DATASET_LABELS[dataset],
+            xy=(k_values[-1], last_mean),
+            xytext=label_offsets[dataset],
+            textcoords="offset points",
             color=COLORS[dataset],
             fontsize=12.5,
             fontweight="bold",
