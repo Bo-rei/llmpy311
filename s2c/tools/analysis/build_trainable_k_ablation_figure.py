@@ -106,7 +106,7 @@ def load_source() -> pd.DataFrame:
 
 def build_figure(frame: pd.DataFrame) -> plt.Figure:
     fig, ax = plt.subplots(figsize=(7.204724, 2.95))
-    fig.subplots_adjust(left=0.13, right=0.985, bottom=0.235, top=0.98)
+    fig.subplots_adjust(left=0.13, right=0.985, bottom=0.235, top=0.84)
 
     k_values = np.arange(1, 6, dtype=float)
     for dataset in DATASET_ORDER:
@@ -143,30 +143,17 @@ def build_figure(frame: pd.DataFrame) -> plt.Figure:
     for spine in ("left", "bottom"):
         ax.spines[spine].set_color(DARK)
 
-    # Direct labels avoid a separate legend and preserve the style of the
-    # existing paper figures while keeping the plot area compact.  Anchor each
-    # label at the final marker and move it into the right-side gutter so that
-    # neither the line nor its marker/error bar runs through the text.
-    label_offsets = {
-        "clinc150": (20.0, 4.0),
-        "banking77": (20.0, 4.0),
-        "stackoverflow": (20.0, 4.0),
-    }
-    for dataset in DATASET_ORDER:
-        part = frame.loc[frame["dataset"] == dataset].sort_values("k")
-        last_mean = 100.0 * float(part.iloc[-1]["oos_f1_mean"])
-        ax.annotate(
-            DATASET_LABELS[dataset],
-            xy=(k_values[-1], last_mean),
-            xytext=label_offsets[dataset],
-            textcoords="offset points",
-            color=COLORS[dataset],
-            fontsize=12.5,
-            fontweight="bold",
-            ha="left",
-            va="center",
-            clip_on=False,
-        )
+    # Keep all dataset names in one row above the axes so no label can touch a
+    # curve, marker, or error bar inside the data region.
+    ax.legend(
+        loc="lower center",
+        bbox_to_anchor=(0.5, 1.015),
+        ncol=3,
+        columnspacing=1.5,
+        handlelength=2.0,
+        handletextpad=0.5,
+        fontsize=11.5,
+    )
     return fig
 
 

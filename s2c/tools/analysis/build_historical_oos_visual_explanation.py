@@ -71,6 +71,14 @@ METHOD_LABELS = {"frozen_k1": "Frozen", "trainable_k1": "Trainable"}
 
 BLUE = "#4C78A8"
 RED = "#C44E52"
+# Geometry palette follows the restrained Nature/NMI families: neutral Known
+# points, deep indigo for OOS outside, and a muted red accent for OOS inside.
+GEOMETRY_KNOWN = "#FFA660"
+OOS_OUTSIDE = "#D85B59"
+OOS_INSIDE = "#5271AE"
+GEOMETRY_SURFACE = "#D8D8D8"
+GEOMETRY_WIREFRAME = "#A8A8A8"
+GEOMETRY_CENTER = "#F5CC7D"
 GRAY = "#8B929A"
 LIGHT_GRAY = "#D9DDE1"
 DARK = "#252525"
@@ -771,14 +779,14 @@ def plot_local_boundary_geometry_3d(
         # even when it lies outside this displayed sphere.
         local_inside = local_scores[method] <= 1.0
         local_outside = ~local_inside
-        ax.scatter(train_xy[:, 0], train_xy[:, 1], train_xy[:, 2], s=7, color="#4477AA", alpha=0.30, linewidths=0, depthshade=False, zorder=3, rasterized=True)
-        ax.scatter(oos_xy[local_outside, 0], oos_xy[local_outside, 1], oos_xy[local_outside, 2], s=5, color="#CC6677", alpha=0.10, marker="o", linewidths=0, depthshade=False, zorder=2, rasterized=True)
-        ax.scatter(oos_xy[local_inside, 0], oos_xy[local_inside, 1], oos_xy[local_inside, 2], s=18, facecolors="none", edgecolors="#CC6677", alpha=0.85, marker="o", linewidths=0.8, depthshade=False, zorder=4)
+        ax.scatter(train_xy[:, 0], train_xy[:, 1], train_xy[:, 2], s=7, color=GEOMETRY_KNOWN, alpha=0.30, linewidths=0, depthshade=False, zorder=3, rasterized=True)
+        ax.scatter(oos_xy[local_outside, 0], oos_xy[local_outside, 1], oos_xy[local_outside, 2], s=7, color=OOS_OUTSIDE, alpha=0.42, marker="o", linewidths=0, depthshade=False, zorder=2, rasterized=True)
+        ax.scatter(oos_xy[local_inside, 0], oos_xy[local_inside, 1], oos_xy[local_inside, 2], s=19, facecolors="none", edgecolors=OOS_INSIDE, alpha=0.95, marker="o", linewidths=1.0, depthshade=False, zorder=4)
         boundary = projected_surfaces[method]
-        ax.plot_surface(boundary[:, :, 0], boundary[:, :, 1], boundary[:, :, 2], color="#9ABAD0", alpha=0.055, linewidth=0, shade=False, zorder=1)
-        ax.plot_wireframe(boundary[:, :, 0], boundary[:, :, 1], boundary[:, :, 2], rstride=9, cstride=12, color="#9AB0C0", alpha=0.35, linewidth=0.45, zorder=1)
+        ax.plot_surface(boundary[:, :, 0], boundary[:, :, 1], boundary[:, :, 2], color=GEOMETRY_SURFACE, alpha=0.055, linewidth=0, shade=False, zorder=1)
+        ax.plot_wireframe(boundary[:, :, 0], boundary[:, :, 1], boundary[:, :, 2], rstride=9, cstride=12, color=GEOMETRY_WIREFRAME, alpha=0.28, linewidth=0.45, zorder=1)
         center = projected_centers[method]
-        ax.scatter([center[0]], [center[1]], [center[2]], marker="*", s=100, color="#334155", edgecolor="white", linewidth=0.9, depthshade=False, zorder=10)
+        ax.scatter([center[0]], [center[1]], [center[2]], marker="*", s=100, color=GEOMETRY_CENTER, edgecolor="white", linewidth=0.9, depthshade=False, zorder=10)
         ax.set_xlim(-display_radius, display_radius)
         ax.set_ylim(-display_radius, display_radius)
         ax.set_zlim(-display_radius, display_radius)
@@ -803,10 +811,10 @@ def plot_local_boundary_geometry_3d(
         ax.zaxis.pane.fill = False
 
     handles = [
-        Line2D([], [], marker="o", linestyle="none", color="#4477AA", markersize=5, label="Known"),
-        Line2D([], [], marker="o", linestyle="none", color="#CC6677", markersize=5, label="OOS outside"),
-        Line2D([], [], marker="o", linestyle="none", markerfacecolor="none", markeredgecolor="#CC6677", markersize=6, label="OOS inside"),
-        Line2D([], [], marker="*", linestyle="none", color="#334155", markersize=8, label="Center"),
+        Line2D([], [], marker="o", linestyle="none", color=GEOMETRY_KNOWN, markersize=5, label="Known"),
+        Line2D([], [], marker="o", linestyle="none", color=OOS_OUTSIDE, markersize=5, label="OOS outside"),
+        Line2D([], [], marker="o", linestyle="none", markerfacecolor="none", markeredgecolor=OOS_INSIDE, markersize=6, label="OOS inside"),
+        Line2D([], [], marker="*", linestyle="none", color=GEOMETRY_CENTER, markersize=8, label="Center"),
     ]
     fig.legend(
         handles=handles,
@@ -938,6 +946,11 @@ def plot_paper_score_distribution(
     fig.subplots_adjust(left=0.095, right=0.995, bottom=0.24, top=0.96, wspace=0.16)
     for column, method in enumerate(METHODS):
         ax = axes[column]
+        stage_title = {
+            "frozen_k1": "Frozen encoder\n(before representation training)",
+            "trainable_k1": "Trainable encoder\n(after representation training)",
+        }[method]
+        ax.set_title(stage_title, fontsize=11.5, fontweight="bold", pad=7, linespacing=1.12)
         for population in ("Known", "OOS"):
             centers, density, overflow = smoothed_histogram(populations[(method, population)], bins)
             ax.plot(centers, density, color=population_colors[population], linewidth=1.45, label=population)

@@ -70,14 +70,14 @@
     {
       "method": "frozen_k1",
       "test_rows": 5990,
-      "score_max_abs_delta": 2.259556122208295e-07,
+      "score_max_abs_delta": 3.1695056623703977e-07,
       "decision_mismatch_count": 0,
       "nearest_cluster_mismatch_count": 0
     },
     {
       "method": "trainable_k1",
       "test_rows": 5990,
-      "score_max_abs_delta": 4.3361082890935876e-07,
+      "score_max_abs_delta": 7.199483124109562e-07,
       "decision_mismatch_count": 0,
       "nearest_cluster_mismatch_count": 0
     }
